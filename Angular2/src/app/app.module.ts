@@ -5,13 +5,11 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { MateriasComponent } from './materias.component';
-import { OpcionesListaComponent } from './opciones.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MateriasComponent,
-    OpcionesListaComponent
+    MateriasComponent
   ],
   imports: [
     BrowserModule,
