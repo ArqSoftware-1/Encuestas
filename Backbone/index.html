@@ -1,42 +1,34 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<title>Ejemplo Backbone</title>
-		<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
-		<script type="text/javascript" src="underscore-min.js"></script>
-		<script type="text/javascript" src="backbone-min.js"></script>
-	</head>
-	<body>
+<html lang="en">
 
-	<div id="persona1">
-	</div>
+<head>
+  <meta charset="utf-8">
+  <title>Backbone.js Todos</title>
+</head>
 
-	<!-- Templates -->
-	<script type="text/template" id="persona1-template">
-		<%= contenido %>
-	</script>
+<body>
 
-	
-	<script>
-		$(document).ready(function(){
-			var PersonaModel = Backbone.Model.extend({
-			defaults: {
-				nombre: "Sin nombre"
-			}
-			});
 
-			var PersonaView = Backbone.View.extend({
-				render: function() {
-				
-					$(this.id).html(_.template($('#persona1-template').html(), {contenido: this.model.get('text')}));
-					return this;
-				}
-			});
+  <script src="jquery-3.1.1.min.js"></script>
+  <script src="underscore-min.js"></script>
+  <script src="backbone-min.js"></script>
+  <script src="app.js"></script>
 
-			var personaModel = new PersonaModel({text: "Juan Perez"});
-			var personaView = new PersonaView({ model: personaModel, id: '#persona1' });
-			personaView.render();
-		});
-	</script>
-	</body>
+  <!-- Templates -->
+
+  <div id="todoapp">
+
+    <footer>
+      <a id="clear-completed">Clear completed</a>
+      <div id="todo-count"></div>
+    </footer>
+
+  </div>
+  
+
+  <script type="text/template" id="stats-template">
+    <%= done %>
+  </script>
+
+  </body>
 </html>
