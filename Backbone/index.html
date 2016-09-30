@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ejemplo Backbone</title>
+		<script type="text/javascript" src="jquery-3.1.1.min.js"></script>
+		<script type="text/javascript" src="underscore-min.js"></script>
+		<script type="text/javascript" src="backbone-min.js"></script>
+	</head>
+	<body>
+
+	<div id="persona1">
+	</div>
+
+	<!-- Templates -->
+	<script type="text/template" id="persona1-template">
+		<%= contenido %>
+	</script>
+
+	
+	<script>
+		$(document).ready(function(){
+			var PersonaModel = Backbone.Model.extend({
+			defaults: {
+				nombre: "Sin nombre"
+			}
+			});
+
+			var PersonaView = Backbone.View.extend({
+				render: function() {
+				
+					$(this.id).html(_.template($('#persona1-template').html(), {contenido: this.model.get('text')}));
+					return this;
+				}
+			});
+
+			var personaModel = new PersonaModel({text: "Juan Perez"});
+			var personaView = new PersonaView({ model: personaModel, id: '#persona1' });
+			personaView.render();
+		});
+	</script>
+	</body>
+</html>
