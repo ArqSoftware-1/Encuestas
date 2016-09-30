@@ -1,0 +1,15 @@
+<div>
+	<h4>Lista de materias</h4>
+	<ul>
+		<li *ngFor="let materia of materias">
+			{{materia.Nombre}} 
+			<br>
+			<select (change)="onChange(materia.Nombre, $event.target.value)">
+			  <option *ngFor="let opcion of opciones">
+			    {{opcion.Nombre}}
+			  </option>
+			</select>
+		</li>
+	</ul>
+	<button md-raised-button color="primary" (click)="enviar()">Enviar</button>
+</div>
