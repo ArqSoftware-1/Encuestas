@@ -1,49 +1,82 @@
+$(function() {
+    // Modelo de la materia
+    var Materia = Backbone.Model.extend({
+        defaults: function() {
+            return {
+                id: 1,
+                nombre: "Sin nombre",
+                opciones: []
+            };
+        },
+        sync: function() {
+            return false;
+        }
+    });
 
-$(function(){
+    // Listado de las materias
+    var ListaMaterias = Backbone.Collection.extend({
+        model: Materia,
+    });
 
-  // Todo Model
-  // ----------
+    var Materias = new ListaMaterias;
 
-  // Our basic **Todo** model has `title`, `order`, and `done` attributes.
-  var Todo = Backbone.Model.extend({
+    var MateriaView = Backbone.View.extend({
+        tagName: "li",
+        template: _.template($('#materia-template').html()),
+        initialize: function() {
+            // Binding con la materia para actualizar la vista cuando se modifica una
+            this.listenTo(this.model, 'change', this.render);
+        },
+        render: function() {
+            this.$el.html(this.template(this.model.toJSON()));
+            return this;
+        },
+    });
 
-    // Default attributes for the todo item.
-    defaults: function() {
-      return {
-        title: "empty todo...",
-        done: false
-      };
-    },
+    var AppView = Backbone.View.extend({
+        el: $("#app"),
+        events: {
+            "click #enviar": "enviar",
+        },
+        initialize: function() {
+            this.lista = this.$('#materia-lista');
+            // Binding con el listado de materias para actualizar la vista cuando se agrega una
+            this.listenTo(Materias, 'add', this.agregarUno);
+            this.listenTo(Materias, 'reset', this.agregarTodos);
 
-    toggle: function() {
-     
-    }
+            Materias.create(new Materia({
+                id: 1,
+                nombre: 'Intr. a la programación',
+                opciones: ['Ya la cursé', 'La voy a cursar']
+            }));
+            Materias.create(new Materia({
+                id: 2,
+                nombre: 'Matemática 1',
+                opciones: ['Ya la cursé', 'La voy a cursar']
+            }));
 
-  });
+        },
+        render: function() {
 
-  var AppView = Backbone.View.extend({
+        },
+        agregarUno: function(materia) {
+            var view = new MateriaView({
+                model: materia
+            });
+            this.$("#materia-lista").append(view.render().el);
+        },
+        agregarTodos: function() {
+            Materias.each(this.agregarUno, this);
+        },
+        enviar: function() {
+            resultado = [];
+            Materias.each(function(materia) {
+                materia = materia.toJSON();
+                resultado[materia.nombre] = $('select[id=' + materia.id + '-select]').val();
+            }, this);
+            console.log(resultado);
+        }
+    });
 
-    el: $("#todoapp"),
-
-    // Our template for the line of statistics at the bottom of the app.
-    statsTemplate: _.template($('#stats-template').html()),
-
-    initialize: function() {
-
-      this.footer = this.$('footer');
-
-    },
-	
-    // Re-rendering the App just means refreshing the statistics -- the rest
-    // of the app doesn't change.
-    render: function() {
-        this.footer.html(this.statsTemplate({done: 'hola'}));
-    },
-
-  });
-
-  // Finally, we kick things off by creating the **App**.
-  var App = new AppView;
-  App.render();
-
+    var App = new AppView;
 });
