@@ -2,8 +2,8 @@
 
 ## Instalación
 ```bash
-git clone https://github.com/....
-cd TP-Ecuetas-MEAN
+git clone https://github.com/ArqSoftware-1/Encuestas.git
+cd Encuestas
 
 # Instalar dependencias
 npm install
