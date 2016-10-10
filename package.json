@@ -1,7 +1,6 @@
 {
-  "name": "angular2-express-starter",
+  "name": "encuesta-inscripcion",
   "version": "1.0.0",
-  "description": "Starter application of Angular2 on Express",
   "main": "server/app.js",
   "private": true,
   "scripts": {
@@ -16,8 +15,6 @@
   "engines": {
     "node": ">= 5.4.1"
   },
-  "author": "Vlado Tešanović",
-  "license": "MIT",
   "dependencies": {
     "@types/body-parser": "0.0.32",
     "@types/express": "^4.0.32",
