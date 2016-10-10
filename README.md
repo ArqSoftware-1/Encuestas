@@ -17,12 +17,16 @@ npm run develop
 
 ###Para modo desarrollo
 
+```html
 <script src="assets/js/systemjs.config.js"></script>
 <script>
     System.import('app').catch(function(err) { console.error(err); });
 </script>
+```
 
 ###Para modo producción
 
+```html
 <!-- Production mod -->
 <script src="js/bundle.min.js"></script>
+```
