@@ -1,0 +1,37 @@
+<div class="ui container">
+    <nav class="ui menu inverted teal huge" background-color="#2185d0">
+        <a routerLink="home" class="item">Home</a>
+
+        <nav class="menu right">
+            <a class="bottom attached fluid primary" (click)="signup()" class="item">Signup</a>
+            <a (click)="myPopup.show($event, {position: 'right center'})" *ngIf="!isLogged" class="item">Login</a>
+            <a (click)="logout()" *ngIf="isLogged" class="item inverted red">Logout</a>
+        </nav>
+    </nav>
+    
+    <sm-popup class="huge" #myPopup>
+        <sm-card class="card basic">
+            <card-title> Simple login </card-title>
+            <card-subtitle>  </card-subtitle>
+            <card-content>
+                <p><b>Password</b>: angualr2</p>
+                <p><b>Username</b>: pabloperez</p>
+            </card-content>
+            
+            <sm-button class="bottom attached fluid primary" *ngIf="!isLogged" (click)="login()">Login</sm-button>
+            <sm-button class="bottom attached fluid red" *ngIf="isLogged" (click)="logout()">Logout</sm-button>
+        </sm-card>
+    </sm-popup>
+        
+    <titulo [nombre]="nombreApp"></titulo>
+    
+    <div class="ui divider"></div>
+    
+    <router-outlet></router-outlet>
+    
+    <sm-segment *ngIf="response">
+        <div style="word-break: break-all"><b>Hashed:</b> {{response?.hashed}}</div>
+        <div class="ui divider"></div>
+        <div style="word-break: break-all"><b>Salt:</b> {{response?.salt}}</div>
+    </sm-segment>    
+</div>

@@ -1,0 +1,25 @@
+<div class="ui centered grid">
+	<div class="left floated right aligned six wide column">
+		<h2>Lista de materias</h2>
+	</div>
+</div>
+<div class="ui centered two column grid" *ngFor="let materia of materias">
+  <div class="column">
+    <div class="ui raised segment">
+      <a class="ui red ribbon label">{{materia.Nombre}}</a>
+      <br>
+      <br>
+      <sm-dropdown title="Opciones" class="pointing blue floating labeled  icon button" (onChange)="onChange(materia.Nombre, $event)">
+		    <sm-item  *ngFor="let opcion of opciones">
+				{{opcion.Nombre}}
+			</sm-item>
+		</sm-dropdown>
+    </div>
+  </div>
+</div>
+<br>
+<div class="ui left two column grid">
+	<div class="column centered">
+		<sm-button class="positive" (click)="enviar()">Enviar</sm-button>
+	</div>
+</div>
