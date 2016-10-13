@@ -1,4 +1,12 @@
-## TP-Encuetas-MEAN
+# Encuentas - Arquitectura de software 1
+
+## Tecnologías
+
+- Angular 2 ( 2.0 final realase )
+- Express
+- NodeJS
+- ng-semantic ( https://github.com/vladotesanovic/ngSemantic )
+- Mongoosejs (próximamente)
 
 ## Instalación
 ```bash
@@ -8,14 +16,14 @@ cd Encuestas
 # Instalar dependencias
 npm install
 
-# Correr sercer
+# Correr server
 npm run develop
 
-# url: http://localhost:3000
+# URL: http://localhost:3000
 ```
-##En public/index.html:
 
-###Para modo desarrollo
+## Para desarrollar
+Descomentar en public/index.html:
 
 ```html
 <script src="assets/js/systemjs.config.js"></script>
@@ -24,8 +32,7 @@ npm run develop
 </script>
 ```
 
-###Para modo producción
-
+Comentar
 ```html
 <!-- Production mod -->
 <script src="js/bundle.min.js"></script>
