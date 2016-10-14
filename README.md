@@ -5,7 +5,7 @@
 - Angular 2 ( 2.0 final realase )
 - Express
 - NodeJS
-- ng-semantic ( https://github.com/vladotesanovic/ngSemantic )
+- Bootstrap 3.3.7
 - Mongoosejs (próximamente)
 
 ## Instalación
