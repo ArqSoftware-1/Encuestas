@@ -2,6 +2,8 @@ import * as express from "express";
 import { join } from "path";
 import * as favicon from "serve-favicon";
 import { json, urlencoded } from "body-parser";
+import * as winston from "winston";
+require('winston-loggly-bulk');
 
 import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
@@ -53,5 +55,13 @@ app.use(function(err: any, req: express.Request, res: express.Response, next: ex
         message: err.message
     });
 });
+
+winston.add(winston.transports.Loggly, {
+    inputToken: "92eab9c6-189f-4340-a690-4b162f9da412",
+    subdomain: "quilsoft",
+    tags: ["Winston-NodeJS"],
+    json:true
+});
+winston.log('info',"Hola esto es una prueba desde la app de encuestas!");
 
 export { app }

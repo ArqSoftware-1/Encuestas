@@ -7,6 +7,7 @@
 - NodeJS
 - Bootstrap 3.3.7
 - Mongoosejs (próximamente)
+- Loggly (para guardar los logs en la nube)
 
 ## Instalación
 ```bash
