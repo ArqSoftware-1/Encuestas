@@ -1,5 +1,9 @@
 # Encuentas - Arquitectura de software 1
 
+## Deploy en heroku
+
+https://encuestas-inscripcion.herokuapp.com
+
 ## Tecnologías
 
 - Angular 2 ( 2.0 final realase )
