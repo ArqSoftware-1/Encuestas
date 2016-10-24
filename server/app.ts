@@ -4,6 +4,7 @@ import * as favicon from "serve-favicon";
 import { json, urlencoded } from "body-parser";
 import * as winston from "winston";
 require('winston-loggly-bulk');
+require('newrelic');
 
 import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
