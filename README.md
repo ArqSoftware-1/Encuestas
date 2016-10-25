@@ -21,6 +21,9 @@ cd Encuestas
 # Instalar dependencias
 npm install
 
+# Ejecutar mongodb
+mongod --dbpath path\to\data
+
 # Correr server
 npm run develop
 

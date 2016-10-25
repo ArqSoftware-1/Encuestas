@@ -3,6 +3,7 @@ import { join } from "path";
 import * as favicon from "serve-favicon";
 import { json, urlencoded } from "body-parser";
 import * as winston from "winston";
+import mongoose = require("mongoose");
 require('winston-loggly-bulk');
 
 import { loginRouter } from "./routes/login";
@@ -65,3 +66,30 @@ winston.add(winston.transports.Loggly, {
 winston.log('info',"Hola esto es una prueba desde la app de encuestas!");
 
 export { app }
+
+// Prueba mongoose
+
+mongoose.connect('mongodb://localhost/encuestas');
+
+interface IUser {
+    email: string;
+    password: string;
+    displayName: string;
+};
+
+interface IUserModel extends IUser, mongoose.Document { }
+
+var userSchema = new mongoose.Schema({
+    email: String,
+    password: String,
+    displayName: String
+});
+
+var User = mongoose.model<IUserModel>("User", userSchema);
+
+var user = new User({email: "user@appsilon.pl"});
+user.save();
+
+User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
+    console.log(user);
+});
