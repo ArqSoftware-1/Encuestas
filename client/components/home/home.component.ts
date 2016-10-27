@@ -3,7 +3,7 @@ import { ApiService } from "../../service/api.service";
 
 @Component({
     selector: "home",
-    templateUrl: `client/modules/home/home.component.html`
+    templateUrl: `client/components/home/home.component.html`
 })
 export class HomeComponent {
     error: string;

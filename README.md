@@ -10,7 +10,7 @@ https://encuestas-inscripcion.herokuapp.com
 - Express
 - NodeJS
 - Bootstrap 3.3.7
-- Mongoosejs (próximamente)
+- Mongoosejs
 - Loggly (para guardar los logs en la nube)
 
 ## Instalación

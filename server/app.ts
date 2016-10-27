@@ -95,8 +95,8 @@ User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
 });
 
 // Para agregado de materias y sus opciones
-import { Opcion } from "./Domain/Opcion";
-import { Materia } from "./Domain/Materia";
+import { Opcion } from "./models/Opcion";
+import { Materia } from "./models/Materia";
 
 var opcionSchema = new mongoose.Schema({
     Descripcion: String,

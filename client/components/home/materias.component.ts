@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { MateriasService } from "./materias.service"
+import { MateriasService } from "../../service/home/materias.service"
 
 @Component({
   selector: 'materias',
-  templateUrl: 'client/modules/home/materias.component.html',
+  templateUrl: 'client/components/home/materias.component.html',
   providers: [MateriasService],
   inputs: ['materiasOpciones']
  

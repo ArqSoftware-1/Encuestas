@@ -3,10 +3,10 @@ import { HttpModule } from "@angular/http";
 import { NgSemanticModule } from "ng-semantic";
 import { CommonModule } from "@angular/common";
 
-import { HomeComponent } from "./home.component";
-import { routing } from "./home.routing";
+import { HomeComponent } from "../../components/home/home.component";
+import { routing } from "../../routes/home/home.routing";
 import { SharedModule } from "../shared/shared.module";
-import { MateriasComponent } from './materias.component';
+import { MateriasComponent } from '../../components/home/materias.component';
 
 @NgModule({
     imports: [
