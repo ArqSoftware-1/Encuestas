@@ -93,3 +93,30 @@ user.save();
 User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
     console.log(user);
 });
+
+// Para agregado de materias y sus opciones
+import { Opcion } from "./Domain/Opcion";
+import { Materia } from "./Domain/Materia";
+
+var opcionSchema = new mongoose.Schema({
+    Descripcion: String,
+});
+
+var materiaSchema = new mongoose.Schema({
+    Opciones: [],
+    Nombre: String,
+});
+
+var opcion = mongoose.model<Opcion>("Opcion", opcionSchema);
+var materia = mongoose.model<Materia>("Materia", materiaSchema);
+
+var opc = new opcion({Descripcion: "Voy a cursar"});
+opc.save();
+
+var enc = new materia({Opciones: [opc], Nombre: "Matematica"});
+enc.save();
+
+opcion.findOne({Descripcion: "Voy a cursar"}).exec().then(op => {
+    console.log(op);
+});
+//
