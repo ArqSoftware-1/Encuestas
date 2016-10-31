@@ -1,4 +1,4 @@
-import mongoose = require("mongoose");
+/*import mongoose = require("mongoose");
 import { Opcion } from "./Opcion";
 
 export class Materia implements mongoose.Document {
@@ -9,4 +9,4 @@ export class Materia implements mongoose.Document {
         this._Opciones = opciones;
         this._Nombre = materia;
     }
-}
+}*/

@@ -96,7 +96,8 @@ User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
 
 // Para agregado de materias y sus opciones
 import { Opcion } from "./models/Opcion";
-import { Materia } from "./models/Materia";
+import { Document, Schema, model } from 'mongoose'
+/*import { Materia } from "./models/Materia";
 
 var opcionSchema = new mongoose.Schema({
     Descripcion: String,
@@ -118,5 +119,23 @@ enc.save();
 
 opcion.findOne({Descripcion: "Voy a cursar"}).exec().then(op => {
     console.log(op);
+});*/
+
+var opcionSchema = new Schema({
+  descripcion: { required: true, type: String }
+})
+
+opcionSchema.method('toString', Opcion.prototype.toString)
+
+
+interface OpcionDocument extends Opcion, Document { }
+const OpcionModel = model<OpcionDocument>('Opcion', opcionSchema)
+
+var opc = new OpcionModel({Descripcion: "Voy a cursar"});
+opc.save();
+
+OpcionModel.findOne({Descripcion: "Voy a cursar"}).exec().then(op => {
+    console.log(op);
 });
+
 //
