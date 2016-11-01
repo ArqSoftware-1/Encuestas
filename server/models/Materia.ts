@@ -1,12 +1,11 @@
-/*import mongoose = require("mongoose");
 import { Opcion } from "./Opcion";
 
-export class Materia implements mongoose.Document {
+export class Materia {
     _Opciones: Array<Opcion> = [];
-    _Nombre: String;
+    _NombreMateria: String;
 
-    constructor(public opciones: Array<Opcion>, public materia: String) {
+    constructor(public opciones: Array<Opcion>, public nombreMateria: String) {
         this._Opciones = opciones;
-        this._Nombre = materia;
+        this._NombreMateria = nombreMateria;
     }
-}*/
+}

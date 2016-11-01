@@ -96,30 +96,8 @@ User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
 
 // Para agregado de materias y sus opciones
 import { Opcion } from "./models/Opcion";
+import { Materia } from "./models/Materia";
 import { Document, Schema, model } from 'mongoose'
-/*import { Materia } from "./models/Materia";
-
-var opcionSchema = new mongoose.Schema({
-    Descripcion: String,
-});
-
-var materiaSchema = new mongoose.Schema({
-    Opciones: [],
-    Nombre: String,
-});
-
-var opcion = mongoose.model<Opcion>("Opcion", opcionSchema);
-var materia = mongoose.model<Materia>("Materia", materiaSchema);
-
-var opc = new opcion({Descripcion: "Voy a cursar"});
-opc.save();
-
-var enc = new materia({Opciones: [opc], Nombre: "Matematica"});
-enc.save();
-
-opcion.findOne({Descripcion: "Voy a cursar"}).exec().then(op => {
-    console.log(op);
-});*/
 
 var opcionSchema = new Schema({
   descripcion: { required: true, type: String }
@@ -131,11 +109,32 @@ opcionSchema.method('toString', Opcion.prototype.toString)
 interface OpcionDocument extends Opcion, Document { }
 const OpcionModel = model<OpcionDocument>('Opcion', opcionSchema)
 
-var opc = new OpcionModel({Descripcion: "Voy a cursar"});
-opc.save();
+var opc1 = new OpcionModel({Descripcion: "Voy a cursar"});
+var opc2 = new OpcionModel({Descripcion: "Ya Curse"});
+var opc3 = new OpcionModel({Descripcion: "Me gustaria pero no puedo"});
+var opc4 = new OpcionModel({Descripcion: "No voy a cursar"});
 
-OpcionModel.findOne({Descripcion: "Voy a cursar"}).exec().then(op => {
-    console.log(op);
+opc1.save();
+opc2.save();
+opc3.save();
+opc4.save();
+
+var materiaSchema = new Schema({ opciones: { type: [opcionSchema] }, nombreMateria: { type: String } })
+
+interface MateriaDocument extends Materia, Document { }
+const MateriaModel = model<MateriaDocument>('Materia', materiaSchema)
+
+var mat = new MateriaModel({opciones: [opc1, opc2, opc3, opc4], nombreMateria: "Intro"});
+
+mat.save();
+
+MateriaModel.findOne({nombreMateria: "Intro"}).exec().then(materia => {
+    console.log(materia);
 });
 
+MateriaModel.$where('this.nombreMateria === this.nombreMateria').exec(function (err, docs) {
+  // called when the `query.complete` or `query.error` are called
+  // internally
+  console.log(docs);
+})
 //
