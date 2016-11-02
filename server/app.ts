@@ -65,69 +65,12 @@ winston.add(winston.transports.Loggly, {
 });
 winston.log('info',"Hola esto es una prueba desde la app de encuestas!");
 
-export { app }
-
-// Prueba mongoose
-
 mongoose.connect('mongodb://localhost/encuestas');
 
-interface IUser {
-    email: string;
-    password: string;
-    displayName: string;
-};
-
-interface IUserModel extends IUser, mongoose.Document { }
-
-var userSchema = new mongoose.Schema({
-    email: String,
-    password: String,
-    displayName: String
-});
-
-var User = mongoose.model<IUserModel>("User", userSchema);
-
-var user = new User({email: "user@appsilon.pl"});
-user.save();
-
-User.findOne({email: "user@appsilon.pl"}).exec().then(user => {
-    console.log(user);
-});
-
-// Para agregado de materias y sus opciones
-import { Opcion } from "./models/Opcion";
-import { Materia } from "./models/Materia";
-import { Document, Schema, model } from 'mongoose'
-
-var opcionSchema = new Schema({
-  descripcion: { required: true, type: String }
+mongoose.connection.once('open', ()=> {
+    mongoose.connection.db.dropDatabase(() => {
+        require('./data');
+    })
 })
 
-opcionSchema.method('toString', Opcion.prototype.toString)
-
-
-interface OpcionDocument extends Opcion, Document { }
-const OpcionModel = model<OpcionDocument>('Opcion', opcionSchema)
-
-var opc1 = new OpcionModel({descripcion: "Voy a cursar"});
-var opc2 = new OpcionModel({descripcion: "Ya Curse"});
-var opc3 = new OpcionModel({descripcion: "Me gustaria pero no puedo"});
-var opc4 = new OpcionModel({descripcion: "No voy a cursar"});
-
-opc1.save();
-opc2.save();
-opc3.save();
-opc4.save();
-
-var materiaSchema = new Schema({ opciones: { type: [opcionSchema] }, nombreMateria: { type: String } })
-
-interface MateriaDocument extends Materia, Document { }
-const MateriaModel = model<MateriaDocument>('Materia', materiaSchema)
-
-var mat = new MateriaModel({opciones: [opc1, opc2, opc3, opc4], nombreMateria: "Intro"});
-
-mat.save();
-
-MateriaModel.findOne({nombreMateria: "Intro"}).exec().then(materia => {
-    console.log(materia);
-});
+export { app }
