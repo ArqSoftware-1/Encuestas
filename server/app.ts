@@ -109,10 +109,10 @@ opcionSchema.method('toString', Opcion.prototype.toString)
 interface OpcionDocument extends Opcion, Document { }
 const OpcionModel = model<OpcionDocument>('Opcion', opcionSchema)
 
-var opc1 = new OpcionModel({Descripcion: "Voy a cursar"});
-var opc2 = new OpcionModel({Descripcion: "Ya Curse"});
-var opc3 = new OpcionModel({Descripcion: "Me gustaria pero no puedo"});
-var opc4 = new OpcionModel({Descripcion: "No voy a cursar"});
+var opc1 = new OpcionModel({descripcion: "Voy a cursar"});
+var opc2 = new OpcionModel({descripcion: "Ya Curse"});
+var opc3 = new OpcionModel({descripcion: "Me gustaria pero no puedo"});
+var opc4 = new OpcionModel({descripcion: "No voy a cursar"});
 
 opc1.save();
 opc2.save();
@@ -131,10 +131,3 @@ mat.save();
 MateriaModel.findOne({nombreMateria: "Intro"}).exec().then(materia => {
     console.log(materia);
 });
-
-MateriaModel.$where('this.nombreMateria === this.nombreMateria').exec(function (err, docs) {
-  // called when the `query.complete` or `query.error` are called
-  // internally
-  console.log(docs);
-})
-//

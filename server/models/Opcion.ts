@@ -1,11 +1,7 @@
 export class Opcion {
-  _Descripcion: string;
-
-  constructor(public descripcion: string) {
-        this._Descripcion = descripcion;
-    }
+    descripcion: string;
 
     toString() {
-        return this._Descripcion;
+        return this.descripcion;
     }
 }
