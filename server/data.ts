@@ -2,6 +2,7 @@
 import { ModeloOpcion, EsquemaOpcion} from "./models/Opcion";
 import { ModeloMateria, EsquemaMateria} from "./models/Materia";
 import { ModeloEncuesta, EsquemaEncuesta} from "./models/Encuesta";
+import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "./models/RespuestaEncuesta";
 import { Document, Schema, model } from 'mongoose'
 
 
@@ -35,3 +36,7 @@ materia4.save();
 // Encuesta
 var encuesta = new ModeloEncuesta({materias: [materia1, materia2, materia3, materia4], anho: 2016, semestre: 2});
 encuesta.save();
+
+// Encuesta
+var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar'});
+respuestaEncuesta.save();

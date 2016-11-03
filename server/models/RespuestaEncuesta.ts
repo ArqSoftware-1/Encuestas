@@ -3,13 +3,13 @@ import { Document, Schema, model } from 'mongoose'
 
 class RespuestaEncuesta {
     respuestasMateria: Array<RespuestaMateria> = [];
-    DNIUsuario: String;
-    emailUsuario: String;
+    DNIAlumno: String;
+    emailAlumno: String;
 }
 
-var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [RespuestaMateria] }, 
-                                   DNIUsuario: { type: String }, 
-                                   emailUsuario: { type: String } 
+var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaRespuestaMateria] }, 
+                                   DNIAlumno: { type: String }, 
+                                   emailAlumno: { type: String } 
                                  });
 
 interface DocumentoRespuestaEncuesta extends RespuestaEncuesta, Document { };
