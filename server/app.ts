@@ -8,6 +8,8 @@ require('winston-loggly-bulk');
 
 import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
+import { rutaEncuestas } from "./routes/encuestas";
+import { rutaRespuestasEncuesta } from "./routes/respuestasEncuesta";
 
 const app: express.Application = express();
 app.disable("x-powered-by");
@@ -19,7 +21,8 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 
 // api routes
-app.use("/api", protectedRouter);
+app.use("/api/encuestas", rutaEncuestas);
+app.use("/api/respuestas/encuesta", rutaRespuestasEncuesta);
 app.use("/login", loginRouter);
 
 app.use('/client', express.static(join(__dirname, '../client')));

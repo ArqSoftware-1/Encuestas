@@ -1,5 +1,5 @@
 import { RespuestaMateria, EsquemaRespuestaMateria } from "./RespuestaMateria";
-import { Document, Schema, model } from 'mongoose'
+import { Document, Schema, model } from 'mongoose';
 
 class RespuestaEncuesta {
     respuestasMateria: Array<RespuestaMateria> = [];
