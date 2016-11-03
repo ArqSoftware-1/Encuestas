@@ -8,6 +8,7 @@ import { AppComponent }  from './app.component';
 import { routing } from "./routes";
 import { TituloComponent } from "./components/shared/titulo.component";
 import { HomeModule } from "./modules/home/home.module";
+import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
 
 @NgModule({
     imports: [
@@ -15,6 +16,7 @@ import { HomeModule } from "./modules/home/home.module";
         HttpModule,
         NgSemanticModule,      
         HomeModule,
+        RespuestaEncuestaModule,
         routing
     ],
     providers: [
