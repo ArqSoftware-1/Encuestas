@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { RespuestaEncuestaService } from "../../service/respuestaEncuesta/respuestaEncuesta.service";
+import { EncuestaService } from "../../service/respuestaEncuesta/encuesta.service";
 import { ApiService } from "../../service/api.service";
 
 @Component({
   selector: 'materias',
   templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
-  providers: [RespuestaEncuestaService],
+  providers: [RespuestaEncuestaService, EncuestaService],
   inputs: ['materiasOpciones']
  
 })
@@ -14,16 +15,22 @@ export class MateriasComponent {
 	materias;
 	opciones;
 
-	constructor(respuestaEncuestaService:RespuestaEncuestaService, private apiService: ApiService){
+	constructor(respuestaEncuestaService:RespuestaEncuestaService, encuestaService:EncuestaService, private apiService: ApiService){
 		respuestaEncuestaService.obtenerMaterias().subscribe(
-                (data) => {  console.log(data)},
+                (dataMaterias) => {  
+                	console.log(dataMaterias); 
+
+                	encuestaService.obtenerEncuesta(dataMaterias.encuesta._id).subscribe(
+		                (dataEncuesta) => {  this.materias = dataEncuesta.materias},		                
+		                (errorObtenerEncuesta: Error) => {
+		                    console.log(errorObtenerEncuesta);
+		                });
+
+                },
                 (error: Error) => {
                     console.log(error);
                 });
-
-		this.opciones = respuestaEncuestaService.obtenerOpciones();
-		this.materiasOpciones = [];
-		this.materias = [];
+		this.materiasOpciones; = [];
 	}
 
 	eligioOpcionParaMateria(nombreMateria){
