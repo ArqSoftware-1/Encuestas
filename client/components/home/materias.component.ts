@@ -13,8 +13,6 @@ export class MateriasComponent {
 	materias;
 	opciones;
 
-	cities: Array<string> = ["New York", "Belgrade", "Stockholm", "Sarajevo"];
-
 	constructor(estudiantesService:MateriasService){
 		this.materias = estudiantesService.obtenerMaterias();
 		this.opciones = estudiantesService.obtenerOpciones();
