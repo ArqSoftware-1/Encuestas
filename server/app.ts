@@ -10,6 +10,8 @@ import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
 import { rutaEncuestas } from "./routes/encuestas";
 import { rutaRespuestasEncuesta } from "./routes/respuestasEncuesta";
+import { rutaMateria } from "./routes/materias";
+import { rutaOpcion } from "./routes/opciones";
 
 const app: express.Application = express();
 app.disable("x-powered-by");
@@ -21,6 +23,8 @@ app.use(json());
 app.use(urlencoded({ extended: true }));
 
 // api routes
+app.use("/api/opciones", rutaOpcion);
+app.use("/api/materias", rutaMateria);
 app.use("/api/encuestas", rutaEncuestas);
 app.use("/api/respuestas/encuesta", rutaRespuestasEncuesta);
 app.use("/login", loginRouter);

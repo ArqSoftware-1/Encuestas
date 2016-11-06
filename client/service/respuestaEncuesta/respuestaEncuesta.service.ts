@@ -1,18 +1,35 @@
 import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
+import { MateriasService } from "../home/materias.service";
+import { OpcionService } from "../home/opcion.service";
 
 @Injectable()
 export class RespuestaEncuestaService{
+	materiaService;
+	opcionService;
 
-	constructor(private http: Http) {}
+//materiasService: MateriasService, opcionService: OpcionService, 
+	constructor(private http: Http) {
+		//this.materiaService = materiasService;
+		//this.opcionService = opcionService;
+	}
 
-	obtenerMaterias(){
+	obtenerRespuestaEncuesta(){
       	return this.http
 	               .get('/api/respuestas/encuesta/detalle?email=alumno@unq.edu.ar')
 	               .map((response: Response) => response.json())
 	}
 
-	obtenerOpciones(){
-		return [ {Id: 1, Nombre: 'Ya curse' }, { Id: 2, Nombre: 'Voy a cursar en c1' }, { Id: 3, Nombre: 'Voy a cursar en c2' }, { Id: 4, Nombre: 'No voy a cursar' }, { Id: 5, Nombre: 'Me gustaria pero no puedo' } ];
+	guardarRespuesta(materiasOpciones){
+		var respuestaEncuesta = this.obtenerRespuestaEncuesta();
+
+		for(var i = 0; i < materiasOpciones.length; i++){
+			var materia = this.materiaService.obtenerMateria(materiasOpciones[i].IdMateria);
+			var opcion = this.opcionService.obtenerOpcion(materiasOpciones[i].IdOpcion);
+			//var modeloRespuestaMateria = new ModeloRespuestaMateria({materia: materia, opcion: opcion})
+			console.log({materia: materia, opcion: opcion});
+			//respuestaEncuesta.respuestaMateria.push(modeloRespuestaMateria);
+			//update respuestaEncuesta
+		}
 	}
 }

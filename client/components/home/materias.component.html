@@ -3,7 +3,7 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">{{materia.Nombre}}</div>
 			<div class="panel-body">
-				<select (change)="onChange(materia.Nombre, $event)">
+				<select (change)="onChange(materia.Nombre, $event)" class="form-control">
 					<option *ngFor="let opcion of opciones">{{opcion.Nombre}}</option>
 				</select>
 			</div>

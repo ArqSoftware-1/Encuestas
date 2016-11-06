@@ -14,9 +14,11 @@ export class MateriasComponent {
 	materiasOpciones;
 	materias;
 	opciones;
+	respuestaEncuestaService;
 
 	constructor(respuestaEncuestaService:RespuestaEncuestaService, encuestaService:EncuestaService, private apiService: ApiService){
-		respuestaEncuestaService.obtenerMaterias().subscribe(
+		this.respuestaEncuestaService = respuestaEncuestaService;
+		respuestaEncuestaService.obtenerRespuestaEncuesta().subscribe(
                 (dataMaterias) => {  
                 	console.log(dataMaterias); 
 
@@ -30,13 +32,13 @@ export class MateriasComponent {
                 (error: Error) => {
                     console.log(error);
                 });
-		this.materiasOpciones; = [];
+		this.materiasOpciones = [];
 	}
 
-	eligioOpcionParaMateria(nombreMateria){
+	eligioOpcionParaMateria(idMateria){
 		var estaLaMateria = false;
 		for(var i = 0; i < this.materiasOpciones.length; i++){
-			if(this.materiasOpciones[i].Nombre == nombreMateria){
+			if(this.materiasOpciones[i].IdMateria == idMateria){
 				estaLaMateria = true;
 				break;
 			}
@@ -44,33 +46,29 @@ export class MateriasComponent {
 		return estaLaMateria;
 	}
 
-	onChange(nombreMateria, data: {}) {
-		if(this.materiasOpciones.length == 0){
-			var materiaOpcion = { Nombre: nombreMateria, Opcion: data};
-			this.materiasOpciones.push(materiaOpcion);
-		}
+	agregarMateriaOpcion(idMateria, idOpcion){
+		var materiaOpcion = { IdMateria: idMateria, IdOpcion: idOpcion};
+		this.materiasOpciones.push(materiaOpcion);
+	}
+
+	cambiarOpcionDeMateria(idMateria, idOpcion){
 		for(var i = 0; i < this.materiasOpciones.length; i++){
-			if(this.materiasOpciones[i].Nombre == nombreMateria){
-				this.materiasOpciones[i].Opcion = data;
+			if(this.materiasOpciones[i].IdMateria == idMateria){
+				this.materiasOpciones[i].IdOpcion = idOpcion;
 				break;
 			}
 		}
+	}
 
-		var estaLaMateria = false;
-		for(var i = 0; i < this.materiasOpciones.length; i++){
-			if(this.materiasOpciones[i].Nombre == nombreMateria){
-				estaLaMateria = true;
-				break;
-			}
-		}
-
-		if(!estaLaMateria){
-			var materiaOpcion = { Nombre: nombreMateria, Opcion: data};
-			this.materiasOpciones.push(materiaOpcion);
-		}
+	onChange(idMateria, idOpcion) {
+		if(this.materiasOpciones.length == 0 ││ !this.eligioOpcionParaMateria(idMateria))
+			this.agregarMateriaOpcion(idMateria, idOpcion);
+		
+		this.cambiarOpcionDeMateria(idMateria, idOpcion);
 	}
 
 	enviar(){
 		console.log(this.materiasOpciones);
+		this.respuestaEncuestaService.guardarRespuesta(this.materiasOpciones);
 	}
 }

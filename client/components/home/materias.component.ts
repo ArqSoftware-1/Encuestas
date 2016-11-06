@@ -13,9 +13,9 @@ export class MateriasComponent {
 	materias;
 	opciones;
 
-	constructor(estudiantesService:MateriasService){
-		this.materias = estudiantesService.obtenerMaterias();
-		this.opciones = estudiantesService.obtenerOpciones();
+	constructor(materiaService:MateriasService){
+		this.materias = materiaService.obtenerMaterias();
+		this.opciones = materiaService.obtenerOpciones();
 		this.materiasOpciones = [];
 	}
 
