@@ -1,5 +1,6 @@
 import { Router, Response, Request, NextFunction } from "express";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "../models/RespuestaEncuesta";
+import { ModeloRespuestaMateria, EsquemaRespuestaMateria} from "../models/RespuestaMateria";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
 
@@ -19,8 +20,23 @@ rutaRespuestasEncuesta.use((request: Request & { headers: { authorization: strin
     });
 });
 
+rutaRespuestasEncuesta.post("/actualizar-respuestas", (request: Request, response: Response) => {
+    var respuestas =  request.body.respuestas;
+    ModeloRespuestaEncuesta.findById(request.param('id')).exec()
+                                    .then(respuestaEncuesta => { 
+                                        /*respuestas.forEach(function(respuesta) {
+                                            var respuestaMateria = new ModeloRespuestaMateria({materia_id: respuesta.materia._id,
+                                                                       opcion_id: respuesta.opcion._id});
+                                            respuestaMateria.save();
+                                            respuestaEncuesta.respuestasMateria.push(respuestaMateria);
+                                            respuestaEncuesta.save();
+                                        });*/
+                                        response.json(respuestaEncuesta);
+                                    });
+});
+
 rutaRespuestasEncuesta.get("/detalle", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.findOne({emailAlumno: request.param('email')}).exec()
+    ModeloRespuestaEncuesta.findOne({_id: request.param('token')}).exec()
                                     .then(respuestaEncuesta => {
                                             response.json(respuestaEncuesta);
                                     });

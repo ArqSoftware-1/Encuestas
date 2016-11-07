@@ -2,73 +2,66 @@ import { Component } from '@angular/core';
 import { RespuestaEncuestaService } from "../../service/respuestaEncuesta/respuestaEncuesta.service";
 import { EncuestaService } from "../../service/respuestaEncuesta/encuesta.service";
 import { ApiService } from "../../service/api.service";
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'materias',
   templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
-  providers: [RespuestaEncuestaService, EncuestaService],
-  inputs: ['materiasOpciones']
+  providers: [RespuestaEncuestaService]
  
 })
 export class MateriasComponent {
-	materiasOpciones;
+	respuestaEncuesta;
 	materias;
-	opciones;
-	respuestaEncuestaService;
+	respuestaEncuestaService: RespuestaEncuestaService;
 
-	constructor(respuestaEncuestaService:RespuestaEncuestaService, encuestaService:EncuestaService, private apiService: ApiService){
-		this.respuestaEncuestaService = respuestaEncuestaService;
-		respuestaEncuestaService.obtenerRespuestaEncuesta().subscribe(
-                (dataMaterias) => {  
-                	console.log(dataMaterias); 
+	constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute){
+        var token = route.snapshot.queryParams['token'];
 
-                	encuestaService.obtenerEncuesta(dataMaterias.encuesta._id).subscribe(
-		                (dataEncuesta) => {  this.materias = dataEncuesta.materias},		                
-		                (errorObtenerEncuesta: Error) => {
-		                    console.log(errorObtenerEncuesta);
-		                });
-
+        this.respuestaEncuestaService = respuestaEncuestaService;
+        this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
+                (respuestaEncuesta) => {
+                    if(respuestaEncuesta){
+                    	this.respuestaEncuesta = respuestaEncuesta;
+                    	this.materias = respuestaEncuesta.encuesta.materias;
+                    }
                 },
                 (error: Error) => {
                     console.log(error);
                 });
-		this.materiasOpciones = [];
 	}
 
-	eligioOpcionParaMateria(idMateria){
-		var estaLaMateria = false;
-		for(var i = 0; i < this.materiasOpciones.length; i++){
-			if(this.materiasOpciones[i].IdMateria == idMateria){
-				estaLaMateria = true;
-				break;
-			}
-		}
-		return estaLaMateria;
+	esLaOpcionElegida(materia, opcion){
+		/*var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
+			(materiaOpcion) => materiaOpcion.opcion._id == opcion._id)[0];
+		if(respuestaMateria)
+			return true;
+		else
+			return false;*/
+		return false;
 	}
 
-	agregarMateriaOpcion(idMateria, idOpcion){
-		var materiaOpcion = { IdMateria: idMateria, IdOpcion: idOpcion};
-		this.materiasOpciones.push(materiaOpcion);
-	}
+	seleccionarOpcionDeMateria(idMateria, idOpcion){
+		var materia = this.respuestaEncuesta.encuesta.materias.filter(
+      		(materia) => materia._id == idMateria)[0];
+		var opcion = materia.opciones.filter(
+      		(opcion) => opcion._id == idOpcion)[0];
 
-	cambiarOpcionDeMateria(idMateria, idOpcion){
-		for(var i = 0; i < this.materiasOpciones.length; i++){
-			if(this.materiasOpciones[i].IdMateria == idMateria){
-				this.materiasOpciones[i].IdOpcion = idOpcion;
-				break;
-			}
-		}
-	}
-
-	onChange(idMateria, idOpcion) {
-		if(this.materiasOpciones.length == 0 ││ !this.eligioOpcionParaMateria(idMateria))
-			this.agregarMateriaOpcion(idMateria, idOpcion);
-		
-		this.cambiarOpcionDeMateria(idMateria, idOpcion);
+		this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(
+														(opcionSeleccionada) =>
+																 opcionSeleccionada.materia._id !== idMateria);
+		if(opcion)
+			this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
 	}
 
 	enviar(){
-		console.log(this.materiasOpciones);
-		this.respuestaEncuestaService.guardarRespuesta(this.materiasOpciones);
+		this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, 
+			this.respuestaEncuesta.respuestasMateria).subscribe(
+                (data) => {
+                    console.log(data);
+                },
+                (error: Error) => {
+                    console.log(error);
+            });;
 	}
 }

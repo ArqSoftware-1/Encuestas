@@ -14,22 +14,15 @@ export class RespuestaEncuestaService{
 		//this.opcionService = opcionService;
 	}
 
-	obtenerRespuestaEncuesta(){
+	obtenerRespuestaEncuesta(token:String){
       	return this.http
-	               .get('/api/respuestas/encuesta/detalle?email=alumno@unq.edu.ar')
+	               .get('/api/respuestas/encuesta/detalle?token=' + token)
 	               .map((response: Response) => response.json())
 	}
 
-	guardarRespuesta(materiasOpciones){
-		var respuestaEncuesta = this.obtenerRespuestaEncuesta();
-
-		for(var i = 0; i < materiasOpciones.length; i++){
-			var materia = this.materiaService.obtenerMateria(materiasOpciones[i].IdMateria);
-			var opcion = this.opcionService.obtenerOpcion(materiasOpciones[i].IdOpcion);
-			//var modeloRespuestaMateria = new ModeloRespuestaMateria({materia: materia, opcion: opcion})
-			console.log({materia: materia, opcion: opcion});
-			//respuestaEncuesta.respuestaMateria.push(modeloRespuestaMateria);
-			//update respuestaEncuesta
-		}
+	actualizarRespuestas(respuestaEncuestaId, respuestas){
+		return this.http
+	               .post('/api/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {respuestas: respuestas})
+	               .map((response: Response) => response.json())
 	}
 }

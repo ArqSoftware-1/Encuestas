@@ -10,7 +10,7 @@ import { Document, Schema, model } from 'mongoose'
 var opcion1 = new ModeloOpcion({descripcion: "Voy a cursar en c1"});
 var opcion2 = new ModeloOpcion({descripcion: "Voy a cursar en c2"});
 var opcion3 = new ModeloOpcion({descripcion: "Voy a cursar en c3"});
-var opcion4 = new ModeloOpcion({descripcion: "Ya Cursé"});
+var opcion4 = new ModeloOpcion({descripcion: "Ya cursé"});
 var opcion5 = new ModeloOpcion({descripcion: "Me gustaría pero no puedo"});
 var opcion6 = new ModeloOpcion({descripcion: "No voy a cursar"});
 
@@ -34,7 +34,7 @@ materia3.save();
 materia4.save();
 
 // Encuesta
-var encuesta = new ModeloEncuesta({materias: [materia1, materia2, materia3, materia4], anho: 2016, semestre: 2});
+var encuesta = new ModeloEncuesta({materias: [materia1, materia2, materia3, materia4], anho: 2016, semestre: 2, carrera: 'Licenciatura en informática'});
 encuesta.save();
 
 // Encuesta

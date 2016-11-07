@@ -3,12 +3,12 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">{{materia.nombre}}</div>
 			<div class="panel-body">
-				<select (change)="onChange(materia._id, $event.target.value)" class="form-control">
+				<select (change)="seleccionarOpcionDeMateria(materia._id, $event.target.value)" class="form-control">
 					<option>--Elija una opción--</option>
-					<option *ngFor="let opcion of materia.opciones" value="{{opcion._id}}">{{opcion.descripcion}}</option>
+					<option *ngFor="let opcion of materia.opciones" value="{{opcion._id}}" [selected]="esLaOpcionElegida(materia, opcion)">{{opcion.descripcion}}</option>
 				</select>
 			</div>
 		</div>
 	</div>
 </div>
-<button type="button" class="btn btn-success navbar-btn" (click)="enviar()">Enviar (ver consola)</button>
+<button type="button" class="btn btn-success navbar-btn" (click)="enviar()">Enviar</button>
