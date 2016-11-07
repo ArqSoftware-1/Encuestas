@@ -14,13 +14,17 @@ export class RespuestaEncuestaComponent {
 
     constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute) {
         var token = route.snapshot.queryParams['token'];
+        if(!token){
+            this.titulo = 'No exite la encuesta seleccionada.';
+            return;
+        }
         respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
                 (respuestaEncuesta) => {  
                     if(respuestaEncuesta){
                         this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre 
                                        + ' - ' + respuestaEncuesta.encuesta.carrera;
                     }else{
-                        this.titulo = 'No exite la encuesta';
+                        this.titulo = 'No exite la encuesta seleccionada.';
                     }
 
                 },

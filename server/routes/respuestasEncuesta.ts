@@ -1,6 +1,8 @@
 import { Router, Response, Request, NextFunction } from "express";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "../models/RespuestaEncuesta";
 import { ModeloRespuestaMateria, EsquemaRespuestaMateria} from "../models/RespuestaMateria";
+import { Materia, ModeloMateria, EsquemaMateria } from "../models/Materia";
+import { Opcion, ModeloOpcion, EsquemaOpcion } from "../models/Opcion";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
 
@@ -23,14 +25,15 @@ rutaRespuestasEncuesta.use((request: Request & { headers: { authorization: strin
 rutaRespuestasEncuesta.post("/actualizar-respuestas", (request: Request, response: Response) => {
     var respuestas =  request.body.respuestas;
     ModeloRespuestaEncuesta.findById(request.param('id')).exec()
-                                    .then(respuestaEncuesta => { 
-                                        /*respuestas.forEach(function(respuesta) {
-                                            var respuestaMateria = new ModeloRespuestaMateria({materia_id: respuesta.materia._id,
-                                                                       opcion_id: respuesta.opcion._id});
-                                            respuestaMateria.save();
+                                    .then(respuestaEncuesta => {
+                                        respuestaEncuesta.respuestasMateria = [];
+                                        respuestas.forEach(function(respuesta) {
+                                            var materia = new ModeloMateria(respuesta.materia);
+                                            var opcion = new ModeloOpcion(respuesta.opcion);
+                                            var respuestaMateria = new ModeloRespuestaMateria({materia: materia, opcion: opcion});
                                             respuestaEncuesta.respuestasMateria.push(respuestaMateria);
-                                            respuestaEncuesta.save();
-                                        });*/
+                                        });
+                                        respuestaEncuesta.save();
                                         response.json(respuestaEncuesta);
                                     });
 });

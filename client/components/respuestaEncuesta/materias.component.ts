@@ -14,9 +14,13 @@ export class MateriasComponent {
 	respuestaEncuesta;
 	materias;
 	respuestaEncuestaService: RespuestaEncuestaService;
+	encuestaFinalizada: Boolean;
+	enlace: String;
 
 	constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute){
         var token = route.snapshot.queryParams['token'];
+        this.encuestaFinalizada = false;
+        this.enlace = document.URL;
 
         this.respuestaEncuestaService = respuestaEncuestaService;
         this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
@@ -32,13 +36,12 @@ export class MateriasComponent {
 	}
 
 	esLaOpcionElegida(materia, opcion){
-		/*var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
-			(materiaOpcion) => materiaOpcion.opcion._id == opcion._id)[0];
+		var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
+			(materiaOpcion) => materiaOpcion.opcion._id == opcion._id && materiaOpcion.materia._id == materia._id)[0];
 		if(respuestaMateria)
 			return true;
 		else
-			return false;*/
-		return false;
+			return false;
 	}
 
 	seleccionarOpcionDeMateria(idMateria, idOpcion){
@@ -54,11 +57,13 @@ export class MateriasComponent {
 			this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
 	}
 
-	enviar(){
+	guardar(){
+		if(!this.respuestaEncuesta)return;
 		this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, 
 			this.respuestaEncuesta.respuestasMateria).subscribe(
                 (data) => {
                     console.log(data);
+                    this.encuestaFinalizada = true;
                 },
                 (error: Error) => {
                     console.log(error);

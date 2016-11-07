@@ -1,14 +1,24 @@
-<div class="row">
-	<div class="col-md-4" *ngFor="let materia of materias">
-		<div class="panel panel-default">
-			<div class="panel-heading">{{materia.nombre}}</div>
-			<div class="panel-body">
-				<select (change)="seleccionarOpcionDeMateria(materia._id, $event.target.value)" class="form-control">
-					<option>--Elija una opción--</option>
-					<option *ngFor="let opcion of materia.opciones" value="{{opcion._id}}" [selected]="esLaOpcionElegida(materia, opcion)">{{opcion.descripcion}}</option>
-				</select>
+<div *ngIf="!encuestaFinalizada">
+	<div class="row">
+		<div class="col-md-4" *ngFor="let materia of materias">
+			<div class="panel panel-default">
+				<div class="panel-heading">{{materia.nombre}}</div>
+				<div class="panel-body">
+					<select (change)="seleccionarOpcionDeMateria(materia._id, $event.target.value)" class="form-control">
+						<option>--Elija una opción--</option>
+						<option *ngFor="let opcion of materia.opciones" value="{{opcion._id}}" [selected]="esLaOpcionElegida(materia, opcion)">{{opcion.descripcion}}</option>
+					</select>
+				</div>
 			</div>
 		</div>
 	</div>
+	<button type="button" class="btn btn-success navbar-btn" (click)="guardar()">Guardar</button>
 </div>
-<button type="button" class="btn btn-success navbar-btn" (click)="enviar()">Enviar</button>
+
+<div *ngIf="encuestaFinalizada">
+	<div class="row">
+		<div class="col-md-8">
+			<p>La encuesta fue guardada correctamente. Para poder editarla ingrese desde el siguiente enlace: <a href="{{enlace}}" target="_blank">{{enlace}}</a>. Recuerde guardarlo en un lugar seguro.</p>
+		</div>
+	</div>
+</div>
