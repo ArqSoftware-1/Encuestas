@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/@types/mongoose/index.d.ts" />
+/// <reference path="../node_modules/@types/mongodb/index.d.ts" />
 import * as express from "express";
 import { join } from "path";
 import * as favicon from "serve-favicon";
