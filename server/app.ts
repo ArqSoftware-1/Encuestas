@@ -1,4 +1,4 @@
-/// <reference path="../node_modules/typescript/lib/lib.es6.d.ts" />
+/// <reference path="../node_modules/typescript/lib/lib.es5.d.ts" />
 import * as express from "express";
 import { join } from "path";
 import * as favicon from "serve-favicon";
