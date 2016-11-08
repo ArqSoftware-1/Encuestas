@@ -72,7 +72,7 @@ winston.add(winston.transports.Loggly, {
 });
 winston.log('info',"Hola esto es una prueba desde la app de encuestas!");
 
-mongoose.connect(/*process.env.MONGOLAB_URI ||*/ 'mongodb://localhost/encuestas');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/encuestas');
 
 mongoose.connection.once('open', ()=> {
     mongoose.connection.db.dropDatabase(() => {
