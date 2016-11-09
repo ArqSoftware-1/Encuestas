@@ -70,7 +70,7 @@ winston.add(winston.transports.Loggly, {
     tags: ["Winston-NodeJS"],
     json:true
 });
-winston.log('info',"Hola esto es una prueba desde la app de encuestas!");
+winston.log('info',"Aplicación iniciada");
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
 

@@ -29,6 +29,7 @@ export class RespuestaEncuestaComponent {
 
                 },
                 (error: Error) => {
+                    this.titulo = 'No exite la encuesta seleccionada.';
                     console.log(error);
                 });
     }

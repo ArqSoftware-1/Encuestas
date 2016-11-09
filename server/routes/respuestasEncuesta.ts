@@ -5,6 +5,7 @@ import { Materia, ModeloMateria, EsquemaMateria } from "../models/Materia";
 import { Opcion, ModeloOpcion, EsquemaOpcion } from "../models/Opcion";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
+import * as winston from "winston";
 
 const rutaRespuestasEncuesta: Router = Router();
 
@@ -35,13 +36,21 @@ rutaRespuestasEncuesta.post("/actualizar-respuestas", (request: Request, respons
                                         });
                                         respuestaEncuesta.save();
                                         response.json(respuestaEncuesta);
+                                    })
+                                    .catch(error => {
+                                        winston.log('error', 'Se ha produccido un error al actualizar una respeusta: ' + error);
+                                        response.status(400).json(error);
                                     });
 });
 
 rutaRespuestasEncuesta.get("/detalle", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.findOne({_id: request.param('token')}).exec()
+    ModeloRespuestaEncuesta.findById(request.param('token')).exec()
                                     .then(respuestaEncuesta => {
                                             response.json(respuestaEncuesta);
+                                    })
+                                    .catch(error => {
+                                        winston.log('error ', 'Se ha produccido un error al obtener una respuesta: ' + error);
+                                        response.status(400).json(error);
                                     });
 });
 
@@ -49,6 +58,10 @@ rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) =>
     ModeloRespuestaEncuesta.find().exec()
                                     .then(respuestasEncuesta => {
                                             response.json(respuestasEncuesta);
+                                    })
+                                    .catch(error => {
+                                        winston.log('error', 'Se ha produccido un error al listar las respuestas: ' + error);
+                                        response.status(400).json(error);
                                     });
 });
 
