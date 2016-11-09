@@ -1,7 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'respuesta-encuesta', pathMatch: 'full' }
+    { path: '', redirectTo: 'login', pathMatch: 'full' }
 ];
 
 export const routing = RouterModule.forRoot(routes, { useHash: true });

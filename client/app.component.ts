@@ -8,7 +8,7 @@ import "rxjs/add/operator/map";
     templateUrl: "client/app.component.html"
 })
 export class AppComponent {
-    nombreApp: string = "Encuestas";
+    nombreApp: string = "Encuestas - UNQ";
     user: any = {
         password: "1234",
         username: "Fernando"

@@ -9,6 +9,7 @@ import { routing } from "./routes";
 import { TituloComponent } from "./components/shared/titulo.component";
 import { HomeModule } from "./modules/home/home.module";
 import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
+import { LoginModule } from "./modules/autenticacion/login.module";
 
 @NgModule({
     imports: [
@@ -17,6 +18,7 @@ import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEn
         NgSemanticModule,      
         HomeModule,
         RespuestaEncuestaModule,
+        LoginModule,
         routing
     ],
     providers: [
