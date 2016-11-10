@@ -22,7 +22,7 @@ export class LoginComponent {
     	this.route = route;
     	this.loginService = loginService;
     	if(localStorage.getItem("id_token")){
-    		this.route.navigate(['listado-encuesta']);
+    		this.route.navigate(['encuestas/listado']);
     	}
     }
 
