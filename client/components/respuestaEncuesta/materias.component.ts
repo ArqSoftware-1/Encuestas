@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RespuestaEncuestaService } from "../../service/respuestaEncuesta/respuestaEncuesta.service";
-import { EncuestaService } from "../../service/respuestaEncuesta/encuesta.service";
 import { ApiService } from "../../service/api.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 

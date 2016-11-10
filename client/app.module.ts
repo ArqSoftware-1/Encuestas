@@ -10,6 +10,8 @@ import { TituloComponent } from "./components/shared/titulo.component";
 import { HomeModule } from "./modules/home/home.module";
 import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
 import { LoginModule } from "./modules/autenticacion/login.module";
+import { ListadoEncuestaModule } from "./modules/encuesta/listadoEncuesta.module";
+//import { VerEncuestaModule } from "./modules/encuesta/verEncuesta.module";
 
 @NgModule({
     imports: [
@@ -19,7 +21,9 @@ import { LoginModule } from "./modules/autenticacion/login.module";
         HomeModule,
         RespuestaEncuestaModule,
         LoginModule,
-        routing
+        routing,
+        ListadoEncuestaModule,
+        //VerEncuestaModule,
     ],
     providers: [
         provideAuth({

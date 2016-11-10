@@ -1,0 +1,21 @@
+<h2>Listado de Encuestas</h2>
+<table class="table">
+	<thead >
+	  <tr>
+	    <th>Año - Semestre</th>
+	    <th>Carrera</th>
+	    <th>Acciones</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr *ngFor="let encuesta of encuestas">
+	    <td>{{encuesta.anho}} - {{encuesta.semestre}}</td>
+	    <td>{{encuesta.carrera}}</td>
+	    <td>
+	    	<!--<a [routerLink]="['../ver-encuesta', encuesta._id]"><span class="glyphicon glyphicon-search"></span></a>
+	    	<a><span class="glyphicon glyphicon-pencil"></span></a>
+	    	<a><span class="glyphicon glyphicon-remove"></span></a>-->
+	    </td>
+	  </tr>
+	</tbody>
+</table>
