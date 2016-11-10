@@ -44,15 +44,7 @@ rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
 });
 
 rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
-    /*ModeloRespuestaEncuesta.find({'encuesta._id': request.param('id')}, {'group': 'opciones'}).exec()
-                         .then(encuestas => {
-                            response.json(encuestas);
-                         })
-                         .catch(error => {
-                            winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-                            response.status(400).json(error);
-                         });*/
-    ModeloRespuestaEncuesta.aggregate({$match:{}},
+    ModeloRespuestaEncuesta.aggregate({$match:{ 'encuesta._id': request.param('id')}},
                                       {$unwind: '$respuestasMateria'},
                                       {$project: {encuesta_id: '$encuesta._id', opcion: '$respuestasMateria.opcion.descripcion', materia: '$respuestasMateria.materia.nombre'}},
                                       {$group: { _id : { opcion: '$opcion', materia: '$materia'}, count: {$sum: 1} } }

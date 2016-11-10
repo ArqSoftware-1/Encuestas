@@ -45,6 +45,9 @@ encuesta.save();
 var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar'});
 respuestaEncuesta.save();
 
+var respuestaEncuesta1 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar'});
+respuestaEncuesta1.save();
+
 // Director
 const salt = randomBytes(128).toString("base64");
 
