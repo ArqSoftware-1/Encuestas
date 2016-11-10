@@ -14,7 +14,7 @@ export class ListadoEncuestaComponent {
 	constructor(encuestaService:EncuestaService){
 		encuestaService.obtenerTodasLasEncuestas().subscribe(
                 (encuestas) => {
-                    	this.encuestas = encuestas;                    
+                    this.encuestas = encuestas;                    
                 },
                 (error: Error) => {
                     console.log(error);

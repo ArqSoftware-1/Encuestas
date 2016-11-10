@@ -10,12 +10,18 @@ export class EncuestaService{
 	obtenerEncuesta(id){
       	return this.http
 	               .get('/api/encuestas/detalle?id=' + id)
-	               .map((response: Response) => response.json())
+	               .map((response: Response) => response.json());
 	}
 
 	obtenerTodasLasEncuestas(){
       	return this.http
 	               .get('/api/encuestas/listado')
-	               .map((response: Response) => response.json())
+	               .map((response: Response) => response.json());
+	}
+
+	obtenerEstadisticas(id){
+      	return this.http
+	               .get('/api/encuestas/estadisticas?id=' + id)
+	               .map((response: Response) => response.json());
 	}
 }

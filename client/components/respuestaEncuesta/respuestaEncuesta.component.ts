@@ -13,7 +13,7 @@ export class RespuestaEncuestaComponent {
     titulo: String;
 
     constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute) {
-        var token = route.snapshot.queryParams['token'];
+        var token = route.snapshot.params['token'];
         if(!token){
             this.titulo = 'No exite la encuesta seleccionada.';
             return;

@@ -17,7 +17,7 @@ export class MateriasComponent {
 	enlace: String;
 
 	constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute){
-        var token = route.snapshot.queryParams['token'];
+        var token = route.snapshot.params['token'];
         this.encuestaFinalizada = false;
         this.enlace = document.URL;
 

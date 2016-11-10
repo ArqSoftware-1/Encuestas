@@ -10,7 +10,7 @@ import { TituloComponent } from "./components/shared/titulo.component";
 import { HomeModule } from "./modules/home/home.module";
 import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
 import { LoginModule } from "./modules/autenticacion/login.module";
-import { ListadoEncuestaModule } from "./modules/encuesta/listadoEncuesta.module";
+import { EncuestaModule } from "./modules/encuesta/encuesta.module";
 //import { VerEncuestaModule } from "./modules/encuesta/verEncuesta.module";
 
 @NgModule({
@@ -22,7 +22,7 @@ import { ListadoEncuestaModule } from "./modules/encuesta/listadoEncuesta.module
         RespuestaEncuestaModule,
         LoginModule,
         routing,
-        ListadoEncuestaModule,
+        EncuestaModule,
         //VerEncuestaModule,
     ],
     providers: [

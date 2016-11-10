@@ -3,8 +3,9 @@ import { HttpModule } from "@angular/http";
 import { NgSemanticModule } from "ng-semantic";
 import { CommonModule } from "@angular/common";
 
+import { EstadisticasEncuestaComponent } from "../../components/encuesta/estadisticasEncuesta.component";
 import { ListadoEncuestaComponent } from "../../components/encuesta/listadoEncuesta.component";
-import { routing } from "../../routes/encuesta/listadoEncuesta.routing";
+import { routing } from "../../routes/encuesta/encuesta.routing";
 import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
@@ -16,13 +17,15 @@ import { SharedModule } from "../shared/shared.module";
         NgSemanticModule
     ],
     declarations: [
-        ListadoEncuestaComponent
+        ListadoEncuestaComponent,
+        EstadisticasEncuestaComponent
     ],
     bootstrap: [
-        ListadoEncuestaComponent
+        ListadoEncuestaComponent,
+        EstadisticasEncuestaComponent
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA
     ]
 })
-export class ListadoEncuestaModule { }
+export class EncuestaModule { }
