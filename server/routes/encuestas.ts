@@ -10,11 +10,11 @@ rutaEncuestas.use((request: Request & { headers: { authorization: string } }, re
     const token = request.headers.authorization;
 
     verify(token, secret, function(tokenError) {
-        /*if (tokenError) {
+        if (tokenError) {
             return response.status(403).json({
                 message: "Invalid token, please Log in first"
             });
-        }*/
+        }
 
         next();
     });

@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Http, Response} from '@angular/http';
+import { AuthHttp } from "angular2-jwt";
 import { MateriasService } from "../home/materias.service";
 import { OpcionService } from "../home/opcion.service";
 
@@ -9,7 +10,7 @@ export class RespuestaEncuestaService{
 	opcionService;
 
 //materiasService: MateriasService, opcionService: OpcionService, 
-	constructor(private http: Http) {
+	constructor(private http: AuthHttp) {
 		//this.materiaService = materiasService;
 		//this.opcionService = opcionService;
 	}

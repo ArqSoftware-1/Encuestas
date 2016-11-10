@@ -3,7 +3,11 @@ import { ModeloOpcion, EsquemaOpcion} from "./models/Opcion";
 import { ModeloMateria, EsquemaMateria} from "./models/Materia";
 import { ModeloEncuesta, EsquemaEncuesta} from "./models/Encuesta";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "./models/RespuestaEncuesta";
+import { ModeloDirector, EsquemaDirector} from "./models/Director";
 import { Document, Schema, model } from 'mongoose'
+import { randomBytes, pbkdf2 } from "crypto";
+import { sign } from "jsonwebtoken";
+import { secret, length, digest } from "./config";
 
 
 // Opciones
@@ -40,3 +44,11 @@ encuesta.save();
 // Encuesta
 var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar'});
 respuestaEncuesta.save();
+
+// Director
+const salt = randomBytes(128).toString("base64");
+
+pbkdf2('1234', salt, 10000, length, digest, (err: Error, hash: Buffer) => {
+	var director = new ModeloDirector({email: 'director@unq.edu.ar', password: hash.toString("hex"), salt: salt});
+	director.save();
+});
