@@ -44,10 +44,12 @@ rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
 });
 
 rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.aggregate({$match:{ 'encuesta._id': request.param('id')}},
+    ModeloRespuestaEncuesta.aggregate(
                                       {$unwind: '$respuestasMateria'},
                                       {$unwind: '$encuesta'},
                                       {$project: {encuesta_id: '$encuesta._id', opcion: '$respuestasMateria.opcion.descripcion', materia: '$respuestasMateria.materia.nombre'}},
+                                      /*{$match: {'encuesta._id': {$gte: request.param('id')} }},*/
+                                      /*{ $lookup: {from: 'encuesta', localField: 'encuesta._id', foreignField: '_id', as: request.param('id')} },*/
                                       {$group: { _id : { opcion: '$opcion', materia: '$materia', encuesta_id: '$encuesta_id'}, count: {$sum: 1} } }
                                       ).exec()
                          .then(encuestas => {
