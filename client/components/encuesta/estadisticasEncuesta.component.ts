@@ -12,8 +12,8 @@ export class EstadisticasEncuestaComponent {
 	encuestas;
 	
 	constructor(encuestaService:EncuestaService, route: ActivatedRoute){
-		var token = route.snapshot.params['id'];
-		encuestaService.obtenerEstadisticas(token).subscribe(
+		var id = route.snapshot.params['id'];
+		encuestaService.obtenerEstadisticas(id).subscribe(
                 (encuestas) => {
                     console.log(encuestas);                    
                 },
