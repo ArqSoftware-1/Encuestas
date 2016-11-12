@@ -37,16 +37,22 @@ materia2.save();
 materia3.save();
 materia4.save();
 
-// Encuesta
+// Encuestas
 var encuesta = new ModeloEncuesta({materias: [materia1, materia2, materia3, materia4], anho: 2016, semestre: 2, carrera: 'Licenciatura en informática'});
 encuesta.save();
 
-// Encuesta
+var encuesta1 = new ModeloEncuesta({materias: [materia1, materia2, materia3], anho: 2017, semestre: 1, carrera: 'Licenciatura en informática'});
+encuesta1.save();
+
+// Respuestas
 var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar'});
 respuestaEncuesta.save();
 
 var respuestaEncuesta1 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar'});
 respuestaEncuesta1.save();
+
+var respuestaEncuesta2 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta1, DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar'});
+respuestaEncuesta2.save();
 
 // Director
 const salt = randomBytes(128).toString("base64");

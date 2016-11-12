@@ -33,7 +33,7 @@ rutaEncuestas.get("/listado", (request: Request, response: Response) => {
 });
 
 rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
-    ModeloEncuesta.findOne({_id: request.param('id')}).exec()
+    ModeloEncuesta.findById(request.param('id')).exec()
                          .then(encuesta => {
                             response.json(encuesta);
                          })
@@ -48,12 +48,19 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
                                       {$unwind: '$respuestasMateria'},
                                       {$unwind: '$encuesta'},
                                       {$project: {encuesta_id: '$encuesta._id', opcion: '$respuestasMateria.opcion.descripcion', materia: '$respuestasMateria.materia.nombre'}},
-                                      /*{$match: {'encuesta._id': {$gte: request.param('id')} }},*/
-                                      /*{ $lookup: {from: 'encuesta', localField: 'encuesta._id', foreignField: '_id', as: request.param('id')} },*/
                                       {$group: { _id : { opcion: '$opcion', materia: '$materia', encuesta_id: '$encuesta_id'}, count: {$sum: 1} } }
                                       ).exec()
-                         .then(encuestas => {
-                            response.json(encuestas);
+                         .then(estadisticas => {
+                            var estadísticasFiltradas = estadisticas.filter(
+                                                            estadistica => estadistica._id.encuesta_id == request.param('id'));
+                            ModeloEncuesta.findOne({_id: request.param('id')}).exec()
+                                                 .then(encuesta => {
+                                                    response.json({estadisticas: estadísticasFiltradas, encuesta: encuesta});
+                                                 })
+                                                 .catch(error => {
+                                                    winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta en estadisticas: ' + error);
+                                                    response.status(400).json(error);
+                                                 });
                          })
                          .catch(error => {
                             winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);

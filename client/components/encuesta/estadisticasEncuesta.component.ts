@@ -3,22 +3,38 @@ import { EncuestaService } from "../../service/encuesta/encuesta.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
-  selector: 'encuestas',
+  selector: 'estadisticas-encuesta',
   templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
   providers: [EncuestaService]
 })
 
 export class EstadisticasEncuestaComponent {
-	encuestas;
+	titulo;
+  estadisticas;
+  materias;
 	
 	constructor(encuestaService:EncuestaService, route: ActivatedRoute){
 		var id = route.snapshot.params['id'];
-		encuestaService.obtenerEstadisticas(id).subscribe(
-                (encuestas) => {
-                    console.log(encuestas);                    
+    encuestaService.obtenerEstadisticas(id).subscribe(
+                (estadistica) => {
+                    console.log(estadistica); 
+                    this.estadisticas = estadistica.estadisticas;
+                    this.materias = estadistica.encuesta.materias;
+                    this.titulo = 'Estadísticas de inscripción ' + estadistica.encuesta.anho + ' del semestre ' + estadistica.encuesta.semestre + ' - ' + estadistica.encuesta.carrera;     
                 },
                 (error: Error) => {
                     console.log(error);
                 });
 	}
+
+  cantidadPara(materia, opcion){
+    var estadistica = this.estadisticas.filter(
+                              (estadistica) => estadistica._id.materia == materia.nombre 
+                                                && estadistica._id.opcion == opcion.descripcion)[0];
+    if(estadistica){
+        return estadistica.count;
+    }
+    return 0;
+  }
+
 }
