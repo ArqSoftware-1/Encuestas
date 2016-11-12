@@ -12,10 +12,11 @@
 	    <td>{{encuesta.anho}} - {{encuesta.semestre}}</td>
 	    <td>{{encuesta.carrera}}</td>
 	    <td>
-	    	<a [routerLink]="['/encuestas/estadisticas', encuesta._id]"><span class="glyphicon glyphicon-stats"></span></a>
-	    	<a><span class="glyphicon glyphicon-search"></span></a>
-	    	<a><span class="glyphicon glyphicon-pencil"></span></a>
-	    	<a><span class="glyphicon glyphicon-remove"></span></a>
+	    	<a [routerLink]="['/encuestas/estadisticas', encuesta._id]" title="Estadisticas"><span class="glyphicon glyphicon-stats"></span></a>
+	    	<a><span class="glyphicon glyphicon-search" title="Ver encuesta"></span></a>
+	    	<a><span class="glyphicon glyphicon-pencil" title="Editar encuesta"></span></a>
+	    	<a><span class="glyphicon glyphicon-remove" title="Eliminar encuesta"></span></a>
+	    	<a [routerLink]="['/asignar/alumno', encuesta._id]" title="Asignar alumno"><span class="glyphicon glyphicon-plus"></span></a>
 	    </td>
 	  </tr>
 	</tbody>

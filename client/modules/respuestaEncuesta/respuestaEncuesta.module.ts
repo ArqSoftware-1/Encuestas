@@ -7,6 +7,7 @@ import { RespuestaEncuestaComponent } from "../../components/respuestaEncuesta/r
 import { routing } from "../../routes/respuestaEncuesta/respuestaEncuesta.routing";
 import { SharedModule } from "../shared/shared.module";
 import { MateriasComponent } from '../../components/respuestaEncuesta/materias.component';
+import { AsignarAlumnoComponent } from '../../components/respuestaEncuesta/asignarAlumno.component';
 
 @NgModule({
     imports: [
@@ -17,7 +18,7 @@ import { MateriasComponent } from '../../components/respuestaEncuesta/materias.c
         NgSemanticModule
     ],
     declarations: [
-        RespuestaEncuestaComponent, MateriasComponent
+        RespuestaEncuestaComponent, MateriasComponent, AsignarAlumnoComponent
     ],
     bootstrap: [
         RespuestaEncuestaComponent

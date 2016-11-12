@@ -5,12 +5,14 @@ import { Document, Schema, model } from 'mongoose';
 class RespuestaEncuesta {
     respuestasMateria: Array<RespuestaMateria> = [];
     encuesta: Encuesta;
+    nombreYApellido: String;
     DNIAlumno: String;
     emailAlumno: String;
 }
 
 var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaRespuestaMateria] }, 
-								   encuesta: { type: EsquemaEncuesta },
+                                   encuesta: { type: EsquemaEncuesta },
+                                   nombreYApellido: { type: String }, 
                                    DNIAlumno: { type: String }, 
                                    emailAlumno: { type: String } 
                                  });
