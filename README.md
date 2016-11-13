@@ -7,10 +7,10 @@ https://encuestas-inscripcion.herokuapp.com
 ## Tecnologías
 
 - Angular 2 ( 2.0 final realase )
-- Express
-- NodeJS
+- Express 4.13.4
+- NodeJS >= 5.4.1
 - Bootstrap 3.3.7
-- Mongoosejs
+- Mongoosejs 3.2.10
 - Loggly (para guardar los logs en la nube)
 
 ## Configuración del entorno
