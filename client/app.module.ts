@@ -6,24 +6,19 @@ import { NgSemanticModule } from "ng-semantic";
 
 import { AppComponent }  from './app.component';
 import { routing } from "./routes";
-import { TituloComponent } from "./components/shared/titulo.component";
-import { HomeModule } from "./modules/home/home.module";
 import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
 import { LoginModule } from "./modules/autenticacion/login.module";
 import { EncuestaModule } from "./modules/encuesta/encuesta.module";
-//import { VerEncuestaModule } from "./modules/encuesta/verEncuesta.module";
 
 @NgModule({
     imports: [
         BrowserModule,
         HttpModule,
         NgSemanticModule,      
-        HomeModule,
         RespuestaEncuestaModule,
         LoginModule,
         routing,
-        EncuestaModule,
-        //VerEncuestaModule,
+        EncuestaModule
     ],
     providers: [
         provideAuth({
@@ -32,7 +27,7 @@ import { EncuestaModule } from "./modules/encuesta/encuesta.module";
             noTokenScheme: true
         })
     ],
-    declarations: [ TituloComponent, AppComponent ],
+    declarations: [ AppComponent ],
     bootstrap:    [ AppComponent ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA

@@ -1,18 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import { AuthHttp } from "angular2-jwt";
-import { MateriasService } from "../home/materias.service";
-import { OpcionService } from "../home/opcion.service";
 
 @Injectable()
 export class RespuestaEncuestaService{
 	materiaService;
 	opcionService;
 
-//materiasService: MateriasService, opcionService: OpcionService, 
 	constructor(private authHttp: AuthHttp, private http: Http) {
-		//this.materiaService = materiasService;
-		//this.opcionService = opcionService;
+		
 	}
 
 	obtenerRespuestaEncuesta(token:String){
