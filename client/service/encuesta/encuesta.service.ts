@@ -5,23 +5,30 @@ import {Http, Response} from '@angular/http';
 @Injectable()
 export class EncuestaService{
 
-	constructor(private http: AuthHttp) {}
+    constructor(private http: AuthHttp) {}
 
-	obtenerEncuesta(id){
-      	return this.http
-	               .get('/api/encuestas/detalle?id=' + id)
-	               .map((response: Response) => response.json());
-	}
+    obtenerEncuesta(id){
+        return this.http
+                   .get('/api/encuestas/detalle?id=' + id)
+                   .map((response: Response) => response.json());
+    }
 
-	obtenerTodasLasEncuestas(){
-      	return this.http
-	               .get('/api/encuestas/listado')
-	               .map((response: Response) => response.json());
-	}
+    obtenerTodasLasEncuestas(){
+        return this.http
+                   .get('/api/encuestas/listado')
+                   .map((response: Response) => response.json());
+    }
 
-	obtenerEstadisticas(id){
+    obtenerEstadisticas(id){
       	return this.http
-	               .get('/api/encuestas/estadisticas?id=' + id)
-	               .map((response: Response) => response.json());
-	}
+                   .get('/api/encuestas/estadisticas?id=' + id)
+                   .map((response: Response) => response.json());
+    }
+
+
+    completaron(id){
+      	return this.http
+                   .get('/api/encuestas/completaron?id=' + id)
+                   .map((response: Response) => response.json());
+    }
 }

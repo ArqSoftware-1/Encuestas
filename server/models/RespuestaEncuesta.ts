@@ -8,7 +8,8 @@ class RespuestaEncuesta {
     nombreYApellido: String;
     DNIAlumno: String;
     emailAlumno: String;
-    urlEncuesta: String;    
+    urlEncuesta: String;
+    completa: Boolean;   
 }
 
 var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaRespuestaMateria] }, 
@@ -16,7 +17,8 @@ var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaR
                                    nombreYApellidoAlumno: { type: String }, 
                                    DNIAlumno: { type: String }, 
                                    emailAlumno: { type: String },
-                                   urlEncuesta: { type: String } 
+                                   urlEncuesta: { type: String },
+                                   completa: { type: Boolean}
                                  });
 
 interface DocumentoRespuestaEncuesta extends RespuestaEncuesta, Document { };

@@ -68,6 +68,24 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
                          });
 });
 
+rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
+    ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id'), completa: true}).exec()
+                         .then(completaron => {
+                            ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id')}).exec()
+                                                 .then(total => {
+                                                    response.json({total: total, completaron: completaron});
+                                                 })
+                                                 .catch(error => {
+                                                    winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que deben responder una encuesta: ' + error);
+                                                    response.status(400).json(error);
+                                                 });
+                         })
+                         .catch(error => {
+                            winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta: ' + error);
+                            response.status(400).json(error);
+                         });
+});
+
 export { rutaEncuestas }
 
 

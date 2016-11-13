@@ -34,6 +34,7 @@ rutaRespuestasEncuesta.post("/actualizar-respuestas", (request: Request, respons
                                             var respuestaMateria = new ModeloRespuestaMateria({materia: materia, opcion: opcion});
                                             respuestaEncuesta.respuestasMateria.push(respuestaMateria);
                                         });
+                                        respuestaEncuesta.completa = respuestaEncuesta.respuestasMateria.length == respuestaEncuesta.encuesta.materias.length;
                                         respuestaEncuesta.save();
                                         response.json(respuestaEncuesta);
                                     })
