@@ -45,13 +45,13 @@ var encuesta1 = new ModeloEncuesta({materias: [materia1, materia2, materia3], an
 encuesta1.save();
 
 // Respuestas
-var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar', completa: false});
+var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, nombreYApellidoAlumno: 'Alumno', DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar', completa: false});
 respuestaEncuesta.save();
 
-var respuestaEncuesta1 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar', completa: false});
+var respuestaEncuesta1 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, nombreYApellidoAlumno: 'Alumno 1', DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar', completa: false});
 respuestaEncuesta1.save();
 
-var respuestaEncuesta2 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta1, DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar', completa: false});
+var respuestaEncuesta2 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta1, nombreYApellidoAlumno: 'Alumno 1', DNIAlumno: '87654321', emailAlumno: 'alumno1unq.edu.ar', completa: false});
 respuestaEncuesta2.save();
 
 // Director

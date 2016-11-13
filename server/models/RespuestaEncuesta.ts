@@ -5,11 +5,12 @@ import { Document, Schema, model } from 'mongoose';
 class RespuestaEncuesta {
     respuestasMateria: Array<RespuestaMateria> = [];
     encuesta: Encuesta;
-    nombreYApellido: String;
+    nombreYApellidoAlumno: String;
     DNIAlumno: String;
     emailAlumno: String;
     urlEncuesta: String;
-    completa: Boolean;   
+    completa: Boolean;
+    token: String; 
 }
 
 var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaRespuestaMateria] }, 
@@ -18,7 +19,8 @@ var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaR
                                    DNIAlumno: { type: String }, 
                                    emailAlumno: { type: String },
                                    urlEncuesta: { type: String },
-                                   completa: { type: Boolean}
+                                   completa: { type: Boolean },
+                                   token: { type: String }
                                  });
 
 interface DocumentoRespuestaEncuesta extends RespuestaEncuesta, Document { };
