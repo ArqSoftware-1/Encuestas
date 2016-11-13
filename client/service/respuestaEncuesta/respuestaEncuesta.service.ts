@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Http, Response} from '@angular/http';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import { AuthHttp } from "angular2-jwt";
 import { MateriasService } from "../home/materias.service";
 import { OpcionService } from "../home/opcion.service";
@@ -24,6 +24,25 @@ export class RespuestaEncuestaService{
 	actualizarRespuestas(respuestaEncuestaId, respuestas){
 		return this.http
 	               .post('/api/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {respuestas: respuestas})
+	               .map((response: Response) => response.json())
+	}
+
+	asignarAlumnoAEncuesta(alumno, encuesta){
+		return this.http
+	               .post('/api/respuestas/encuesta/guardar', JSON.stringify({alumno: alumno, encuesta: encuesta}),  new RequestOptions({
+            			headers: new Headers({"Content-Type": "application/json"})
+        })).map((response: Response) => response.json())
+	}
+
+	obtenerRespuestasEncuesta(){
+		return this.http
+	               .get('/api/respuestas/encuesta/listado')
+	               .map((response: Response) => response.json())
+	}
+
+	obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre){
+		return this.http
+	               .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)
 	               .map((response: Response) => response.json())
 	}
 }

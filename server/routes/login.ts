@@ -38,7 +38,6 @@ loginRouter.post("/", function (request: Request, response: Response, next: Next
         response.json({message: "Todos los campos son requeridos"});
     }
 
-
     ModeloDirector.findOne({email: request.body.email}).exec()
                     .then(director => {
                         if(director){

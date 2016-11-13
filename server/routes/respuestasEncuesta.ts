@@ -65,6 +65,37 @@ rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) =>
                                     });
 });
 
+rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response) => {
+    ModeloRespuestaEncuesta.find({'encuesta.anho': request.param('anho'), 'encuesta.semestre': request.param('semestre')}).exec()
+                                    .then(respuestasEncuesta => {
+                                            response.json(respuestasEncuesta);
+                                    })
+                                    .catch(error => {
+                                        winston.log('error', 'Se ha produccido un error al listar las respuestas por año y semestre: ' + error);
+                                        response.status(400).json(error);
+                                    });
+});
+
+rutaRespuestasEncuesta.post("/guardar", function (request: Request, response: Response, next: NextFunction) {
+    ModeloRespuestaEncuesta.find().exec()
+                                    .then(respuestasEncuesta => {
+                                            var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], 
+                                                                                                    encuesta: request.body.encuesta, 
+                                                                                                    DNIAlumno: request.body.alumno.DNIAlumno, 
+                                                                                                    emailAlumno: request.body.alumno.emailAlumno, 
+                                                                                                    nombreYApellidoAlumno: request.body.alumno.nombreYApellidoAlumno
+                                                                                                })
+                                            respuestaEncuesta.save();
+                                            respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta._id;
+                                            respuestaEncuesta.save();
+                                            response.json(respuestaEncuesta);
+                                    })
+                                    .catch(error => {
+                                        winston.log('error', 'Se ha produccido un error al asignar una respuesta: ' + error);
+                                        response.status(400).json(error);
+                                    });
+});
+
 export { rutaRespuestasEncuesta }
 
 

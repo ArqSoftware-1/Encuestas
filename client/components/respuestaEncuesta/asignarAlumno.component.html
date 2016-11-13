@@ -8,21 +8,21 @@
 <div class="row">
 	<div class="form-group col-md-3">
 		<label>Nombre y Apellido</label>
-    	<input class="form-control" placeholder="ingrese nombre y apellido...">
+    	<input class="form-control" placeholder="ingrese nombre y apellido..." type="text" [(ngModel)]="alumno.nombreYApellidoAlumno">
 	</div>
 	<div class="form-group col-md-3">
 		<label>DNI</label>
-    	<input class="form-control" placeholder="ingrese DNI...">
+    	<input class="form-control" placeholder="ingrese DNI..." [(ngModel)]="alumno.DNIAlumno">
 	</div>
 	<div class="form-group col-md-3">
 		<label>Email</label>
-    	<input type="email" class="form-control" placeholder="ingrese Email...">
+    	<input type="email" class="form-control" placeholder="ingrese Email..." [(ngModel)]="alumno.emailAlumno">
 	</div>
 </div>
 
 <div class="row">
 	<div class="col-md-1">
-		<button class="btn btn-success" type="button">Asignar</button>
+		<button class="btn btn-success" type="button" (click)="asignarAlumno()">Asignar</button>
 	</div>
 </div>
 <br>
@@ -36,6 +36,11 @@
 	  </tr>
 	</thead>
 	<tbody>
-	  
+	  <tr  *ngFor="let alumno of alumnos">
+	  	<td>{{alumno.nombreYApellidoAlumno}}</td>
+	  	<td>{{alumno.DNIAlumno}}</td>
+	  	<td>{{alumno.emailAlumno}}</td>
+	  	<td><a href="{{alumno.urlEncuesta}}">{{alumno.urlEncuesta}}</a></td>
+	  </tr>
 	</tbody>
 </table>
