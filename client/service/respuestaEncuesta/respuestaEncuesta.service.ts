@@ -10,38 +10,38 @@ export class RespuestaEncuestaService{
 	opcionService;
 
 //materiasService: MateriasService, opcionService: OpcionService, 
-	constructor(private http: AuthHttp) {
+	constructor(private authHttp: AuthHttp, private http: Http) {
 		//this.materiaService = materiasService;
 		//this.opcionService = opcionService;
 	}
 
 	obtenerRespuestaEncuesta(token:String){
       	return this.http
-	               .get('/api/respuestas/encuesta/detalle?token=' + token)
+	               .get('/api/publica/respuestas/encuesta/detalle?token=' + token)
 	               .map((response: Response) => response.json())
 	}
 
 	actualizarRespuestas(respuestaEncuestaId, respuestas){
 		return this.http
-	               .post('/api/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {respuestas: respuestas})
+	               .post('/api/publica/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {respuestas: respuestas})
 	               .map((response: Response) => response.json())
 	}
 
 	asignarAlumnoAEncuesta(alumno, encuesta){
-		return this.http
+		return this.authHttp
 	               .post('/api/respuestas/encuesta/guardar', JSON.stringify({alumno: alumno, encuesta: encuesta}),  new RequestOptions({
             			headers: new Headers({"Content-Type": "application/json"})
         })).map((response: Response) => response.json())
 	}
 
 	obtenerRespuestasEncuesta(){
-		return this.http
+		return this.authHttp
 	               .get('/api/respuestas/encuesta/listado')
 	               .map((response: Response) => response.json())
 	}
 
 	obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre){
-		return this.http
+		return this.authHttp
 	               .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)
 	               .map((response: Response) => response.json())
 	}

@@ -10,6 +10,7 @@ import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
 import { rutaEncuestas } from "./routes/encuestas";
 import { rutaRespuestasEncuesta } from "./routes/respuestasEncuesta";
+import { rutaRespuestasEncuestaPublica } from "./routes/respuestasEncuestaPublica";
 import { rutaMaterias } from "./routes/materias";
 import { rutaOpciones } from "./routes/opciones";
 
@@ -27,6 +28,7 @@ app.use("/api/opciones", rutaOpciones);
 app.use("/api/materias", rutaMaterias);
 app.use("/api/encuestas", rutaEncuestas);
 app.use("/api/respuestas/encuesta", rutaRespuestasEncuesta);
+app.use("/api/publica/respuestas/encuesta", rutaRespuestasEncuestaPublica);
 app.use("/login", loginRouter);
 
 app.use('/client', express.static(join(__dirname, '../client')));

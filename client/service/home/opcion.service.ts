@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
+import { AuthHttp } from "angular2-jwt";
 import {Http, Response} from '@angular/http';
 
 @Injectable()
 export class OpcionService{
 
-	constructor(private http: Http) {}
+	constructor(private http: AuthHttp) {}
 
 	obtenerOpcion(idOpcion){
 		return this.http
