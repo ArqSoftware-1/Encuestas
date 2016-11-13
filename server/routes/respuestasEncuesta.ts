@@ -6,6 +6,7 @@ import { Opcion, ModeloOpcion, EsquemaOpcion } from "../models/Opcion";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
 import * as winston from "winston";
+import { randomBytes, pbkdf2 } from "crypto";
 
 const rutaRespuestasEncuesta: Router = Router();
 
@@ -45,7 +46,7 @@ rutaRespuestasEncuesta.post("/actualizar-respuestas", (request: Request, respons
 });
 
 rutaRespuestasEncuesta.get("/detalle", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.findById(request.param('token')).exec()
+    ModeloRespuestaEncuesta.findOne({token: request.param('token')}).exec()
                                     .then(respuestaEncuesta => {
                                             response.json(respuestaEncuesta);
                                     })
@@ -87,7 +88,10 @@ rutaRespuestasEncuesta.post("/guardar", function (request: Request, response: Re
                                                                                                     nombreYApellidoAlumno: request.body.alumno.nombreYApellidoAlumno
                                                                                                 })
                                             respuestaEncuesta.save();
-                                            respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta._id;
+                                            if(!respuestaEncuesta.token){
+                                                respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
+                                            }
+                                            respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
                                             respuestaEncuesta.save();
                                             response.json(respuestaEncuesta);
                                     })

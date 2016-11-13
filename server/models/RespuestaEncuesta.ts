@@ -10,7 +10,7 @@ class RespuestaEncuesta {
     emailAlumno: String;
     urlEncuesta: String;
     completa: Boolean;
-    token: String; 
+    token: String;
 }
 
 var EsquemaRespuestaEncuesta = new Schema({ respuestasMateria: { type: [EsquemaRespuestaMateria] }, 

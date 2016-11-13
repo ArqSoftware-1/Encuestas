@@ -53,4 +53,8 @@ export class AsignarAlumnoComponent {
                     console.log(error);
                 });
   }
+
+  crearUrlPara(alumno){
+    return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
+  }
 }
