@@ -1,10 +1,10 @@
 <div class="container" style="margin: 0 auto; width:40%;">
-  <div class="form-signin">
+  <form class="form-signin">
     <h2 class="form-signin-heading">Iniciar sesión</h2>
     <label for="inputEmail" class="sr-only">Email</label>
-    <input id="email" class="form-control" placeholder="Email" required="" [(ngModel)]="user.email" autofocus="" type="email">
+    <input id="email" class="form-control" placeholder="Email" required="" [(ngModel)]="user.email" autofocus="" type="email" [ngModelOptions]="{standalone: true}">
     <label for="inputPassword" class="sr-only">Contraseña</label>
-    <input id="password" class="form-control" placeholder="Contraseña" required="" [(ngModel)]="user.password" type="password">
+    <input id="password" class="form-control" placeholder="Contraseña" required="" [(ngModel)]="user.password" type="password" [ngModelOptions]="{standalone: true}">
     <div class="checkbox">
       <!--<label>
       <input value="remember-me" type="checkbox"> Recordame
@@ -12,5 +12,5 @@
       <br>
     </div>
     <button class="btn btn-lg btn-primary btn-block" (click)="login()">Ingresar</button>
-  </div>
+  </form>
 </div>
