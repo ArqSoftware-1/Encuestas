@@ -45,13 +45,34 @@ export class AsignarAlumnoComponent {
   }
 
   asignarAlumno(){
+    if(!this.seLLenaronLosCampoCorrectamente())
+      return;
+
     this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(
                 (respuestaEcuesta) => {
                     this.alumnos.push(respuestaEcuesta);
+                    this.alumno.nombreYApellidoAlumno = "";
+                    this.alumno.DNIAlumno = "";
+                    this.alumno.emailAlumno = "";
                 },
                 (error: Error) => {
                     console.log(error);
                 });
+  }
+
+  seLLenaronLosCampoCorrectamente(){
+    if(this.alumno.nombreYApellidoAlumno.length == 0 || this.alumno.DNIAlumno.length == 0
+        || this.alumno.emailAlumno.length == 0){
+          alert("Todos los campos son obligatorios.");
+          return false;
+    }
+
+    if(!/^[a-z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/.test(this.alumno.emailAlumno)){
+      alert("Email inválido.");
+      return false;
+    }
+
+    return true;
   }
 
   crearUrlPara(alumno){

@@ -7,15 +7,15 @@
 <br>
 <div class="row">
 	<div class="form-group col-md-3">
-		<label>Nombre y Apellido</label>
+		<label>Nombre y Apellido<span style="color:red"> *</span></label>
     	<input class="form-control" placeholder="ingrese nombre y apellido..." type="text" [(ngModel)]="alumno.nombreYApellidoAlumno">
 	</div>
 	<div class="form-group col-md-3">
-		<label>DNI</label>
+		<label>DNI<span style="color:red"> *</span></label>
     	<input class="form-control" placeholder="ingrese DNI..." [(ngModel)]="alumno.DNIAlumno">
 	</div>
 	<div class="form-group col-md-3">
-		<label>Email</label>
+		<label>Email<span style="color:red"> *</span></label>
     	<input type="email" class="form-control" placeholder="ingrese Email..." [(ngModel)]="alumno.emailAlumno">
 	</div>
 </div>
