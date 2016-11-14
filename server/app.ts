@@ -1,3 +1,4 @@
+require ('newrelic');
 import * as express from "express";
 import { join } from "path";
 import * as favicon from "serve-favicon";
@@ -5,7 +6,6 @@ import { json, urlencoded } from "body-parser";
 import * as winston from "winston";
 import mongoose = require("mongoose");
 require('winston-loggly-bulk');
-require('newrelic');
 
 import { loginRouter } from "./routes/login";
 import { protectedRouter } from "./routes/protected";
@@ -82,24 +82,5 @@ mongoose.connection.once('open', ()=> {
         require('./data');
     })
 })
-
-exports.config = {
-  /**
-   * Array of application names.
-   */
-  app_name: ['Encuestas'],
-  /**
-   * Your New Relic license key.
-   */
-  license_key: '74314e19624be4368072e78ff499853c7cb6b28b',
-  logging: {
-    /**
-     * Level at which to log. 'trace' is most useful to New Relic when diagnosing
-     * issues with the agent, 'info' and higher will impose the least overhead on
-     * production applications.
-     */
-    level: 'info'
-  }
-}
 
 export { app }
