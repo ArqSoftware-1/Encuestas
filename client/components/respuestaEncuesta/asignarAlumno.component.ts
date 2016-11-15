@@ -72,6 +72,13 @@ export class AsignarAlumnoComponent {
       return false;
     }
 
+    var alumnos = this.alumnos.filter(a => a.DNIAlumno == this.alumno.DNIAlumno);
+
+    if(alumnos.length != 0){
+      alert("El DNI ingresado ya existe.");
+      return false;
+    }
+
     return true;
   }
 
