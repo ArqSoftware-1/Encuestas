@@ -1,11 +1,17 @@
-<h2>{{titulo}}</h2>
-<p>
-<b>* Total de alumnos asignados a la encuesta:</b> {{total}} <br>
-<b>* Alumnos que completaron toda la encuesta:</b> {{completaron}} <br>
-<b>* Alumnos que no iniciaron la encuesta:</b> {{noIniciarion}} <br>
-<b>* Alumnos que completaron alguna opción:</b> {{completaronAlgunaOpcion}} <br>
-<b>* A continuación las opciones elegidas por materia:</b> <br>
-</p>
+<div class="row">
+	<div class="col-md-5">
+		<h2>{{titulo}}</h2>
+		<b>Total de alumnos asignados a la encuesta:</b> {{total}} <br>
+	</div>
+	<div class="col-md-7">
+		<div id="piechart" style="width: 500px; height: 277px;"></div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<p><b>A continuación las opciones elegidas por materia:</b></p>
+	</div>
+</div>
 <div class="row">
 	<div class="col-md-3" *ngFor="let materia of materias">
 		<div class="panel panel-default">
@@ -21,5 +27,3 @@
 	<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
 	</div>
 </div>
-
-

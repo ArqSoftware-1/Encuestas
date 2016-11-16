@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component,Directive,ElementRef,Input,OnInit } from '@angular/core';
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
+declare var google:any;
+declare var googleLoaded:any;
 
 @Component({
   selector: 'estadisticas-encuesta',
   templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
-  providers: [EncuestaService]
+  providers: [EncuestaService],
 })
 
-export class EstadisticasEncuestaComponent {
+export class EstadisticasEncuestaComponent implements OnInit {
     titulo;
     estadisticas;
     materias;
@@ -16,6 +19,8 @@ export class EstadisticasEncuestaComponent {
     noIniciarion;
     completaronAlgunaOpcion;
     total;
+
+    public pie_ChartData:(string|number)[][] = [['Condición', 'Cantidad']];
 
     constructor(encuestaService:EncuestaService, route: ActivatedRoute){
     var id = route.snapshot.params['id'];
@@ -36,6 +41,9 @@ export class EstadisticasEncuestaComponent {
                     this.noIniciarion = res.total - res.completaronAlgunaOpcion;
                     this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
                     this.total = res.total;
+                    this.pie_ChartData.push(['Alumnos que completaron toda la encuesta', parseInt(res.completaron)]);
+                    this.pie_ChartData.push(['Alumnos que no iniciaron la encuesta', res.total - res.completaronAlgunaOpcion]);
+                    this.pie_ChartData.push(['Alumnos que completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
                 },
                 (error: Error) => {
                     console.log(error);
@@ -50,6 +58,29 @@ export class EstadisticasEncuestaComponent {
         return estadistica.count;
     }
     return 0;
+  }
+
+  ngOnInit() {
+    google.charts.load('current', {'packages':['corechart', 'gauge']});
+    setTimeout(() =>this.drawGraph(this.pie_ChartData),1000);
+  }
+
+  drawGraph (pie_ChartData) {
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable(pie_ChartData);
+
+        var options = {
+          title: 'Estadísticas sobre el total de alumnos asignados',
+          is3D: true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+
   }
 
 }
