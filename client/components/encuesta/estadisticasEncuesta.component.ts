@@ -13,7 +13,9 @@ export class EstadisticasEncuestaComponent {
     estadisticas;
     materias;
     completaron; 
-    noCompletaron;
+    noIniciarion;
+    completaronAlgunaOpcion;
+    total;
 
     constructor(encuestaService:EncuestaService, route: ActivatedRoute){
     var id = route.snapshot.params['id'];
@@ -31,7 +33,9 @@ export class EstadisticasEncuestaComponent {
                 (res) => {
                     console.log(res); 
                     this.completaron = res.completaron;
-                    this.noCompletaron = res.total - res.completaron;
+                    this.noIniciarion = res.total - res.completaronAlgunaOpcion;
+                    this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
+                    this.total = res.total;
                 },
                 (error: Error) => {
                     console.log(error);

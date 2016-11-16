@@ -2,6 +2,7 @@ import { Document, Schema, model } from 'mongoose'
 
 class Opcion {
     descripcion: string;
+    limite: Number;
 
     toString() {
         return this.descripcion;
@@ -9,7 +10,8 @@ class Opcion {
 }
 
 var EsquemaOpcion = new Schema({
-  descripcion: { required: true, type: String }
+  descripcion: { required: true, type: String },
+  limite: {  type: Number },
 });
 
 EsquemaOpcion.method('toString', Opcion.prototype.toString);
