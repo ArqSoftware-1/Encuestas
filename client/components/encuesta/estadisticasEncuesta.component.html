@@ -17,7 +17,13 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">{{materia.nombre}}</div>
 			<div class="panel-body" style="height: 125px; overflow: auto">
-				<div *ngFor="let opcion of materia.opciones">{{opcion.descripcion}}: {{cantidadPara(materia, opcion)}}</div>
+				<div *ngFor="let opcion of materia.opciones">
+
+					<div>
+						<span>{{opcion.descripcion}}: {{cantidadPara(materia, opcion)}}  {{opcion.limite > 0 ? '/ ' + opcion.limite : ''}}</span>
+					</div>
+
+				</div>
 			</div>
 		</div>
 	</div>
@@ -27,3 +33,9 @@
 	<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
 	</div>
 </div>
+
+<style>
+.col-md-3{
+	padding-right: 0px !important;
+}
+</style>
