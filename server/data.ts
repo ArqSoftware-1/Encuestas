@@ -3,6 +3,7 @@ import { ModeloOpcion, EsquemaOpcion, NombresOpcionDefecto} from "./models/Opcio
 import { ModeloMateria, EsquemaMateria} from "./models/Materia";
 import { ModeloEncuesta, EsquemaEncuesta} from "./models/Encuesta";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "./models/RespuestaEncuesta";
+import { ModeloRespuestaMateria } from "./models/RespuestaMateria";
 import { ModeloDirector, EsquemaDirector} from "./models/Director";
 import { Document, Schema, model } from 'mongoose'
 import { randomBytes, pbkdf2 } from "crypto";
@@ -46,7 +47,7 @@ var encuesta1 = new ModeloEncuesta({materias: [materia1, materia2, materia3], an
 encuesta1.save();
 
 // Respuestas
-var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta, nombreYApellidoAlumno: 'Alumno', DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar', completa: false});
+var respuestaEncuesta = new ModeloRespuestaEncuesta({respuestasMateria: [new ModeloRespuestaMateria({materia: materia1, opcion: opcion2})], encuesta: encuesta, nombreYApellidoAlumno: 'Alumno', DNIAlumno: '12345678', emailAlumno: 'alumno@unq.edu.ar', completa: false});
 respuestaEncuesta.save();
 respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
 respuestaEncuesta.save();

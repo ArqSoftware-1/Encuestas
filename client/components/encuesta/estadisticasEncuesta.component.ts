@@ -58,6 +58,9 @@ export class EstadisticasEncuestaComponent implements OnInit {
                               (estadistica) => estadistica._id.materia == materia.nombre 
                                                 && estadistica._id.opcion == opcion.descripcion)[0];
     if(estadistica){
+        if(opcion.limite <= estadistica.count){
+            materia.tieneOpcionConLimiteSuperado = true;
+        }
         return estadistica.count;
     }
     return 0;
