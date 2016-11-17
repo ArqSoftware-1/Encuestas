@@ -19,6 +19,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
     noIniciarion;
     completaronAlgunaOpcion;
     total;
+    cantidad;
 
     public pie_ChartData:(string|number)[][] = [['Condición', 'Cantidad']];
 
@@ -41,9 +42,11 @@ export class EstadisticasEncuestaComponent implements OnInit {
                     this.noIniciarion = res.total - res.completaronAlgunaOpcion;
                     this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
                     this.total = res.total;
-                    this.pie_ChartData.push(['Alumnos que completaron toda la encuesta', parseInt(res.completaron)]);
-                    this.pie_ChartData.push(['Alumnos que no iniciaron la encuesta', res.total - res.completaronAlgunaOpcion]);
-                    this.pie_ChartData.push(['Alumnos que completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
+                    this.pie_ChartData.push(['Completaron toda la encuesta', res.CompletaronYCursanPorLoMenosUnaMateria]);
+                    this.pie_ChartData.push(['No iniciaron la encuesta', res.total - res.completaron]);
+                    this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
+                    this.pie_ChartData.push(['Completaron y no cursan nada', res.completaron - res.CompletaronYCursanPorLoMenosUnaMateria]);
+
                 },
                 (error: Error) => {
                     console.log(error);
@@ -62,7 +65,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
 
   ngOnInit() {
     google.charts.load('current', {'packages':['corechart', 'gauge']});
-    setTimeout(() =>this.drawGraph(this.pie_ChartData),1000);
+    setTimeout(() =>this.drawGraph(this.pie_ChartData), 500);
   }
 
   drawGraph (pie_ChartData) {

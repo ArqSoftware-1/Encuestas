@@ -10,13 +10,13 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
  
 })
 export class MateriasComponent {
-	respuestaEncuesta;
-	materias;
-	respuestaEncuestaService: RespuestaEncuestaService;
-	encuestaFinalizada: Boolean;
-	enlace: String;
+    respuestaEncuesta;
+    materias;
+    respuestaEncuestaService: RespuestaEncuestaService;
+    encuestaFinalizada: Boolean;
+    enlace: String;
 
-	constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute){
+    constructor(respuestaEncuestaService:RespuestaEncuestaService, route: ActivatedRoute){
         var token = route.snapshot.params['token'];
         this.encuestaFinalizada = false;
         this.enlace = document.URL;
@@ -25,56 +25,55 @@ export class MateriasComponent {
         this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
                 (respuestaEncuesta) => {
                     if(respuestaEncuesta){
-                    	this.respuestaEncuesta = respuestaEncuesta;
-                    	this.materias = respuestaEncuesta.encuesta.materias;
+                        this.respuestaEncuesta = respuestaEncuesta;
+                        this.materias = respuestaEncuesta.encuesta.materias;
                     }
                 },
                 (error: Error) => {
                     console.log(error);
                 });
-	}
+    }
 
-	esLaOpcionElegida(materia, opcion){
-				
-		var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
-		(materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
+    esLaOpcionElegida(materia, opcion){
+        var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
+        (materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
 
-		if(respuestaMateria){
+        if(respuestaMateria){
+            return respuestaMateria.opcion._id == opcion._id;
+        }
+        else{
+            if(opcion._id == materia.idOpcionPorDefecto){
+                this.seleccionarOpcionDeMateria(materia._id, opcion._id)
+                return true;
+            }else{
+                return false;
+            }
+        }
+    }
 
-			if(respuestaMateria.opcion._id == opcion._id)
-				return true;
-			else
-				return false;
-		}
-		else{
+    tieneOpcionElegida(materia){
+        var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
+            (materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
+        return respuestaMateria ? true : false;
+    }
 
-			if(opcion._id == materia.idOpcionPorDefecto){
-				this.seleccionarOpcionDeMateria(materia._id, opcion._id)
-				return true;
-			}else{
-				return false;
-			}
+    seleccionarOpcionDeMateria(idMateria, idOpcion){
+        var materia = this.respuestaEncuesta.encuesta.materias.filter(
+              (materia) => materia._id == idMateria)[0];
+        var opcion = materia.opciones.filter(
+              (opcion) => opcion._id == idOpcion)[0];
 
-		}
-	}
+        this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(
+                                                        (opcionSeleccionada) =>
+                                                                 opcionSeleccionada.materia._id !== idMateria);
+        if(opcion)
+            this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
+    }
 
-	seleccionarOpcionDeMateria(idMateria, idOpcion){
-		var materia = this.respuestaEncuesta.encuesta.materias.filter(
-      		(materia) => materia._id == idMateria)[0];
-		var opcion = materia.opciones.filter(
-      		(opcion) => opcion._id == idOpcion)[0];
-
-		this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(
-														(opcionSeleccionada) =>
-																 opcionSeleccionada.materia._id !== idMateria);
-		if(opcion)
-			this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
-	}
-
-	guardar(){
-		if(!this.respuestaEncuesta)return;
-		this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, 
-			this.respuestaEncuesta.respuestasMateria).subscribe(
+    guardar(){
+        if(!this.respuestaEncuesta)return;
+        this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, 
+            this.respuestaEncuesta.respuestasMateria).subscribe(
                 (data) => {
                     console.log(data);
                     this.encuestaFinalizada = true;
@@ -82,5 +81,5 @@ export class MateriasComponent {
                 (error: Error) => {
                     console.log(error);
             });;
-	}
+    }
 }

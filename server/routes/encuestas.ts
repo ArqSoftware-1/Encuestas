@@ -1,6 +1,7 @@
 import { Router, Response, Request, NextFunction } from "express";
 import { ModeloEncuesta, EsquemaEncuesta} from "../models/Encuesta";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "../models/RespuestaEncuesta";
+import { NombresOpcionDefecto } from "../models/Opcion";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
 import * as winston from "winston";
@@ -71,23 +72,39 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
 rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
     ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id'), completa: true}).exec()
                          .then(completaron => {
+                            
                             ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id')}).exec()
                                 .then(total => {
-                                    ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id'), 'respuestasMateria' : {$exists: true}, $where: 'this.respuestasMateria.length >= 1'}).exec()
+                                    
+                                    ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id'), completa: false, 'respuestasMateria' : {$exists: true}, $where: 'this.respuestasMateria.length >= 1'}).exec()
                                         .then(completaronAlgunaOpcion => {
-                                            response.json({ total: total,
-                                                            completaron: completaron,
-                                                            completaronAlgunaOpcion: completaronAlgunaOpcion});
+                                            
+                                            ModeloRespuestaEncuesta.count({'encuesta._id': request.param('id'), 
+                                                                            completa: true, 
+                                                                            'respuestasMateria.opcion.descripcion': { "$nin" : [NombresOpcionDefecto.valores.no_voy_a_cursar, NombresOpcionDefecto.valores.me_gustaria_pero_no_puedo, NombresOpcionDefecto.valores.ya_curse]}}).exec()
+                                                .then(CompletaronYCursanPorLoMenosUnaMateria => {
+                                                    response.json({ total: total,
+                                                                    completaron: completaron,
+                                                                    completaronAlgunaOpcion: completaronAlgunaOpcion,
+                                                                    CompletaronYCursanPorLoMenosUnaMateria: CompletaronYCursanPorLoMenosUnaMateria});
+                                                })
+                                                .catch(error => {
+                                                    winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta y no van a cursar: ' + error);
+                                                    response.status(400).json(error);
+                                                });
+
                                         })
                                         .catch(error => {
                                             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron alguna opcion: ' + error);
                                             response.status(400).json(error);
                                         });
+
                                 })
                                 .catch(error => {
                                     winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que deben responder una encuesta: ' + error);
                                     response.status(400).json(error);
                                 });
+
                          })
                          .catch(error => {
                             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta: ' + error);

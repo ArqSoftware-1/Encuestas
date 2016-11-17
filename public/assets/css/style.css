@@ -10,5 +10,11 @@ body {
 }
 
 .teal.active.item, .ui.inverted.teal.menu {
-    background-color: #2185d0;
+	background-color: #2185d0;
+}
+.danger{
+	color: #a94442;
+}
+.success{
+	color: #3c763d;
 }

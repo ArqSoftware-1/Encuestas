@@ -20,14 +20,14 @@ export class EncuestaService{
     }
 
     obtenerEstadisticas(id){
-      	return this.http
+          return this.http
                    .get('/api/encuestas/estadisticas?id=' + id)
                    .map((response: Response) => response.json());
     }
 
 
     completaron(id){
-      	return this.http
+          return this.http
                    .get('/api/encuestas/completaron?id=' + id)
                    .map((response: Response) => response.json());
     }

@@ -27,7 +27,7 @@ export class LoginService{
     }
 
     logOut() {
-    	localStorage.removeItem("id_token");
+        localStorage.removeItem("id_token");
         this.isLoggedInSubject.next(this.checkIsLoggedIn());
     }
 
@@ -40,11 +40,11 @@ export class LoginService{
             .subscribe(
                 (res: Response & { jwt: string, message: string }) => {
                     if(res.jwt){
-						localStorage.setItem("id_token", res.jwt);
-			            this.isLoggedInSubject.next(this.checkIsLoggedIn());
-			            cbSuccess(res);
+                        localStorage.setItem("id_token", res.jwt);
+                        this.isLoggedInSubject.next(this.checkIsLoggedIn());
+                        cbSuccess(res);
                     }else{
-                    	alert(res.message);
+                        alert(res.message);
                     }
                 },
                 (error: Error) => { alert("Se ha producido un error al conectar con el servidor"); console.log(error) }

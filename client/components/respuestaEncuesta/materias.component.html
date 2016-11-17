@@ -1,11 +1,10 @@
 <div *ngIf="!encuestaFinalizada">
 	<div class="row">
 		<div class="col-md-3" *ngFor="let materia of materias">
-			<div class="panel panel-default">
+			<div class="panel panel-default" [ngModel]="materia">
 				<div class="panel-heading">{{materia.nombre}}</div>
 				<div class="panel-body">
 					<select (change)="seleccionarOpcionDeMateria(materia._id, $event.target.value)" class="form-control">
-						<option>--Elija una opción--</option>
 						<option *ngFor="let opcion of materia.opciones" value="{{opcion._id}}" [selected]="esLaOpcionElegida(materia, opcion)">{{opcion.descripcion}}</option>
 					</select>
 				</div>
