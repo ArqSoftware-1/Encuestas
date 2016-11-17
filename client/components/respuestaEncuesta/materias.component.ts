@@ -35,12 +35,27 @@ export class MateriasComponent {
 	}
 
 	esLaOpcionElegida(materia, opcion){
+				
 		var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
-			(materiaOpcion) => materiaOpcion.opcion._id == opcion._id && materiaOpcion.materia._id == materia._id)[0];
-		if(respuestaMateria)
-			return true;
-		else
-			return false;
+		(materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
+
+		if(respuestaMateria){
+
+			if(respuestaMateria.opcion._id == opcion._id)
+				return true;
+			else
+				return false;
+		}
+		else{
+
+			if(opcion._id == materia.idOpcionPorDefecto){
+				this.seleccionarOpcionDeMateria(materia._id, opcion._id)
+				return true;
+			}else{
+				return false;
+			}
+
+		}
 	}
 
 	seleccionarOpcionDeMateria(idMateria, idOpcion){

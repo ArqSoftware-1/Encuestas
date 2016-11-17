@@ -28,10 +28,10 @@ opcion6.save();
 
 
 // Materias
-var materia1 = new ModeloMateria({opciones: [opcion1, opcion2, opcion4, opcion5, opcion6], nombre: "Introducción a la programación"});
-var materia2 = new ModeloMateria({opciones: [opcion1, opcion4, opcion5, opcion6], nombre: "Organización de las computadores"});
-var materia3 = new ModeloMateria({opciones: [opcion1, opcion4, opcion5, opcion6], nombre: "Matemática 1"});
-var materia4 = new ModeloMateria({opciones: [opcion1, opcion7, opcion4, opcion5, opcion6], nombre: "Programación funcional"});
+var materia1 = new ModeloMateria({opciones: [opcion1, opcion2, opcion4, opcion5, opcion6], nombre: "Introducción a la programación", idOpcionPorDefecto: opcion4._id});
+var materia2 = new ModeloMateria({opciones: [opcion1, opcion4, opcion5, opcion6], nombre: "Organización de las computadores", idOpcionPorDefecto: opcion4._id});
+var materia3 = new ModeloMateria({opciones: [opcion1, opcion4, opcion5, opcion6], nombre: "Matemática 1", idOpcionPorDefecto: opcion4._id});
+var materia4 = new ModeloMateria({opciones: [opcion1, opcion7, opcion4, opcion5, opcion6], nombre: "Programación funcional", idOpcionPorDefecto: opcion4._id});
 
 materia1.save();
 materia2.save();
@@ -56,7 +56,7 @@ respuestaEncuesta1.save();
 respuestaEncuesta1.token = respuestaEncuesta1._id + randomBytes(16).toString("hex");
 respuestaEncuesta1.save();
 
-var respuestaEncuesta2 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta1, nombreYApellidoAlumno: 'Alumno 1', DNIAlumno: '87654321', emailAlumno: 'alumno1unq.edu.ar', completa: false});
+var respuestaEncuesta2 = new ModeloRespuestaEncuesta({respuestasMateria: [], encuesta: encuesta1, nombreYApellidoAlumno: 'Alumno 1', DNIAlumno: '87654321', emailAlumno: 'alumno1@unq.edu.ar', completa: false});
 respuestaEncuesta2.save();
 respuestaEncuesta2.token = respuestaEncuesta2._id + randomBytes(16).toString("hex");
 respuestaEncuesta2.save();

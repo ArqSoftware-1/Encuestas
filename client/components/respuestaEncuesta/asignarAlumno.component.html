@@ -26,10 +26,23 @@
 	</div>
 </div>
 <br>
+
+<div class="row">
+	<div class="col-md-3">
+		<input type="search" class="form-control" placeholder="ingrese nombre y apellido..." [(ngModel)]="nombreYApellido">
+	</div>
+	<div class="col-md-3">
+		<input type="search" class="form-control" placeholder="ingrese DNI..." [(ngModel)]="dni">
+	</div>
+	<div class="col-md-3">
+		<button class="btn btn-success" (click)="buscar()">Buscar</button>
+	</div>
+</div>
+<div class="table-responsive">
 <table class="table">
 	<thead>
 	  <tr>
-	    <th>Nombre y Apellido</th>
+	    <th width="50%">Nombre y Apellido</th>
 	    <th>DNI</th>
 	    <th>Email</th>
 	    <th>URL Encuesta</th>
@@ -40,11 +53,11 @@
 	  	<td>{{alumno.nombreYApellidoAlumno}}</td>
 	  	<td>{{alumno.DNIAlumno}}</td>
 	  	<td>{{alumno.emailAlumno}}</td>
-	  	<td><a href="{{crearUrlPara(alumno)}}" target="_blank">{{crearUrlPara(alumno)}}</a></td>
+	  	<td><a href="{{crearUrlPara(alumno)}}">{{crearUrlPara(alumno)}}</a></td>
 	  </tr>
 	</tbody>
 </table>
-
+</div>
 <div class="row">
 	<div class="col-md-12">
 	<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>

@@ -41,4 +41,10 @@ export class RespuestaEncuestaService{
 	               .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)
 	               .map((response: Response) => response.json())
 	}
+
+	buscarAlumnoPor(nombreYApellido, dni, idEncuesta){
+		return this.authHttp
+	               .get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta)
+	               .map((response: Response) => response.json())
+	}
 }

@@ -7,7 +7,7 @@ class RespuestaMateria {
     materia: Materia;
 }
 
-var EsquemaRespuestaMateria = new Schema({ opcion: { type: EsquemaOpcion }, materia: { type: EsquemaMateria } });
+var EsquemaRespuestaMateria = new Schema({ opcion: { type: EsquemaOpcion }, materia: { type: EsquemaMateria }});
 
 interface DocumentoRespuestaMateria extends RespuestaMateria, Document { };
 

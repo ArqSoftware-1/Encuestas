@@ -23,12 +23,15 @@ export class AsignarAlumnoComponent {
                         emailAlumno:""
                       };
   alumnos = [];
+  nombreYApellido;
+  dni;
+  idEncuesta;
   
   constructor(encuestaService:EncuestaService, route: ActivatedRoute, respuestaEncuestaService:RespuestaEncuestaService){
-    var idEncuesta = route.snapshot.params['idEncuesta'];
+    this.idEncuesta = route.snapshot.params['idEncuesta'];
     this.respuestaEncuestaService = respuestaEncuestaService;
 
-    encuestaService.obtenerEncuesta(idEncuesta).subscribe(
+    encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
                 (encuesta) => {
                     this.encuesta = encuesta;
                     respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(
@@ -84,5 +87,15 @@ export class AsignarAlumnoComponent {
 
   crearUrlPara(alumno){
     return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
+  }
+
+  buscar(){
+    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta).subscribe(
+                (respuestasEcuesta) => {
+                    this.alumnos = respuestasEcuesta;
+                },
+                (error: Error) => {
+                    console.log(error);
+                });
   }
 }

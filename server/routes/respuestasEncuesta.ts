@@ -69,6 +69,25 @@ rutaRespuestasEncuesta.post("/guardar", function (request: Request, response: Re
                                     });
 });
 
+rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) => {console.log(request.param('nombreYApellido'));
+    var alumno = request.param('nombreYApellido');
+    var dni = request.param('dni');
+    var idEncuesta = request.param('idEncuesta');
+    ModeloRespuestaEncuesta.find({ $and: [ {$or:[ {nombreYApellidoAlumno: new RegExp(alumno, 'i')}, 
+                                                  {DNIAlumno: new RegExp(dni, 'i')}
+                                                ]},
+                                           {'encuesta._id': idEncuesta }
+                                         
+                                         ]}).exec()
+                                            .then(respuestasEncuesta => {
+                                                    response.json(respuestasEncuesta);
+                                            })
+                                            .catch(error => {
+                                                winston.log('error', 'Se ha produccido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
+                                                response.status(400).json(error);
+                                            });
+});
+
 export { rutaRespuestasEncuesta }
 
 
