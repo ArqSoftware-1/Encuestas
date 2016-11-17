@@ -23,8 +23,8 @@ export class AsignarAlumnoComponent {
                         emailAlumno:""
                       };
   alumnos = [];
-  nombreYApellido;
-  dni;
+  nombreYApellido = "";
+  dni = "";
   idEncuesta;
   
   constructor(encuestaService:EncuestaService, route: ActivatedRoute, respuestaEncuestaService:RespuestaEncuestaService){
