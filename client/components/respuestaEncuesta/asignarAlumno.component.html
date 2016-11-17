@@ -18,13 +18,11 @@
 		<label>Email<span style="color:red"> *</span></label>
     	<input type="email" class="form-control" placeholder="ingrese Email..." [(ngModel)]="alumno.emailAlumno">
 	</div>
-</div>
-
-<div class="row">
-	<div class="col-md-1">
-		<button class="btn btn-success" type="button" (click)="asignarAlumno()">Asignar</button>
+	<div class="form-group col-md-3">
+		<button class="btn btn-success" style="margin-top: 25px" type="button" (click)="asignarAlumno()">Asignar</button>
 	</div>
 </div>
+
 <br>
 
 <div class="row">
@@ -35,7 +33,7 @@
 		<input type="search" class="form-control" placeholder="ingrese DNI..." [(ngModel)]="dni">
 	</div>
 	<div class="col-md-3">
-		<button class="btn btn-success" (click)="buscar()">Buscar</button>
+		<button class="btn btn-primary" (click)="buscar()">Buscar</button>
 	</div>
 </div>
 <div class="table-responsive">
