@@ -12,38 +12,45 @@ const rutaRespuestasEncuestaPublica: Router = Router();
 
 
 rutaRespuestasEncuestaPublica.post("/actualizar-respuestas", (request: Request, response: Response) => {
-    var respuestas =  request.body.respuestas;
+    var respuestas = request.body.respuestas;
     ModeloRespuestaEncuesta.findById(request.param('id')).exec()
-                                    .then(respuestaEncuesta => {
-                                        respuestaEncuesta.respuestasMateria = [];
-                                        respuestas.forEach(function(respuesta) {
-                                            var materia = new ModeloMateria(respuesta.materia);
-                                            var opcion = new ModeloOpcion(respuesta.opcion);
-                                            var respuestaMateria = new ModeloRespuestaMateria({materia: materia, opcion: opcion});
-                                            respuestaEncuesta.respuestasMateria.push(respuestaMateria);
-                                        });
-                                        respuestaEncuesta.completa = respuestaEncuesta.respuestasMateria.length == respuestaEncuesta.encuesta.materias.length;
-                                        respuestaEncuesta.save();
-                                        response.json(respuestaEncuesta);
-                                    })
-                                    .catch(error => {
-                                        winston.log('error', 'Se ha produccido un error al actualizar una respeusta: ' + error);
-                                        response.status(400).json(error);
-                                    });
+        .then(respuestaEncuesta => {
+            respuestaEncuesta.respuestasMateria = [];
+            respuestas.forEach(function(respuesta) {
+                var materia = new ModeloMateria(respuesta.materia);
+                var opcion = new ModeloOpcion(respuesta.opcion);
+                var respuestaMateria = new ModeloRespuestaMateria({
+                    materia: materia,
+                    opcion: opcion
+                });
+                respuestaEncuesta.respuestasMateria.push(respuestaMateria);
+            });
+            respuestaEncuesta.completa = respuestaEncuesta.respuestasMateria.length == respuestaEncuesta.encuesta.materias.length;
+            respuestaEncuesta.save();
+            response.json(respuestaEncuesta);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al actualizar una respeusta: ' + error);
+            response.status(400).json(error);
+        });
 });
 
 rutaRespuestasEncuestaPublica.get("/detalle", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.findOne({token: request.param('token')}).exec()
-                                    .then(respuestaEncuesta => {
-                                            response.json(respuestaEncuesta);
-                                    })
-                                    .catch(error => {
-                                        winston.log('error ', 'Se ha produccido un error al obtener una respuesta: ' + error);
-                                        response.status(400).json(error);
-                                    });
+    ModeloRespuestaEncuesta.findOne({
+            token: request.param('token')
+        }).exec()
+        .then(respuestaEncuesta => {
+            response.json(respuestaEncuesta);
+        })
+        .catch(error => {
+            winston.log('error ', 'Se ha produccido un error al obtener una respuesta: ' + error);
+            response.status(400).json(error);
+        });
 });
 
-export { rutaRespuestasEncuestaPublica }
+export {
+    rutaRespuestasEncuestaPublica
+}
 
 
 

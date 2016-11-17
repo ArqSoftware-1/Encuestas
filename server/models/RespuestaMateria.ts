@@ -7,10 +7,19 @@ class RespuestaMateria {
     materia: Materia;
 }
 
-var EsquemaRespuestaMateria = new Schema({ opcion: { type: EsquemaOpcion }, materia: { type: EsquemaMateria }});
+var EsquemaRespuestaMateria = new Schema({
+    opcion: {
+        type: EsquemaOpcion
+    },
+    materia: {
+        type: EsquemaMateria
+    }
+});
 
-interface DocumentoRespuestaMateria extends RespuestaMateria, Document { };
+interface DocumentoRespuestaMateria extends RespuestaMateria, Document {};
 
-const ModeloRespuestaMateria = model<DocumentoRespuestaMateria>('RespuestaMateria', EsquemaRespuestaMateria);
+const ModeloRespuestaMateria = model < DocumentoRespuestaMateria > ('RespuestaMateria', EsquemaRespuestaMateria);
 
-export {RespuestaMateria, ModeloRespuestaMateria, EsquemaRespuestaMateria};
+export {
+    RespuestaMateria, ModeloRespuestaMateria, EsquemaRespuestaMateria
+};

@@ -22,7 +22,9 @@ app.use(favicon(join(__dirname, "../public", "favicon.ico")));
 app.use(express.static(join(__dirname, '../public')));
 
 app.use(json());
-app.use(urlencoded({ extended: true }));
+app.use(urlencoded({
+    extended: true
+}));
 
 // api routes
 app.use("/api/opciones", rutaOpciones);
@@ -71,16 +73,18 @@ winston.add(winston.transports.Loggly, {
     inputToken: "92eab9c6-189f-4340-a690-4b162f9da412",
     subdomain: "quilsoft",
     tags: ["Winston-NodeJS"],
-    json:true
+    json: true
 });
-winston.log('info',"Aplicación iniciada");
+winston.log('info', "Aplicación iniciada");
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
 
-mongoose.connection.once('open', ()=> {
+mongoose.connection.once('open', () => {
     mongoose.connection.db.dropDatabase(() => {
         require('./data');
     })
 })
 
-export { app }
+export {
+    app
+}

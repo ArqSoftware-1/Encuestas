@@ -6,7 +6,11 @@ import * as winston from "winston";
 
 const rutaOpciones: Router = Router();
 
-rutaOpciones.use((request: Request & { headers: { authorization: string } }, response: Response, next: NextFunction) => {
+rutaOpciones.use((request: Request & {
+    headers: {
+        authorization: string
+    }
+}, response: Response, next: NextFunction) => {
     const token = request.headers.authorization;
 
     verify(token, secret, function(tokenError) {
@@ -22,24 +26,28 @@ rutaOpciones.use((request: Request & { headers: { authorization: string } }, res
 
 rutaOpciones.get("/listado", (request: Request, response: Response) => {
     ModeloOpcion.find().exec()
-                         .then(opciones => {
-                            response.json(opciones);
-                         })
-                         .catch(error => {
-                            winston.log('error', 'Se ha produccido un error al listar las opciones: ' + error);
-                            response.status(400).json(error);
-                         });
+        .then(opciones => {
+            response.json(opciones);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al listar las opciones: ' + error);
+            response.status(400).json(error);
+        });
 });
 
 rutaOpciones.get("/detalle", (request: Request, response: Response) => {
-    ModeloOpcion.findOne({_id: request.param('id')}).exec()
-                         .then(opcion => {
-                            response.json(opcion);
-                         })
-                         .catch(error => {
-                            winston.log('error', 'Se ha produccido un error al obtener el detalle de una opcion: ' + error);
-                            response.status(400).json(error);
-                         });
+    ModeloOpcion.findOne({
+            _id: request.param('id')
+        }).exec()
+        .then(opcion => {
+            response.json(opcion);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al obtener el detalle de una opcion: ' + error);
+            response.status(400).json(error);
+        });
 });
 
-export { rutaOpciones }
+export {
+    rutaOpciones
+}

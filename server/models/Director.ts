@@ -6,13 +6,22 @@ class Director {
     salt: Buffer;
 }
 
-var EsquemaDirector = new Schema({ email: { type: String }, 
-                                   password: { type: String},
-                                   salt: { type: Buffer}
-                                 });
+var EsquemaDirector = new Schema({
+    email: {
+        type: String
+    },
+    password: {
+        type: String
+    },
+    salt: {
+        type: Buffer
+    }
+});
 
-interface DocumentoDirector extends Director, Document { };
+interface DocumentoDirector extends Director, Document {};
 
-const ModeloDirector = model<DocumentoDirector>('Director', EsquemaDirector);
+const ModeloDirector = model < DocumentoDirector > ('Director', EsquemaDirector);
 
-export {Director, ModeloDirector, EsquemaDirector};
+export {
+    Director, ModeloDirector, EsquemaDirector
+};

@@ -18,19 +18,21 @@ export class LoginComponent {
     route: Router;
     loginService: LoginService;
 
-    constructor(private http: Http, loginService:LoginService, route: Router){
+    constructor(private http: Http, loginService: LoginService, route: Router) {
         this.route = route;
         this.loginService = loginService;
-        if(localStorage.getItem("id_token")){
+        if (localStorage.getItem("id_token")) {
             this.route.navigate(['encuestas/listado']);
         }
     }
 
     login() {
-        this.loginService.login({ password: this.user.password, email: this.user.email },
-                            (res: Response) => {
-                                location.reload(); 
-                            });
+        this.loginService.login({
+            password: this.user.password,
+            email: this.user.email
+        }, (res: Response) => {
+            location.reload();
+        });
     }
 
     /*signup() {

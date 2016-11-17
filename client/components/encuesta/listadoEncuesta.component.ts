@@ -10,14 +10,13 @@ import { EncuestaService } from "../../service/encuesta/encuesta.service";
 
 export class ListadoEncuestaComponent {
     encuestas;
-    
-    constructor(encuestaService:EncuestaService){
+
+    constructor(encuestaService: EncuestaService) {
         encuestaService.obtenerTodasLasEncuestas().subscribe(
-                (encuestas) => {
-                    this.encuestas = encuestas;                    
-                },
-                (error: Error) => {
-                    console.log(error);
-                });
+            (encuestas) => {
+                this.encuestas = encuestas;
+            }, (error: Error) => {
+                console.log(error);
+            });
     }
 }

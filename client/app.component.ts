@@ -21,10 +21,12 @@ export class AppComponent {
     loginSub;
 
     isLogged: boolean;
-    response: Response & { hashed?: string, salt?: string };
-    @ViewChild("myPopup") myPopup: SemanticPopupComponent;
+    response: Response & {
+        hashed ? : string, salt ? : string
+    };@
+    ViewChild("myPopup") myPopup: SemanticPopupComponent;
 
-    constructor(private http: Http, route: Router, loginService:LoginService) {
+    constructor(private http: Http, route: Router, loginService: LoginService) {
         this.isLogged = !!localStorage.getItem("id_token");
         this.loginService = loginService;
     }
@@ -35,10 +37,9 @@ export class AppComponent {
     }
 
     ngOnInit() {
-      this.loginSub = this.loginService.loggedInObservable.subscribe(val => {
-        this.isLogged = val;
-      });
+        this.loginSub = this.loginService.loggedInObservable.subscribe(val => {
+            this.isLogged = val;
+        });
     }
-
 
 }

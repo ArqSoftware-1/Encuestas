@@ -12,90 +12,86 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 
 export class AsignarAlumnoComponent {
-  encuesta: any = { 
-                    anho: "",
-                    semestre:"",
-                  };
-  respuestaEncuestaService;
-  encuestaService;
-  alumno : any = { nombreYApellidoAlumno: "",
-                        DNIAlumno: "",
-                        emailAlumno:""
-                      };
-  alumnos = [];
-  nombreYApellido = "";
-  dni = "";
-  idEncuesta;
-  
-  constructor(encuestaService:EncuestaService, route: ActivatedRoute, respuestaEncuestaService:RespuestaEncuestaService){
-    this.idEncuesta = route.snapshot.params['idEncuesta'];
-    this.respuestaEncuestaService = respuestaEncuestaService;
+    encuesta: any = {
+        anho: "",
+        semestre: "",
+    };
+    respuestaEncuestaService;
+    encuestaService;
+    alumno: any = {
+        nombreYApellidoAlumno: "",
+        DNIAlumno: "",
+        emailAlumno: ""
+    };
+    alumnos = [];
+    nombreYApellido = "";
+    dni = "";
+    idEncuesta;
 
-    encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
-                (encuesta) => {
-                    this.encuesta = encuesta;
-                    respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(
-                            (respuestasEcuesta) => {
-                                this.alumnos = respuestasEcuesta;
-                            },
-                            (error: Error) => {
-                                console.log(error);
-                            });
-                },
-                (error: Error) => {
-                    console.log(error);
-                });
-  }
+    constructor(encuestaService: EncuestaService, route: ActivatedRoute, respuestaEncuestaService: RespuestaEncuestaService) {
+        this.idEncuesta = route.snapshot.params['idEncuesta'];
+        this.respuestaEncuestaService = respuestaEncuestaService;
 
-  asignarAlumno(){
-    if(!this.seLLenaronLosCampoCorrectamente())
-      return;
-
-    this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(
-                (respuestaEcuesta) => {
-                    this.alumnos.push(respuestaEcuesta);
-                    this.alumno.nombreYApellidoAlumno = "";
-                    this.alumno.DNIAlumno = "";
-                    this.alumno.emailAlumno = "";
-                },
-                (error: Error) => {
-                    console.log(error);
-                });
-  }
-
-  seLLenaronLosCampoCorrectamente(){
-    if(this.alumno.nombreYApellidoAlumno.length == 0 || this.alumno.DNIAlumno.length == 0
-        || this.alumno.emailAlumno.length == 0){
-          alert("Todos los campos son obligatorios.");
-          return false;
+        encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
+            (encuesta) => {
+                this.encuesta = encuesta;
+                respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(
+                    (respuestasEcuesta) => {
+                        this.alumnos = respuestasEcuesta;
+                    }, (error: Error) => {
+                        console.log(error);
+                    });
+            }, (error: Error) => {
+                console.log(error);
+            });
     }
 
-    if(!/^[a-z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/.test(this.alumno.emailAlumno)){
-      alert("Email inválido.");
-      return false;
+    asignarAlumno() {
+        if (!this.seLLenaronLosCampoCorrectamente())
+            return;
+
+        this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(
+            (respuestaEcuesta) => {
+                this.alumnos.push(respuestaEcuesta);
+                this.alumno.nombreYApellidoAlumno = "";
+                this.alumno.DNIAlumno = "";
+                this.alumno.emailAlumno = "";
+            }, (error: Error) => {
+                console.log(error);
+            });
     }
 
-    var alumnos = this.alumnos.filter(a => a.DNIAlumno == this.alumno.DNIAlumno);
+    seLLenaronLosCampoCorrectamente() {
+        if (this.alumno.nombreYApellidoAlumno.length == 0 || this.alumno.DNIAlumno.length == 0 || this.alumno.emailAlumno.length == 0) {
+            alert("Todos los campos son obligatorios.");
+            return false;
+        }
 
-    if(alumnos.length != 0){
-      alert("El DNI ingresado ya existe.");
-      return false;
+        if (!/^[a-z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/.test(this.alumno.emailAlumno)) {
+            alert("Email inválido.");
+            return false;
+        }
+
+        var alumnos = this.alumnos.filter(a => a.DNIAlumno == this.alumno.DNIAlumno);
+
+        if (alumnos.length != 0) {
+            alert("El DNI ingresado ya existe.");
+            return false;
+        }
+
+        return true;
     }
 
-    return true;
-  }
+    crearUrlPara(alumno) {
+        return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
+    }
 
-  crearUrlPara(alumno){
-    return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
-  }
-
-  buscar(){
-    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta).subscribe(
-                (respuestasEcuesta) => {
-                    this.alumnos = respuestasEcuesta;
-                },
-                (error: Error) => {
-                    console.log(error);
-                });
-  }
+    buscar() {
+        this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta).subscribe(
+            (respuestasEcuesta) => {
+                this.alumnos = respuestasEcuesta;
+            }, (error: Error) => {
+                console.log(error);
+            });
+    }
 }
