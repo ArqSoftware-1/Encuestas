@@ -120,7 +120,7 @@ rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
                                     'encuesta._id': request.param('id'),
                                     completa: true,
                                     'respuestasMateria.opcion.tipo': {
-                                        "$nin": [NombresOpcionDefecto.tipos.comision, NombresOpcionDefecto.tipos.ya_curse]
+                                        "$nin": [NombresOpcionDefecto.tipos.comision]
                                     }
                                 }).exec()
                                 .then(completaronYNoCursanNada => {
