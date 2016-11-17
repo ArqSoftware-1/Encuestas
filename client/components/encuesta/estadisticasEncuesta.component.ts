@@ -43,11 +43,10 @@ export class EstadisticasEncuestaComponent implements OnInit {
                 this.noIniciarion = res.total - res.completaronAlgunaOpcion;
                 this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
                 this.total = res.total;
-                this.pie_ChartData.push(['Completaron toda la encuesta', res.CompletaronYCursanPorLoMenosUnaMateria]);
+                this.pie_ChartData.push(['Completaron y cursan por lo menos una', res.completaron - res.completaronYNoCursanNada]);
                 this.pie_ChartData.push(['No iniciaron la encuesta', res.total - res.completaron]);
-                this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
-                this.pie_ChartData.push(['Completaron y no cursan nada', res.completaron - res.CompletaronYCursanPorLoMenosUnaMateria]);
-
+                this.pie_ChartData.push(['Completaron y no cursan nada', res.completaronYNoCursanNada]);
+                //this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
             }, (error: Error) => {
                 console.log(error);
             });
@@ -80,7 +79,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
             var data = google.visualization.arrayToDataTable(pie_ChartData);
 
             var options = {
-                title: 'Estadísticas sobre el total de alumnos asignados',
+                title: 'Gráfico estadístico sobre el total de alumnos asignados',
                 is3D: true
             };
 

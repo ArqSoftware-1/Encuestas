@@ -119,16 +119,16 @@ rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
                             ModeloRespuestaEncuesta.count({
                                     'encuesta._id': request.param('id'),
                                     completa: true,
-                                    'respuestasMateria.opcion.descripcion': {
-                                        "$nin": [NombresOpcionDefecto.valores.no_voy_a_cursar, NombresOpcionDefecto.valores.me_gustaria_pero_no_puedo, NombresOpcionDefecto.valores.ya_curse]
+                                    'respuestasMateria.opcion.tipo': {
+                                        "$nin": [NombresOpcionDefecto.tipos.comision, NombresOpcionDefecto.tipos.ya_curse]
                                     }
                                 }).exec()
-                                .then(CompletaronYCursanPorLoMenosUnaMateria => {
+                                .then(completaronYNoCursanNada => {
                                     response.json({
                                         total: total,
                                         completaron: completaron,
                                         completaronAlgunaOpcion: completaronAlgunaOpcion,
-                                        CompletaronYCursanPorLoMenosUnaMateria: CompletaronYCursanPorLoMenosUnaMateria
+                                        completaronYNoCursanNada: completaronYNoCursanNada
                                     });
                                 })
                                 .catch(error => {

@@ -14,28 +14,35 @@ import { secret, length, digest } from "./config";
 // Opciones
 var opcion1 = new ModeloOpcion({
     descripcion: "Voy a cursar en c1",
-    limite: 2
+    limite: 2,
+    tipo: NombresOpcionDefecto.tipos.comision
 });
 var opcion2 = new ModeloOpcion({
     descripcion: "Voy a cursar en c2",
-    limite: 1
+    limite: 1,
+    tipo: NombresOpcionDefecto.tipos.comision
 });
 var opcion3 = new ModeloOpcion({
     descripcion: "Voy a cursar en c3",
-    limite: 3
+    limite: 3,
+    tipo: NombresOpcionDefecto.tipos.comision
 });
 var opcion4 = new ModeloOpcion({
-    descripcion: NombresOpcionDefecto.valores.ya_curse
+    descripcion: NombresOpcionDefecto.descripciones.ya_curse,
+    tipo: NombresOpcionDefecto.tipos.ya_curse
 });
 var opcion5 = new ModeloOpcion({
-    descripcion: NombresOpcionDefecto.valores.me_gustaria_pero_no_puedo
+    descripcion: NombresOpcionDefecto.descripciones.me_gustaria_pero_no_puedo,
+    tipo: NombresOpcionDefecto.tipos.no_voy_a_cursar
 });
 var opcion6 = new ModeloOpcion({
-    descripcion: NombresOpcionDefecto.valores.no_voy_a_cursar
+    descripcion: NombresOpcionDefecto.descripciones.no_voy_a_cursar,
+    tipo: NombresOpcionDefecto.tipos.no_voy_a_cursar
 });
 var opcion7 = new ModeloOpcion({
     descripcion: "Voy a cursar en c3",
-    limite: 2
+    limite: 2,
+    tipo: NombresOpcionDefecto.tipos.comision
 });
 
 opcion1.save();
