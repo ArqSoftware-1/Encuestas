@@ -1,20 +1,25 @@
 body {
-	background: #f4f4f4;
+    background: #f4f4f4;
 }
 .center {
-	text-align: center;
-	padding-top: 100px;
+    text-align: center;
+    padding-top: 100px;
 }
 .sebm-google-map-container {
-	height: 300px;
+    height: 300px;
 }
 
 .teal.active.item, .ui.inverted.teal.menu {
-	background-color: #2185d0;
+    background-color: #2185d0;
 }
 .danger{
-	color: #a94442;
+    color: #a94442;
 }
 .success{
-	color: #3c763d;
+    color: #3c763d;
+}
+.box-hover:hover{
+    box-shadow: 0px 0px 6px 0px rgba(119, 119, 119, 0.61) !important;
+    -moz-box-shadow: 0px 0px 6px 0px rgba(119, 119, 119, 0.61) !important;
+    -webkit-box-shadow: 0px 0px 6px 0px rgba(119, 119, 119, 0.61) !important;
 }
