@@ -37,13 +37,18 @@ export class MateriasComponent {
     esLaOpcionElegida(materia, opcion){
         var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
         (materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
-
         if(respuestaMateria){
-            return respuestaMateria.opcion._id == opcion._id;
+            if(respuestaMateria.opcion._id == opcion._id){
+                materia.tieneOpcionElegida = !materia.tieneOpcionPorDefecto;
+                return true;
+            }else{
+                return false;
+            }
         }
         else{
             if(opcion._id == materia.idOpcionPorDefecto){
-                this.seleccionarOpcionDeMateria(materia._id, opcion._id)
+                materia.tieneOpcionPorDefecto = true;
+                this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
                 return true;
             }else{
                 return false;
@@ -66,8 +71,11 @@ export class MateriasComponent {
         this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(
                                                         (opcionSeleccionada) =>
                                                                  opcionSeleccionada.materia._id !== idMateria);
-        if(opcion)
+        if(opcion){
             this.respuestaEncuesta.respuestasMateria.push({materia, opcion});
+            materia.tieneOpcionPorDefecto = false;
+            materia.tieneOpcionElegida = true;
+        }
     }
 
     guardar(){

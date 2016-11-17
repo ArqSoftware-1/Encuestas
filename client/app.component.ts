@@ -36,7 +36,6 @@ export class AppComponent {
 
     ngOnInit() {
       this.loginSub = this.loginService.loggedInObservable.subscribe(val => {
-        console.log(val);
         this.isLogged = val;
       });
     }
