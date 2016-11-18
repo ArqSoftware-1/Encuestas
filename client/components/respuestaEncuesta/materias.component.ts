@@ -15,6 +15,11 @@ export class MateriasComponent {
     respuestaEncuestaService: RespuestaEncuestaService;
     encuestaFinalizada: Boolean;
     enlace: String;
+    tipoOpcion = {
+        COMISION: 'success',
+        YACURSE: 'warning',
+        NOVOYACURSAR: 'danger'
+    }
 
     constructor(respuestaEncuestaService: RespuestaEncuestaService, route: ActivatedRoute) {
         var token = route.snapshot.params['token'];
@@ -37,29 +42,19 @@ export class MateriasComponent {
         var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
             (materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
         if (respuestaMateria) {
-            if (respuestaMateria.opcion._id == opcion._id) {
-                materia.tieneOpcionElegida = !materia.tieneOpcionPorDefecto;
+        	if(respuestaMateria.opcion._id == opcion._id){
+                materia.opcionElegidaPorAlumno = opcion;
                 return true;
-            } else {
-                return false;
-            }
+        	}
+            return false;
         } else {
             if (opcion._id == materia.idOpcionPorDefecto) {
-                materia.tieneOpcionPorDefecto = true;
-                this.respuestaEncuesta.respuestasMateria.push({
-                    materia, opcion
-                });
+                this.seleccionarOpcionDeMateria(materia._id, opcion._id);
                 return true;
             } else {
                 return false;
             }
         }
-    }
-
-    tieneOpcionElegida(materia) {
-        var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(
-            (materiaOpcion) => materiaOpcion.materia._id == materia._id)[0];
-        return respuestaMateria ? true : false;
     }
 
     seleccionarOpcionDeMateria(idMateria, idOpcion) {
@@ -75,8 +70,7 @@ export class MateriasComponent {
             this.respuestaEncuesta.respuestasMateria.push({
                 materia, opcion
             });
-            materia.tieneOpcionPorDefecto = false;
-            materia.tieneOpcionElegida = true;
+            materia.opcionElegidaPorAlumno = opcion;
         }
     }
 
