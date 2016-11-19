@@ -85,7 +85,8 @@ var encuesta = new ModeloEncuesta({
     materias: [materia1, materia2, materia3, materia4],
     anho: 2016,
     semestre: 2,
-    carrera: 'Licenciatura en informática'
+    carrera: 'Licenciatura en informática',
+    fechaLimite: new Date(2016, 11, 31)
 });
 encuesta.save();
 
@@ -93,7 +94,8 @@ var encuesta1 = new ModeloEncuesta({
     materias: [materia1, materia2, materia3],
     anho: 2017,
     semestre: 1,
-    carrera: 'Licenciatura en informática'
+    carrera: 'Licenciatura en informática',
+    fechaLimite: new Date(2017, 4, 18)
 });
 encuesta1.save();
 

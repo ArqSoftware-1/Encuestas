@@ -37,7 +37,8 @@ rutaRespuestasEncuestaPublica.post("/actualizar-respuestas", (request: Request, 
 
 rutaRespuestasEncuestaPublica.get("/detalle", (request: Request, response: Response) => {
     ModeloRespuestaEncuesta.findOne({
-            token: request.param('token')
+            token: request.param('token'),  
+            'encuesta.fechaLimite': {$gte : Date.now()}
         }).exec()
         .then(respuestaEncuesta => {
             response.json(respuestaEncuesta);

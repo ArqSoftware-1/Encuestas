@@ -19,4 +19,10 @@ export class ListadoEncuestaComponent {
                 console.log(error);
             });
     }
+
+    formatearFecha(fecha){
+      fecha = new Date(fecha);
+      var fechaFormateada = fecha.getDate()  + "-" + (fecha.getMonth() + 1) + "-" + fecha.getFullYear() + " ";
+      return fechaFormateada;
+    }
 }

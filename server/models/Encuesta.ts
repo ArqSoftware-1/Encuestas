@@ -6,6 +6,7 @@ class Encuesta {
     anho: Number;
     semestre: Number;
     carrera: String;
+    fechaLimite: Date
 }
 
 var EsquemaEncuesta = new Schema({
@@ -25,6 +26,9 @@ var EsquemaEncuesta = new Schema({
     carrera: {
         required: true,
         type: String
+    },
+    fechaLimite: {
+        type: Date
     },
 });
 

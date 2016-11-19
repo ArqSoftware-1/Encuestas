@@ -4,6 +4,7 @@
     <tr>
       <th>Año - Semestre</th>
       <th>Carrera</th>
+      <th>Fecha límite</th>
       <th>Acciones</th>
     </tr>
   </thead>
@@ -11,6 +12,7 @@
     <tr *ngFor="let encuesta of encuestas">
       <td>{{encuesta.anho}} - {{encuesta.semestre}}</td>
       <td>{{encuesta.carrera}}</td>
+      <td>{{formatearFecha(encuesta.fechaLimite)}}</td>
       <td>
         <a [routerLink]="['/encuestas/estadisticas', encuesta._id]" title="Estadisticas"><span class="glyphicon glyphicon-stats"></span></a>
         <!--<a><span class="glyphicon glyphicon-search" title="Ver encuesta"></span></a>
