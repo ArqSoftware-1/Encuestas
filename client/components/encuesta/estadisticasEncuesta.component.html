@@ -6,7 +6,7 @@
     <b>Total de alumnos asignados a la encuesta:</b> {{total}} <br>
   </div>
   <div class="col-md-7">
-    <div id="piechart" style="width: 500px; height: 277px;"></div>
+    <div id="piechart" style="width: 500px; height: 230px;"></div>
   </div>
 </div>
 <div class="row">
@@ -18,7 +18,7 @@
   <div class="col-md-3" *ngFor="let materia of materias">
     <div class="panel panel-{{materia.tieneOpcionConLimiteSuperado ? 'danger' : 'default'}} box-hover">
       <div class="panel-heading">{{materia.nombre}}</div>
-      <div class="panel-body" style="height: 125px; overflow: auto">
+      <div class="panel-body" style="height: 130px; overflow: auto">
         <div *ngFor="let opcion of materia.opciones;">
           <div>
             <span [class]="cantidadPara(materia, opcion) >= opcion.limite ? 'danger' : ''">{{opcion.descripcion}}: {{cantidadPara(materia, opcion)}}  {{opcion.limite > 0 ? '/ ' + opcion.limite : ''}}</span>
