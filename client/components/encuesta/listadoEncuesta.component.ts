@@ -21,8 +21,16 @@ export class ListadoEncuestaComponent {
     }
 
     formatearFecha(fecha){
+      if(!fecha){return '-'}
       fecha = new Date(fecha);
-      var fechaFormateada = fecha.getDate()  + "-" + (fecha.getMonth() + 1) + "-" + fecha.getFullYear() + " ";
+      var fechaFormateada = this.agregarCero(fecha.getDate())  + "-" + (this.agregarCero(fecha.getMonth() + 1)) + "-" + fecha.getFullYear() + " ";
       return fechaFormateada;
+    }
+
+    agregarCero(numero){
+      if(numero < 10){
+        return '0' + numero;
+      }
+      return numero;
     }
 }
