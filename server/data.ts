@@ -152,6 +152,34 @@ respuestaEncuesta2.save();
 respuestaEncuesta2.token = respuestaEncuesta2._id + randomBytes(16).toString("hex");
 respuestaEncuesta2.save();
 
+var respuestaEncuesta3 = new ModeloRespuestaEncuesta({
+    respuestasMateria: [new ModeloRespuestaMateria({
+            materia: materia1,
+            opcion: opcion5
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia2,
+            opcion: opcion5
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia3,
+            opcion: opcion6
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia4,
+            opcion: opcion6
+        })
+    ],
+    completa: true,
+    encuesta: encuesta,
+    nombreYApellidoAlumno: 'Alumno 2',
+    DNIAlumno: '43218765',
+    emailAlumno: 'alumno2@unq.edu.ar'
+});
+respuestaEncuesta3.save();
+respuestaEncuesta3.token = respuestaEncuesta3._id + randomBytes(16).toString("hex");
+respuestaEncuesta3.save();
+
 // Director
 const salt = randomBytes(128).toString("base64");
 
