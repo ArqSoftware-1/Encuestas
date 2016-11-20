@@ -100,6 +100,19 @@ var encuesta1 = new ModeloEncuesta({
 encuesta1.save();
 
 // Respuestas
+for(var i = 1; i < 100; i++){
+    var respuestaEncuesta1 = new ModeloRespuestaEncuesta({
+    respuestasMateria: [],
+    encuesta: encuesta,
+    nombreYApellidoAlumno: 'Alumno ' + i,
+    DNIAlumno: '' + i,
+    emailAlumno: 'alumno' + i + '@unq.edu.ar',
+    completa: false
+});
+respuestaEncuesta1.save();
+respuestaEncuesta1.token = respuestaEncuesta1._id + randomBytes(16).toString("hex");
+respuestaEncuesta1.save();
+}
 var respuestaEncuesta = new ModeloRespuestaEncuesta({
     respuestasMateria: [new ModeloRespuestaMateria({
             materia: materia1,
@@ -127,7 +140,7 @@ var respuestaEncuesta = new ModeloRespuestaEncuesta({
 respuestaEncuesta.save();
 respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
 respuestaEncuesta.save();
-
+/*
 var respuestaEncuesta1 = new ModeloRespuestaEncuesta({
     respuestasMateria: [],
     encuesta: encuesta,
@@ -151,7 +164,7 @@ var respuestaEncuesta2 = new ModeloRespuestaEncuesta({
 respuestaEncuesta2.save();
 respuestaEncuesta2.token = respuestaEncuesta2._id + randomBytes(16).toString("hex");
 respuestaEncuesta2.save();
-
+*/
 var respuestaEncuesta3 = new ModeloRespuestaEncuesta({
     respuestasMateria: [new ModeloRespuestaMateria({
             materia: materia1,

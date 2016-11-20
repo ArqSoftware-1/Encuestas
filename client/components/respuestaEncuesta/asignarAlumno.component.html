@@ -56,8 +56,13 @@
 	</tbody>
 </table>
 </div>
+<ng-pagination id="paginados" [(totalItems)]="totalItems" [(ngModel)]="paginaActual" [maxSize]="maximoPorPagina" [boundaryLinks]="true" (pageChanged)="buscar()"></ng-pagination>
+
+<div id="paginado"></div>
+
 <div class="row">
 	<div class="col-md-12">
 	<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
 	</div>
 </div>
+

@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 import { RespuestaEncuestaService } from "../../service/respuestaEncuesta/respuestaEncuesta.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
+//declare var $:JQueryStatic;
 
 
 @Component({
@@ -28,6 +30,10 @@ export class AsignarAlumnoComponent {
     dni = "";
     idEncuesta;
 
+    public paginaActual:number = 1;
+    public totalItems:number = 100; // total numbar of page not items 
+    public maximoPorPagina:number = 10;
+
     constructor(encuestaService: EncuestaService, route: ActivatedRoute, respuestaEncuestaService: RespuestaEncuestaService) {
         this.idEncuesta = route.snapshot.params['idEncuesta'];
         this.respuestaEncuestaService = respuestaEncuestaService;
@@ -35,7 +41,7 @@ export class AsignarAlumnoComponent {
         encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
             (encuesta) => {
                 this.encuesta = encuesta;
-                respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(
+                respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre, this.maximoPorPagina).subscribe(
                     (respuestasEcuesta) => {
                         this.alumnos = respuestasEcuesta;
                     }, (error: Error) => {
@@ -44,6 +50,16 @@ export class AsignarAlumnoComponent {
             }, (error: Error) => {
                 console.log(error);
             });
+    }
+
+    ngOnInit(){
+        this.respuestaEncuestaService.cantidadDeRespuestaEncuestaPara("","",this.idEncuesta).subscribe(
+                (cantidad) => {
+                    this.totalItems = cantidad;
+                    alert(this.totalItems);
+                }, (error: Error) => {
+                        console.log(error);
+                });
     }
 
     asignarAlumno() {
@@ -87,11 +103,18 @@ export class AsignarAlumnoComponent {
     }
 
     buscar() {
-        this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta).subscribe(
+        this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.paginaActual, this.maximoPorPagina).subscribe(
             (respuestasEcuesta) => {
                 this.alumnos = respuestasEcuesta;
             }, (error: Error) => {
                 console.log(error);
             });
+
+        this.respuestaEncuestaService.cantidadDeRespuestaEncuestaPara(this.nombreYApellido, this.dni, this.idEncuesta).subscribe(
+                (cantidad) => {
+                    this.totalItems = cantidad;
+                }, (error: Error) => {
+                        console.log(error);
+                });
     }
 }

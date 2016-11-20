@@ -43,15 +43,21 @@ export class RespuestaEncuestaService {
             .map((response: Response) => response.json())
     }
 
-    obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre) {
+    obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre, maximoPorPagina) {
         return this.authHttp
-            .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)
+            .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre + '&maximoPorPagina=' + maximoPorPagina)
             .map((response: Response) => response.json())
     }
 
-    buscarAlumnoPor(nombreYApellido, dni, idEncuesta) {
+    buscarAlumnoPor(nombreYApellido, dni, idEncuesta, paginaActual, maximoPorPagina) {
         return this.authHttp
-            .get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta)
+            .get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&paginaActual=' + paginaActual + '&maximoPorPagina=' + maximoPorPagina)
+            .map((response: Response) => response.json())
+    }
+
+    cantidadDeRespuestaEncuestaPara(nombreYApellido, dni, idEncuesta,){
+        return this.authHttp
+            .get('/api/respuestas/encuesta/cantidadPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta)
             .map((response: Response) => response.json())
     }
 }

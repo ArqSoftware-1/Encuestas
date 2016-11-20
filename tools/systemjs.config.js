@@ -27,7 +27,8 @@ var isPublic = typeof window != "undefined";
             'rxjs':                       'npm:rxjs',
             'angular2-in-memory-web-api': 'npm:angular2-in-memory-web-api',
             'angular2-jwt':               'npm:angular2-jwt/angular2-jwt.js',
-            'ng-semantic':                'npm:ng-semantic'
+            'ng-semantic':                'npm:ng-semantic',
+            'angular2-bootstrap-pagination': 'npm:angular2-bootstrap-pagination/directives/pagination.directive.js'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

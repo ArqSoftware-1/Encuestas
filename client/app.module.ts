@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { provideAuth } from "angular2-jwt";
 import { HttpModule } from "@angular/http";
 import { NgSemanticModule } from "ng-semantic";
+import { FormsModule }   from '@angular/forms';
 
 import { AppComponent }  from './app.component';
 import { routing } from "./routes";
@@ -18,7 +19,8 @@ import { EncuestaModule } from "./modules/encuesta/encuesta.module";
         RespuestaEncuestaModule,
         LoginModule,
         routing,
-        EncuestaModule
+        EncuestaModule,
+        FormsModule
     ],
     providers: [
         provideAuth({

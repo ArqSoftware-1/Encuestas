@@ -43,7 +43,7 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
     ModeloRespuestaEncuesta.find({
             'encuesta.anho': request.param('anho'),
             'encuesta.semestre': request.param('semestre')
-        }).exec()
+        }).limit(+request.param('maximoPorPagina')).exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
         })
@@ -81,6 +81,8 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
     var alumno = request.param('nombreYApellido');
     var dni = request.param('dni');
     var idEncuesta = request.param('idEncuesta');
+    var paginaActual = +request.param('paginaActual');
+    var maximoPorPagina = +request.param('maximoPorPagina');
     ModeloRespuestaEncuesta.find({
             'encuesta._id': idEncuesta
         })
@@ -90,9 +92,35 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         .find({
             DNIAlumno: new RegExp(dni, 'i')
         })
+        .limit(maximoPorPagina)
+        .skip((paginaActual - 1) * maximoPorPagina)
         .exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
+            response.status(400).json(error);
+        });
+});
+
+rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response) => {
+    var alumno = request.param('nombreYApellido');
+    var dni = request.param('dni');
+    var idEncuesta = request.param('idEncuesta');
+    ModeloRespuestaEncuesta.find({
+            'encuesta._id': idEncuesta
+        })
+        .find({
+            nombreYApellidoAlumno: new RegExp(alumno, 'i')
+        })
+        .find({
+            DNIAlumno: new RegExp(dni, 'i')
+        })
+        .count()
+        .exec()
+        .then(cantidad => {
+            response.json(cantidad);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
