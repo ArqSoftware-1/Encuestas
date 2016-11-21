@@ -16830,8 +16830,8 @@ $__System.register("6", ["3", "7", "9", "a", "8", "b"], function (exports_1, con
             login_service_1 = login_service_1_1;
         }],
         execute: function () {
-            AppComponent = class AppComponent {
-                constructor(http, route, loginService) {
+            AppComponent = function () {
+                function AppComponent(http, route, loginService) {
                     this.http = http;
                     this.nombreApp = "Encuestas - UNQ";
                     this.user = {
@@ -16841,22 +16841,24 @@ $__System.register("6", ["3", "7", "9", "a", "8", "b"], function (exports_1, con
                     this.isLogged = !!localStorage.getItem("id_token");
                     this.loginService = loginService;
                 }
-                logout() {
+                AppComponent.prototype.logout = function () {
                     this.loginService.logOut();
                     this.route.navigate(['login']);
-                }
-                ngOnInit() {
-                    this.loginSub = this.loginService.loggedInObservable.subscribe(val => {
-                        this.isLogged = val;
+                };
+                AppComponent.prototype.ngOnInit = function () {
+                    var _this = this;
+                    this.loginSub = this.loginService.loggedInObservable.subscribe(function (val) {
+                        _this.isLogged = val;
                     });
-                }
-            };
-            __decorate([core_1.ViewChild("myPopup"), __metadata('design:type', ng_semantic_1.SemanticPopupComponent)], AppComponent.prototype, "myPopup", void 0);
-            AppComponent = __decorate([core_1.Component({
-                selector: "app",
-                templateUrl: "client/app.component.html",
-                providers: [login_service_1.LoginService]
-            }), __metadata('design:paramtypes', [http_1.Http, router_1.Router, login_service_1.LoginService])], AppComponent);
+                };
+                __decorate([core_1.ViewChild("myPopup"), __metadata('design:type', ng_semantic_1.SemanticPopupComponent)], AppComponent.prototype, "myPopup", void 0);
+                AppComponent = __decorate([core_1.Component({
+                    selector: "app",
+                    templateUrl: "client/app.component.html",
+                    providers: [login_service_1.LoginService]
+                }), __metadata('design:paramtypes', [http_1.Http, router_1.Router, login_service_1.LoginService])], AppComponent);
+                return AppComponent;
+            }();
             exports_1("AppComponent", AppComponent);
         }
     };
@@ -16904,30 +16906,32 @@ $__System.register("d", ["3", "e", "8"], function (exports_1, context_1) {
             router_1 = router_1_1;
         }],
         execute: function () {
-            RespuestaEncuestaComponent = class RespuestaEncuestaComponent {
-                constructor(respuestaEncuestaService, route) {
+            RespuestaEncuestaComponent = function () {
+                function RespuestaEncuestaComponent(respuestaEncuestaService, route) {
+                    var _this = this;
                     var token = route.snapshot.params['token'];
                     if (!token) {
                         this.titulo = 'No exite la encuesta seleccionada.';
                         return;
                     }
-                    respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(respuestaEncuesta => {
+                    respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(function (respuestaEncuesta) {
                         if (respuestaEncuesta) {
-                            this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
+                            _this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
                         } else {
-                            this.titulo = 'No exite la encuesta seleccionada.';
+                            _this.titulo = 'No exite la encuesta seleccionada.';
                         }
-                    }, error => {
-                        this.titulo = 'No exite la encuesta seleccionada.';
+                    }, function (error) {
+                        _this.titulo = 'No exite la encuesta seleccionada.';
                         console.log(error);
                     });
                 }
-            };
-            RespuestaEncuestaComponent = __decorate([core_1.Component({
-                selector: 'encuesta',
-                templateUrl: 'client/components/respuestaEncuesta/respuestaEncuesta.component.html',
-                providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
-            }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], RespuestaEncuestaComponent);
+                RespuestaEncuestaComponent = __decorate([core_1.Component({
+                    selector: 'encuesta',
+                    templateUrl: 'client/components/respuestaEncuesta/respuestaEncuesta.component.html',
+                    providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
+                }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], RespuestaEncuestaComponent);
+                return RespuestaEncuestaComponent;
+            }();
             exports_1("RespuestaEncuestaComponent", RespuestaEncuestaComponent);
         }
     };
@@ -16979,8 +16983,9 @@ $__System.register('11', ['3', 'e', '8'], function (exports_1, context_1) {
             router_1 = router_1_1;
         }],
         execute: function () {
-            MateriasComponent = class MateriasComponent {
-                constructor(respuestaEncuestaService, route) {
+            MateriasComponent = function () {
+                function MateriasComponent(respuestaEncuestaService, route) {
+                    var _this = this;
                     this.tipoOpcion = {
                         COMISION: 'success',
                         YACURSE: 'warning',
@@ -16990,17 +16995,19 @@ $__System.register('11', ['3', 'e', '8'], function (exports_1, context_1) {
                     this.encuestaFinalizada = false;
                     this.enlace = document.URL;
                     this.respuestaEncuestaService = respuestaEncuestaService;
-                    this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(respuestaEncuesta => {
+                    this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(function (respuestaEncuesta) {
                         if (respuestaEncuesta) {
-                            this.respuestaEncuesta = respuestaEncuesta;
-                            this.materias = respuestaEncuesta.encuesta.materias;
+                            _this.respuestaEncuesta = respuestaEncuesta;
+                            _this.materias = respuestaEncuesta.encuesta.materias;
                         }
-                    }, error => {
+                    }, function (error) {
                         console.log(error);
                     });
                 }
-                esLaOpcionElegida(materia, opcion) {
-                    var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(materiaOpcion => materiaOpcion.materia._id == materia._id)[0];
+                MateriasComponent.prototype.esLaOpcionElegida = function (materia, opcion) {
+                    var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(function (materiaOpcion) {
+                        return materiaOpcion.materia._id == materia._id;
+                    })[0];
                     if (respuestaMateria) {
                         if (respuestaMateria.opcion._id == opcion._id) {
                             materia.opcionElegidaPorAlumno = opcion;
@@ -17015,34 +17022,42 @@ $__System.register('11', ['3', 'e', '8'], function (exports_1, context_1) {
                             return false;
                         }
                     }
-                }
-                seleccionarOpcionDeMateria(idMateria, idOpcion) {
-                    var materia = this.respuestaEncuesta.encuesta.materias.filter(materia => materia._id == idMateria)[0];
-                    var opcion = materia.opciones.filter(opcion => opcion._id == idOpcion)[0];
-                    this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(opcionSeleccionada => opcionSeleccionada.materia._id !== idMateria);
+                };
+                MateriasComponent.prototype.seleccionarOpcionDeMateria = function (idMateria, idOpcion) {
+                    var materia = this.respuestaEncuesta.encuesta.materias.filter(function (materia) {
+                        return materia._id == idMateria;
+                    })[0];
+                    var opcion = materia.opciones.filter(function (opcion) {
+                        return opcion._id == idOpcion;
+                    })[0];
+                    this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(function (opcionSeleccionada) {
+                        return opcionSeleccionada.materia._id !== idMateria;
+                    });
                     if (opcion) {
                         this.respuestaEncuesta.respuestasMateria.push({
-                            materia, opcion
+                            materia: materia, opcion: opcion
                         });
                         materia.opcionElegidaPorAlumno = opcion;
                     }
-                }
-                guardar() {
+                };
+                MateriasComponent.prototype.guardar = function () {
+                    var _this = this;
                     if (!this.respuestaEncuesta) return;
-                    this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, this.respuestaEncuesta.respuestasMateria).subscribe(data => {
+                    this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, this.respuestaEncuesta.respuestasMateria).subscribe(function (data) {
                         console.log(data);
-                        this.encuestaFinalizada = true;
-                    }, error => {
+                        _this.encuestaFinalizada = true;
+                    }, function (error) {
                         console.log(error);
                     });
                     ;
-                }
-            };
-            MateriasComponent = __decorate([core_1.Component({
-                selector: 'materias',
-                templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
-                providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
-            }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], MateriasComponent);
+                };
+                MateriasComponent = __decorate([core_1.Component({
+                    selector: 'materias',
+                    templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
+                    providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
+                }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], MateriasComponent);
+                return MateriasComponent;
+            }();
             exports_1("MateriasComponent", MateriasComponent);
         }
     };
@@ -17073,20 +17088,24 @@ $__System.register('e', ['3', '7', '12'], function (exports_1, context_1) {
             angular2_jwt_1 = angular2_jwt_1_1;
         }],
         execute: function () {
-            RespuestaEncuestaService = class RespuestaEncuestaService {
-                constructor(authHttp, http) {
+            RespuestaEncuestaService = function () {
+                function RespuestaEncuestaService(authHttp, http) {
                     this.authHttp = authHttp;
                     this.http = http;
                 }
-                obtenerRespuestaEncuesta(token) {
-                    return this.http.get('/api/publica/respuestas/encuesta/detalle?token=' + token).map(response => response.json());
-                }
-                actualizarRespuestas(respuestaEncuestaId, respuestas) {
+                RespuestaEncuestaService.prototype.obtenerRespuestaEncuesta = function (token) {
+                    return this.http.get('/api/publica/respuestas/encuesta/detalle?token=' + token).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.actualizarRespuestas = function (respuestaEncuestaId, respuestas) {
                     return this.http.post('/api/publica/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {
                         respuestas: respuestas
-                    }).map(response => response.json());
-                }
-                asignarAlumnoAEncuesta(alumno, encuesta) {
+                    }).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.asignarAlumnoAEncuesta = function (alumno, encuesta) {
                     return this.authHttp.post('/api/respuestas/encuesta/guardar', JSON.stringify({
                         alumno: alumno,
                         encuesta: encuesta
@@ -17094,22 +17113,33 @@ $__System.register('e', ['3', '7', '12'], function (exports_1, context_1) {
                         headers: new http_1.Headers({
                             "Content-Type": "application/json"
                         })
-                    })).map(response => response.json());
-                }
-                obtenerRespuestasEncuesta() {
-                    return this.authHttp.get('/api/respuestas/encuesta/listado').map(response => response.json());
-                }
-                obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre) {
-                    return this.authHttp.get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre).map(response => response.json());
-                }
-                buscarAlumnoPor(nombreYApellido, dni, idEncuesta, cantidadASaltear) {
-                    return this.authHttp.get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&cantidadASaltear=' + cantidadASaltear).map(response => response.json());
-                }
-                cantidadDeRespuestaEncuestaPara(nombreYApellido, dni, idEncuesta) {
-                    return this.authHttp.get('/api/respuestas/encuesta/cantidadPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta).map(response => response.json());
-                }
-            };
-            RespuestaEncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp, http_1.Http])], RespuestaEncuestaService);
+                    })).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.obtenerRespuestasEncuesta = function () {
+                    return this.authHttp.get('/api/respuestas/encuesta/listado').map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.obtenerRespuestasEncuestaPorAnhoYSemestre = function (anho, semestre) {
+                    return this.authHttp.get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.buscarAlumnoPor = function (nombreYApellido, dni, idEncuesta, cantidadASaltear) {
+                    return this.authHttp.get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&cantidadASaltear=' + cantidadASaltear).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService.prototype.cantidadDeRespuestaEncuestaPara = function (nombreYApellido, dni, idEncuesta) {
+                    return this.authHttp.get('/api/respuestas/encuesta/cantidadPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta).map(function (response) {
+                        return response.json();
+                    });
+                };
+                RespuestaEncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp, http_1.Http])], RespuestaEncuestaService);
+                return RespuestaEncuestaService;
+            }();
             exports_1("RespuestaEncuestaService", RespuestaEncuestaService);
         }
     };
@@ -17146,8 +17176,9 @@ $__System.register("10", ["3", "13", "e", "8"], function (exports_1, context_1) 
                 provide: Window,
                 useValue: window
             };
-            AsignarAlumnoComponent = class AsignarAlumnoComponent {
-                constructor(encuestaService, route, respuestaEncuestaService, window) {
+            AsignarAlumnoComponent = function () {
+                function AsignarAlumnoComponent(encuestaService, route, respuestaEncuestaService, window) {
+                    var _this = this;
                     this.encuesta = {
                         anho: "",
                         semestre: ""
@@ -17164,29 +17195,31 @@ $__System.register("10", ["3", "13", "e", "8"], function (exports_1, context_1) 
                     this.idEncuesta = route.snapshot.params['idEncuesta'];
                     this.respuestaEncuestaService = respuestaEncuestaService;
                     this.window = window;
-                    encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(encuesta => {
-                        this.encuesta = encuesta;
-                        respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(respuestasEcuesta => {
-                            this.alumnos = respuestasEcuesta;
-                        }, error => {
+                    encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(function (encuesta) {
+                        _this.encuesta = encuesta;
+                        respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(function (respuestasEcuesta) {
+                            _this.alumnos = respuestasEcuesta;
+                        }, function (error) {
                             console.log(error);
                         });
-                    }, error => {
+                    }, function (error) {
                         console.log(error);
                     });
                 }
-                asignarAlumno() {
+                AsignarAlumnoComponent.prototype.asignarAlumno = function () {
+                    var _this = this;
                     if (!this.seLLenaronLosCampoCorrectamente()) return;
-                    this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(respuestaEcuesta => {
-                        this.alumnos.push(respuestaEcuesta);
-                        this.alumno.nombreYApellidoAlumno = "";
-                        this.alumno.DNIAlumno = "";
-                        this.alumno.emailAlumno = "";
-                    }, error => {
+                    this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(function (respuestaEcuesta) {
+                        _this.alumnos.push(respuestaEcuesta);
+                        _this.alumno.nombreYApellidoAlumno = "";
+                        _this.alumno.DNIAlumno = "";
+                        _this.alumno.emailAlumno = "";
+                    }, function (error) {
                         console.log(error);
                     });
-                }
-                seLLenaronLosCampoCorrectamente() {
+                };
+                AsignarAlumnoComponent.prototype.seLLenaronLosCampoCorrectamente = function () {
+                    var _this = this;
                     if (this.alumno.nombreYApellidoAlumno.length == 0 || this.alumno.DNIAlumno.length == 0 || this.alumno.emailAlumno.length == 0) {
                         alert("Todos los campos son obligatorios.");
                         return false;
@@ -17195,40 +17228,47 @@ $__System.register("10", ["3", "13", "e", "8"], function (exports_1, context_1) 
                         alert("Email inválido.");
                         return false;
                     }
-                    var alumnos = this.alumnos.filter(a => a.DNIAlumno == this.alumno.DNIAlumno);
+                    var alumnos = this.alumnos.filter(function (a) {
+                        return a.DNIAlumno == _this.alumno.DNIAlumno;
+                    });
                     if (alumnos.length != 0) {
                         alert("El DNI ingresado ya existe.");
                         return false;
                     }
                     return true;
-                }
-                crearUrlPara(alumno) {
+                };
+                AsignarAlumnoComponent.prototype.crearUrlPara = function (alumno) {
                     return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
-                }
-                buscar() {
+                };
+                AsignarAlumnoComponent.prototype.buscar = function () {
+                    var _this = this;
                     this.cantidadASaltear = 0;
-                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(respuestasEcuesta => {
-                        this.alumnos = respuestasEcuesta;
-                    }, error => {
+                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(function (respuestasEcuesta) {
+                        _this.alumnos = respuestasEcuesta;
+                    }, function (error) {
                         console.log(error);
                     });
-                }
-                mostrarMas() {
+                };
+                AsignarAlumnoComponent.prototype.mostrarMas = function () {
+                    var _this = this;
                     this.cantidadASaltear = this.cantidadASaltear + 10;
-                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(respuestasEcuesta => {
-                        for (var i = 0; i < respuestasEcuesta.length; i++) this.alumnos.push(respuestasEcuesta[i]);
-                        setTimeout(() => this.window.scrollTo(0, this.alumnos.length * 100), 10);
-                    }, error => {
+                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(function (respuestasEcuesta) {
+                        for (var i = 0; i < respuestasEcuesta.length; i++) _this.alumnos.push(respuestasEcuesta[i]);
+                        setTimeout(function () {
+                            return _this.window.scrollTo(0, _this.alumnos.length * 100);
+                        }, 10);
+                    }, function (error) {
                         console.log(error);
                     });
-                }
-            };
-            __decorate([core_1.ViewChild('someVar'), __metadata('design:type', core_1.ElementRef)], AsignarAlumnoComponent.prototype, "someVar", void 0);
-            AsignarAlumnoComponent = __decorate([core_1.Component({
-                selector: 'asignar-usuario',
-                templateUrl: 'client/components/respuestaEncuesta/asignarAlumno.component.html',
-                providers: [encuesta_service_1.EncuestaService, respuestaEncuesta_service_1.RespuestaEncuestaService, WINDOW_PROVIDER]
-            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute, respuestaEncuesta_service_1.RespuestaEncuestaService, Window])], AsignarAlumnoComponent);
+                };
+                __decorate([core_1.ViewChild('someVar'), __metadata('design:type', core_1.ElementRef)], AsignarAlumnoComponent.prototype, "someVar", void 0);
+                AsignarAlumnoComponent = __decorate([core_1.Component({
+                    selector: 'asignar-usuario',
+                    templateUrl: 'client/components/respuestaEncuesta/asignarAlumno.component.html',
+                    providers: [encuesta_service_1.EncuestaService, respuestaEncuesta_service_1.RespuestaEncuestaService, WINDOW_PROVIDER]
+                }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute, respuestaEncuesta_service_1.RespuestaEncuestaService, Window])], AsignarAlumnoComponent);
+                return AsignarAlumnoComponent;
+            }();
             exports_1("AsignarAlumnoComponent", AsignarAlumnoComponent);
         }
     };
@@ -17273,13 +17313,16 @@ $__System.register("14", ["3", "7", "9", "15", "16", "d", "f", "17", "11", "10"]
             asignarAlumno_component_1 = asignarAlumno_component_1_1;
         }],
         execute: function () {
-            RespuestaEncuestaModule = class RespuestaEncuestaModule {};
-            RespuestaEncuestaModule = __decorate([core_1.NgModule({
-                imports: [common_1.CommonModule, http_1.HttpModule, respuestaEncuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, forms_1.FormsModule],
-                declarations: [respuestaEncuesta_component_1.RespuestaEncuestaComponent, materias_component_1.MateriasComponent, asignarAlumno_component_1.AsignarAlumnoComponent],
-                bootstrap: [respuestaEncuesta_component_1.RespuestaEncuestaComponent],
-                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-            }), __metadata('design:paramtypes', [])], RespuestaEncuestaModule);
+            RespuestaEncuestaModule = function () {
+                function RespuestaEncuestaModule() {}
+                RespuestaEncuestaModule = __decorate([core_1.NgModule({
+                    imports: [common_1.CommonModule, http_1.HttpModule, respuestaEncuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, forms_1.FormsModule],
+                    declarations: [respuestaEncuesta_component_1.RespuestaEncuestaComponent, materias_component_1.MateriasComponent, asignarAlumno_component_1.AsignarAlumnoComponent],
+                    bootstrap: [respuestaEncuesta_component_1.RespuestaEncuestaComponent],
+                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+                }), __metadata('design:paramtypes', [])], RespuestaEncuestaModule);
+                return RespuestaEncuestaModule;
+            }();
             exports_1("RespuestaEncuestaModule", RespuestaEncuestaModule);
         }
     };
@@ -17312,45 +17355,56 @@ $__System.register('b', ['3', '7', '18', '12'], function (exports_1, context_1) 
             angular2_jwt_1 = angular2_jwt_1_1;
         }],
         execute: function () {
-            LoginService = class LoginService {
-                constructor(http) {
+            LoginService = function () {
+                function LoginService(http) {
                     this.http = http;
                     this.isLoggedInSubject = new BehaviorSubject_1.BehaviorSubject(this.checkIsLoggedIn());
                 }
-                get loggedInObservable() {
-                    return this.isLoggedInSubject.asObservable();
-                }
-                checkIsLoggedIn() {
-                    let isLoggedIn = false;
+                Object.defineProperty(LoginService.prototype, "loggedInObservable", {
+                    get: function () {
+                        return this.isLoggedInSubject.asObservable();
+                    },
+                    enumerable: true,
+                    configurable: true
+                });
+                LoginService.prototype.checkIsLoggedIn = function () {
+                    var isLoggedIn = false;
                     try {
                         isLoggedIn = angular2_jwt_1.tokenNotExpired();
                     } catch (e) {}
                     return isLoggedIn;
-                }
-                logOut() {
+                };
+                LoginService.prototype.logOut = function () {
                     localStorage.removeItem("id_token");
                     this.isLoggedInSubject.next(this.checkIsLoggedIn());
-                }
-                login(data, cbSuccess = null) {
+                };
+                LoginService.prototype.login = function (data, cbSuccess) {
+                    var _this = this;
+                    if (cbSuccess === void 0) {
+                        cbSuccess = null;
+                    }
                     this.http.post("/login", JSON.stringify(data), new http_1.RequestOptions({
                         headers: new http_1.Headers({
                             "Content-Type": "application/json"
                         })
-                    })).map(res => res.json()).subscribe(res => {
+                    })).map(function (res) {
+                        return res.json();
+                    }).subscribe(function (res) {
                         if (res.jwt) {
                             localStorage.setItem("id_token", res.jwt);
-                            this.isLoggedInSubject.next(this.checkIsLoggedIn());
+                            _this.isLoggedInSubject.next(_this.checkIsLoggedIn());
                             cbSuccess(res);
                         } else {
                             alert(res.message);
                         }
-                    }, error => {
+                    }, function (error) {
                         alert("Se ha producido un error al conectar con el servidor");
                         console.log(error);
                     });
-                }
-            };
-            LoginService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [http_1.Http])], LoginService);
+                };
+                LoginService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [http_1.Http])], LoginService);
+                return LoginService;
+            }();
             exports_1("LoginService", LoginService);
         }
     };
@@ -17383,8 +17437,8 @@ $__System.register('19', ['3', 'b', '8', '7'], function (exports_1, context_1) {
             http_1 = http_1_1;
         }],
         execute: function () {
-            LoginComponent = class LoginComponent {
-                constructor(http, loginService, route) {
+            LoginComponent = function () {
+                function LoginComponent(http, loginService, route) {
                     this.http = http;
                     this.user = {
                         email: "",
@@ -17396,20 +17450,21 @@ $__System.register('19', ['3', 'b', '8', '7'], function (exports_1, context_1) {
                         this.route.navigate(['encuestas/listado']);
                     }
                 }
-                login() {
+                LoginComponent.prototype.login = function () {
                     this.loginService.login({
                         password: this.user.password,
                         email: this.user.email
-                    }, res => {
+                    }, function (res) {
                         location.reload();
                     });
-                }
-            };
-            LoginComponent = __decorate([core_1.Component({
-                selector: 'login',
-                templateUrl: 'client/components/autenticacion/login.component.html',
-                providers: [login_service_1.LoginService]
-            }), __metadata('design:paramtypes', [http_1.Http, login_service_1.LoginService, router_1.Router])], LoginComponent);
+                };
+                LoginComponent = __decorate([core_1.Component({
+                    selector: 'login',
+                    templateUrl: 'client/components/autenticacion/login.component.html',
+                    providers: [login_service_1.LoginService]
+                }), __metadata('design:paramtypes', [http_1.Http, login_service_1.LoginService, router_1.Router])], LoginComponent);
+                return LoginComponent;
+            }();
             exports_1("LoginComponent", LoginComponent);
         }
     };
@@ -17471,13 +17526,16 @@ $__System.register("1b", ["3", "7", "9", "15", "5", "16", "19", "1a", "17"], fun
             shared_module_1 = shared_module_1_1;
         }],
         execute: function () {
-            LoginModule = class LoginModule {};
-            LoginModule = __decorate([core_1.NgModule({
-                imports: [common_1.CommonModule, http_1.HttpModule, login_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, platform_browser_1.BrowserModule, forms_1.FormsModule],
-                declarations: [login_component_1.LoginComponent],
-                bootstrap: [login_component_1.LoginComponent],
-                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-            }), __metadata('design:paramtypes', [])], LoginModule);
+            LoginModule = function () {
+                function LoginModule() {}
+                LoginModule = __decorate([core_1.NgModule({
+                    imports: [common_1.CommonModule, http_1.HttpModule, login_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, platform_browser_1.BrowserModule, forms_1.FormsModule],
+                    declarations: [login_component_1.LoginComponent],
+                    bootstrap: [login_component_1.LoginComponent],
+                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+                }), __metadata('design:paramtypes', [])], LoginModule);
+                return LoginModule;
+            }();
             exports_1("LoginModule", LoginModule);
         }
     };
@@ -28044,34 +28102,37 @@ $__System.register('65', ['3', '13', '8'], function (exports_1, context_1) {
             router_1 = router_1_1;
         }],
         execute: function () {
-            EstadisticasEncuestaComponent = class EstadisticasEncuestaComponent {
-                constructor(encuestaService, route) {
+            EstadisticasEncuestaComponent = function () {
+                function EstadisticasEncuestaComponent(encuestaService, route) {
+                    var _this = this;
                     this.pie_ChartData = [['Condición', 'Cantidad']];
                     var id = route.snapshot.params['id'];
-                    encuestaService.obtenerEstadisticas(id).subscribe(estadistica => {
+                    encuestaService.obtenerEstadisticas(id).subscribe(function (estadistica) {
                         console.log(estadistica);
-                        this.estadisticas = estadistica.estadisticas;
-                        this.materias = estadistica.encuesta.materias;
-                        this.titulo = 'Estadísticas de inscripción ' + estadistica.encuesta.anho + ' del semestre ' + estadistica.encuesta.semestre + ' - ' + estadistica.encuesta.carrera;
-                    }, error => {
+                        _this.estadisticas = estadistica.estadisticas;
+                        _this.materias = estadistica.encuesta.materias;
+                        _this.titulo = 'Estadísticas de inscripción ' + estadistica.encuesta.anho + ' del semestre ' + estadistica.encuesta.semestre + ' - ' + estadistica.encuesta.carrera;
+                    }, function (error) {
                         console.log(error);
                     });
-                    encuestaService.completaron(id).subscribe(res => {
+                    encuestaService.completaron(id).subscribe(function (res) {
                         console.log(res);
-                        this.completaron = res.completaron;
-                        this.noIniciarion = res.total - res.completaronAlgunaOpcion;
-                        this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
-                        this.total = res.total;
-                        this.pie_ChartData.push(['Completaron y cursan por lo menos una', res.completaron - res.completaronYNoCursanNada]);
-                        this.pie_ChartData.push(['No iniciaron la encuesta', res.total - res.completaron]);
-                        this.pie_ChartData.push(['Completaron y no cursan nada', res.completaronYNoCursanNada]);
+                        _this.completaron = res.completaron;
+                        _this.noIniciarion = res.total - res.completaronAlgunaOpcion;
+                        _this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
+                        _this.total = res.total;
+                        _this.pie_ChartData.push(['Completaron y cursan por lo menos una', res.completaron - res.completaronYNoCursanNada]);
+                        _this.pie_ChartData.push(['No iniciaron la encuesta', res.total - res.completaron]);
+                        _this.pie_ChartData.push(['Completaron y no cursan nada', res.completaronYNoCursanNada]);
                         //this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
-                    }, error => {
+                    }, function (error) {
                         console.log(error);
                     });
                 }
-                cantidadPara(materia, opcion) {
-                    var estadistica = this.estadisticas.filter(estadistica => estadistica._id.materia == materia.nombre && estadistica._id.opcion == opcion.descripcion)[0];
+                EstadisticasEncuestaComponent.prototype.cantidadPara = function (materia, opcion) {
+                    var estadistica = this.estadisticas.filter(function (estadistica) {
+                        return estadistica._id.materia == materia.nombre && estadistica._id.opcion == opcion.descripcion;
+                    })[0];
                     if (estadistica) {
                         if (opcion.limite <= estadistica.count) {
                             materia.tieneOpcionConLimiteSuperado = true;
@@ -28079,14 +28140,17 @@ $__System.register('65', ['3', '13', '8'], function (exports_1, context_1) {
                         return estadistica.count;
                     }
                     return 0;
-                }
-                ngOnInit() {
+                };
+                EstadisticasEncuestaComponent.prototype.ngOnInit = function () {
+                    var _this = this;
                     google.charts.load('current', {
                         'packages': ['corechart', 'gauge']
                     });
-                    setTimeout(() => this.drawGraph(this.pie_ChartData), 1000);
-                }
-                drawGraph(pie_ChartData) {
+                    setTimeout(function () {
+                        return _this.drawGraph(_this.pie_ChartData);
+                    }, 1000);
+                };
+                EstadisticasEncuestaComponent.prototype.drawGraph = function (pie_ChartData) {
                     google.charts.setOnLoadCallback(drawChart);
                     function drawChart() {
                         var data = google.visualization.arrayToDataTable(pie_ChartData);
@@ -28097,13 +28161,14 @@ $__System.register('65', ['3', '13', '8'], function (exports_1, context_1) {
                         var chart = new google.visualization.PieChart(document.getElementById('piechart'));
                         chart.draw(data, options);
                     }
-                }
-            };
-            EstadisticasEncuestaComponent = __decorate([core_1.Component({
-                selector: 'estadisticas-encuesta',
-                templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
-                providers: [encuesta_service_1.EncuestaService]
-            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute])], EstadisticasEncuestaComponent);
+                };
+                EstadisticasEncuestaComponent = __decorate([core_1.Component({
+                    selector: 'estadisticas-encuesta',
+                    templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
+                    providers: [encuesta_service_1.EncuestaService]
+                }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute])], EstadisticasEncuestaComponent);
+                return EstadisticasEncuestaComponent;
+            }();
             exports_1("EstadisticasEncuestaComponent", EstadisticasEncuestaComponent);
         }
     };
@@ -28132,24 +28197,33 @@ $__System.register("13", ["3", "12"], function (exports_1, context_1) {
             angular2_jwt_1 = angular2_jwt_1_1;
         }],
         execute: function () {
-            EncuestaService = class EncuestaService {
-                constructor(http) {
+            EncuestaService = function () {
+                function EncuestaService(http) {
                     this.http = http;
                 }
-                obtenerEncuesta(id) {
-                    return this.http.get('/api/encuestas/detalle?id=' + id).map(response => response.json());
-                }
-                obtenerTodasLasEncuestas() {
-                    return this.http.get('/api/encuestas/listado').map(response => response.json());
-                }
-                obtenerEstadisticas(id) {
-                    return this.http.get('/api/encuestas/estadisticas?id=' + id).map(response => response.json());
-                }
-                completaron(id) {
-                    return this.http.get('/api/encuestas/completaron?id=' + id).map(response => response.json());
-                }
-            };
-            EncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], EncuestaService);
+                EncuestaService.prototype.obtenerEncuesta = function (id) {
+                    return this.http.get('/api/encuestas/detalle?id=' + id).map(function (response) {
+                        return response.json();
+                    });
+                };
+                EncuestaService.prototype.obtenerTodasLasEncuestas = function () {
+                    return this.http.get('/api/encuestas/listado').map(function (response) {
+                        return response.json();
+                    });
+                };
+                EncuestaService.prototype.obtenerEstadisticas = function (id) {
+                    return this.http.get('/api/encuestas/estadisticas?id=' + id).map(function (response) {
+                        return response.json();
+                    });
+                };
+                EncuestaService.prototype.completaron = function (id) {
+                    return this.http.get('/api/encuestas/completaron?id=' + id).map(function (response) {
+                        return response.json();
+                    });
+                };
+                EncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], EncuestaService);
+                return EncuestaService;
+            }();
             exports_1("EncuestaService", EncuestaService);
         }
     };
@@ -28178,34 +28252,36 @@ $__System.register("66", ["3", "13"], function (exports_1, context_1) {
             encuesta_service_1 = encuesta_service_1_1;
         }],
         execute: function () {
-            ListadoEncuestaComponent = class ListadoEncuestaComponent {
-                constructor(encuestaService) {
-                    encuestaService.obtenerTodasLasEncuestas().subscribe(encuestas => {
-                        this.encuestas = encuestas;
-                    }, error => {
+            ListadoEncuestaComponent = function () {
+                function ListadoEncuestaComponent(encuestaService) {
+                    var _this = this;
+                    encuestaService.obtenerTodasLasEncuestas().subscribe(function (encuestas) {
+                        _this.encuestas = encuestas;
+                    }, function (error) {
                         console.log(error);
                     });
                 }
-                formatearFecha(fecha) {
+                ListadoEncuestaComponent.prototype.formatearFecha = function (fecha) {
                     if (!fecha) {
                         return '-';
                     }
                     fecha = new Date(fecha);
                     var fechaFormateada = this.agregarCero(fecha.getDate()) + "-" + this.agregarCero(fecha.getMonth() + 1) + "-" + fecha.getFullYear() + " ";
                     return fechaFormateada;
-                }
-                agregarCero(numero) {
+                };
+                ListadoEncuestaComponent.prototype.agregarCero = function (numero) {
                     if (numero < 10) {
                         return '0' + numero;
                     }
                     return numero;
-                }
-            };
-            ListadoEncuestaComponent = __decorate([core_1.Component({
-                selector: 'encuestas',
-                templateUrl: 'client/components/encuesta/listadoEncuesta.component.html',
-                providers: [encuesta_service_1.EncuestaService]
-            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService])], ListadoEncuestaComponent);
+                };
+                ListadoEncuestaComponent = __decorate([core_1.Component({
+                    selector: 'encuestas',
+                    templateUrl: 'client/components/encuesta/listadoEncuesta.component.html',
+                    providers: [encuesta_service_1.EncuestaService]
+                }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService])], ListadoEncuestaComponent);
+                return ListadoEncuestaComponent;
+            }();
             exports_1("ListadoEncuestaComponent", ListadoEncuestaComponent);
         }
     };
@@ -44598,15 +44674,18 @@ $__System.register("72", ["3", "12", "a"], function (exports_1, context_1) {
             angular2_jwt_1 = angular2_jwt_1_1;
         }, function (_1) {}],
         execute: function () {
-            ApiService = class ApiService {
-                constructor(authHttp) {
+            ApiService = function () {
+                function ApiService(authHttp) {
                     this.authHttp = authHttp;
                 }
-                get(url) {
-                    return this.authHttp.get(url).map(response => response.json());
-                }
-            };
-            ApiService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], ApiService);
+                ApiService.prototype.get = function (url) {
+                    return this.authHttp.get(url).map(function (response) {
+                        return response.json();
+                    });
+                };
+                ApiService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], ApiService);
+                return ApiService;
+            }();
             exports_1("ApiService", ApiService);
         }
     };
@@ -44637,20 +44716,21 @@ $__System.register("17", ["3", "15", "72"], function (exports_1, context_1) {
             api_service_1 = api_service_1_1;
         }],
         execute: function () {
-            let SharedModule_1 = class SharedModule {
-                static forRoot() {
+            SharedModule = function () {
+                function SharedModule() {}
+                SharedModule.forRoot = function () {
                     return {
-                        ngModule: SharedModule_1,
+                        ngModule: SharedModule,
                         providers: [api_service_1.ApiService]
                     };
-                }
-            };
-            let SharedModule = SharedModule_1;
-            SharedModule = SharedModule_1 = __decorate([core_1.NgModule({
-                imports: [common_1.CommonModule],
-                declarations: [],
-                exports: []
-            }), __metadata('design:paramtypes', [])], SharedModule);
+                };
+                SharedModule = __decorate([core_1.NgModule({
+                    imports: [common_1.CommonModule],
+                    declarations: [],
+                    exports: []
+                }), __metadata('design:paramtypes', [])], SharedModule);
+                return SharedModule;
+            }();
             exports_1("SharedModule", SharedModule);
         }
     };
@@ -44691,13 +44771,16 @@ $__System.register("73", ["3", "7", "9", "15", "65", "66", "67", "17"], function
             shared_module_1 = shared_module_1_1;
         }],
         execute: function () {
-            EncuestaModule = class EncuestaModule {};
-            EncuestaModule = __decorate([core_1.NgModule({
-                imports: [common_1.CommonModule, http_1.HttpModule, encuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule],
-                declarations: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
-                bootstrap: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
-                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-            }), __metadata('design:paramtypes', [])], EncuestaModule);
+            EncuestaModule = function () {
+                function EncuestaModule() {}
+                EncuestaModule = __decorate([core_1.NgModule({
+                    imports: [common_1.CommonModule, http_1.HttpModule, encuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule],
+                    declarations: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
+                    bootstrap: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
+                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+                }), __metadata('design:paramtypes', [])], EncuestaModule);
+                return EncuestaModule;
+            }();
             exports_1("EncuestaModule", EncuestaModule);
         }
     };
@@ -44744,18 +44827,21 @@ $__System.register('74', ['3', '5', '12', '7', '9', '16', '6', 'c', '14', '1b', 
             encuesta_module_1 = encuesta_module_1_1;
         }],
         execute: function () {
-            AppModule = class AppModule {};
-            AppModule = __decorate([core_1.NgModule({
-                imports: [platform_browser_1.BrowserModule, http_1.HttpModule, ng_semantic_1.NgSemanticModule, respuestaEncuesta_module_1.RespuestaEncuestaModule, login_module_1.LoginModule, routes_1.routing, encuesta_module_1.EncuestaModule, forms_1.FormsModule],
-                providers: [angular2_jwt_1.provideAuth({
-                    globalHeaders: [{ "Content-type": "application/json" }],
-                    newJwtError: true,
-                    noTokenScheme: true
-                })],
-                declarations: [app_component_1.AppComponent],
-                bootstrap: [app_component_1.AppComponent],
-                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-            }), __metadata('design:paramtypes', [])], AppModule);
+            AppModule = function () {
+                function AppModule() {}
+                AppModule = __decorate([core_1.NgModule({
+                    imports: [platform_browser_1.BrowserModule, http_1.HttpModule, ng_semantic_1.NgSemanticModule, respuestaEncuesta_module_1.RespuestaEncuestaModule, login_module_1.LoginModule, routes_1.routing, encuesta_module_1.EncuestaModule, forms_1.FormsModule],
+                    providers: [angular2_jwt_1.provideAuth({
+                        globalHeaders: [{ "Content-type": "application/json" }],
+                        newJwtError: true,
+                        noTokenScheme: true
+                    })],
+                    declarations: [app_component_1.AppComponent],
+                    bootstrap: [app_component_1.AppComponent],
+                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+                }), __metadata('design:paramtypes', [])], AppModule);
+                return AppModule;
+            }();
             exports_1("AppModule", AppModule);
         }
     };

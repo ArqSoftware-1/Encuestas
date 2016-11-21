@@ -33,7 +33,6 @@ export class AsignarAlumnoComponent {
     idEncuesta;
     cantidadASaltear = 0;
     window: Window;
-    @ViewChild('someVar') someVar:ElementRef;
 
     constructor(encuestaService: EncuestaService, route: ActivatedRoute, respuestaEncuestaService: RespuestaEncuestaService, window: Window) {
         this.idEncuesta = route.snapshot.params['idEncuesta'];
