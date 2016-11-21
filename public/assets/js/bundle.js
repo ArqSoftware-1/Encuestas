@@ -16801,7 +16801,7 @@ var define = $__System.amdDefine;
 }));
 
 })();
-$__System.register("6", ["3", "7", "8", "9"], function (exports_1, context_1) {
+$__System.register("6", ["3", "7", "9", "a", "8", "b"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -16815,7 +16815,7 @@ $__System.register("6", ["3", "7", "8", "9"], function (exports_1, context_1) {
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, ng_semantic_1;
+    var core_1, http_1, ng_semantic_1, router_1, login_service_1;
     var AppComponent;
     return {
         setters: [function (core_1_1) {
@@ -16824,61 +16824,45 @@ $__System.register("6", ["3", "7", "8", "9"], function (exports_1, context_1) {
             http_1 = http_1_1;
         }, function (ng_semantic_1_1) {
             ng_semantic_1 = ng_semantic_1_1;
-        }, function (_1) {}],
+        }, function (_1) {}, function (router_1_1) {
+            router_1 = router_1_1;
+        }, function (login_service_1_1) {
+            login_service_1 = login_service_1_1;
+        }],
         execute: function () {
-            AppComponent = function () {
-                function AppComponent(http) {
+            AppComponent = class AppComponent {
+                constructor(http, route, loginService) {
                     this.http = http;
-                    this.nombreApp = "Encuestas";
+                    this.nombreApp = "Encuestas - UNQ";
                     this.user = {
                         password: "1234",
                         username: "Fernando"
                     };
                     this.isLogged = !!localStorage.getItem("id_token");
+                    this.loginService = loginService;
                 }
-                AppComponent.prototype.signup = function () {
-                    var _this = this;
-                    this.http.post("/login/signup", JSON.stringify({ password: this.user.password, username: this.user.username }), new http_1.RequestOptions({
-                        headers: new http_1.Headers({ "Content-Type": "application/json" })
-                    })).map(function (res) {
-                        return res.json();
-                    }).subscribe(function (res) {
-                        _this.response = res;
-                    }, function (error) {
-                        console.log(error);
+                logout() {
+                    this.loginService.logOut();
+                    this.route.navigate(['login']);
+                }
+                ngOnInit() {
+                    this.loginSub = this.loginService.loggedInObservable.subscribe(val => {
+                        this.isLogged = val;
                     });
-                };
-                AppComponent.prototype.login = function () {
-                    var _this = this;
-                    this.http.post("/login", JSON.stringify({ password: this.user.password }), new http_1.RequestOptions({
-                        headers: new http_1.Headers({ "Content-Type": "application/json" })
-                    })).map(function (res) {
-                        return res.json();
-                    }).subscribe(function (res) {
-                        localStorage.setItem("id_token", res.jwt);
-                        _this.isLogged = true;
-                        _this.myPopup.hide();
-                    }, function (error) {
-                        console.log(error);
-                    });
-                };
-                AppComponent.prototype.logout = function () {
-                    localStorage.removeItem("id_token");
-                    this.isLogged = false;
-                };
-                __decorate([core_1.ViewChild("myPopup"), __metadata('design:type', ng_semantic_1.SemanticPopupComponent)], AppComponent.prototype, "myPopup", void 0);
-                AppComponent = __decorate([core_1.Component({
-                    selector: "app",
-                    templateUrl: "client/app.component.html"
-                }), __metadata('design:paramtypes', [http_1.Http])], AppComponent);
-                return AppComponent;
-            }();
+                }
+            };
+            __decorate([core_1.ViewChild("myPopup"), __metadata('design:type', ng_semantic_1.SemanticPopupComponent)], AppComponent.prototype, "myPopup", void 0);
+            AppComponent = __decorate([core_1.Component({
+                selector: "app",
+                templateUrl: "client/app.component.html",
+                providers: [login_service_1.LoginService]
+            }), __metadata('design:paramtypes', [http_1.Http, router_1.Router, login_service_1.LoginService])], AppComponent);
             exports_1("AppComponent", AppComponent);
         }
     };
 });
 
-$__System.register("a", ["b"], function (exports_1, context_1) {
+$__System.register("c", ["8"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -16889,13 +16873,13 @@ $__System.register("a", ["b"], function (exports_1, context_1) {
             router_1 = router_1_1;
         }],
         execute: function () {
-            exports_1("routes", routes = [{ path: '', redirectTo: 'respuesta-encuesta', pathMatch: 'full' }]);
+            exports_1("routes", routes = [{ path: '', redirectTo: 'login', pathMatch: 'full' }]);
             exports_1("routing", routing = router_1.RouterModule.forRoot(routes, { useHash: true }));
         }
     };
 });
 
-$__System.register("c", ["3"], function (exports_1, context_1) {
+$__System.register("d", ["3", "e", "8"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -16909,96 +16893,68 @@ $__System.register("c", ["3"], function (exports_1, context_1) {
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1;
-    var TituloComponent;
+    var core_1, respuestaEncuesta_service_1, router_1;
+    var RespuestaEncuestaComponent;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
+        }, function (respuestaEncuesta_service_1_1) {
+            respuestaEncuesta_service_1 = respuestaEncuesta_service_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
         }],
         execute: function () {
-            TituloComponent = function () {
-                function TituloComponent() {}
-                __decorate([core_1.Input(), __metadata('design:type', String)], TituloComponent.prototype, "nombre", void 0);
-                TituloComponent = __decorate([core_1.Component({
-                    selector: "titulo",
-                    template: "<h2>{{nombre}}</h2>"
-                }), __metadata('design:paramtypes', [])], TituloComponent);
-                return TituloComponent;
-            }();
-            exports_1("TituloComponent", TituloComponent);
-        }
-    };
-});
-
-$__System.register("d", ["3", "e"], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, api_service_1;
-    var HomeComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (api_service_1_1) {
-            api_service_1 = api_service_1_1;
-        }],
-        execute: function () {
-            HomeComponent = function () {
-                function HomeComponent(apiService) {
-                    this.apiService = apiService;
-                }
-                HomeComponent.prototype.protected = function () {
-                    var _this = this;
-                    this.apiService.get("/api").subscribe(function (data) {
-                        _this.response = data;
-                    }, function (error) {
-                        _this.error = error.message;
-                        setTimeout(function () {
-                            return _this.error = null;
-                        }, 4000);
+            RespuestaEncuestaComponent = class RespuestaEncuestaComponent {
+                constructor(respuestaEncuestaService, route) {
+                    var token = route.snapshot.params['token'];
+                    if (!token) {
+                        this.titulo = 'No exite la encuesta seleccionada.';
+                        return;
+                    }
+                    respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(respuestaEncuesta => {
+                        if (respuestaEncuesta) {
+                            this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
+                        } else {
+                            this.titulo = 'No exite la encuesta seleccionada.';
+                        }
+                    }, error => {
+                        this.titulo = 'No exite la encuesta seleccionada.';
+                        console.log(error);
                     });
-                };
-                HomeComponent = __decorate([core_1.Component({
-                    selector: "home",
-                    templateUrl: "client/components/home/home.component.html"
-                }), __metadata('design:paramtypes', [api_service_1.ApiService])], HomeComponent);
-                return HomeComponent;
-            }();
-            exports_1("HomeComponent", HomeComponent);
+                }
+            };
+            RespuestaEncuestaComponent = __decorate([core_1.Component({
+                selector: 'encuesta',
+                templateUrl: 'client/components/respuestaEncuesta/respuestaEncuesta.component.html',
+                providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
+            }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], RespuestaEncuestaComponent);
+            exports_1("RespuestaEncuestaComponent", RespuestaEncuestaComponent);
         }
     };
 });
 
-$__System.register('f', ['b', 'd'], function (exports_1, context_1) {
+$__System.register('f', ['8', 'd', '10'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
-    var router_1, home_component_1;
+    var router_1, respuestaEncuesta_component_1, asignarAlumno_component_1;
     var routes, routing;
     return {
         setters: [function (router_1_1) {
             router_1 = router_1_1;
-        }, function (home_component_1_1) {
-            home_component_1 = home_component_1_1;
+        }, function (respuestaEncuesta_component_1_1) {
+            respuestaEncuesta_component_1 = respuestaEncuesta_component_1_1;
+        }, function (asignarAlumno_component_1_1) {
+            asignarAlumno_component_1 = asignarAlumno_component_1_1;
         }],
         execute: function () {
-            exports_1("routes", routes = [{ path: 'home', component: home_component_1.HomeComponent }]);
+            exports_1("routes", routes = [{ path: 'respuesta-encuesta/:token', component: respuestaEncuesta_component_1.RespuestaEncuestaComponent }, { path: 'asignar/alumno/:idEncuesta', component: asignarAlumno_component_1.AsignarAlumnoComponent }]);
             exports_1("routing", routing = router_1.RouterModule.forChild(routes));
         }
     };
 });
 
-$__System.register('10', ['3', '7'], function (exports_1, context_1) {
+$__System.register('11', ['3', 'e', '8'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -17012,117 +16968,87 @@ $__System.register('10', ['3', '7'], function (exports_1, context_1) {
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
-    var MateriasService;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (http_1_1) {
-            http_1 = http_1_1;
-        }],
-        execute: function () {
-            MateriasService = function () {
-                function MateriasService(http) {
-                    this.http = http;
-                }
-                MateriasService.prototype.obtenerMaterias = function () {
-                    return [{ Nombre: 'Introducción a la programacion', OpcionElegida: '' }, { Nombre: 'Matematica 1', OpcionElegida: '' }, { Nombre: 'Organizacion de las computadoras', OpcionElegida: '' }];
-                };
-                MateriasService.prototype.obtenerOpciones = function () {
-                    return [{ Id: 1, Nombre: 'Ya curse' }, { Id: 2, Nombre: 'Voy a cursar en c1' }, { Id: 3, Nombre: 'Voy a cursar en c2' }, { Id: 4, Nombre: 'No voy a cursar' }, { Id: 5, Nombre: 'Me gustaria pero no puedo' }];
-                };
-                MateriasService.prototype.obtenerMateria = function (idMateria) {
-                    return this.http.get('/api/materias/get?id=' + idMateria).map(function (response) {
-                        return response.json();
-                    });
-                };
-                MateriasService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [http_1.Http])], MateriasService);
-                return MateriasService;
-            }();
-            exports_1("MateriasService", MateriasService);
-        }
-    };
-});
-
-$__System.register("11", ["3", "10"], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, materias_service_1;
+    var core_1, respuestaEncuesta_service_1, router_1;
     var MateriasComponent;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
-        }, function (materias_service_1_1) {
-            materias_service_1 = materias_service_1_1;
+        }, function (respuestaEncuesta_service_1_1) {
+            respuestaEncuesta_service_1 = respuestaEncuesta_service_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
         }],
         execute: function () {
-            MateriasComponent = function () {
-                function MateriasComponent(materiaService) {
-                    this.materias = materiaService.obtenerMaterias();
-                    this.opciones = materiaService.obtenerOpciones();
-                    this.materiasOpciones = [];
+            MateriasComponent = class MateriasComponent {
+                constructor(respuestaEncuestaService, route) {
+                    this.tipoOpcion = {
+                        COMISION: 'success',
+                        YACURSE: 'warning',
+                        NOVOYACURSAR: 'danger'
+                    };
+                    var token = route.snapshot.params['token'];
+                    this.encuestaFinalizada = false;
+                    this.enlace = document.URL;
+                    this.respuestaEncuestaService = respuestaEncuestaService;
+                    this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(respuestaEncuesta => {
+                        if (respuestaEncuesta) {
+                            this.respuestaEncuesta = respuestaEncuesta;
+                            this.materias = respuestaEncuesta.encuesta.materias;
+                        }
+                    }, error => {
+                        console.log(error);
+                    });
                 }
-                MateriasComponent.prototype.eligioOpcionParaMateria = function (nombreMateria) {
-                    var estaLaMateria = false;
-                    for (var i = 0; i < this.materiasOpciones.length; i++) {
-                        if (this.materiasOpciones[i].Nombre == nombreMateria) {
-                            estaLaMateria = true;
-                            break;
+                esLaOpcionElegida(materia, opcion) {
+                    var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(materiaOpcion => materiaOpcion.materia._id == materia._id)[0];
+                    if (respuestaMateria) {
+                        if (respuestaMateria.opcion._id == opcion._id) {
+                            materia.opcionElegidaPorAlumno = opcion;
+                            return true;
+                        }
+                        return false;
+                    } else {
+                        if (opcion._id == materia.idOpcionPorDefecto) {
+                            this.seleccionarOpcionDeMateria(materia._id, opcion._id);
+                            return true;
+                        } else {
+                            return false;
                         }
                     }
-                    return estaLaMateria;
-                };
-                MateriasComponent.prototype.onChange = function (nombreMateria, data) {
-                    if (this.materiasOpciones.length == 0) {
-                        var materiaOpcion = { Nombre: nombreMateria, Opcion: data };
-                        this.materiasOpciones.push(materiaOpcion);
+                }
+                seleccionarOpcionDeMateria(idMateria, idOpcion) {
+                    var materia = this.respuestaEncuesta.encuesta.materias.filter(materia => materia._id == idMateria)[0];
+                    var opcion = materia.opciones.filter(opcion => opcion._id == idOpcion)[0];
+                    this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(opcionSeleccionada => opcionSeleccionada.materia._id !== idMateria);
+                    if (opcion) {
+                        this.respuestaEncuesta.respuestasMateria.push({
+                            materia, opcion
+                        });
+                        materia.opcionElegidaPorAlumno = opcion;
                     }
-                    for (var i = 0; i < this.materiasOpciones.length; i++) {
-                        if (this.materiasOpciones[i].Nombre == nombreMateria) {
-                            this.materiasOpciones[i].Opcion = data;
-                            break;
-                        }
-                    }
-                    var estaLaMateria = false;
-                    for (var i = 0; i < this.materiasOpciones.length; i++) {
-                        if (this.materiasOpciones[i].Nombre == nombreMateria) {
-                            estaLaMateria = true;
-                            break;
-                        }
-                    }
-                    if (!estaLaMateria) {
-                        var materiaOpcion = { Nombre: nombreMateria, Opcion: data };
-                        this.materiasOpciones.push(materiaOpcion);
-                    }
-                };
-                MateriasComponent.prototype.enviar = function () {
-                    console.log(this.materiasOpciones);
-                };
-                MateriasComponent = __decorate([core_1.Component({
-                    selector: 'materias',
-                    templateUrl: 'client/components/home/materias.component.html',
-                    providers: [materias_service_1.MateriasService],
-                    inputs: ['materiasOpciones']
-                }), __metadata('design:paramtypes', [materias_service_1.MateriasService])], MateriasComponent);
-                return MateriasComponent;
-            }();
+                }
+                guardar() {
+                    if (!this.respuestaEncuesta) return;
+                    this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, this.respuestaEncuesta.respuestasMateria).subscribe(data => {
+                        console.log(data);
+                        this.encuestaFinalizada = true;
+                    }, error => {
+                        console.log(error);
+                    });
+                    ;
+                }
+            };
+            MateriasComponent = __decorate([core_1.Component({
+                selector: 'materias',
+                templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
+                providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
+            }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], MateriasComponent);
             exports_1("MateriasComponent", MateriasComponent);
         }
     };
 });
 
-$__System.register("12", ["3", "7", "8", "13", "d", "f", "14", "11"], function (exports_1, context_1) {
+$__System.register('e', ['3', '7', '12'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -17136,8 +17062,194 @@ $__System.register("12", ["3", "7", "8", "13", "d", "f", "14", "11"], function (
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, ng_semantic_1, common_1, home_component_1, home_routing_1, shared_module_1, materias_component_1;
-    var HomeModule;
+    var core_1, http_1, angular2_jwt_1;
+    var RespuestaEncuestaService;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (http_1_1) {
+            http_1 = http_1_1;
+        }, function (angular2_jwt_1_1) {
+            angular2_jwt_1 = angular2_jwt_1_1;
+        }],
+        execute: function () {
+            RespuestaEncuestaService = class RespuestaEncuestaService {
+                constructor(authHttp, http) {
+                    this.authHttp = authHttp;
+                    this.http = http;
+                }
+                obtenerRespuestaEncuesta(token) {
+                    return this.http.get('/api/publica/respuestas/encuesta/detalle?token=' + token).map(response => response.json());
+                }
+                actualizarRespuestas(respuestaEncuestaId, respuestas) {
+                    return this.http.post('/api/publica/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, {
+                        respuestas: respuestas
+                    }).map(response => response.json());
+                }
+                asignarAlumnoAEncuesta(alumno, encuesta) {
+                    return this.authHttp.post('/api/respuestas/encuesta/guardar', JSON.stringify({
+                        alumno: alumno,
+                        encuesta: encuesta
+                    }), new http_1.RequestOptions({
+                        headers: new http_1.Headers({
+                            "Content-Type": "application/json"
+                        })
+                    })).map(response => response.json());
+                }
+                obtenerRespuestasEncuesta() {
+                    return this.authHttp.get('/api/respuestas/encuesta/listado').map(response => response.json());
+                }
+                obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre) {
+                    return this.authHttp.get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre).map(response => response.json());
+                }
+                buscarAlumnoPor(nombreYApellido, dni, idEncuesta, cantidadASaltear) {
+                    return this.authHttp.get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&cantidadASaltear=' + cantidadASaltear).map(response => response.json());
+                }
+                cantidadDeRespuestaEncuestaPara(nombreYApellido, dni, idEncuesta) {
+                    return this.authHttp.get('/api/respuestas/encuesta/cantidadPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta).map(response => response.json());
+                }
+            };
+            RespuestaEncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp, http_1.Http])], RespuestaEncuestaService);
+            exports_1("RespuestaEncuestaService", RespuestaEncuestaService);
+        }
+    };
+});
+
+$__System.register("10", ["3", "13", "e", "8"], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, encuesta_service_1, respuestaEncuesta_service_1, router_1;
+    var WINDOW_PROVIDER, AsignarAlumnoComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (encuesta_service_1_1) {
+            encuesta_service_1 = encuesta_service_1_1;
+        }, function (respuestaEncuesta_service_1_1) {
+            respuestaEncuesta_service_1 = respuestaEncuesta_service_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
+        }],
+        execute: function () {
+            WINDOW_PROVIDER = {
+                provide: Window,
+                useValue: window
+            };
+            AsignarAlumnoComponent = class AsignarAlumnoComponent {
+                constructor(encuestaService, route, respuestaEncuestaService, window) {
+                    this.encuesta = {
+                        anho: "",
+                        semestre: ""
+                    };
+                    this.alumno = {
+                        nombreYApellidoAlumno: "",
+                        DNIAlumno: "",
+                        emailAlumno: ""
+                    };
+                    this.alumnos = [];
+                    this.nombreYApellido = "";
+                    this.dni = "";
+                    this.cantidadASaltear = 0;
+                    this.idEncuesta = route.snapshot.params['idEncuesta'];
+                    this.respuestaEncuestaService = respuestaEncuestaService;
+                    this.window = window;
+                    encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(encuesta => {
+                        this.encuesta = encuesta;
+                        respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(respuestasEcuesta => {
+                            this.alumnos = respuestasEcuesta;
+                        }, error => {
+                            console.log(error);
+                        });
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+                asignarAlumno() {
+                    if (!this.seLLenaronLosCampoCorrectamente()) return;
+                    this.respuestaEncuestaService.asignarAlumnoAEncuesta(this.alumno, this.encuesta).subscribe(respuestaEcuesta => {
+                        this.alumnos.push(respuestaEcuesta);
+                        this.alumno.nombreYApellidoAlumno = "";
+                        this.alumno.DNIAlumno = "";
+                        this.alumno.emailAlumno = "";
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+                seLLenaronLosCampoCorrectamente() {
+                    if (this.alumno.nombreYApellidoAlumno.length == 0 || this.alumno.DNIAlumno.length == 0 || this.alumno.emailAlumno.length == 0) {
+                        alert("Todos los campos son obligatorios.");
+                        return false;
+                    }
+                    if (!/^[a-z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)?@[a-z][a-zA-Z-0-9]*\.[a-z]+(\.[a-z]+)?$/.test(this.alumno.emailAlumno)) {
+                        alert("Email inválido.");
+                        return false;
+                    }
+                    var alumnos = this.alumnos.filter(a => a.DNIAlumno == this.alumno.DNIAlumno);
+                    if (alumnos.length != 0) {
+                        alert("El DNI ingresado ya existe.");
+                        return false;
+                    }
+                    return true;
+                }
+                crearUrlPara(alumno) {
+                    return document.baseURI + '#/respuesta-encuesta/' + alumno.token;
+                }
+                buscar() {
+                    this.cantidadASaltear = 0;
+                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(respuestasEcuesta => {
+                        this.alumnos = respuestasEcuesta;
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+                mostrarMas() {
+                    this.cantidadASaltear = this.cantidadASaltear + 10;
+                    this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(respuestasEcuesta => {
+                        for (var i = 0; i < respuestasEcuesta.length; i++) this.alumnos.push(respuestasEcuesta[i]);
+                        setTimeout(() => this.window.scrollTo(0, this.alumnos.length * 100), 10);
+                    }, error => {
+                        console.log(error);
+                    });
+                }
+            };
+            __decorate([core_1.ViewChild('someVar'), __metadata('design:type', core_1.ElementRef)], AsignarAlumnoComponent.prototype, "someVar", void 0);
+            AsignarAlumnoComponent = __decorate([core_1.Component({
+                selector: 'asignar-usuario',
+                templateUrl: 'client/components/respuestaEncuesta/asignarAlumno.component.html',
+                providers: [encuesta_service_1.EncuestaService, respuestaEncuesta_service_1.RespuestaEncuestaService, WINDOW_PROVIDER]
+            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute, respuestaEncuesta_service_1.RespuestaEncuestaService, Window])], AsignarAlumnoComponent);
+            exports_1("AsignarAlumnoComponent", AsignarAlumnoComponent);
+        }
+    };
+});
+
+$__System.register("14", ["3", "7", "9", "15", "16", "d", "f", "17", "11", "10"], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, http_1, ng_semantic_1, common_1, forms_1, respuestaEncuesta_component_1, respuestaEncuesta_routing_1, shared_module_1, materias_component_1, asignarAlumno_component_1;
+    var RespuestaEncuestaModule;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
@@ -17147,32 +17259,231 @@ $__System.register("12", ["3", "7", "8", "13", "d", "f", "14", "11"], function (
             ng_semantic_1 = ng_semantic_1_1;
         }, function (common_1_1) {
             common_1 = common_1_1;
-        }, function (home_component_1_1) {
-            home_component_1 = home_component_1_1;
-        }, function (home_routing_1_1) {
-            home_routing_1 = home_routing_1_1;
+        }, function (forms_1_1) {
+            forms_1 = forms_1_1;
+        }, function (respuestaEncuesta_component_1_1) {
+            respuestaEncuesta_component_1 = respuestaEncuesta_component_1_1;
+        }, function (respuestaEncuesta_routing_1_1) {
+            respuestaEncuesta_routing_1 = respuestaEncuesta_routing_1_1;
         }, function (shared_module_1_1) {
             shared_module_1 = shared_module_1_1;
         }, function (materias_component_1_1) {
             materias_component_1 = materias_component_1_1;
+        }, function (asignarAlumno_component_1_1) {
+            asignarAlumno_component_1 = asignarAlumno_component_1_1;
         }],
         execute: function () {
-            HomeModule = function () {
-                function HomeModule() {}
-                HomeModule = __decorate([core_1.NgModule({
-                    imports: [common_1.CommonModule, http_1.HttpModule, home_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule],
-                    declarations: [home_component_1.HomeComponent, materias_component_1.MateriasComponent],
-                    bootstrap: [home_component_1.HomeComponent],
-                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-                }), __metadata('design:paramtypes', [])], HomeModule);
-                return HomeModule;
-            }();
-            exports_1("HomeModule", HomeModule);
+            RespuestaEncuestaModule = class RespuestaEncuestaModule {};
+            RespuestaEncuestaModule = __decorate([core_1.NgModule({
+                imports: [common_1.CommonModule, http_1.HttpModule, respuestaEncuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, forms_1.FormsModule],
+                declarations: [respuestaEncuesta_component_1.RespuestaEncuestaComponent, materias_component_1.MateriasComponent, asignarAlumno_component_1.AsignarAlumnoComponent],
+                bootstrap: [respuestaEncuesta_component_1.RespuestaEncuestaComponent],
+                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+            }), __metadata('design:paramtypes', [])], RespuestaEncuestaModule);
+            exports_1("RespuestaEncuestaModule", RespuestaEncuestaModule);
         }
     };
 });
 
-$__System.registerDynamic("15", ["3"], true, function ($__require, exports, module) {
+$__System.register('b', ['3', '7', '18', '12'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, http_1, BehaviorSubject_1, angular2_jwt_1;
+    var LoginService;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (http_1_1) {
+            http_1 = http_1_1;
+        }, function (BehaviorSubject_1_1) {
+            BehaviorSubject_1 = BehaviorSubject_1_1;
+        }, function (angular2_jwt_1_1) {
+            angular2_jwt_1 = angular2_jwt_1_1;
+        }],
+        execute: function () {
+            LoginService = class LoginService {
+                constructor(http) {
+                    this.http = http;
+                    this.isLoggedInSubject = new BehaviorSubject_1.BehaviorSubject(this.checkIsLoggedIn());
+                }
+                get loggedInObservable() {
+                    return this.isLoggedInSubject.asObservable();
+                }
+                checkIsLoggedIn() {
+                    let isLoggedIn = false;
+                    try {
+                        isLoggedIn = angular2_jwt_1.tokenNotExpired();
+                    } catch (e) {}
+                    return isLoggedIn;
+                }
+                logOut() {
+                    localStorage.removeItem("id_token");
+                    this.isLoggedInSubject.next(this.checkIsLoggedIn());
+                }
+                login(data, cbSuccess = null) {
+                    this.http.post("/login", JSON.stringify(data), new http_1.RequestOptions({
+                        headers: new http_1.Headers({
+                            "Content-Type": "application/json"
+                        })
+                    })).map(res => res.json()).subscribe(res => {
+                        if (res.jwt) {
+                            localStorage.setItem("id_token", res.jwt);
+                            this.isLoggedInSubject.next(this.checkIsLoggedIn());
+                            cbSuccess(res);
+                        } else {
+                            alert(res.message);
+                        }
+                    }, error => {
+                        alert("Se ha producido un error al conectar con el servidor");
+                        console.log(error);
+                    });
+                }
+            };
+            LoginService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [http_1.Http])], LoginService);
+            exports_1("LoginService", LoginService);
+        }
+    };
+});
+
+$__System.register('19', ['3', 'b', '8', '7'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, login_service_1, router_1, http_1;
+    var LoginComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (login_service_1_1) {
+            login_service_1 = login_service_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
+        }, function (http_1_1) {
+            http_1 = http_1_1;
+        }],
+        execute: function () {
+            LoginComponent = class LoginComponent {
+                constructor(http, loginService, route) {
+                    this.http = http;
+                    this.user = {
+                        email: "",
+                        password: ""
+                    };
+                    this.route = route;
+                    this.loginService = loginService;
+                    if (localStorage.getItem("id_token")) {
+                        this.route.navigate(['encuestas/listado']);
+                    }
+                }
+                login() {
+                    this.loginService.login({
+                        password: this.user.password,
+                        email: this.user.email
+                    }, res => {
+                        location.reload();
+                    });
+                }
+            };
+            LoginComponent = __decorate([core_1.Component({
+                selector: 'login',
+                templateUrl: 'client/components/autenticacion/login.component.html',
+                providers: [login_service_1.LoginService]
+            }), __metadata('design:paramtypes', [http_1.Http, login_service_1.LoginService, router_1.Router])], LoginComponent);
+            exports_1("LoginComponent", LoginComponent);
+        }
+    };
+});
+
+$__System.register('1a', ['8', '19'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var router_1, login_component_1;
+    var routes, routing;
+    return {
+        setters: [function (router_1_1) {
+            router_1 = router_1_1;
+        }, function (login_component_1_1) {
+            login_component_1 = login_component_1_1;
+        }],
+        execute: function () {
+            exports_1("routes", routes = [{ path: 'login', component: login_component_1.LoginComponent }]);
+            exports_1("routing", routing = router_1.RouterModule.forChild(routes));
+        }
+    };
+});
+
+$__System.register("1b", ["3", "7", "9", "15", "5", "16", "19", "1a", "17"], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, http_1, ng_semantic_1, common_1, platform_browser_1, forms_1, login_component_1, login_routing_1, shared_module_1;
+    var LoginModule;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (http_1_1) {
+            http_1 = http_1_1;
+        }, function (ng_semantic_1_1) {
+            ng_semantic_1 = ng_semantic_1_1;
+        }, function (common_1_1) {
+            common_1 = common_1_1;
+        }, function (platform_browser_1_1) {
+            platform_browser_1 = platform_browser_1_1;
+        }, function (forms_1_1) {
+            forms_1 = forms_1_1;
+        }, function (login_component_1_1) {
+            login_component_1 = login_component_1_1;
+        }, function (login_routing_1_1) {
+            login_routing_1 = login_routing_1_1;
+        }, function (shared_module_1_1) {
+            shared_module_1 = shared_module_1_1;
+        }],
+        execute: function () {
+            LoginModule = class LoginModule {};
+            LoginModule = __decorate([core_1.NgModule({
+                imports: [common_1.CommonModule, http_1.HttpModule, login_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule, platform_browser_1.BrowserModule, forms_1.FormsModule],
+                declarations: [login_component_1.LoginComponent],
+                bootstrap: [login_component_1.LoginComponent],
+                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+            }), __metadata('design:paramtypes', [])], LoginModule);
+            exports_1("LoginModule", LoginModule);
+        }
+    };
+});
+
+$__System.registerDynamic("1c", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17215,7 +17526,7 @@ $__System.registerDynamic("15", ["3"], true, function ($__require, exports, modu
     exports.SemanticMenuComponent = SemanticMenuComponent;
     return module.exports;
 });
-$__System.registerDynamic("16", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("1d", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17254,7 +17565,7 @@ $__System.registerDynamic("16", ["3"], true, function ($__require, exports, modu
     exports.SemanticMessageComponent = SemanticMessageComponent;
     return module.exports;
 });
-$__System.registerDynamic("17", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("1e", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17289,7 +17600,7 @@ $__System.registerDynamic("17", ["3"], true, function ($__require, exports, modu
     exports.SMTooltipDirective = SMTooltipDirective;
     return module.exports;
 });
-$__System.registerDynamic("18", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("1f", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17350,7 +17661,7 @@ $__System.registerDynamic("18", ["3"], true, function ($__require, exports, modu
     exports.SemanticPopupComponent = SemanticPopupComponent;
     return module.exports;
 });
-$__System.registerDynamic("19", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("20", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17389,7 +17700,7 @@ $__System.registerDynamic("19", ["3"], true, function ($__require, exports, modu
     exports.SemanticModalComponent = SemanticModalComponent;
     return module.exports;
 });
-$__System.registerDynamic("1a", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("21", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17419,7 +17730,7 @@ $__System.registerDynamic("1a", ["3"], true, function ($__require, exports, modu
     exports.SemanticSegmentComponent = SemanticSegmentComponent;
     return module.exports;
 });
-$__System.registerDynamic("1b", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("22", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17457,7 +17768,7 @@ $__System.registerDynamic("1b", ["3"], true, function ($__require, exports, modu
     exports.SemanticListComponent = SemanticListComponent;
     return module.exports;
 });
-$__System.registerDynamic("1c", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("23", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17491,7 +17802,7 @@ $__System.registerDynamic("1c", ["3"], true, function ($__require, exports, modu
     exports.SemanticButtonComponent = SemanticButtonComponent;
     return module.exports;
 });
-$__System.registerDynamic("1d", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("24", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17527,7 +17838,7 @@ $__System.registerDynamic("1d", ["3"], true, function ($__require, exports, modu
     exports.SemanticItemComponent = SemanticItemComponent;
     return module.exports;
 });
-$__System.registerDynamic("1e", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("25", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17594,7 +17905,7 @@ $__System.registerDynamic("1e", ["3"], true, function ($__require, exports, modu
     exports.SMDeviceVisibilityDirective = SMDeviceVisibilityDirective;
     return module.exports;
 });
-$__System.registerDynamic("1f", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("26", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17643,7 +17954,7 @@ $__System.registerDynamic("1f", ["3"], true, function ($__require, exports, modu
     exports.SemanticDropdownComponent = SemanticDropdownComponent;
     return module.exports;
 });
-$__System.registerDynamic("20", ["3", "21"], true, function ($__require, exports, module) {
+$__System.registerDynamic("27", ["3", "16"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17660,7 +17971,7 @@ $__System.registerDynamic("20", ["3", "21"], true, function ($__require, exports
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1 = $__require("3");
-    var forms_1 = $__require("21");
+    var forms_1 = $__require("16");
     var SemanticSelectComponent = function () {
         function SemanticSelectComponent() {
             this.control = new forms_1.FormControl();
@@ -17716,7 +18027,7 @@ $__System.registerDynamic("20", ["3", "21"], true, function ($__require, exports
     exports.SemanticSelectComponent = SemanticSelectComponent;
     return module.exports;
 });
-$__System.registerDynamic("22", ["23"], true, function ($__require, exports, module) {
+$__System.registerDynamic("28", ["29"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17729,7 +18040,7 @@ $__System.registerDynamic("22", ["23"], true, function ($__require, exports, mod
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscription_1 = $__require("23");
+    var Subscription_1 = $__require("29");
     /**
      * A unit of work to be executed in a {@link Scheduler}. An action is typically
      * created from within a Scheduler and an RxJS user does not need to concern
@@ -17772,7 +18083,7 @@ $__System.registerDynamic("22", ["23"], true, function ($__require, exports, mod
 
     return module.exports;
 });
-$__System.registerDynamic('24', ['25', '22'], true, function ($__require, exports, module) {
+$__System.registerDynamic('2a', ['2b', '28'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -17785,8 +18096,8 @@ $__System.registerDynamic('24', ['25', '22'], true, function ($__require, export
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var root_1 = $__require('25');
-    var Action_1 = $__require('22');
+    var root_1 = $__require('2b');
+    var Action_1 = $__require('28');
     /**
      * We need this JSDoc comment for affecting ESDoc.
      * @ignore
@@ -17928,7 +18239,7 @@ $__System.registerDynamic('24', ['25', '22'], true, function ($__require, export
 
     return module.exports;
 });
-$__System.registerDynamic("26", [], true, function ($__require, exports, module) {
+$__System.registerDynamic("2c", [], true, function ($__require, exports, module) {
     "use strict";
     /**
      * An execution context and a data structure to order tasks and schedule their
@@ -17991,7 +18302,7 @@ $__System.registerDynamic("26", [], true, function ($__require, exports, module)
 
     return module.exports;
 });
-$__System.registerDynamic("27", ["26"], true, function ($__require, exports, module) {
+$__System.registerDynamic("2d", ["2c"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18004,7 +18315,7 @@ $__System.registerDynamic("27", ["26"], true, function ($__require, exports, mod
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Scheduler_1 = $__require("26");
+    var Scheduler_1 = $__require("2c");
     var AsyncScheduler = function (_super) {
         __extends(AsyncScheduler, _super);
         function AsyncScheduler() {
@@ -18052,20 +18363,20 @@ $__System.registerDynamic("27", ["26"], true, function ($__require, exports, mod
 
     return module.exports;
 });
-$__System.registerDynamic('28', ['24', '27'], true, function ($__require, exports, module) {
+$__System.registerDynamic('2e', ['2a', '2d'], true, function ($__require, exports, module) {
   "use strict";
 
   var define,
       global = this || self,
       GLOBAL = global;
-  var AsyncAction_1 = $__require('24');
-  var AsyncScheduler_1 = $__require('27');
+  var AsyncAction_1 = $__require('2a');
+  var AsyncScheduler_1 = $__require('2d');
   exports.async = new AsyncScheduler_1.AsyncScheduler(AsyncAction_1.AsyncAction);
   
 
   return module.exports;
 });
-$__System.registerDynamic('29', ['2a', '28'], true, function ($__require, exports, module) {
+$__System.registerDynamic('2f', ['30', '2e'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18078,8 +18389,8 @@ $__System.registerDynamic('29', ['2a', '28'], true, function ($__require, export
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscriber_1 = $__require('2a');
-    var async_1 = $__require('28');
+    var Subscriber_1 = $__require('30');
+    var async_1 = $__require('2e');
     /**
      * Emits a value from the source Observable only after a particular time span
      * has passed without another source emission.
@@ -18193,20 +18504,20 @@ $__System.registerDynamic('29', ['2a', '28'], true, function ($__require, export
 
     return module.exports;
 });
-$__System.registerDynamic('2b', ['2c', '29'], true, function ($__require, exports, module) {
+$__System.registerDynamic('31', ['32', '2f'], true, function ($__require, exports, module) {
   "use strict";
 
   var define,
       global = this || self,
       GLOBAL = global;
-  var Observable_1 = $__require('2c');
-  var debounceTime_1 = $__require('29');
+  var Observable_1 = $__require('32');
+  var debounceTime_1 = $__require('2f');
   Observable_1.Observable.prototype.debounceTime = debounceTime_1.debounceTime;
   
 
   return module.exports;
 });
-$__System.registerDynamic('2d', ['2a', '2e', '2f'], true, function ($__require, exports, module) {
+$__System.registerDynamic('33', ['30', '34', '35'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18219,9 +18530,9 @@ $__System.registerDynamic('2d', ['2a', '2e', '2f'], true, function ($__require, 
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscriber_1 = $__require('2a');
-    var tryCatch_1 = $__require('2e');
-    var errorObject_1 = $__require('2f');
+    var Subscriber_1 = $__require('30');
+    var tryCatch_1 = $__require('34');
+    var errorObject_1 = $__require('35');
     /**
      * Returns an Observable that emits all items emitted by the source Observable that are distinct by comparison from the previous item.
      * If a comparator function is provided, then it will be called for each item to test for whether or not that value should be emitted.
@@ -18292,20 +18603,20 @@ $__System.registerDynamic('2d', ['2a', '2e', '2f'], true, function ($__require, 
 
     return module.exports;
 });
-$__System.registerDynamic('30', ['2c', '2d'], true, function ($__require, exports, module) {
+$__System.registerDynamic('36', ['32', '33'], true, function ($__require, exports, module) {
   "use strict";
 
   var define,
       global = this || self,
       GLOBAL = global;
-  var Observable_1 = $__require('2c');
-  var distinctUntilChanged_1 = $__require('2d');
+  var Observable_1 = $__require('32');
+  var distinctUntilChanged_1 = $__require('33');
   Observable_1.Observable.prototype.distinctUntilChanged = distinctUntilChanged_1.distinctUntilChanged;
   
 
   return module.exports;
 });
-$__System.registerDynamic("31", ["3", "21", "2b", "30"], true, function ($__require, exports, module) {
+$__System.registerDynamic("37", ["3", "16", "31", "36"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18322,9 +18633,9 @@ $__System.registerDynamic("31", ["3", "21", "2b", "30"], true, function ($__requ
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1 = $__require("3");
-    var forms_1 = $__require("21");
-    $__require("2b");
-    $__require("30");
+    var forms_1 = $__require("16");
+    $__require("31");
+    $__require("36");
     var SemanticSearchComponent = function () {
         function SemanticSearchComponent() {
             this.debounce = 0;
@@ -18353,7 +18664,7 @@ $__System.registerDynamic("31", ["3", "21", "2b", "30"], true, function ($__requ
     exports.SemanticSearchComponent = SemanticSearchComponent;
     return module.exports;
 });
-$__System.registerDynamic("32", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("38", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18387,7 +18698,7 @@ $__System.registerDynamic("32", ["3"], true, function ($__require, exports, modu
     exports.SemanticLoaderComponent = SemanticLoaderComponent;
     return module.exports;
 });
-$__System.registerDynamic("33", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("39", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18429,7 +18740,7 @@ $__System.registerDynamic("33", ["3"], true, function ($__require, exports, modu
     exports.SemanticCardsComponent = SemanticCardsComponent;
     return module.exports;
 });
-$__System.registerDynamic("34", ["3", "21"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3a", ["3", "16"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18446,7 +18757,7 @@ $__System.registerDynamic("34", ["3", "21"], true, function ($__require, exports
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1 = $__require("3");
-    var forms_1 = $__require("21");
+    var forms_1 = $__require("16");
     var SemanticInputComponent = function () {
         function SemanticInputComponent(viewRef) {
             this.viewRef = viewRef;
@@ -18532,7 +18843,7 @@ $__System.registerDynamic("34", ["3", "21"], true, function ($__require, exports
     exports.SemanticTextareaComponent = SemanticTextareaComponent;
     return module.exports;
 });
-$__System.registerDynamic("35", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3b", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18589,7 +18900,7 @@ $__System.registerDynamic("35", ["3"], true, function ($__require, exports, modu
     exports.SemanticSidebarComponent = SemanticSidebarComponent;
     return module.exports;
 });
-$__System.registerDynamic("36", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3c", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18674,7 +18985,7 @@ $__System.registerDynamic("36", ["3"], true, function ($__require, exports, modu
     exports.SemanticTabsComponent = SemanticTabsComponent;
     return module.exports;
 });
-$__System.registerDynamic("37", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3d", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18704,7 +19015,7 @@ $__System.registerDynamic("37", ["3"], true, function ($__require, exports, modu
     exports.SemanticFlagComponent = SemanticFlagComponent;
     return module.exports;
 });
-$__System.registerDynamic("38", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3e", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18753,7 +19064,7 @@ $__System.registerDynamic("38", ["3"], true, function ($__require, exports, modu
     exports.SemanticContextMenuComponent = SemanticContextMenuComponent;
     return module.exports;
 });
-$__System.registerDynamic("39", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("3f", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18794,7 +19105,7 @@ $__System.registerDynamic("39", ["3"], true, function ($__require, exports, modu
     exports.SemanticProgressComponent = SemanticProgressComponent;
     return module.exports;
 });
-$__System.registerDynamic("3a", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("40", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18827,7 +19138,7 @@ $__System.registerDynamic("3a", ["3"], true, function ($__require, exports, modu
     exports.SemanticDimmerComponent = SemanticDimmerComponent;
     return module.exports;
 });
-$__System.registerDynamic("3b", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("41", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18860,7 +19171,7 @@ $__System.registerDynamic("3b", ["3"], true, function ($__require, exports, modu
     exports.SemanticTransitionComponent = SemanticTransitionComponent;
     return module.exports;
 });
-$__System.registerDynamic("3c", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("42", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18916,7 +19227,7 @@ $__System.registerDynamic("3c", ["3"], true, function ($__require, exports, modu
     exports.SemanticShapeComponent = SemanticShapeComponent;
     return module.exports;
 });
-$__System.registerDynamic("3d", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("43", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -18980,7 +19291,7 @@ $__System.registerDynamic("3d", ["3"], true, function ($__require, exports, modu
     exports.SemanticAccordionItemComponent = SemanticAccordionItemComponent;
     return module.exports;
 });
-$__System.registerDynamic("3e", ["3"], true, function ($__require, exports, module) {
+$__System.registerDynamic("44", ["3"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -19026,13 +19337,13 @@ $__System.registerDynamic("3e", ["3"], true, function ($__require, exports, modu
     exports.SemanticRatingComponent = SemanticRatingComponent;
     return module.exports;
 });
-$__System.registerDynamic('3f', ['25'], true, function ($__require, exports, module) {
+$__System.registerDynamic('45', ['2b'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
         global = this || self,
         GLOBAL = global;
-    var root_1 = $__require('25');
+    var root_1 = $__require('2b');
     /**
      * @param PromiseCtor
      * @return {Promise<T>}
@@ -19070,7 +19381,7 @@ $__System.registerDynamic('3f', ['25'], true, function ($__require, exports, mod
 (function() {
 var define = $__System.amdDefine;
 (function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operator/toPromise'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromPromise')) : typeof define === 'function' && define.amd ? define("21", ["exports", "3", "3f", "40", "2c", "41"], factory) : (factory((global.ng = global.ng || {}, global.ng.forms = global.ng.forms || {}), global.ng.core, global.Rx.Observable.prototype, global.Rx, global.Rx, global.Rx.Observable));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/operator/toPromise'), require('rxjs/Subject'), require('rxjs/Observable'), require('rxjs/observable/fromPromise')) : typeof define === 'function' && define.amd ? define("16", ["exports", "3", "45", "46", "32", "47"], factory) : (factory((global.ng = global.ng || {}, global.ng.forms = global.ng.forms || {}), global.ng.core, global.Rx.Observable.prototype, global.Rx, global.Rx, global.Rx.Observable));
 }(this, function(exports, _angular_core, rxjs_operator_toPromise, rxjs_Subject, rxjs_Observable, rxjs_observable_fromPromise) {
   'use strict';
   var globalScope;
@@ -22919,7 +23230,7 @@ var define = $__System.amdDefine;
 }));
 
 })();
-$__System.registerDynamic("8", ["15", "16", "17", "18", "19", "1a", "1b", "1c", "1d", "1e", "1f", "20", "31", "32", "33", "34", "35", "36", "37", "38", "39", "3a", "3b", "3c", "3d", "3e", "3", "13", "21"], true, function ($__require, exports, module) {
+$__System.registerDynamic("9", ["1c", "1d", "1e", "1f", "20", "21", "22", "23", "24", "25", "26", "27", "37", "38", "39", "3a", "3b", "3c", "3d", "3e", "3f", "40", "41", "42", "43", "44", "3", "15", "16"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -22938,63 +23249,63 @@ $__System.registerDynamic("8", ["15", "16", "17", "18", "19", "1a", "1b", "1c", 
     function __export(m) {
         for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
     }
-    var menu_1 = $__require("15");
-    var message_1 = $__require("16");
-    var tooltip_1 = $__require("17");
-    var popup_1 = $__require("18");
-    var modal_1 = $__require("19");
-    var segment_1 = $__require("1a");
-    var list_1 = $__require("1b");
-    var button_1 = $__require("1c");
-    var item_1 = $__require("1d");
-    var visibility_1 = $__require("1e");
-    var dropdown_1 = $__require("1f");
-    var select_1 = $__require("20");
-    var search_1 = $__require("31");
-    var loader_1 = $__require("32");
-    var card_1 = $__require("33");
-    var input_1 = $__require("34");
-    var sidebar_1 = $__require("35");
-    var tab_1 = $__require("36");
-    var flag_1 = $__require("37");
-    var contextmenu_1 = $__require("38");
-    var progress_1 = $__require("39");
-    var dimmer_1 = $__require("3a");
-    var transition_1 = $__require("3b");
-    var shape_1 = $__require("3c");
-    var accordion_1 = $__require("3d");
-    var rating_1 = $__require("3e");
-    __export($__require("15"));
-    __export($__require("38"));
-    __export($__require("16"));
-    __export($__require("17"));
-    __export($__require("18"));
-    __export($__require("1e"));
-    __export($__require("19"));
-    __export($__require("1a"));
-    __export($__require("3e"));
-    __export($__require("1b"));
+    var menu_1 = $__require("1c");
+    var message_1 = $__require("1d");
+    var tooltip_1 = $__require("1e");
+    var popup_1 = $__require("1f");
+    var modal_1 = $__require("20");
+    var segment_1 = $__require("21");
+    var list_1 = $__require("22");
+    var button_1 = $__require("23");
+    var item_1 = $__require("24");
+    var visibility_1 = $__require("25");
+    var dropdown_1 = $__require("26");
+    var select_1 = $__require("27");
+    var search_1 = $__require("37");
+    var loader_1 = $__require("38");
+    var card_1 = $__require("39");
+    var input_1 = $__require("3a");
+    var sidebar_1 = $__require("3b");
+    var tab_1 = $__require("3c");
+    var flag_1 = $__require("3d");
+    var contextmenu_1 = $__require("3e");
+    var progress_1 = $__require("3f");
+    var dimmer_1 = $__require("40");
+    var transition_1 = $__require("41");
+    var shape_1 = $__require("42");
+    var accordion_1 = $__require("43");
+    var rating_1 = $__require("44");
     __export($__require("1c"));
-    __export($__require("31"));
+    __export($__require("3e"));
     __export($__require("1d"));
+    __export($__require("1e"));
     __export($__require("1f"));
+    __export($__require("25"));
     __export($__require("20"));
-    __export($__require("32"));
-    __export($__require("33"));
-    __export($__require("34"));
-    __export($__require("35"));
-    __export($__require("36"));
+    __export($__require("21"));
+    __export($__require("44"));
+    __export($__require("22"));
+    __export($__require("23"));
     __export($__require("37"));
+    __export($__require("24"));
+    __export($__require("26"));
+    __export($__require("27"));
+    __export($__require("38"));
     __export($__require("39"));
     __export($__require("3a"));
     __export($__require("3b"));
     __export($__require("3c"));
     __export($__require("3d"));
+    __export($__require("3f"));
+    __export($__require("40"));
+    __export($__require("41"));
+    __export($__require("42"));
+    __export($__require("43"));
     exports.SEMANTIC_COMPONENTS = [card_1.SemanticCardComponent, card_1.SemanticCardsComponent, contextmenu_1.SemanticContextMenuComponent, input_1.SemanticInputComponent, input_1.SemanticTextareaComponent, input_1.SemanticCheckboxComponent, menu_1.SemanticMenuComponent, message_1.SemanticMessageComponent, segment_1.SemanticSegmentComponent, dimmer_1.SemanticDimmerComponent, transition_1.SemanticTransitionComponent, shape_1.SemanticShapeComponent, popup_1.SemanticPopupComponent, dropdown_1.SemanticDropdownComponent, list_1.SemanticListComponent, select_1.SemanticSelectComponent, flag_1.SemanticFlagComponent, search_1.SemanticSearchComponent, item_1.SemanticItemComponent, sidebar_1.SemanticSidebarComponent, progress_1.SemanticProgressComponent, modal_1.SemanticModalComponent, tab_1.SemanticTabsComponent, tab_1.SemanticTabComponent, button_1.SemanticButtonComponent, loader_1.SemanticLoaderComponent, accordion_1.SemanticAccordionComponent, accordion_1.SemanticAccordionItemComponent, rating_1.SemanticRatingComponent];
     exports.SEMANTIC_DIRECTIVES = [tooltip_1.SMTooltipDirective, visibility_1.SMVisibilityDirective, visibility_1.SMDeviceVisibilityDirective];
     var core_1 = $__require("3");
-    var common_1 = $__require("13");
-    var forms_1 = $__require("21");
+    var common_1 = $__require("15");
+    var forms_1 = $__require("16");
     var NgSemanticModule = function () {
         function NgSemanticModule() {}
         NgSemanticModule = __decorate([core_1.NgModule({
@@ -23007,109 +23318,7 @@ $__System.registerDynamic("8", ["15", "16", "17", "18", "19", "1a", "1b", "1c", 
     exports.NgSemanticModule = NgSemanticModule;
     return module.exports;
 });
-$__System.register("42", ["3", "43", "b"], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, respuestaEncuesta_service_1, router_1;
-    var RespuestaEncuestaComponent;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (respuestaEncuesta_service_1_1) {
-            respuestaEncuesta_service_1 = respuestaEncuesta_service_1_1;
-        }, function (router_1_1) {
-            router_1 = router_1_1;
-        }],
-        execute: function () {
-            RespuestaEncuestaComponent = function () {
-                function RespuestaEncuestaComponent(respuestaEncuestaService, route) {
-                    var _this = this;
-                    var token = route.snapshot.queryParams['token'];
-                    if (!token) {
-                        this.titulo = 'No exite la encuesta seleccionada.';
-                        return;
-                    }
-                    respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(function (respuestaEncuesta) {
-                        if (respuestaEncuesta) {
-                            _this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
-                        } else {
-                            _this.titulo = 'No exite la encuesta seleccionada.';
-                        }
-                    }, function (error) {
-                        _this.titulo = 'No exite la encuesta seleccionada.';
-                        console.log(error);
-                    });
-                }
-                RespuestaEncuestaComponent = __decorate([core_1.Component({
-                    selector: 'encuesta',
-                    templateUrl: 'client/components/respuestaEncuesta/respuestaEncuesta.component.html',
-                    providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
-                }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], RespuestaEncuestaComponent);
-                return RespuestaEncuestaComponent;
-            }();
-            exports_1("RespuestaEncuestaComponent", RespuestaEncuestaComponent);
-        }
-    };
-});
-
-$__System.register('44', ['b', '42'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var router_1, respuestaEncuesta_component_1;
-    var routes, routing;
-    return {
-        setters: [function (router_1_1) {
-            router_1 = router_1_1;
-        }, function (respuestaEncuesta_component_1_1) {
-            respuestaEncuesta_component_1 = respuestaEncuesta_component_1_1;
-        }],
-        execute: function () {
-            exports_1("routes", routes = [{ path: 'respuesta-encuesta', component: respuestaEncuesta_component_1.RespuestaEncuestaComponent }]);
-            exports_1("routing", routing = router_1.RouterModule.forChild(routes));
-        }
-    };
-});
-
-$__System.registerDynamic('45', ['2c', '41'], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var Observable_1 = $__require('2c');
-  var fromPromise_1 = $__require('41');
-  Observable_1.Observable.fromPromise = fromPromise_1.fromPromise;
-  
-
-  return module.exports;
-});
-$__System.registerDynamic('46', ['2c', '47'], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var Observable_1 = $__require('2c');
-  var mergeMap_1 = $__require('47');
-  Observable_1.Observable.prototype.mergeMap = mergeMap_1.mergeMap;
-  Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("48", ["3", "7", "2c", "45", "46"], true, function ($__require, exports, module) {
+$__System.registerDynamic('48', ['2b', '32', '49'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -23122,6 +23331,4698 @@ $__System.registerDynamic("48", ["3", "7", "2c", "45", "46"], true, function ($_
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
+    var root_1 = $__require('2b');
+    var Observable_1 = $__require('32');
+    var iterator_1 = $__require('49');
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var IteratorObservable = function (_super) {
+        __extends(IteratorObservable, _super);
+        function IteratorObservable(iterator, scheduler) {
+            _super.call(this);
+            this.scheduler = scheduler;
+            if (iterator == null) {
+                throw new Error('iterator cannot be null.');
+            }
+            this.iterator = getIterator(iterator);
+        }
+        IteratorObservable.create = function (iterator, scheduler) {
+            return new IteratorObservable(iterator, scheduler);
+        };
+        IteratorObservable.dispatch = function (state) {
+            var index = state.index,
+                hasError = state.hasError,
+                iterator = state.iterator,
+                subscriber = state.subscriber;
+            if (hasError) {
+                subscriber.error(state.error);
+                return;
+            }
+            var result = iterator.next();
+            if (result.done) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(result.value);
+            state.index = index + 1;
+            if (subscriber.closed) {
+                return;
+            }
+            this.schedule(state);
+        };
+        IteratorObservable.prototype._subscribe = function (subscriber) {
+            var index = 0;
+            var _a = this,
+                iterator = _a.iterator,
+                scheduler = _a.scheduler;
+            if (scheduler) {
+                return scheduler.schedule(IteratorObservable.dispatch, 0, {
+                    index: index, iterator: iterator, subscriber: subscriber
+                });
+            } else {
+                do {
+                    var result = iterator.next();
+                    if (result.done) {
+                        subscriber.complete();
+                        break;
+                    } else {
+                        subscriber.next(result.value);
+                    }
+                    if (subscriber.closed) {
+                        break;
+                    }
+                } while (true);
+            }
+        };
+        return IteratorObservable;
+    }(Observable_1.Observable);
+    exports.IteratorObservable = IteratorObservable;
+    var StringIterator = function () {
+        function StringIterator(str, idx, len) {
+            if (idx === void 0) {
+                idx = 0;
+            }
+            if (len === void 0) {
+                len = str.length;
+            }
+            this.str = str;
+            this.idx = idx;
+            this.len = len;
+        }
+        StringIterator.prototype[iterator_1.$$iterator] = function () {
+            return this;
+        };
+        StringIterator.prototype.next = function () {
+            return this.idx < this.len ? {
+                done: false,
+                value: this.str.charAt(this.idx++)
+            } : {
+                done: true,
+                value: undefined
+            };
+        };
+        return StringIterator;
+    }();
+    var ArrayIterator = function () {
+        function ArrayIterator(arr, idx, len) {
+            if (idx === void 0) {
+                idx = 0;
+            }
+            if (len === void 0) {
+                len = toLength(arr);
+            }
+            this.arr = arr;
+            this.idx = idx;
+            this.len = len;
+        }
+        ArrayIterator.prototype[iterator_1.$$iterator] = function () {
+            return this;
+        };
+        ArrayIterator.prototype.next = function () {
+            return this.idx < this.len ? {
+                done: false,
+                value: this.arr[this.idx++]
+            } : {
+                done: true,
+                value: undefined
+            };
+        };
+        return ArrayIterator;
+    }();
+    function getIterator(obj) {
+        var i = obj[iterator_1.$$iterator];
+        if (!i && typeof obj === 'string') {
+            return new StringIterator(obj);
+        }
+        if (!i && obj.length !== undefined) {
+            return new ArrayIterator(obj);
+        }
+        if (!i) {
+            throw new TypeError('object is not iterable');
+        }
+        return obj[iterator_1.$$iterator]();
+    }
+    var maxSafeInteger = Math.pow(2, 53) - 1;
+    function toLength(o) {
+        var len = +o.length;
+        if (isNaN(len)) {
+            return 0;
+        }
+        if (len === 0 || !numberIsFinite(len)) {
+            return len;
+        }
+        len = sign(len) * Math.floor(Math.abs(len));
+        if (len <= 0) {
+            return 0;
+        }
+        if (len > maxSafeInteger) {
+            return maxSafeInteger;
+        }
+        return len;
+    }
+    function numberIsFinite(value) {
+        return typeof value === 'number' && root_1.root.isFinite(value);
+    }
+    function sign(value) {
+        var valueAsNumber = +value;
+        if (valueAsNumber === 0) {
+            return valueAsNumber;
+        }
+        if (isNaN(valueAsNumber)) {
+            return valueAsNumber;
+        }
+        return valueAsNumber < 0 ? -1 : 1;
+    }
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('4a', ['32', '4b', '4c'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Observable_1 = $__require('32');
+    var ScalarObservable_1 = $__require('4b');
+    var EmptyObservable_1 = $__require('4c');
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var ArrayLikeObservable = function (_super) {
+        __extends(ArrayLikeObservable, _super);
+        function ArrayLikeObservable(arrayLike, scheduler) {
+            _super.call(this);
+            this.arrayLike = arrayLike;
+            this.scheduler = scheduler;
+            if (!scheduler && arrayLike.length === 1) {
+                this._isScalar = true;
+                this.value = arrayLike[0];
+            }
+        }
+        ArrayLikeObservable.create = function (arrayLike, scheduler) {
+            var length = arrayLike.length;
+            if (length === 0) {
+                return new EmptyObservable_1.EmptyObservable();
+            } else if (length === 1) {
+                return new ScalarObservable_1.ScalarObservable(arrayLike[0], scheduler);
+            } else {
+                return new ArrayLikeObservable(arrayLike, scheduler);
+            }
+        };
+        ArrayLikeObservable.dispatch = function (state) {
+            var arrayLike = state.arrayLike,
+                index = state.index,
+                length = state.length,
+                subscriber = state.subscriber;
+            if (subscriber.closed) {
+                return;
+            }
+            if (index >= length) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(arrayLike[index]);
+            state.index = index + 1;
+            this.schedule(state);
+        };
+        ArrayLikeObservable.prototype._subscribe = function (subscriber) {
+            var index = 0;
+            var _a = this,
+                arrayLike = _a.arrayLike,
+                scheduler = _a.scheduler;
+            var length = arrayLike.length;
+            if (scheduler) {
+                return scheduler.schedule(ArrayLikeObservable.dispatch, 0, {
+                    arrayLike: arrayLike, index: index, length: length, subscriber: subscriber
+                });
+            } else {
+                for (var i = 0; i < length && !subscriber.closed; i++) {
+                    subscriber.next(arrayLike[i]);
+                }
+                subscriber.complete();
+            }
+        };
+        return ArrayLikeObservable;
+    }(Observable_1.Observable);
+    exports.ArrayLikeObservable = ArrayLikeObservable;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('4d', ['32'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var Observable_1 = $__require('32');
+    /**
+     * Represents a push-based event or value that an {@link Observable} can emit.
+     * This class is particularly useful for operators that manage notifications,
+     * like {@link materialize}, {@link dematerialize}, {@link observeOn}, and
+     * others. Besides wrapping the actual delivered value, it also annotates it
+     * with metadata of, for instance, what type of push message it is (`next`,
+     * `error`, or `complete`).
+     *
+     * @see {@link materialize}
+     * @see {@link dematerialize}
+     * @see {@link observeOn}
+     *
+     * @class Notification<T>
+     */
+    var Notification = function () {
+        function Notification(kind, value, exception) {
+            this.kind = kind;
+            this.value = value;
+            this.exception = exception;
+            this.hasValue = kind === 'N';
+        }
+        /**
+         * Delivers to the given `observer` the value wrapped by this Notification.
+         * @param {Observer} observer
+         * @return
+         */
+        Notification.prototype.observe = function (observer) {
+            switch (this.kind) {
+                case 'N':
+                    return observer.next && observer.next(this.value);
+                case 'E':
+                    return observer.error && observer.error(this.exception);
+                case 'C':
+                    return observer.complete && observer.complete();
+            }
+        };
+        /**
+         * Given some {@link Observer} callbacks, deliver the value represented by the
+         * current Notification to the correctly corresponding callback.
+         * @param {function(value: T): void} next An Observer `next` callback.
+         * @param {function(err: any): void} [error] An Observer `error` callback.
+         * @param {function(): void} [complete] An Observer `complete` callback.
+         * @return {any}
+         */
+        Notification.prototype.do = function (next, error, complete) {
+            var kind = this.kind;
+            switch (kind) {
+                case 'N':
+                    return next && next(this.value);
+                case 'E':
+                    return error && error(this.exception);
+                case 'C':
+                    return complete && complete();
+            }
+        };
+        /**
+         * Takes an Observer or its individual callback functions, and calls `observe`
+         * or `do` methods accordingly.
+         * @param {Observer|function(value: T): void} nextOrObserver An Observer or
+         * the `next` callback.
+         * @param {function(err: any): void} [error] An Observer `error` callback.
+         * @param {function(): void} [complete] An Observer `complete` callback.
+         * @return {any}
+         */
+        Notification.prototype.accept = function (nextOrObserver, error, complete) {
+            if (nextOrObserver && typeof nextOrObserver.next === 'function') {
+                return this.observe(nextOrObserver);
+            } else {
+                return this.do(nextOrObserver, error, complete);
+            }
+        };
+        /**
+         * Returns a simple Observable that just delivers the notification represented
+         * by this Notification instance.
+         * @return {any}
+         */
+        Notification.prototype.toObservable = function () {
+            var kind = this.kind;
+            switch (kind) {
+                case 'N':
+                    return Observable_1.Observable.of(this.value);
+                case 'E':
+                    return Observable_1.Observable.throw(this.exception);
+                case 'C':
+                    return Observable_1.Observable.empty();
+            }
+            throw new Error('unexpected notification kind value');
+        };
+        /**
+         * A shortcut to create a Notification instance of the type `next` from a
+         * given value.
+         * @param {T} value The `next` value.
+         * @return {Notification<T>} The "next" Notification representing the
+         * argument.
+         */
+        Notification.createNext = function (value) {
+            if (typeof value !== 'undefined') {
+                return new Notification('N', value);
+            }
+            return this.undefinedValueNotification;
+        };
+        /**
+         * A shortcut to create a Notification instance of the type `error` from a
+         * given error.
+         * @param {any} [err] The `error` exception.
+         * @return {Notification<T>} The "error" Notification representing the
+         * argument.
+         */
+        Notification.createError = function (err) {
+            return new Notification('E', undefined, err);
+        };
+        /**
+         * A shortcut to create a Notification instance of the type `complete`.
+         * @return {Notification<any>} The valueless "complete" Notification.
+         */
+        Notification.createComplete = function () {
+            return this.completeNotification;
+        };
+        Notification.completeNotification = new Notification('C');
+        Notification.undefinedValueNotification = new Notification('N', undefined);
+        return Notification;
+    }();
+    exports.Notification = Notification;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('4e', ['30', '4d'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require('30');
+    var Notification_1 = $__require('4d');
+    /**
+     * @see {@link Notification}
+     *
+     * @param scheduler
+     * @param delay
+     * @return {Observable<R>|WebSocketSubject<T>|Observable<T>}
+     * @method observeOn
+     * @owner Observable
+     */
+    function observeOn(scheduler, delay) {
+        if (delay === void 0) {
+            delay = 0;
+        }
+        return this.lift(new ObserveOnOperator(scheduler, delay));
+    }
+    exports.observeOn = observeOn;
+    var ObserveOnOperator = function () {
+        function ObserveOnOperator(scheduler, delay) {
+            if (delay === void 0) {
+                delay = 0;
+            }
+            this.scheduler = scheduler;
+            this.delay = delay;
+        }
+        ObserveOnOperator.prototype.call = function (subscriber, source) {
+            return source._subscribe(new ObserveOnSubscriber(subscriber, this.scheduler, this.delay));
+        };
+        return ObserveOnOperator;
+    }();
+    exports.ObserveOnOperator = ObserveOnOperator;
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var ObserveOnSubscriber = function (_super) {
+        __extends(ObserveOnSubscriber, _super);
+        function ObserveOnSubscriber(destination, scheduler, delay) {
+            if (delay === void 0) {
+                delay = 0;
+            }
+            _super.call(this, destination);
+            this.scheduler = scheduler;
+            this.delay = delay;
+        }
+        ObserveOnSubscriber.dispatch = function (arg) {
+            var notification = arg.notification,
+                destination = arg.destination;
+            notification.observe(destination);
+        };
+        ObserveOnSubscriber.prototype.scheduleMessage = function (notification) {
+            this.add(this.scheduler.schedule(ObserveOnSubscriber.dispatch, this.delay, new ObserveOnMessage(notification, this.destination)));
+        };
+        ObserveOnSubscriber.prototype._next = function (value) {
+            this.scheduleMessage(Notification_1.Notification.createNext(value));
+        };
+        ObserveOnSubscriber.prototype._error = function (err) {
+            this.scheduleMessage(Notification_1.Notification.createError(err));
+        };
+        ObserveOnSubscriber.prototype._complete = function () {
+            this.scheduleMessage(Notification_1.Notification.createComplete());
+        };
+        return ObserveOnSubscriber;
+    }(Subscriber_1.Subscriber);
+    exports.ObserveOnSubscriber = ObserveOnSubscriber;
+    var ObserveOnMessage = function () {
+        function ObserveOnMessage(notification, destination) {
+            this.notification = notification;
+            this.destination = destination;
+        }
+        return ObserveOnMessage;
+    }();
+    exports.ObserveOnMessage = ObserveOnMessage;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('4f', ['50', '51', '52', '48', '53', '4a', '49', '32', '4e', '54'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var isArray_1 = $__require('50');
+    var isPromise_1 = $__require('51');
+    var PromiseObservable_1 = $__require('52');
+    var IteratorObservable_1 = $__require('48');
+    var ArrayObservable_1 = $__require('53');
+    var ArrayLikeObservable_1 = $__require('4a');
+    var iterator_1 = $__require('49');
+    var Observable_1 = $__require('32');
+    var observeOn_1 = $__require('4e');
+    var observable_1 = $__require('54');
+    var isArrayLike = function (x) {
+        return x && typeof x.length === 'number';
+    };
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var FromObservable = function (_super) {
+        __extends(FromObservable, _super);
+        function FromObservable(ish, scheduler) {
+            _super.call(this, null);
+            this.ish = ish;
+            this.scheduler = scheduler;
+        }
+        /**
+         * Creates an Observable from an Array, an array-like object, a Promise, an
+         * iterable object, or an Observable-like object.
+         *
+         * <span class="informal">Converts almost anything to an Observable.</span>
+         *
+         * <img src="./img/from.png" width="100%">
+         *
+         * Convert various other objects and data types into Observables. `from`
+         * converts a Promise or an array-like or an
+         * [iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable)
+         * object into an Observable that emits the items in that promise or array or
+         * iterable. A String, in this context, is treated as an array of characters.
+         * Observable-like objects (contains a function named with the ES2015 Symbol
+         * for Observable) can also be converted through this operator.
+         *
+         * @example <caption>Converts an array to an Observable</caption>
+         * var array = [10, 20, 30];
+         * var result = Rx.Observable.from(array);
+         * result.subscribe(x => console.log(x));
+         *
+         * @example <caption>Convert an infinite iterable (from a generator) to an Observable</caption>
+         * function* generateDoubles(seed) {
+         *   var i = seed;
+         *   while (true) {
+         *     yield i;
+         *     i = 2 * i; // double it
+         *   }
+         * }
+         *
+         * var iterator = generateDoubles(3);
+         * var result = Rx.Observable.from(iterator).take(10);
+         * result.subscribe(x => console.log(x));
+         *
+         * @see {@link create}
+         * @see {@link fromEvent}
+         * @see {@link fromEventPattern}
+         * @see {@link fromPromise}
+         *
+         * @param {ObservableInput<T>} ish A subscribable object, a Promise, an
+         * Observable-like, an Array, an iterable or an array-like object to be
+         * converted.
+         * @param {Scheduler} [scheduler] The scheduler on which to schedule the
+         * emissions of values.
+         * @return {Observable<T>} The Observable whose values are originally from the
+         * input object that was converted.
+         * @static true
+         * @name from
+         * @owner Observable
+         */
+        FromObservable.create = function (ish, scheduler) {
+            if (ish != null) {
+                if (typeof ish[observable_1.$$observable] === 'function') {
+                    if (ish instanceof Observable_1.Observable && !scheduler) {
+                        return ish;
+                    }
+                    return new FromObservable(ish, scheduler);
+                } else if (isArray_1.isArray(ish)) {
+                    return new ArrayObservable_1.ArrayObservable(ish, scheduler);
+                } else if (isPromise_1.isPromise(ish)) {
+                    return new PromiseObservable_1.PromiseObservable(ish, scheduler);
+                } else if (typeof ish[iterator_1.$$iterator] === 'function' || typeof ish === 'string') {
+                    return new IteratorObservable_1.IteratorObservable(ish, scheduler);
+                } else if (isArrayLike(ish)) {
+                    return new ArrayLikeObservable_1.ArrayLikeObservable(ish, scheduler);
+                }
+            }
+            throw new TypeError((ish !== null && typeof ish || ish) + ' is not observable');
+        };
+        FromObservable.prototype._subscribe = function (subscriber) {
+            var ish = this.ish;
+            var scheduler = this.scheduler;
+            if (scheduler == null) {
+                return ish[observable_1.$$observable]().subscribe(subscriber);
+            } else {
+                return ish[observable_1.$$observable]().subscribe(new observeOn_1.ObserveOnSubscriber(subscriber, scheduler, 0));
+            }
+        };
+        return FromObservable;
+    }(Observable_1.Observable);
+    exports.FromObservable = FromObservable;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("55", ["4f"], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var FromObservable_1 = $__require("4f");
+  exports.from = FromObservable_1.FromObservable.create;
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("4b", ["32"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Observable_1 = $__require("32");
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var ScalarObservable = function (_super) {
+        __extends(ScalarObservable, _super);
+        function ScalarObservable(value, scheduler) {
+            _super.call(this);
+            this.value = value;
+            this.scheduler = scheduler;
+            this._isScalar = true;
+            if (scheduler) {
+                this._isScalar = false;
+            }
+        }
+        ScalarObservable.create = function (value, scheduler) {
+            return new ScalarObservable(value, scheduler);
+        };
+        ScalarObservable.dispatch = function (state) {
+            var done = state.done,
+                value = state.value,
+                subscriber = state.subscriber;
+            if (done) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(value);
+            if (subscriber.closed) {
+                return;
+            }
+            state.done = true;
+            this.schedule(state);
+        };
+        ScalarObservable.prototype._subscribe = function (subscriber) {
+            var value = this.value;
+            var scheduler = this.scheduler;
+            if (scheduler) {
+                return scheduler.schedule(ScalarObservable.dispatch, 0, {
+                    done: false, value: value, subscriber: subscriber
+                });
+            } else {
+                subscriber.next(value);
+                if (!subscriber.closed) {
+                    subscriber.complete();
+                }
+            }
+        };
+        return ScalarObservable;
+    }(Observable_1.Observable);
+    exports.ScalarObservable = ScalarObservable;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("4c", ["32"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Observable_1 = $__require("32");
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var EmptyObservable = function (_super) {
+        __extends(EmptyObservable, _super);
+        function EmptyObservable(scheduler) {
+            _super.call(this);
+            this.scheduler = scheduler;
+        }
+        /**
+         * Creates an Observable that emits no items to the Observer and immediately
+         * emits a complete notification.
+         *
+         * <span class="informal">Just emits 'complete', and nothing else.
+         * </span>
+         *
+         * <img src="./img/empty.png" width="100%">
+         *
+         * This static operator is useful for creating a simple Observable that only
+         * emits the complete notification. It can be used for composing with other
+         * Observables, such as in a {@link mergeMap}.
+         *
+         * @example <caption>Emit the number 7, then complete.</caption>
+         * var result = Rx.Observable.empty().startWith(7);
+         * result.subscribe(x => console.log(x));
+         *
+         * @example <caption>Map and flatten only odd numbers to the sequence 'a', 'b', 'c'</caption>
+         * var interval = Rx.Observable.interval(1000);
+         * var result = interval.mergeMap(x =>
+         *   x % 2 === 1 ? Rx.Observable.of('a', 'b', 'c') : Rx.Observable.empty()
+         * );
+         * result.subscribe(x => console.log(x));
+         *
+         * @see {@link create}
+         * @see {@link never}
+         * @see {@link of}
+         * @see {@link throw}
+         *
+         * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
+         * the emission of the complete notification.
+         * @return {Observable} An "empty" Observable: emits only the complete
+         * notification.
+         * @static true
+         * @name empty
+         * @owner Observable
+         */
+        EmptyObservable.create = function (scheduler) {
+            return new EmptyObservable(scheduler);
+        };
+        EmptyObservable.dispatch = function (arg) {
+            var subscriber = arg.subscriber;
+            subscriber.complete();
+        };
+        EmptyObservable.prototype._subscribe = function (subscriber) {
+            var scheduler = this.scheduler;
+            if (scheduler) {
+                return scheduler.schedule(EmptyObservable.dispatch, 0, { subscriber: subscriber });
+            } else {
+                subscriber.complete();
+            }
+        };
+        return EmptyObservable;
+    }(Observable_1.Observable);
+    exports.EmptyObservable = EmptyObservable;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("56", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isScheduler(value) {
+        return value && typeof value.schedule === 'function';
+    }
+    exports.isScheduler = isScheduler;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('53', ['32', '4b', '4c', '56'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Observable_1 = $__require('32');
+    var ScalarObservable_1 = $__require('4b');
+    var EmptyObservable_1 = $__require('4c');
+    var isScheduler_1 = $__require('56');
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @extends {Ignored}
+     * @hide true
+     */
+    var ArrayObservable = function (_super) {
+        __extends(ArrayObservable, _super);
+        function ArrayObservable(array, scheduler) {
+            _super.call(this);
+            this.array = array;
+            this.scheduler = scheduler;
+            if (!scheduler && array.length === 1) {
+                this._isScalar = true;
+                this.value = array[0];
+            }
+        }
+        ArrayObservable.create = function (array, scheduler) {
+            return new ArrayObservable(array, scheduler);
+        };
+        /**
+         * Creates an Observable that emits some values you specify as arguments,
+         * immediately one after the other, and then emits a complete notification.
+         *
+         * <span class="informal">Emits the arguments you provide, then completes.
+         * </span>
+         *
+         * <img src="./img/of.png" width="100%">
+         *
+         * This static operator is useful for creating a simple Observable that only
+         * emits the arguments given, and the complete notification thereafter. It can
+         * be used for composing with other Observables, such as with {@link concat}.
+         * By default, it uses a `null` Scheduler, which means the `next`
+         * notifications are sent synchronously, although with a different Scheduler
+         * it is possible to determine when those notifications will be delivered.
+         *
+         * @example <caption>Emit 10, 20, 30, then 'a', 'b', 'c', then start ticking every second.</caption>
+         * var numbers = Rx.Observable.of(10, 20, 30);
+         * var letters = Rx.Observable.of('a', 'b', 'c');
+         * var interval = Rx.Observable.interval(1000);
+         * var result = numbers.concat(letters).concat(interval);
+         * result.subscribe(x => console.log(x));
+         *
+         * @see {@link create}
+         * @see {@link empty}
+         * @see {@link never}
+         * @see {@link throw}
+         *
+         * @param {...T} values Arguments that represent `next` values to be emitted.
+         * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
+         * the emissions of the `next` notifications.
+         * @return {Observable<T>} An Observable that emits each given input value.
+         * @static true
+         * @name of
+         * @owner Observable
+         */
+        ArrayObservable.of = function () {
+            var array = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                array[_i - 0] = arguments[_i];
+            }
+            var scheduler = array[array.length - 1];
+            if (isScheduler_1.isScheduler(scheduler)) {
+                array.pop();
+            } else {
+                scheduler = null;
+            }
+            var len = array.length;
+            if (len > 1) {
+                return new ArrayObservable(array, scheduler);
+            } else if (len === 1) {
+                return new ScalarObservable_1.ScalarObservable(array[0], scheduler);
+            } else {
+                return new EmptyObservable_1.EmptyObservable(scheduler);
+            }
+        };
+        ArrayObservable.dispatch = function (state) {
+            var array = state.array,
+                index = state.index,
+                count = state.count,
+                subscriber = state.subscriber;
+            if (index >= count) {
+                subscriber.complete();
+                return;
+            }
+            subscriber.next(array[index]);
+            if (subscriber.closed) {
+                return;
+            }
+            state.index = index + 1;
+            this.schedule(state);
+        };
+        ArrayObservable.prototype._subscribe = function (subscriber) {
+            var index = 0;
+            var array = this.array;
+            var count = array.length;
+            var scheduler = this.scheduler;
+            if (scheduler) {
+                return scheduler.schedule(ArrayObservable.dispatch, 0, {
+                    array: array, index: index, count: count, subscriber: subscriber
+                });
+            } else {
+                for (var i = 0; i < count && !subscriber.closed; i++) {
+                    subscriber.next(array[i]);
+                }
+                subscriber.complete();
+            }
+        };
+        return ArrayObservable;
+    }(Observable_1.Observable);
+    exports.ArrayObservable = ArrayObservable;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("57", ["53"], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var ArrayObservable_1 = $__require("53");
+  exports.of = ArrayObservable_1.ArrayObservable.of;
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("58", ["30"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require("30");
+    /**
+     * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
+     * @param {function} predicate a function for determining if an item meets a specified condition.
+     * @param {any} [thisArg] optional object to use for `this` in the callback
+     * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
+     * @method every
+     * @owner Observable
+     */
+    function every(predicate, thisArg) {
+        return this.lift(new EveryOperator(predicate, thisArg, this));
+    }
+    exports.every = every;
+    var EveryOperator = function () {
+        function EveryOperator(predicate, thisArg, source) {
+            this.predicate = predicate;
+            this.thisArg = thisArg;
+            this.source = source;
+        }
+        EveryOperator.prototype.call = function (observer, source) {
+            return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
+        };
+        return EveryOperator;
+    }();
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var EverySubscriber = function (_super) {
+        __extends(EverySubscriber, _super);
+        function EverySubscriber(destination, predicate, thisArg, source) {
+            _super.call(this, destination);
+            this.predicate = predicate;
+            this.thisArg = thisArg;
+            this.source = source;
+            this.index = 0;
+            this.thisArg = thisArg || this;
+        }
+        EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
+            this.destination.next(everyValueMatch);
+            this.destination.complete();
+        };
+        EverySubscriber.prototype._next = function (value) {
+            var result = false;
+            try {
+                result = this.predicate.call(this.thisArg, value, this.index++, this.source);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            if (!result) {
+                this.notifyComplete(false);
+            }
+        };
+        EverySubscriber.prototype._complete = function () {
+            this.notifyComplete(true);
+        };
+        return EverySubscriber;
+    }(Subscriber_1.Subscriber);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('59', ['30'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require('30');
+    /**
+     * Applies an accumulator function over the source Observable, and returns the
+     * accumulated result when the source completes, given an optional seed value.
+     *
+     * <span class="informal">Combines together all values emitted on the source,
+     * using an accumulator function that knows how to join a new source value into
+     * the accumulation from the past.</span>
+     *
+     * <img src="./img/reduce.png" width="100%">
+     *
+     * Like
+     * [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce),
+     * `reduce` applies an `accumulator` function against an accumulation and each
+     * value of the source Observable (from the past) to reduce it to a single
+     * value, emitted on the output Observable. Note that `reduce` will only emit
+     * one value, only when the source Observable completes. It is equivalent to
+     * applying operator {@link scan} followed by operator {@link last}.
+     *
+     * Returns an Observable that applies a specified `accumulator` function to each
+     * item emitted by the source Observable. If a `seed` value is specified, then
+     * that value will be used as the initial value for the accumulator. If no seed
+     * value is specified, the first item of the source is used as the seed.
+     *
+     * @example <caption>Count the number of click events that happened in 5 seconds</caption>
+     * var clicksInFiveSeconds = Rx.Observable.fromEvent(document, 'click')
+     *   .takeUntil(Rx.Observable.interval(5000));
+     * var ones = clicksInFiveSeconds.mapTo(1);
+     * var seed = 0;
+     * var count = ones.reduce((acc, one) => acc + one, seed);
+     * count.subscribe(x => console.log(x));
+     *
+     * @see {@link count}
+     * @see {@link expand}
+     * @see {@link mergeScan}
+     * @see {@link scan}
+     *
+     * @param {function(acc: R, value: T): R} accumulator The accumulator function
+     * called on each source value.
+     * @param {R} [seed] The initial accumulation value.
+     * @return {Observable<R>} An observable of the accumulated values.
+     * @return {Observable<R>} An Observable that emits a single value that is the
+     * result of accumulating the values emitted by the source Observable.
+     * @method reduce
+     * @owner Observable
+     */
+    function reduce(accumulator, seed) {
+        return this.lift(new ReduceOperator(accumulator, seed));
+    }
+    exports.reduce = reduce;
+    var ReduceOperator = function () {
+        function ReduceOperator(accumulator, seed) {
+            this.accumulator = accumulator;
+            this.seed = seed;
+        }
+        ReduceOperator.prototype.call = function (subscriber, source) {
+            return source._subscribe(new ReduceSubscriber(subscriber, this.accumulator, this.seed));
+        };
+        return ReduceOperator;
+    }();
+    exports.ReduceOperator = ReduceOperator;
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var ReduceSubscriber = function (_super) {
+        __extends(ReduceSubscriber, _super);
+        function ReduceSubscriber(destination, accumulator, seed) {
+            _super.call(this, destination);
+            this.accumulator = accumulator;
+            this.hasValue = false;
+            this.acc = seed;
+            this.accumulator = accumulator;
+            this.hasSeed = typeof seed !== 'undefined';
+        }
+        ReduceSubscriber.prototype._next = function (value) {
+            if (this.hasValue || (this.hasValue = this.hasSeed)) {
+                this._tryReduce(value);
+            } else {
+                this.acc = value;
+                this.hasValue = true;
+            }
+        };
+        ReduceSubscriber.prototype._tryReduce = function (value) {
+            var result;
+            try {
+                result = this.accumulator(this.acc, value);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            this.acc = result;
+        };
+        ReduceSubscriber.prototype._complete = function () {
+            if (this.hasValue || this.hasSeed) {
+                this.destination.next(this.acc);
+            }
+            this.destination.complete();
+        };
+        return ReduceSubscriber;
+    }(Subscriber_1.Subscriber);
+    exports.ReduceSubscriber = ReduceSubscriber;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('5a', ['5b', '5c'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var OuterSubscriber_1 = $__require('5b');
+    var subscribeToResult_1 = $__require('5c');
+    /**
+     * Catches errors on the observable to be handled by returning a new observable or throwing an error.
+     * @param {function} selector a function that takes as arguments `err`, which is the error, and `caught`, which
+     *  is the source observable, in case you'd like to "retry" that observable by returning it again. Whatever observable
+     *  is returned by the `selector` will be used to continue the observable chain.
+     * @return {Observable} an observable that originates from either the source or the observable returned by the
+     *  catch `selector` function.
+     * @method catch
+     * @owner Observable
+     */
+    function _catch(selector) {
+        var operator = new CatchOperator(selector);
+        var caught = this.lift(operator);
+        return operator.caught = caught;
+    }
+    exports._catch = _catch;
+    var CatchOperator = function () {
+        function CatchOperator(selector) {
+            this.selector = selector;
+        }
+        CatchOperator.prototype.call = function (subscriber, source) {
+            return source._subscribe(new CatchSubscriber(subscriber, this.selector, this.caught));
+        };
+        return CatchOperator;
+    }();
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var CatchSubscriber = function (_super) {
+        __extends(CatchSubscriber, _super);
+        function CatchSubscriber(destination, selector, caught) {
+            _super.call(this, destination);
+            this.selector = selector;
+            this.caught = caught;
+        }
+        // NOTE: overriding `error` instead of `_error` because we don't want
+        // to have this flag this subscriber as `isStopped`.
+        CatchSubscriber.prototype.error = function (err) {
+            if (!this.isStopped) {
+                var result = void 0;
+                try {
+                    result = this.selector(err, this.caught);
+                } catch (err) {
+                    this.destination.error(err);
+                    return;
+                }
+                this.unsubscribe();
+                this.destination.remove(this);
+                subscribeToResult_1.subscribeToResult(this, result);
+            }
+        };
+        return CatchSubscriber;
+    }(OuterSubscriber_1.OuterSubscriber);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('5d', ['5b', '5c'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var OuterSubscriber_1 = $__require('5b');
+    var subscribeToResult_1 = $__require('5c');
+    /**
+     * Converts a higher-order Observable into a first-order Observable which
+     * concurrently delivers all values that are emitted on the inner Observables.
+     *
+     * <span class="informal">Flattens an Observable-of-Observables.</span>
+     *
+     * <img src="./img/mergeAll.png" width="100%">
+     *
+     * `mergeAll` subscribes to an Observable that emits Observables, also known as
+     * a higher-order Observable. Each time it observes one of these emitted inner
+     * Observables, it subscribes to that and delivers all the values from the
+     * inner Observable on the output Observable. The output Observable only
+     * completes once all inner Observables have completed. Any error delivered by
+     * a inner Observable will be immediately emitted on the output Observable.
+     *
+     * @example <caption>Spawn a new interval Observable for each click event, and blend their outputs as one Observable</caption>
+     * var clicks = Rx.Observable.fromEvent(document, 'click');
+     * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000));
+     * var firstOrder = higherOrder.mergeAll();
+     * firstOrder.subscribe(x => console.log(x));
+     *
+     * @example <caption>Count from 0 to 9 every second for each click, but only allow 2 concurrent timers</caption>
+     * var clicks = Rx.Observable.fromEvent(document, 'click');
+     * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000).take(10));
+     * var firstOrder = higherOrder.mergeAll(2);
+     * firstOrder.subscribe(x => console.log(x));
+     *
+     * @see {@link combineAll}
+     * @see {@link concatAll}
+     * @see {@link exhaust}
+     * @see {@link merge}
+     * @see {@link mergeMap}
+     * @see {@link mergeMapTo}
+     * @see {@link mergeScan}
+     * @see {@link switch}
+     * @see {@link zipAll}
+     *
+     * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of inner
+     * Observables being subscribed to concurrently.
+     * @return {Observable} An Observable that emits values coming from all the
+     * inner Observables emitted by the source Observable.
+     * @method mergeAll
+     * @owner Observable
+     */
+    function mergeAll(concurrent) {
+        if (concurrent === void 0) {
+            concurrent = Number.POSITIVE_INFINITY;
+        }
+        return this.lift(new MergeAllOperator(concurrent));
+    }
+    exports.mergeAll = mergeAll;
+    var MergeAllOperator = function () {
+        function MergeAllOperator(concurrent) {
+            this.concurrent = concurrent;
+        }
+        MergeAllOperator.prototype.call = function (observer, source) {
+            return source._subscribe(new MergeAllSubscriber(observer, this.concurrent));
+        };
+        return MergeAllOperator;
+    }();
+    exports.MergeAllOperator = MergeAllOperator;
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var MergeAllSubscriber = function (_super) {
+        __extends(MergeAllSubscriber, _super);
+        function MergeAllSubscriber(destination, concurrent) {
+            _super.call(this, destination);
+            this.concurrent = concurrent;
+            this.hasCompleted = false;
+            this.buffer = [];
+            this.active = 0;
+        }
+        MergeAllSubscriber.prototype._next = function (observable) {
+            if (this.active < this.concurrent) {
+                this.active++;
+                this.add(subscribeToResult_1.subscribeToResult(this, observable));
+            } else {
+                this.buffer.push(observable);
+            }
+        };
+        MergeAllSubscriber.prototype._complete = function () {
+            this.hasCompleted = true;
+            if (this.active === 0 && this.buffer.length === 0) {
+                this.destination.complete();
+            }
+        };
+        MergeAllSubscriber.prototype.notifyComplete = function (innerSub) {
+            var buffer = this.buffer;
+            this.remove(innerSub);
+            this.active--;
+            if (buffer.length > 0) {
+                this._next(buffer.shift());
+            } else if (this.active === 0 && this.hasCompleted) {
+                this.destination.complete();
+            }
+        };
+        return MergeAllSubscriber;
+    }(OuterSubscriber_1.OuterSubscriber);
+    exports.MergeAllSubscriber = MergeAllSubscriber;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("5e", ["5d"], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var mergeAll_1 = $__require("5d");
+  /**
+   * Converts a higher-order Observable into a first-order Observable by
+   * concatenating the inner Observables in order.
+   *
+   * <span class="informal">Flattens an Observable-of-Observables by putting one
+   * inner Observable after the other.</span>
+   *
+   * <img src="./img/concatAll.png" width="100%">
+   *
+   * Joins every Observable emitted by the source (a higher-order Observable), in
+   * a serial fashion. It subscribes to each inner Observable only after the
+   * previous inner Observable has completed, and merges all of their values into
+   * the returned observable.
+   *
+   * __Warning:__ If the source Observable emits Observables quickly and
+   * endlessly, and the inner Observables it emits generally complete slower than
+   * the source emits, you can run into memory issues as the incoming Observables
+   * collect in an unbounded buffer.
+   *
+   * Note: `concatAll` is equivalent to `mergeAll` with concurrency parameter set
+   * to `1`.
+   *
+   * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
+   * var clicks = Rx.Observable.fromEvent(document, 'click');
+   * var higherOrder = clicks.map(ev => Rx.Observable.interval(1000).take(4));
+   * var firstOrder = higherOrder.concatAll();
+   * firstOrder.subscribe(x => console.log(x));
+   *
+   * @see {@link combineAll}
+   * @see {@link concat}
+   * @see {@link concatMap}
+   * @see {@link concatMapTo}
+   * @see {@link exhaust}
+   * @see {@link mergeAll}
+   * @see {@link switch}
+   * @see {@link zipAll}
+   *
+   * @return {Observable} An Observable emitting values from all the inner
+   * Observables concatenated.
+   * @method concatAll
+   * @owner Observable
+   */
+  function concatAll() {
+    return this.lift(new mergeAll_1.MergeAllOperator(1));
+  }
+  exports.concatAll = concatAll;
+  
+
+  return module.exports;
+});
+$__System.registerDynamic('5f', ['30', '60'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require('30');
+    var EmptyError_1 = $__require('60');
+    /**
+     * Emits only the first value (or the first value that meets some condition)
+     * emitted by the source Observable.
+     *
+     * <span class="informal">Emits only the first value. Or emits only the first
+     * value that passes some test.</span>
+     *
+     * <img src="./img/first.png" width="100%">
+     *
+     * If called with no arguments, `first` emits the first value of the source
+     * Observable, then completes. If called with a `predicate` function, `first`
+     * emits the first value of the source that matches the specified condition. It
+     * may also take a `resultSelector` function to produce the output value from
+     * the input value, and a `defaultValue` to emit in case the source completes
+     * before it is able to emit a valid value. Throws an error if `defaultValue`
+     * was not provided and a matching element is not found.
+     *
+     * @example <caption>Emit only the first click that happens on the DOM</caption>
+     * var clicks = Rx.Observable.fromEvent(document, 'click');
+     * var result = clicks.first();
+     * result.subscribe(x => console.log(x));
+     *
+     * @example <caption>Emits the first click that happens on a DIV</caption>
+     * var clicks = Rx.Observable.fromEvent(document, 'click');
+     * var result = clicks.first(ev => ev.target.tagName === 'DIV');
+     * result.subscribe(x => console.log(x));
+     *
+     * @see {@link filter}
+     * @see {@link find}
+     * @see {@link take}
+     *
+     * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+     * callback if the Observable completes before any `next` notification was sent.
+     *
+     * @param {function(value: T, index: number, source: Observable<T>): boolean} [predicate]
+     * An optional function called with each item to test for condition matching.
+     * @param {function(value: T, index: number): R} [resultSelector] A function to
+     * produce the value on the output Observable based on the values
+     * and the indices of the source Observable. The arguments passed to this
+     * function are:
+     * - `value`: the value that was emitted on the source.
+     * - `index`: the "index" of the value from the source.
+     * @param {R} [defaultValue] The default value emitted in case no valid value
+     * was found on the source.
+     * @return {Observable<T|R>} an Observable of the first item that matches the
+     * condition.
+     * @method first
+     * @owner Observable
+     */
+    function first(predicate, resultSelector, defaultValue) {
+        return this.lift(new FirstOperator(predicate, resultSelector, defaultValue, this));
+    }
+    exports.first = first;
+    var FirstOperator = function () {
+        function FirstOperator(predicate, resultSelector, defaultValue, source) {
+            this.predicate = predicate;
+            this.resultSelector = resultSelector;
+            this.defaultValue = defaultValue;
+            this.source = source;
+        }
+        FirstOperator.prototype.call = function (observer, source) {
+            return source._subscribe(new FirstSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+        };
+        return FirstOperator;
+    }();
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var FirstSubscriber = function (_super) {
+        __extends(FirstSubscriber, _super);
+        function FirstSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+            _super.call(this, destination);
+            this.predicate = predicate;
+            this.resultSelector = resultSelector;
+            this.defaultValue = defaultValue;
+            this.source = source;
+            this.index = 0;
+            this.hasCompleted = false;
+        }
+        FirstSubscriber.prototype._next = function (value) {
+            var index = this.index++;
+            if (this.predicate) {
+                this._tryPredicate(value, index);
+            } else {
+                this._emit(value, index);
+            }
+        };
+        FirstSubscriber.prototype._tryPredicate = function (value, index) {
+            var result;
+            try {
+                result = this.predicate(value, index, this.source);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            if (result) {
+                this._emit(value, index);
+            }
+        };
+        FirstSubscriber.prototype._emit = function (value, index) {
+            if (this.resultSelector) {
+                this._tryResultSelector(value, index);
+                return;
+            }
+            this._emitFinal(value);
+        };
+        FirstSubscriber.prototype._tryResultSelector = function (value, index) {
+            var result;
+            try {
+                result = this.resultSelector(value, index);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            this._emitFinal(result);
+        };
+        FirstSubscriber.prototype._emitFinal = function (value) {
+            var destination = this.destination;
+            destination.next(value);
+            destination.complete();
+            this.hasCompleted = true;
+        };
+        FirstSubscriber.prototype._complete = function () {
+            var destination = this.destination;
+            if (!this.hasCompleted && typeof this.defaultValue !== 'undefined') {
+                destination.next(this.defaultValue);
+                destination.complete();
+            } else if (!this.hasCompleted) {
+                destination.error(new EmptyError_1.EmptyError());
+            }
+        };
+        return FirstSubscriber;
+    }(Subscriber_1.Subscriber);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('60', [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    /**
+     * An error thrown when an Observable or a sequence was queried but has no
+     * elements.
+     *
+     * @see {@link first}
+     * @see {@link last}
+     * @see {@link single}
+     *
+     * @class EmptyError
+     */
+    var EmptyError = function (_super) {
+        __extends(EmptyError, _super);
+        function EmptyError() {
+            var err = _super.call(this, 'no elements in sequence');
+            this.name = err.name = 'EmptyError';
+            this.stack = err.stack;
+            this.message = err.message;
+        }
+        return EmptyError;
+    }(Error);
+    exports.EmptyError = EmptyError;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('61', ['30', '60'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require('30');
+    var EmptyError_1 = $__require('60');
+    /**
+     * Returns an Observable that emits only the last item emitted by the source Observable.
+     * It optionally takes a predicate function as a parameter, in which case, rather than emitting
+     * the last item from the source Observable, the resulting Observable will emit the last item
+     * from the source Observable that satisfies the predicate.
+     *
+     * <img src="./img/last.png" width="100%">
+     *
+     * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
+     * callback if the Observable completes before any `next` notification was sent.
+     * @param {function} predicate - the condition any source emitted item has to satisfy.
+     * @return {Observable} an Observable that emits only the last item satisfying the given condition
+     * from the source, or an NoSuchElementException if no such items are emitted.
+     * @throws - Throws if no items that match the predicate are emitted by the source Observable.
+     * @method last
+     * @owner Observable
+     */
+    function last(predicate, resultSelector, defaultValue) {
+        return this.lift(new LastOperator(predicate, resultSelector, defaultValue, this));
+    }
+    exports.last = last;
+    var LastOperator = function () {
+        function LastOperator(predicate, resultSelector, defaultValue, source) {
+            this.predicate = predicate;
+            this.resultSelector = resultSelector;
+            this.defaultValue = defaultValue;
+            this.source = source;
+        }
+        LastOperator.prototype.call = function (observer, source) {
+            return source._subscribe(new LastSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+        };
+        return LastOperator;
+    }();
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var LastSubscriber = function (_super) {
+        __extends(LastSubscriber, _super);
+        function LastSubscriber(destination, predicate, resultSelector, defaultValue, source) {
+            _super.call(this, destination);
+            this.predicate = predicate;
+            this.resultSelector = resultSelector;
+            this.defaultValue = defaultValue;
+            this.source = source;
+            this.hasValue = false;
+            this.index = 0;
+            if (typeof defaultValue !== 'undefined') {
+                this.lastValue = defaultValue;
+                this.hasValue = true;
+            }
+        }
+        LastSubscriber.prototype._next = function (value) {
+            var index = this.index++;
+            if (this.predicate) {
+                this._tryPredicate(value, index);
+            } else {
+                if (this.resultSelector) {
+                    this._tryResultSelector(value, index);
+                    return;
+                }
+                this.lastValue = value;
+                this.hasValue = true;
+            }
+        };
+        LastSubscriber.prototype._tryPredicate = function (value, index) {
+            var result;
+            try {
+                result = this.predicate(value, index, this.source);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            if (result) {
+                if (this.resultSelector) {
+                    this._tryResultSelector(value, index);
+                    return;
+                }
+                this.lastValue = value;
+                this.hasValue = true;
+            }
+        };
+        LastSubscriber.prototype._tryResultSelector = function (value, index) {
+            var result;
+            try {
+                result = this.resultSelector(value, index);
+            } catch (err) {
+                this.destination.error(err);
+                return;
+            }
+            this.lastValue = result;
+            this.hasValue = true;
+        };
+        LastSubscriber.prototype._complete = function () {
+            var destination = this.destination;
+            if (this.hasValue) {
+                destination.next(this.lastValue);
+                destination.complete();
+            } else {
+                destination.error(new EmptyError_1.EmptyError());
+            }
+        };
+        return LastSubscriber;
+    }(Subscriber_1.Subscriber);
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('18', ['46', '62'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subject_1 = $__require('46');
+    var ObjectUnsubscribedError_1 = $__require('62');
+    /**
+     * @class BehaviorSubject<T>
+     */
+    var BehaviorSubject = function (_super) {
+        __extends(BehaviorSubject, _super);
+        function BehaviorSubject(_value) {
+            _super.call(this);
+            this._value = _value;
+        }
+        Object.defineProperty(BehaviorSubject.prototype, "value", {
+            get: function () {
+                return this.getValue();
+            },
+            enumerable: true,
+            configurable: true
+        });
+        BehaviorSubject.prototype._subscribe = function (subscriber) {
+            var subscription = _super.prototype._subscribe.call(this, subscriber);
+            if (subscription && !subscription.closed) {
+                subscriber.next(this._value);
+            }
+            return subscription;
+        };
+        BehaviorSubject.prototype.getValue = function () {
+            if (this.hasError) {
+                throw this.thrownError;
+            } else if (this.closed) {
+                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+            } else {
+                return this._value;
+            }
+        };
+        BehaviorSubject.prototype.next = function (value) {
+            _super.prototype.next.call(this, this._value = value);
+        };
+        return BehaviorSubject;
+    }(Subject_1.Subject);
+    exports.BehaviorSubject = BehaviorSubject;
+    
+
+    return module.exports;
+});
+(function() {
+var define = $__System.amdDefine;
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/every'), require('rxjs/operator/map'), require('rxjs/operator/mergeAll'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/operator/first'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/BehaviorSubject')) : typeof define === 'function' && define.amd ? define("8", ["exports", "15", "3", "46", "55", "57", "58", "63", "5d", "64", "59", "32", "5a", "5e", "5f", "60", "47", "61", "18"], factory) : (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx));
+}(this, function(exports, _angular_common, _angular_core, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_operator_every, rxjs_operator_map, rxjs_operator_mergeAll, rxjs_operator_mergeMap, rxjs_operator_reduce, rxjs_Observable, rxjs_operator_catch, rxjs_operator_concatAll, rxjs_operator_first, rxjs_util_EmptyError, rxjs_observable_fromPromise, l, rxjs_BehaviorSubject) {
+  'use strict';
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var PRIMARY_OUTLET = 'primary';
+  var NavigationCancelingError = (function(_super) {
+    __extends(NavigationCancelingError, _super);
+    function NavigationCancelingError(message) {
+      _super.call(this, message);
+      this.message = message;
+      this.stack = (new Error(message)).stack;
+    }
+    NavigationCancelingError.prototype.toString = function() {
+      return this.message;
+    };
+    return NavigationCancelingError;
+  }(Error));
+  function shallowEqualArrays(a, b) {
+    if (a.length !== b.length)
+      return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (!shallowEqual(a[i], b[i]))
+        return false;
+    }
+    return true;
+  }
+  function shallowEqual(a, b) {
+    var k1 = Object.keys(a);
+    var k2 = Object.keys(b);
+    if (k1.length != k2.length) {
+      return false;
+    }
+    var key;
+    for (var i = 0; i < k1.length; i++) {
+      key = k1[i];
+      if (a[key] !== b[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function flatten(a) {
+    var target = [];
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = 0; j < a[i].length; ++j) {
+        target.push(a[i][j]);
+      }
+    }
+    return target;
+  }
+  function last(a) {
+    return a.length > 0 ? a[a.length - 1] : null;
+  }
+  function merge(m1, m2) {
+    var m = {};
+    for (var attr in m1) {
+      if (m1.hasOwnProperty(attr)) {
+        m[attr] = m1[attr];
+      }
+    }
+    for (var attr in m2) {
+      if (m2.hasOwnProperty(attr)) {
+        m[attr] = m2[attr];
+      }
+    }
+    return m;
+  }
+  function forEach(map, callback) {
+    for (var prop in map) {
+      if (map.hasOwnProperty(prop)) {
+        callback(map[prop], prop);
+      }
+    }
+  }
+  function waitForMap(obj, fn) {
+    var waitFor = [];
+    var res = {};
+    forEach(obj, function(a, k) {
+      if (k === PRIMARY_OUTLET) {
+        waitFor.push(rxjs_operator_map.map.call(fn(k, a), function(_) {
+          res[k] = _;
+          return _;
+        }));
+      }
+    });
+    forEach(obj, function(a, k) {
+      if (k !== PRIMARY_OUTLET) {
+        waitFor.push(rxjs_operator_map.map.call(fn(k, a), function(_) {
+          res[k] = _;
+          return _;
+        }));
+      }
+    });
+    if (waitFor.length > 0) {
+      var concatted$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitFor));
+      var last$ = l.last.call(concatted$);
+      return rxjs_operator_map.map.call(last$, function() {
+        return res;
+      });
+    } else {
+      return rxjs_observable_of.of(res);
+    }
+  }
+  function andObservables(observables) {
+    var merged$ = rxjs_operator_mergeAll.mergeAll.call(observables);
+    return rxjs_operator_every.every.call(merged$, function(result) {
+      return result === true;
+    });
+  }
+  function wrapIntoObservable(value) {
+    if (value instanceof rxjs_Observable.Observable) {
+      return value;
+    } else if (value instanceof Promise) {
+      return rxjs_observable_fromPromise.fromPromise(value);
+    } else {
+      return rxjs_observable_of.of(value);
+    }
+  }
+  var ROUTES = new _angular_core.OpaqueToken('ROUTES');
+  var LoadedRouterConfig = (function() {
+    function LoadedRouterConfig(routes, injector, factoryResolver) {
+      this.routes = routes;
+      this.injector = injector;
+      this.factoryResolver = factoryResolver;
+    }
+    return LoadedRouterConfig;
+  }());
+  var RouterConfigLoader = (function() {
+    function RouterConfigLoader(loader, compiler) {
+      this.loader = loader;
+      this.compiler = compiler;
+    }
+    RouterConfigLoader.prototype.load = function(parentInjector, loadChildren) {
+      return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function(r) {
+        var ref = r.create(parentInjector);
+        return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
+      });
+    };
+    RouterConfigLoader.prototype.loadModuleFactory = function(loadChildren) {
+      var _this = this;
+      if (typeof loadChildren === 'string') {
+        return rxjs_observable_fromPromise.fromPromise(this.loader.load(loadChildren));
+      } else {
+        var offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
+        return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function(t) {
+          return offlineMode_1 ? rxjs_observable_of.of(t) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t));
+        });
+      }
+    };
+    return RouterConfigLoader;
+  }());
+  function createEmptyUrlTree() {
+    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
+  }
+  function containsTree(container, containee, exact) {
+    if (exact) {
+      return equalSegmentGroups(container.root, containee.root);
+    } else {
+      return containsSegmentGroup(container.root, containee.root);
+    }
+  }
+  function equalSegmentGroups(container, containee) {
+    if (!equalPath(container.segments, containee.segments))
+      return false;
+    if (container.numberOfChildren !== containee.numberOfChildren)
+      return false;
+    for (var c in containee.children) {
+      if (!container.children[c])
+        return false;
+      if (!equalSegmentGroups(container.children[c], containee.children[c]))
+        return false;
+    }
+    return true;
+  }
+  function containsSegmentGroup(container, containee) {
+    return containsSegmentGroupHelper(container, containee, containee.segments);
+  }
+  function containsSegmentGroupHelper(container, containee, containeePaths) {
+    if (container.segments.length > containeePaths.length) {
+      var current = container.segments.slice(0, containeePaths.length);
+      if (!equalPath(current, containeePaths))
+        return false;
+      if (containee.hasChildren())
+        return false;
+      return true;
+    } else if (container.segments.length === containeePaths.length) {
+      if (!equalPath(container.segments, containeePaths))
+        return false;
+      for (var c in containee.children) {
+        if (!container.children[c])
+          return false;
+        if (!containsSegmentGroup(container.children[c], containee.children[c]))
+          return false;
+      }
+      return true;
+    } else {
+      var current = containeePaths.slice(0, container.segments.length);
+      var next = containeePaths.slice(container.segments.length);
+      if (!equalPath(container.segments, current))
+        return false;
+      if (!container.children[PRIMARY_OUTLET])
+        return false;
+      return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
+    }
+  }
+  var UrlTree = (function() {
+    function UrlTree(root, queryParams, fragment) {
+      this.root = root;
+      this.queryParams = queryParams;
+      this.fragment = fragment;
+    }
+    UrlTree.prototype.toString = function() {
+      return new DefaultUrlSerializer().serialize(this);
+    };
+    return UrlTree;
+  }());
+  var UrlSegmentGroup = (function() {
+    function UrlSegmentGroup(segments, children) {
+      var _this = this;
+      this.segments = segments;
+      this.children = children;
+      this.parent = null;
+      forEach(children, function(v, k) {
+        return v.parent = _this;
+      });
+    }
+    UrlSegmentGroup.prototype.hasChildren = function() {
+      return this.numberOfChildren > 0;
+    };
+    Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
+      get: function() {
+        return Object.keys(this.children).length;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    UrlSegmentGroup.prototype.toString = function() {
+      return serializePaths(this);
+    };
+    return UrlSegmentGroup;
+  }());
+  var UrlSegment = (function() {
+    function UrlSegment(path, parameters) {
+      this.path = path;
+      this.parameters = parameters;
+    }
+    UrlSegment.prototype.toString = function() {
+      return serializePath(this);
+    };
+    return UrlSegment;
+  }());
+  function equalPath(a, b) {
+    if (a.length !== b.length)
+      return false;
+    for (var i = 0; i < a.length; ++i) {
+      if (a[i].path !== b[i].path)
+        return false;
+    }
+    return true;
+  }
+  function mapChildrenIntoArray(segment, fn) {
+    var res = [];
+    forEach(segment.children, function(child, childOutlet) {
+      if (childOutlet === PRIMARY_OUTLET) {
+        res = res.concat(fn(child, childOutlet));
+      }
+    });
+    forEach(segment.children, function(child, childOutlet) {
+      if (childOutlet !== PRIMARY_OUTLET) {
+        res = res.concat(fn(child, childOutlet));
+      }
+    });
+    return res;
+  }
+  var UrlSerializer = (function() {
+    function UrlSerializer() {}
+    return UrlSerializer;
+  }());
+  var DefaultUrlSerializer = (function() {
+    function DefaultUrlSerializer() {}
+    DefaultUrlSerializer.prototype.parse = function(url) {
+      var p = new UrlParser(url);
+      return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
+    };
+    DefaultUrlSerializer.prototype.serialize = function(tree) {
+      var segment = "/" + serializeSegment(tree.root, true);
+      var query = serializeQueryParams(tree.queryParams);
+      var fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
+      return "" + segment + query + fragment;
+    };
+    return DefaultUrlSerializer;
+  }());
+  function serializePaths(segment) {
+    return segment.segments.map(function(p) {
+      return serializePath(p);
+    }).join('/');
+  }
+  function serializeSegment(segment, root) {
+    if (segment.hasChildren() && root) {
+      var primary = segment.children[PRIMARY_OUTLET] ? serializeSegment(segment.children[PRIMARY_OUTLET], false) : '';
+      var children_1 = [];
+      forEach(segment.children, function(v, k) {
+        if (k !== PRIMARY_OUTLET) {
+          children_1.push(k + ":" + serializeSegment(v, false));
+        }
+      });
+      if (children_1.length > 0) {
+        return primary + "(" + children_1.join('//') + ")";
+      } else {
+        return "" + primary;
+      }
+    } else if (segment.hasChildren() && !root) {
+      var children = mapChildrenIntoArray(segment, function(v, k) {
+        if (k === PRIMARY_OUTLET) {
+          return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
+        } else {
+          return [(k + ":" + serializeSegment(v, false))];
+        }
+      });
+      return serializePaths(segment) + "/(" + children.join('//') + ")";
+    } else {
+      return serializePaths(segment);
+    }
+  }
+  function encode(s) {
+    return encodeURIComponent(s);
+  }
+  function decode(s) {
+    return decodeURIComponent(s);
+  }
+  function serializePath(path) {
+    return "" + encode(path.path) + serializeParams(path.parameters);
+  }
+  function serializeParams(params) {
+    return pairs(params).map(function(p) {
+      return (";" + encode(p.first) + "=" + encode(p.second));
+    }).join('');
+  }
+  function serializeQueryParams(params) {
+    var strs = pairs(params).map(function(p) {
+      return (encode(p.first) + "=" + encode(p.second));
+    });
+    return strs.length > 0 ? "?" + strs.join("&") : '';
+  }
+  var Pair = (function() {
+    function Pair(first, second) {
+      this.first = first;
+      this.second = second;
+    }
+    return Pair;
+  }());
+  function pairs(obj) {
+    var res = [];
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        res.push(new Pair(prop, obj[prop]));
+      }
+    }
+    return res;
+  }
+  var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
+  function matchSegments(str) {
+    SEGMENT_RE.lastIndex = 0;
+    var match = str.match(SEGMENT_RE);
+    return match ? match[0] : '';
+  }
+  var QUERY_PARAM_RE = /^[^=\?&#]+/;
+  function matchQueryParams(str) {
+    QUERY_PARAM_RE.lastIndex = 0;
+    var match = str.match(SEGMENT_RE);
+    return match ? match[0] : '';
+  }
+  var QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
+  function matchUrlQueryParamValue(str) {
+    QUERY_PARAM_VALUE_RE.lastIndex = 0;
+    var match = str.match(QUERY_PARAM_VALUE_RE);
+    return match ? match[0] : '';
+  }
+  var UrlParser = (function() {
+    function UrlParser(url) {
+      this.url = url;
+      this.remaining = url;
+    }
+    UrlParser.prototype.peekStartsWith = function(str) {
+      return this.remaining.startsWith(str);
+    };
+    UrlParser.prototype.capture = function(str) {
+      if (!this.remaining.startsWith(str)) {
+        throw new Error("Expected \"" + str + "\".");
+      }
+      this.remaining = this.remaining.substring(str.length);
+    };
+    UrlParser.prototype.parseRootSegment = function() {
+      if (this.remaining.startsWith('/')) {
+        this.capture('/');
+      }
+      if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
+        return new UrlSegmentGroup([], {});
+      } else {
+        return new UrlSegmentGroup([], this.parseChildren());
+      }
+    };
+    UrlParser.prototype.parseChildren = function() {
+      if (this.remaining.length == 0) {
+        return {};
+      }
+      if (this.peekStartsWith('/')) {
+        this.capture('/');
+      }
+      var paths = [];
+      if (!this.peekStartsWith('(')) {
+        paths.push(this.parseSegments());
+      }
+      while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
+        this.capture('/');
+        paths.push(this.parseSegments());
+      }
+      var children = {};
+      if (this.peekStartsWith('/(')) {
+        this.capture('/');
+        children = this.parseParens(true);
+      }
+      var res = {};
+      if (this.peekStartsWith('(')) {
+        res = this.parseParens(false);
+      }
+      if (paths.length > 0 || Object.keys(children).length > 0) {
+        res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
+      }
+      return res;
+    };
+    UrlParser.prototype.parseSegments = function() {
+      var path = matchSegments(this.remaining);
+      if (path === '' && this.peekStartsWith(';')) {
+        throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
+      }
+      this.capture(path);
+      var matrixParams = {};
+      if (this.peekStartsWith(';')) {
+        matrixParams = this.parseMatrixParams();
+      }
+      return new UrlSegment(decode(path), matrixParams);
+    };
+    UrlParser.prototype.parseQueryParams = function() {
+      var params = {};
+      if (this.peekStartsWith('?')) {
+        this.capture('?');
+        this.parseQueryParam(params);
+        while (this.remaining.length > 0 && this.peekStartsWith('&')) {
+          this.capture('&');
+          this.parseQueryParam(params);
+        }
+      }
+      return params;
+    };
+    UrlParser.prototype.parseFragment = function() {
+      if (this.peekStartsWith('#')) {
+        return decodeURI(this.remaining.substring(1));
+      } else {
+        return null;
+      }
+    };
+    UrlParser.prototype.parseMatrixParams = function() {
+      var params = {};
+      while (this.remaining.length > 0 && this.peekStartsWith(';')) {
+        this.capture(';');
+        this.parseParam(params);
+      }
+      return params;
+    };
+    UrlParser.prototype.parseParam = function(params) {
+      var key = matchSegments(this.remaining);
+      if (!key) {
+        return;
+      }
+      this.capture(key);
+      var value = '';
+      if (this.peekStartsWith('=')) {
+        this.capture('=');
+        var valueMatch = matchSegments(this.remaining);
+        if (valueMatch) {
+          value = valueMatch;
+          this.capture(value);
+        }
+      }
+      params[decode(key)] = decode(value);
+    };
+    UrlParser.prototype.parseQueryParam = function(params) {
+      var key = matchQueryParams(this.remaining);
+      if (!key) {
+        return;
+      }
+      this.capture(key);
+      var value = '';
+      if (this.peekStartsWith('=')) {
+        this.capture('=');
+        var valueMatch = matchUrlQueryParamValue(this.remaining);
+        if (valueMatch) {
+          value = valueMatch;
+          this.capture(value);
+        }
+      }
+      params[decode(key)] = decode(value);
+    };
+    UrlParser.prototype.parseParens = function(allowPrimary) {
+      var segments = {};
+      this.capture('(');
+      while (!this.peekStartsWith(')') && this.remaining.length > 0) {
+        var path = matchSegments(this.remaining);
+        var next = this.remaining[path.length];
+        if (next !== '/' && next !== ')' && next !== ';') {
+          throw new Error("Cannot parse url '" + this.url + "'");
+        }
+        var outletName = void 0;
+        if (path.indexOf(':') > -1) {
+          outletName = path.substr(0, path.indexOf(':'));
+          this.capture(outletName);
+          this.capture(':');
+        } else if (allowPrimary) {
+          outletName = PRIMARY_OUTLET;
+        }
+        var children = this.parseChildren();
+        segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] : new UrlSegmentGroup([], children);
+        if (this.peekStartsWith('//')) {
+          this.capture('//');
+        }
+      }
+      this.capture(')');
+      return segments;
+    };
+    return UrlParser;
+  }());
+  var NoMatch = (function() {
+    function NoMatch(segmentGroup) {
+      if (segmentGroup === void 0) {
+        segmentGroup = null;
+      }
+      this.segmentGroup = segmentGroup;
+    }
+    return NoMatch;
+  }());
+  var AbsoluteRedirect = (function() {
+    function AbsoluteRedirect(segments) {
+      this.segments = segments;
+    }
+    return AbsoluteRedirect;
+  }());
+  function noMatch(segmentGroup) {
+    return new rxjs_Observable.Observable(function(obs) {
+      return obs.error(new NoMatch(segmentGroup));
+    });
+  }
+  function absoluteRedirect(segments) {
+    return new rxjs_Observable.Observable(function(obs) {
+      return obs.error(new AbsoluteRedirect(segments));
+    });
+  }
+  function canLoadFails(route) {
+    return new rxjs_Observable.Observable(function(obs) {
+      return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false"));
+    });
+  }
+  function applyRedirects(injector, configLoader, urlTree, config) {
+    return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
+  }
+  var ApplyRedirects = (function() {
+    function ApplyRedirects(injector, configLoader, urlTree, config) {
+      this.injector = injector;
+      this.configLoader = configLoader;
+      this.urlTree = urlTree;
+      this.config = config;
+      this.allowRedirects = true;
+    }
+    ApplyRedirects.prototype.apply = function() {
+      var _this = this;
+      var expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
+      var urlTrees$ = rxjs_operator_map.map.call(expanded$, function(rootSegmentGroup) {
+        return _this.createUrlTree(rootSegmentGroup);
+      });
+      return rxjs_operator_catch._catch.call(urlTrees$, function(e) {
+        if (e instanceof AbsoluteRedirect) {
+          _this.allowRedirects = false;
+          var group = new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = new UrlSegmentGroup(e.segments, {}), _a));
+          return _this.match(group);
+        } else if (e instanceof NoMatch) {
+          throw _this.noMatchError(e);
+        } else {
+          throw e;
+        }
+        var _a;
+      });
+    };
+    ApplyRedirects.prototype.match = function(segmentGroup) {
+      var _this = this;
+      var expanded$ = this.expandSegmentGroup(this.injector, this.config, segmentGroup, PRIMARY_OUTLET);
+      var mapped$ = rxjs_operator_map.map.call(expanded$, function(rootSegmentGroup) {
+        return _this.createUrlTree(rootSegmentGroup);
+      });
+      return rxjs_operator_catch._catch.call(mapped$, function(e) {
+        if (e instanceof NoMatch) {
+          throw _this.noMatchError(e);
+        } else {
+          throw e;
+        }
+      });
+    };
+    ApplyRedirects.prototype.noMatchError = function(e) {
+      return new Error("Cannot match any routes: '" + e.segmentGroup + "'");
+    };
+    ApplyRedirects.prototype.createUrlTree = function(rootCandidate) {
+      var root = rootCandidate.segments.length > 0 ? new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = rootCandidate, _a)) : rootCandidate;
+      return new UrlTree(root, this.urlTree.queryParams, this.urlTree.fragment);
+      var _a;
+    };
+    ApplyRedirects.prototype.expandSegmentGroup = function(injector, routes, segmentGroup, outlet) {
+      if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+        return rxjs_operator_map.map.call(this.expandChildren(injector, routes, segmentGroup), function(children) {
+          return new UrlSegmentGroup([], children);
+        });
+      } else {
+        return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
+      }
+    };
+    ApplyRedirects.prototype.expandChildren = function(injector, routes, segmentGroup) {
+      var _this = this;
+      return waitForMap(segmentGroup.children, function(childOutlet, child) {
+        return _this.expandSegmentGroup(injector, routes, child, childOutlet);
+      });
+    };
+    ApplyRedirects.prototype.expandSegment = function(injector, segmentGroup, routes, segments, outlet, allowRedirects) {
+      var _this = this;
+      var routes$ = rxjs_observable_of.of.apply(void 0, routes);
+      var processedRoutes$ = rxjs_operator_map.map.call(routes$, function(r) {
+        var expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
+        return rxjs_operator_catch._catch.call(expanded$, function(e) {
+          if (e instanceof NoMatch)
+            return rxjs_observable_of.of(null);
+          else
+            throw e;
+        });
+      });
+      var concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
+      var first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function(s) {
+        return !!s;
+      });
+      return rxjs_operator_catch._catch.call(first$, function(e, _) {
+        if (e instanceof rxjs_util_EmptyError.EmptyError) {
+          throw new NoMatch(segmentGroup);
+        } else {
+          throw e;
+        }
+      });
+    };
+    ApplyRedirects.prototype.expandSegmentAgainstRoute = function(injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
+      if (getOutlet$1(route) !== outlet)
+        return noMatch(segmentGroup);
+      if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
+        return noMatch(segmentGroup);
+      if (route.redirectTo === undefined) {
+        return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
+      } else {
+        return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
+      }
+    };
+    ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function(injector, segmentGroup, routes, route, segments, outlet) {
+      if (route.path === '**') {
+        return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
+      } else {
+        return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
+      }
+    };
+    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function(route) {
+      var newSegments = applyRedirectCommands([], route.redirectTo, {});
+      if (route.redirectTo.startsWith('/')) {
+        return absoluteRedirect(newSegments);
+      } else {
+        return rxjs_observable_of.of(new UrlSegmentGroup(newSegments, {}));
+      }
+    };
+    ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function(injector, segmentGroup, routes, route, segments, outlet) {
+      var _a = match(segmentGroup, route, segments),
+          matched = _a.matched,
+          consumedSegments = _a.consumedSegments,
+          lastChild = _a.lastChild,
+          positionalParamSegments = _a.positionalParamSegments;
+      if (!matched)
+        return noMatch(segmentGroup);
+      var newSegments = applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
+      if (route.redirectTo.startsWith('/')) {
+        return absoluteRedirect(newSegments);
+      } else {
+        return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
+      }
+    };
+    ApplyRedirects.prototype.matchSegmentAgainstRoute = function(injector, rawSegmentGroup, route, segments) {
+      var _this = this;
+      if (route.path === '**') {
+        return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
+      } else {
+        var _a = match(rawSegmentGroup, route, segments),
+            matched = _a.matched,
+            consumedSegments_1 = _a.consumedSegments,
+            lastChild = _a.lastChild;
+        if (!matched)
+          return noMatch(rawSegmentGroup);
+        var rawSlicedSegments_1 = segments.slice(lastChild);
+        var childConfig$ = this.getChildConfig(injector, route);
+        return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function(routerConfig) {
+          var childInjector = routerConfig.injector;
+          var childConfig = routerConfig.routes;
+          var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig),
+              segmentGroup = _a.segmentGroup,
+              slicedSegments = _a.slicedSegments;
+          if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+            var expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
+            return rxjs_operator_map.map.call(expanded$, function(children) {
+              return new UrlSegmentGroup(consumedSegments_1, children);
+            });
+          } else if (childConfig.length === 0 && slicedSegments.length === 0) {
+            return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments_1, {}));
+          } else {
+            var expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
+            return rxjs_operator_map.map.call(expanded$, function(cs) {
+              return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children);
+            });
+          }
+        });
+      }
+    };
+    ApplyRedirects.prototype.getChildConfig = function(injector, route) {
+      var _this = this;
+      if (route.children) {
+        return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null));
+      } else if (route.loadChildren) {
+        return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function(shouldLoad) {
+          if (shouldLoad) {
+            if (route._loadedConfig) {
+              return rxjs_observable_of.of(route._loadedConfig);
+            } else {
+              return rxjs_operator_map.map.call(_this.configLoader.load(injector, route.loadChildren), function(r) {
+                route._loadedConfig = r;
+                return r;
+              });
+            }
+          } else {
+            return canLoadFails(route);
+          }
+        });
+      } else {
+        return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null));
+      }
+    };
+    return ApplyRedirects;
+  }());
+  function runGuards(injector, route) {
+    var canLoad = route.canLoad;
+    if (!canLoad || canLoad.length === 0)
+      return rxjs_observable_of.of(true);
+    var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function(c) {
+      var guard = injector.get(c);
+      if (guard.canLoad) {
+        return wrapIntoObservable(guard.canLoad(route));
+      } else {
+        return wrapIntoObservable(guard(route));
+      }
+    });
+    return andObservables(obs);
+  }
+  function match(segmentGroup, route, segments) {
+    var noMatch = {
+      matched: false,
+      consumedSegments: [],
+      lastChild: 0,
+      positionalParamSegments: {}
+    };
+    if (route.path === '') {
+      if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
+        return {
+          matched: false,
+          consumedSegments: [],
+          lastChild: 0,
+          positionalParamSegments: {}
+        };
+      } else {
+        return {
+          matched: true,
+          consumedSegments: [],
+          lastChild: 0,
+          positionalParamSegments: {}
+        };
+      }
+    }
+    var path = route.path;
+    var parts = path.split('/');
+    var positionalParamSegments = {};
+    var consumedSegments = [];
+    var currentIndex = 0;
+    for (var i = 0; i < parts.length; ++i) {
+      if (currentIndex >= segments.length)
+        return noMatch;
+      var current = segments[currentIndex];
+      var p = parts[i];
+      var isPosParam = p.startsWith(':');
+      if (!isPosParam && p !== current.path)
+        return noMatch;
+      if (isPosParam) {
+        positionalParamSegments[p.substring(1)] = current;
+      }
+      consumedSegments.push(current);
+      currentIndex++;
+    }
+    if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+      return {
+        matched: false,
+        consumedSegments: [],
+        lastChild: 0,
+        positionalParamSegments: {}
+      };
+    }
+    return {
+      matched: true,
+      consumedSegments: consumedSegments,
+      lastChild: currentIndex,
+      positionalParamSegments: positionalParamSegments
+    };
+  }
+  function applyRedirectCommands(segments, redirectTo, posParams) {
+    var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
+    if (r === '') {
+      return [];
+    } else {
+      return createSegments(redirectTo, r.split('/'), segments, posParams);
+    }
+  }
+  function createSegments(redirectTo, parts, segments, posParams) {
+    return parts.map(function(p) {
+      return p.startsWith(':') ? findPosParam(p, posParams, redirectTo) : findOrCreateSegment(p, segments);
+    });
+  }
+  function findPosParam(part, posParams, redirectTo) {
+    var paramName = part.substring(1);
+    var pos = posParams[paramName];
+    if (!pos)
+      throw new Error("Cannot redirect to '" + redirectTo + "'. Cannot find '" + part + "'.");
+    return pos;
+  }
+  function findOrCreateSegment(part, segments) {
+    var idx = 0;
+    for (var _i = 0,
+        segments_1 = segments; _i < segments_1.length; _i++) {
+      var s = segments_1[_i];
+      if (s.path === part) {
+        segments.splice(idx);
+        return s;
+      }
+      idx++;
+    }
+    return new UrlSegment(part, {});
+  }
+  function split(segmentGroup, consumedSegments, slicedSegments, config) {
+    if (slicedSegments.length > 0 && containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+      var s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+      return {
+        segmentGroup: mergeTrivialChildren(s),
+        slicedSegments: []
+      };
+    } else if (slicedSegments.length === 0 && containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
+      var s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+      return {
+        segmentGroup: mergeTrivialChildren(s),
+        slicedSegments: slicedSegments
+      };
+    } else {
+      return {
+        segmentGroup: segmentGroup,
+        slicedSegments: slicedSegments
+      };
+    }
+  }
+  function mergeTrivialChildren(s) {
+    if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
+      var c = s.children[PRIMARY_OUTLET];
+      return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
+    } else {
+      return s;
+    }
+  }
+  function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var res = {};
+    for (var _i = 0,
+        routes_1 = routes; _i < routes_1.length; _i++) {
+      var r = routes_1[_i];
+      if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
+        res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
+      }
+    }
+    return merge(children, res);
+  }
+  function createChildrenForEmptySegments(routes, primarySegmentGroup) {
+    var res = {};
+    res[PRIMARY_OUTLET] = primarySegmentGroup;
+    for (var _i = 0,
+        routes_2 = routes; _i < routes_2.length; _i++) {
+      var r = routes_2[_i];
+      if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
+        res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
+      }
+    }
+    return res;
+  }
+  function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function(r) {
+      return emptyPathRedirect(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET;
+    }).length > 0;
+  }
+  function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function(r) {
+      return emptyPathRedirect(segmentGroup, slicedSegments, r);
+    }).length > 0;
+  }
+  function emptyPathRedirect(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+      return false;
+    return r.path === '' && r.redirectTo !== undefined;
+  }
+  function getOutlet$1(route) {
+    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+  }
+  function validateConfig(config) {
+    config.forEach(validateNode);
+  }
+  function validateNode(route) {
+    if (Array.isArray(route)) {
+      throw new Error("Invalid route configuration: Array cannot be specified");
+    }
+    if (!!route.redirectTo && !!route.children) {
+      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
+    }
+    if (!!route.redirectTo && !!route.loadChildren) {
+      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and loadChildren cannot be used together");
+    }
+    if (!!route.children && !!route.loadChildren) {
+      throw new Error("Invalid configuration of route '" + route.path + "': children and loadChildren cannot be used together");
+    }
+    if (!!route.redirectTo && !!route.component) {
+      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
+    }
+    if (route.redirectTo === undefined && !route.component && !route.children && !route.loadChildren) {
+      throw new Error("Invalid configuration of route '" + route.path + "': one of the following must be provided (component or redirectTo or children or loadChildren)");
+    }
+    if (route.path === undefined) {
+      throw new Error("Invalid route configuration: routes must have path specified");
+    }
+    if (route.path.startsWith('/')) {
+      throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
+    }
+    if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
+      var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
+      throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
+    }
+    if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
+      throw new Error("Invalid configuration of route '" + route.path + "': pathMatch can only be set to 'prefix' or 'full'");
+    }
+  }
+  var Tree = (function() {
+    function Tree(root) {
+      this._root = root;
+    }
+    Object.defineProperty(Tree.prototype, "root", {
+      get: function() {
+        return this._root.value;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Tree.prototype.parent = function(t) {
+      var p = this.pathFromRoot(t);
+      return p.length > 1 ? p[p.length - 2] : null;
+    };
+    Tree.prototype.children = function(t) {
+      var n = findNode(t, this._root);
+      return n ? n.children.map(function(t) {
+        return t.value;
+      }) : [];
+    };
+    Tree.prototype.firstChild = function(t) {
+      var n = findNode(t, this._root);
+      return n && n.children.length > 0 ? n.children[0].value : null;
+    };
+    Tree.prototype.siblings = function(t) {
+      var p = findPath(t, this._root, []);
+      if (p.length < 2)
+        return [];
+      var c = p[p.length - 2].children.map(function(c) {
+        return c.value;
+      });
+      return c.filter(function(cc) {
+        return cc !== t;
+      });
+    };
+    Tree.prototype.pathFromRoot = function(t) {
+      return findPath(t, this._root, []).map(function(s) {
+        return s.value;
+      });
+    };
+    return Tree;
+  }());
+  function findNode(expected, c) {
+    if (expected === c.value)
+      return c;
+    for (var _i = 0,
+        _a = c.children; _i < _a.length; _i++) {
+      var cc = _a[_i];
+      var r = findNode(expected, cc);
+      if (r)
+        return r;
+    }
+    return null;
+  }
+  function findPath(expected, c, collected) {
+    collected.push(c);
+    if (expected === c.value)
+      return collected;
+    for (var _i = 0,
+        _a = c.children; _i < _a.length; _i++) {
+      var cc = _a[_i];
+      var cloned = collected.slice(0);
+      var r = findPath(expected, cc, cloned);
+      if (r.length > 0)
+        return r;
+    }
+    return [];
+  }
+  var TreeNode = (function() {
+    function TreeNode(value, children) {
+      this.value = value;
+      this.children = children;
+    }
+    TreeNode.prototype.toString = function() {
+      return "TreeNode(" + this.value + ")";
+    };
+    return TreeNode;
+  }());
+  var __extends$1 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var RouterState = (function(_super) {
+    __extends$1(RouterState, _super);
+    function RouterState(root, snapshot) {
+      _super.call(this, root);
+      this.snapshot = snapshot;
+      setRouterStateSnapshot(this, root);
+    }
+    RouterState.prototype.toString = function() {
+      return this.snapshot.toString();
+    };
+    return RouterState;
+  }(Tree));
+  function createEmptyState(urlTree, rootComponent) {
+    var snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
+    var emptyUrl = new rxjs_BehaviorSubject.BehaviorSubject([new UrlSegment('', {})]);
+    var emptyParams = new rxjs_BehaviorSubject.BehaviorSubject({});
+    var emptyData = new rxjs_BehaviorSubject.BehaviorSubject({});
+    var emptyQueryParams = new rxjs_BehaviorSubject.BehaviorSubject({});
+    var fragment = new rxjs_BehaviorSubject.BehaviorSubject('');
+    var activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
+    activated.snapshot = snapshot.root;
+    return new RouterState(new TreeNode(activated, []), snapshot);
+  }
+  function createEmptyStateSnapshot(urlTree, rootComponent) {
+    var emptyParams = {};
+    var emptyData = {};
+    var emptyQueryParams = {};
+    var fragment = '';
+    var activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
+    return new RouterStateSnapshot('', new TreeNode(activated, []));
+  }
+  var ActivatedRoute = (function() {
+    function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
+      this.url = url;
+      this.params = params;
+      this.queryParams = queryParams;
+      this.fragment = fragment;
+      this.data = data;
+      this.outlet = outlet;
+      this.component = component;
+      this._futureSnapshot = futureSnapshot;
+    }
+    Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
+      get: function() {
+        return this._futureSnapshot.routeConfig;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "root", {
+      get: function() {
+        return this._routerState.root;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "parent", {
+      get: function() {
+        return this._routerState.parent(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
+      get: function() {
+        return this._routerState.firstChild(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "children", {
+      get: function() {
+        return this._routerState.children(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
+      get: function() {
+        return this._routerState.pathFromRoot(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    ActivatedRoute.prototype.toString = function() {
+      return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
+    };
+    return ActivatedRoute;
+  }());
+  var InheritedResolve = (function() {
+    function InheritedResolve(parent, current) {
+      this.parent = parent;
+      this.current = current;
+      this.resolvedData = {};
+    }
+    Object.defineProperty(InheritedResolve.prototype, "flattenedResolvedData", {
+      get: function() {
+        return this.parent ? merge(this.parent.flattenedResolvedData, this.resolvedData) : this.resolvedData;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(InheritedResolve, "empty", {
+      get: function() {
+        return new InheritedResolve(null, {});
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return InheritedResolve;
+  }());
+  var ActivatedRouteSnapshot = (function() {
+    function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
+      this.url = url;
+      this.params = params;
+      this.queryParams = queryParams;
+      this.fragment = fragment;
+      this.data = data;
+      this.outlet = outlet;
+      this.component = component;
+      this._routeConfig = routeConfig;
+      this._urlSegment = urlSegment;
+      this._lastPathIndex = lastPathIndex;
+      this._resolve = resolve;
+    }
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
+      get: function() {
+        return this._routeConfig;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
+      get: function() {
+        return this._routerState.root;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
+      get: function() {
+        return this._routerState.parent(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
+      get: function() {
+        return this._routerState.firstChild(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
+      get: function() {
+        return this._routerState.children(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
+      get: function() {
+        return this._routerState.pathFromRoot(this);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    ActivatedRouteSnapshot.prototype.toString = function() {
+      var url = this.url.map(function(s) {
+        return s.toString();
+      }).join('/');
+      var matched = this._routeConfig ? this._routeConfig.path : '';
+      return "Route(url:'" + url + "', path:'" + matched + "')";
+    };
+    return ActivatedRouteSnapshot;
+  }());
+  var RouterStateSnapshot = (function(_super) {
+    __extends$1(RouterStateSnapshot, _super);
+    function RouterStateSnapshot(url, root) {
+      _super.call(this, root);
+      this.url = url;
+      setRouterStateSnapshot(this, root);
+    }
+    RouterStateSnapshot.prototype.toString = function() {
+      return serializeNode(this._root);
+    };
+    return RouterStateSnapshot;
+  }(Tree));
+  function setRouterStateSnapshot(state, node) {
+    node.value._routerState = state;
+    node.children.forEach(function(c) {
+      return setRouterStateSnapshot(state, c);
+    });
+  }
+  function serializeNode(node) {
+    var c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
+    return "" + node.value + c;
+  }
+  function advanceActivatedRoute(route) {
+    if (route.snapshot) {
+      if (!shallowEqual(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
+        route.queryParams.next(route._futureSnapshot.queryParams);
+      }
+      if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
+        route.fragment.next(route._futureSnapshot.fragment);
+      }
+      if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
+        route.params.next(route._futureSnapshot.params);
+        route.data.next(route._futureSnapshot.data);
+      }
+      if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
+        route.url.next(route._futureSnapshot.url);
+      }
+      route.snapshot = route._futureSnapshot;
+    } else {
+      route.snapshot = route._futureSnapshot;
+      route.data.next(route._futureSnapshot.data);
+    }
+  }
+  function createRouterState(curr, prevState) {
+    var root = createNode(curr._root, prevState ? prevState._root : undefined);
+    return new RouterState(root, curr);
+  }
+  function createNode(curr, prevState) {
+    if (prevState && equalRouteSnapshots(prevState.value.snapshot, curr.value)) {
+      var value = prevState.value;
+      value._futureSnapshot = curr.value;
+      var children = createOrReuseChildren(curr, prevState);
+      return new TreeNode(value, children);
+    } else {
+      var value = createActivatedRoute(curr.value);
+      var children = curr.children.map(function(c) {
+        return createNode(c);
+      });
+      return new TreeNode(value, children);
+    }
+  }
+  function createOrReuseChildren(curr, prevState) {
+    return curr.children.map(function(child) {
+      for (var _i = 0,
+          _a = prevState.children; _i < _a.length; _i++) {
+        var p = _a[_i];
+        if (equalRouteSnapshots(p.value.snapshot, child.value)) {
+          return createNode(child, p);
+        }
+      }
+      return createNode(child);
+    });
+  }
+  function createActivatedRoute(c) {
+    return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.queryParams), new rxjs_BehaviorSubject.BehaviorSubject(c.fragment), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
+  }
+  function equalRouteSnapshots(a, b) {
+    return a._routeConfig === b._routeConfig;
+  }
+  function createUrlTree(route, urlTree, commands, queryParams, fragment) {
+    if (commands.length === 0) {
+      return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
+    }
+    var normalizedCommands = normalizeCommands(commands);
+    validateCommands(normalizedCommands);
+    if (navigateToRoot(normalizedCommands)) {
+      return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
+    }
+    var startingPosition = findStartingPosition(normalizedCommands, urlTree, route);
+    var segmentGroup = startingPosition.processChildren ? updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands) : updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands);
+    return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
+  }
+  function validateCommands(n) {
+    if (n.isAbsolute && n.commands.length > 0 && isMatrixParams(n.commands[0])) {
+      throw new Error('Root segment cannot have matrix parameters');
+    }
+    var c = n.commands.filter(function(c) {
+      return typeof c === 'object' && c.outlets !== undefined;
+    });
+    if (c.length > 0 && c[0] !== n.commands[n.commands.length - 1]) {
+      throw new Error('{outlets:{}} has to be the last command');
+    }
+  }
+  function isMatrixParams(command) {
+    return typeof command === 'object' && command.outlets === undefined && command.segmentPath === undefined;
+  }
+  function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
+    if (urlTree.root === oldSegmentGroup) {
+      return new UrlTree(newSegmentGroup, stringify(queryParams), fragment);
+    } else {
+      return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
+    }
+  }
+  function replaceSegment(current, oldSegment, newSegment) {
+    var children = {};
+    forEach(current.children, function(c, outletName) {
+      if (c === oldSegment) {
+        children[outletName] = newSegment;
+      } else {
+        children[outletName] = replaceSegment(c, oldSegment, newSegment);
+      }
+    });
+    return new UrlSegmentGroup(current.segments, children);
+  }
+  function navigateToRoot(normalizedChange) {
+    return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 && normalizedChange.commands[0] == '/';
+  }
+  var NormalizedNavigationCommands = (function() {
+    function NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, commands) {
+      this.isAbsolute = isAbsolute;
+      this.numberOfDoubleDots = numberOfDoubleDots;
+      this.commands = commands;
+    }
+    return NormalizedNavigationCommands;
+  }());
+  function normalizeCommands(commands) {
+    if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] == '/') {
+      return new NormalizedNavigationCommands(true, 0, commands);
+    }
+    var numberOfDoubleDots = 0;
+    var isAbsolute = false;
+    var res = [];
+    var _loop_1 = function(i) {
+      var c = commands[i];
+      if (typeof c === 'object' && c.outlets !== undefined) {
+        var r_1 = {};
+        forEach(c.outlets, function(commands, name) {
+          if (typeof commands === 'string') {
+            r_1[name] = commands.split('/');
+          } else {
+            r_1[name] = commands;
+          }
+        });
+        res.push({outlets: r_1});
+        return "continue";
+      }
+      if (typeof c === 'object' && c.segmentPath !== undefined) {
+        res.push(c.segmentPath);
+        return "continue";
+      }
+      if (!(typeof c === 'string')) {
+        res.push(c);
+        return "continue";
+      }
+      if (i === 0) {
+        var parts = c.split('/');
+        for (var j = 0; j < parts.length; ++j) {
+          var cc = parts[j];
+          if (j == 0 && cc == '.') {} else if (j == 0 && cc == '') {
+            isAbsolute = true;
+          } else if (cc == '..') {
+            numberOfDoubleDots++;
+          } else if (cc != '') {
+            res.push(cc);
+          }
+        }
+      } else {
+        res.push(c);
+      }
+    };
+    for (var i = 0; i < commands.length; ++i) {
+      _loop_1(i);
+    }
+    return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
+  }
+  var Position = (function() {
+    function Position(segmentGroup, processChildren, index) {
+      this.segmentGroup = segmentGroup;
+      this.processChildren = processChildren;
+      this.index = index;
+    }
+    return Position;
+  }());
+  function findStartingPosition(normalizedChange, urlTree, route) {
+    if (normalizedChange.isAbsolute) {
+      return new Position(urlTree.root, true, 0);
+    } else if (route.snapshot._lastPathIndex === -1) {
+      return new Position(route.snapshot._urlSegment, true, 0);
+    } else {
+      var modifier = isMatrixParams(normalizedChange.commands[0]) ? 0 : 1;
+      var index = route.snapshot._lastPathIndex + modifier;
+      return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, normalizedChange.numberOfDoubleDots);
+    }
+  }
+  function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
+    var g = group;
+    var ci = index;
+    var dd = numberOfDoubleDots;
+    while (dd > ci) {
+      dd -= ci;
+      g = g.parent;
+      if (!g) {
+        throw new Error('Invalid number of \'../\'');
+      }
+      ci = g.segments.length;
+    }
+    return new Position(g, false, ci - dd);
+  }
+  function getPath(command) {
+    return "" + command;
+  }
+  function getOutlets(commands) {
+    if (!(typeof commands[0] === 'object'))
+      return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
+    if (commands[0].outlets === undefined)
+      return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
+    return commands[0].outlets;
+    var _a,
+        _b;
+  }
+  function updateSegmentGroup(segmentGroup, startIndex, commands) {
+    if (!segmentGroup) {
+      segmentGroup = new UrlSegmentGroup([], {});
+    }
+    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+      return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
+    }
+    var m = prefixedWith(segmentGroup, startIndex, commands);
+    var slicedCommands = commands.slice(m.lastIndex);
+    if (m.match && slicedCommands.length === 0) {
+      return new UrlSegmentGroup(segmentGroup.segments, {});
+    } else if (m.match && !segmentGroup.hasChildren()) {
+      return createNewSegmentGroup(segmentGroup, startIndex, commands);
+    } else if (m.match) {
+      return updateSegmentGroupChildren(segmentGroup, 0, slicedCommands);
+    } else {
+      return createNewSegmentGroup(segmentGroup, startIndex, commands);
+    }
+  }
+  function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
+    if (commands.length === 0) {
+      return new UrlSegmentGroup(segmentGroup.segments, {});
+    } else {
+      var outlets_1 = getOutlets(commands);
+      var children_1 = {};
+      forEach(outlets_1, function(commands, outlet) {
+        if (commands !== null) {
+          children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
+        }
+      });
+      forEach(segmentGroup.children, function(child, childOutlet) {
+        if (outlets_1[childOutlet] === undefined) {
+          children_1[childOutlet] = child;
+        }
+      });
+      return new UrlSegmentGroup(segmentGroup.segments, children_1);
+    }
+  }
+  function prefixedWith(segmentGroup, startIndex, commands) {
+    var currentCommandIndex = 0;
+    var currentPathIndex = startIndex;
+    var noMatch = {
+      match: false,
+      lastIndex: 0
+    };
+    while (currentPathIndex < segmentGroup.segments.length) {
+      if (currentCommandIndex >= commands.length)
+        return noMatch;
+      var path = segmentGroup.segments[currentPathIndex];
+      var curr = getPath(commands[currentCommandIndex]);
+      var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
+      if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
+        if (!compare(curr, next, path))
+          return noMatch;
+        currentCommandIndex += 2;
+      } else {
+        if (!compare(curr, {}, path))
+          return noMatch;
+        currentCommandIndex++;
+      }
+      currentPathIndex++;
+    }
+    return {
+      match: true,
+      lastIndex: currentCommandIndex
+    };
+  }
+  function createNewSegmentGroup(segmentGroup, startIndex, commands) {
+    var paths = segmentGroup.segments.slice(0, startIndex);
+    var i = 0;
+    while (i < commands.length) {
+      if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
+        var children = createNewSegmentChldren(commands[i].outlets);
+        return new UrlSegmentGroup(paths, children);
+      }
+      if (i === 0 && isMatrixParams(commands[0])) {
+        var p = segmentGroup.segments[startIndex];
+        paths.push(new UrlSegment(p.path, commands[0]));
+        i++;
+        continue;
+      }
+      var curr = getPath(commands[i]);
+      var next = (i < commands.length - 1) ? commands[i + 1] : null;
+      if (curr && next && isMatrixParams(next)) {
+        paths.push(new UrlSegment(curr, stringify(next)));
+        i += 2;
+      } else {
+        paths.push(new UrlSegment(curr, {}));
+        i++;
+      }
+    }
+    return new UrlSegmentGroup(paths, {});
+  }
+  function createNewSegmentChldren(outlets) {
+    var children = {};
+    forEach(outlets, function(commands, outlet) {
+      if (commands !== null) {
+        children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
+      }
+    });
+    return children;
+  }
+  function stringify(params) {
+    var res = {};
+    forEach(params, function(v, k) {
+      return res[k] = "" + v;
+    });
+    return res;
+  }
+  function compare(path, params, segment) {
+    return path == segment.path && shallowEqual(params, segment.parameters);
+  }
+  var NoMatch$1 = (function() {
+    function NoMatch() {}
+    return NoMatch;
+  }());
+  var InheritedFromParent = (function() {
+    function InheritedFromParent(parent, snapshot, params, data, resolve) {
+      this.parent = parent;
+      this.snapshot = snapshot;
+      this.params = params;
+      this.data = data;
+      this.resolve = resolve;
+    }
+    Object.defineProperty(InheritedFromParent.prototype, "allParams", {
+      get: function() {
+        return this.parent ? merge(this.parent.allParams, this.params) : this.params;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(InheritedFromParent.prototype, "allData", {
+      get: function() {
+        return this.parent ? merge(this.parent.allData, this.data) : this.data;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    InheritedFromParent.empty = function(snapshot) {
+      return new InheritedFromParent(null, snapshot, {}, {}, new InheritedResolve(null, {}));
+    };
+    return InheritedFromParent;
+  }());
+  function recognize(rootComponentType, config, urlTree, url) {
+    return new Recognizer(rootComponentType, config, urlTree, url).recognize();
+  }
+  var Recognizer = (function() {
+    function Recognizer(rootComponentType, config, urlTree, url) {
+      this.rootComponentType = rootComponentType;
+      this.config = config;
+      this.urlTree = urlTree;
+      this.url = url;
+    }
+    Recognizer.prototype.recognize = function() {
+      try {
+        var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
+        var children = this.processSegmentGroup(this.config, rootSegmentGroup, InheritedFromParent.empty(null), PRIMARY_OUTLET);
+        var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, InheritedResolve.empty);
+        var rootNode = new TreeNode(root, children);
+        return rxjs_observable_of.of(new RouterStateSnapshot(this.url, rootNode));
+      } catch (e) {
+        return new rxjs_Observable.Observable(function(obs) {
+          return obs.error(e);
+        });
+      }
+    };
+    Recognizer.prototype.processSegmentGroup = function(config, segmentGroup, inherited, outlet) {
+      if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
+        return this.processChildren(config, segmentGroup, inherited);
+      } else {
+        return this.processSegment(config, segmentGroup, 0, segmentGroup.segments, inherited, outlet);
+      }
+    };
+    Recognizer.prototype.processChildren = function(config, segmentGroup, inherited) {
+      var _this = this;
+      var children = mapChildrenIntoArray(segmentGroup, function(child, childOutlet) {
+        return _this.processSegmentGroup(config, child, inherited, childOutlet);
+      });
+      checkOutletNameUniqueness(children);
+      sortActivatedRouteSnapshots(children);
+      return children;
+    };
+    Recognizer.prototype.processSegment = function(config, segmentGroup, pathIndex, segments, inherited, outlet) {
+      for (var _i = 0,
+          config_1 = config; _i < config_1.length; _i++) {
+        var r = config_1[_i];
+        try {
+          return this.processSegmentAgainstRoute(r, segmentGroup, pathIndex, segments, inherited, outlet);
+        } catch (e) {
+          if (!(e instanceof NoMatch$1))
+            throw e;
+        }
+      }
+      throw new NoMatch$1();
+    };
+    Recognizer.prototype.processSegmentAgainstRoute = function(route, rawSegment, pathIndex, segments, inherited, outlet) {
+      if (route.redirectTo)
+        throw new NoMatch$1();
+      if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
+        throw new NoMatch$1();
+      var newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
+      if (route.path === '**') {
+        var params = segments.length > 0 ? last(segments).parameters : {};
+        var snapshot_1 = new ActivatedRouteSnapshot(segments, Object.freeze(merge(inherited.allParams, params)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, newInheritedResolve);
+        return [new TreeNode(snapshot_1, [])];
+      }
+      var _a = match$1(rawSegment, route, segments, inherited.snapshot),
+          consumedSegments = _a.consumedSegments,
+          parameters = _a.parameters,
+          lastChild = _a.lastChild;
+      var rawSlicedSegments = segments.slice(lastChild);
+      var childConfig = getChildConfig(route);
+      var _b = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig),
+          segmentGroup = _b.segmentGroup,
+          slicedSegments = _b.slicedSegments;
+      var snapshot = new ActivatedRouteSnapshot(consumedSegments, Object.freeze(merge(inherited.allParams, parameters)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, newInheritedResolve);
+      var newInherited = route.component ? InheritedFromParent.empty(snapshot) : new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
+      if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
+        var children = this.processChildren(childConfig, segmentGroup, newInherited);
+        return [new TreeNode(snapshot, children)];
+      } else if (childConfig.length === 0 && slicedSegments.length === 0) {
+        return [new TreeNode(snapshot, [])];
+      } else {
+        var children = this.processSegment(childConfig, segmentGroup, pathIndex + lastChild, slicedSegments, newInherited, PRIMARY_OUTLET);
+        return [new TreeNode(snapshot, children)];
+      }
+    };
+    return Recognizer;
+  }());
+  function sortActivatedRouteSnapshots(nodes) {
+    nodes.sort(function(a, b) {
+      if (a.value.outlet === PRIMARY_OUTLET)
+        return -1;
+      if (b.value.outlet === PRIMARY_OUTLET)
+        return 1;
+      return a.value.outlet.localeCompare(b.value.outlet);
+    });
+  }
+  function getChildConfig(route) {
+    if (route.children) {
+      return route.children;
+    } else if (route.loadChildren) {
+      return route._loadedConfig.routes;
+    } else {
+      return [];
+    }
+  }
+  function match$1(segmentGroup, route, segments, parent) {
+    if (route.path === '') {
+      if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
+        throw new NoMatch$1();
+      } else {
+        var params = parent ? parent.params : {};
+        return {
+          consumedSegments: [],
+          lastChild: 0,
+          parameters: params
+        };
+      }
+    }
+    var path = route.path;
+    var parts = path.split('/');
+    var posParameters = {};
+    var consumedSegments = [];
+    var currentIndex = 0;
+    for (var i = 0; i < parts.length; ++i) {
+      if (currentIndex >= segments.length)
+        throw new NoMatch$1();
+      var current = segments[currentIndex];
+      var p = parts[i];
+      var isPosParam = p.startsWith(':');
+      if (!isPosParam && p !== current.path)
+        throw new NoMatch$1();
+      if (isPosParam) {
+        posParameters[p.substring(1)] = current.path;
+      }
+      consumedSegments.push(current);
+      currentIndex++;
+    }
+    if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
+      throw new NoMatch$1();
+    }
+    var parameters = merge(posParameters, consumedSegments[consumedSegments.length - 1].parameters);
+    return {
+      consumedSegments: consumedSegments,
+      lastChild: currentIndex,
+      parameters: parameters
+    };
+  }
+  function checkOutletNameUniqueness(nodes) {
+    var names = {};
+    nodes.forEach(function(n) {
+      var routeWithSameOutletName = names[n.value.outlet];
+      if (routeWithSameOutletName) {
+        var p = routeWithSameOutletName.url.map(function(s) {
+          return s.toString();
+        }).join('/');
+        var c = n.value.url.map(function(s) {
+          return s.toString();
+        }).join('/');
+        throw new Error("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
+      }
+      names[n.value.outlet] = n.value;
+    });
+  }
+  function getSourceSegmentGroup(segmentGroup) {
+    var s = segmentGroup;
+    while (s._sourceSegment) {
+      s = s._sourceSegment;
+    }
+    return s;
+  }
+  function getPathIndexShift(segmentGroup) {
+    var s = segmentGroup;
+    var res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    while (s._sourceSegment) {
+      s = s._sourceSegment;
+      res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
+    }
+    return res - 1;
+  }
+  function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
+    if (slicedSegments.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
+      var s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
+      s._sourceSegment = segmentGroup;
+      s._segmentIndexShift = consumedSegments.length;
+      return {
+        segmentGroup: s,
+        slicedSegments: []
+      };
+    } else if (slicedSegments.length === 0 && containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
+      var s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
+      s._sourceSegment = segmentGroup;
+      s._segmentIndexShift = consumedSegments.length;
+      return {
+        segmentGroup: s,
+        slicedSegments: slicedSegments
+      };
+    } else {
+      var s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
+      s._sourceSegment = segmentGroup;
+      s._segmentIndexShift = consumedSegments.length;
+      return {
+        segmentGroup: s,
+        slicedSegments: slicedSegments
+      };
+    }
+  }
+  function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
+    var res = {};
+    for (var _i = 0,
+        routes_1 = routes; _i < routes_1.length; _i++) {
+      var r = routes_1[_i];
+      if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$2(r)]) {
+        var s = new UrlSegmentGroup([], {});
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = segmentGroup.segments.length;
+        res[getOutlet$2(r)] = s;
+      }
+    }
+    return merge(children, res);
+  }
+  function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
+    var res = {};
+    res[PRIMARY_OUTLET] = primarySegment;
+    primarySegment._sourceSegment = segmentGroup;
+    primarySegment._segmentIndexShift = consumedSegments.length;
+    for (var _i = 0,
+        routes_2 = routes; _i < routes_2.length; _i++) {
+      var r = routes_2[_i];
+      if (r.path === '' && getOutlet$2(r) !== PRIMARY_OUTLET) {
+        var s = new UrlSegmentGroup([], {});
+        s._sourceSegment = segmentGroup;
+        s._segmentIndexShift = consumedSegments.length;
+        res[getOutlet$2(r)] = s;
+      }
+    }
+    return res;
+  }
+  function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function(r) {
+      return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$2(r) !== PRIMARY_OUTLET;
+    }).length > 0;
+  }
+  function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
+    return routes.filter(function(r) {
+      return emptyPathMatch(segmentGroup, slicedSegments, r);
+    }).length > 0;
+  }
+  function emptyPathMatch(segmentGroup, slicedSegments, r) {
+    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
+      return false;
+    return r.path === '' && r.redirectTo === undefined;
+  }
+  function getOutlet$2(route) {
+    return route.outlet ? route.outlet : PRIMARY_OUTLET;
+  }
+  function getData(route) {
+    return route.data ? route.data : {};
+  }
+  function getResolve(route) {
+    return route.resolve ? route.resolve : {};
+  }
+  var RouterOutletMap = (function() {
+    function RouterOutletMap() {
+      this._outlets = {};
+    }
+    RouterOutletMap.prototype.registerOutlet = function(name, outlet) {
+      this._outlets[name] = outlet;
+    };
+    RouterOutletMap.prototype.removeOutlet = function(name) {
+      this._outlets[name] = undefined;
+    };
+    return RouterOutletMap;
+  }());
+  var NavigationStart = (function() {
+    function NavigationStart(id, url) {
+      this.id = id;
+      this.url = url;
+    }
+    NavigationStart.prototype.toString = function() {
+      return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')";
+    };
+    return NavigationStart;
+  }());
+  var NavigationEnd = (function() {
+    function NavigationEnd(id, url, urlAfterRedirects) {
+      this.id = id;
+      this.url = url;
+      this.urlAfterRedirects = urlAfterRedirects;
+    }
+    NavigationEnd.prototype.toString = function() {
+      return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
+    };
+    return NavigationEnd;
+  }());
+  var NavigationCancel = (function() {
+    function NavigationCancel(id, url, reason) {
+      this.id = id;
+      this.url = url;
+      this.reason = reason;
+    }
+    NavigationCancel.prototype.toString = function() {
+      return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')";
+    };
+    return NavigationCancel;
+  }());
+  var NavigationError = (function() {
+    function NavigationError(id, url, error) {
+      this.id = id;
+      this.url = url;
+      this.error = error;
+    }
+    NavigationError.prototype.toString = function() {
+      return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
+    };
+    return NavigationError;
+  }());
+  var RoutesRecognized = (function() {
+    function RoutesRecognized(id, url, urlAfterRedirects, state) {
+      this.id = id;
+      this.url = url;
+      this.urlAfterRedirects = urlAfterRedirects;
+      this.state = state;
+    }
+    RoutesRecognized.prototype.toString = function() {
+      return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
+    };
+    return RoutesRecognized;
+  }());
+  function defaultErrorHandler(error) {
+    throw error;
+  }
+  var Router = (function() {
+    function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
+      this.rootComponentType = rootComponentType;
+      this.urlSerializer = urlSerializer;
+      this.outletMap = outletMap;
+      this.location = location;
+      this.injector = injector;
+      this.config = config;
+      this.navigationId = 0;
+      this.errorHandler = defaultErrorHandler;
+      this.navigated = false;
+      this.resetConfig(config);
+      this.routerEvents = new rxjs_Subject.Subject();
+      this.currentUrlTree = createEmptyUrlTree();
+      this.configLoader = new RouterConfigLoader(loader, compiler);
+      this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
+    }
+    Router.prototype.initialNavigation = function() {
+      this.setUpLocationChangeListener();
+      this.navigateByUrl(this.location.path(true), {replaceUrl: true});
+    };
+    Router.prototype.setUpLocationChangeListener = function() {
+      var _this = this;
+      this.locationSubscription = this.location.subscribe(Zone.current.wrap(function(change) {
+        var tree = _this.urlSerializer.parse(change['url']);
+        return _this.currentUrlTree.toString() !== tree.toString() ? _this.scheduleNavigation(tree, {
+          skipLocationChange: change['pop'],
+          replaceUrl: true
+        }) : null;
+      }));
+    };
+    Object.defineProperty(Router.prototype, "routerState", {
+      get: function() {
+        return this.currentRouterState;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(Router.prototype, "url", {
+      get: function() {
+        return this.serializeUrl(this.currentUrlTree);
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(Router.prototype, "events", {
+      get: function() {
+        return this.routerEvents;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Router.prototype.resetConfig = function(config) {
+      validateConfig(config);
+      this.config = config;
+    };
+    Router.prototype.ngOnDestroy = function() {
+      this.dispose();
+    };
+    Router.prototype.dispose = function() {
+      this.locationSubscription.unsubscribe();
+    };
+    Router.prototype.createUrlTree = function(commands, _a) {
+      var _b = _a === void 0 ? {} : _a,
+          relativeTo = _b.relativeTo,
+          queryParams = _b.queryParams,
+          fragment = _b.fragment,
+          preserveQueryParams = _b.preserveQueryParams,
+          preserveFragment = _b.preserveFragment;
+      var a = relativeTo ? relativeTo : this.routerState.root;
+      var q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
+      var f = preserveFragment ? this.currentUrlTree.fragment : fragment;
+      return createUrlTree(a, this.currentUrlTree, commands, q, f);
+    };
+    Router.prototype.navigateByUrl = function(url, extras) {
+      if (extras === void 0) {
+        extras = {skipLocationChange: false};
+      }
+      if (url instanceof UrlTree) {
+        return this.scheduleNavigation(url, extras);
+      } else {
+        var urlTree = this.urlSerializer.parse(url);
+        return this.scheduleNavigation(urlTree, extras);
+      }
+    };
+    Router.prototype.navigate = function(commands, extras) {
+      if (extras === void 0) {
+        extras = {skipLocationChange: false};
+      }
+      return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
+    };
+    Router.prototype.serializeUrl = function(url) {
+      return this.urlSerializer.serialize(url);
+    };
+    Router.prototype.parseUrl = function(url) {
+      return this.urlSerializer.parse(url);
+    };
+    Router.prototype.isActive = function(url, exact) {
+      if (url instanceof UrlTree) {
+        return containsTree(this.currentUrlTree, url, exact);
+      } else {
+        var urlTree = this.urlSerializer.parse(url);
+        return containsTree(this.currentUrlTree, urlTree, exact);
+      }
+    };
+    Router.prototype.scheduleNavigation = function(url, extras) {
+      var _this = this;
+      var id = ++this.navigationId;
+      this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
+      return Promise.resolve().then(function(_) {
+        return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id);
+      });
+    };
+    Router.prototype.runNavigate = function(url, shouldPreventPushState, shouldReplaceUrl, id) {
+      var _this = this;
+      if (id !== this.navigationId) {
+        this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
+        this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
+        return Promise.resolve(false);
+      }
+      return new Promise(function(resolvePromise, rejectPromise) {
+        var state;
+        var navigationIsSuccessful;
+        var preActivation;
+        var appliedUrl;
+        var storedState = _this.currentRouterState;
+        var storedUrl = _this.currentUrlTree;
+        var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
+        var snapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function(u) {
+          appliedUrl = u;
+          return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
+        });
+        var emitRecognzied$ = rxjs_operator_map.map.call(snapshot$, function(newRouterStateSnapshot) {
+          _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
+          return newRouterStateSnapshot;
+        });
+        var routerState$ = rxjs_operator_map.map.call(emitRecognzied$, function(routerStateSnapshot) {
+          return createRouterState(routerStateSnapshot, _this.currentRouterState);
+        });
+        var preactivation$ = rxjs_operator_map.map.call(routerState$, function(newState) {
+          state = newState;
+          preActivation = new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
+          preActivation.traverse(_this.outletMap);
+        });
+        var preactivation2$ = rxjs_operator_mergeMap.mergeMap.call(preactivation$, function() {
+          return preActivation.checkGuards();
+        });
+        var resolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivation2$, function(shouldActivate) {
+          if (shouldActivate) {
+            return rxjs_operator_map.map.call(preActivation.resolveData(), function() {
+              return shouldActivate;
+            });
+          } else {
+            return rxjs_observable_of.of(shouldActivate);
+          }
+        });
+        resolveData$.forEach(function(shouldActivate) {
+          if (!shouldActivate || id !== _this.navigationId) {
+            navigationIsSuccessful = false;
+            return;
+          }
+          _this.currentUrlTree = appliedUrl;
+          _this.currentRouterState = state;
+          if (!shouldPreventPushState) {
+            var path = _this.urlSerializer.serialize(appliedUrl);
+            if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
+              _this.location.replaceState(path);
+            } else {
+              _this.location.go(path);
+            }
+          }
+          new ActivateRoutes(state, storedState).activate(_this.outletMap);
+          navigationIsSuccessful = true;
+        }).then(function() {
+          _this.navigated = true;
+          if (navigationIsSuccessful) {
+            _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
+            resolvePromise(true);
+          } else {
+            _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
+            resolvePromise(false);
+          }
+        }, function(e) {
+          if (e instanceof NavigationCancelingError) {
+            _this.navigated = true;
+            _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
+            resolvePromise(false);
+          } else {
+            _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+            try {
+              resolvePromise(_this.errorHandler(e));
+            } catch (ee) {
+              rejectPromise(ee);
+            }
+          }
+          if (id === _this.navigationId) {
+            _this.currentRouterState = storedState;
+            _this.currentUrlTree = storedUrl;
+            _this.location.replaceState(_this.serializeUrl(storedUrl));
+          }
+        });
+      });
+    };
+    return Router;
+  }());
+  var CanActivate = (function() {
+    function CanActivate(path) {
+      this.path = path;
+    }
+    Object.defineProperty(CanActivate.prototype, "route", {
+      get: function() {
+        return this.path[this.path.length - 1];
+      },
+      enumerable: true,
+      configurable: true
+    });
+    return CanActivate;
+  }());
+  var CanDeactivate = (function() {
+    function CanDeactivate(component, route) {
+      this.component = component;
+      this.route = route;
+    }
+    return CanDeactivate;
+  }());
+  var PreActivation = (function() {
+    function PreActivation(future, curr, injector) {
+      this.future = future;
+      this.curr = curr;
+      this.injector = injector;
+      this.checks = [];
+    }
+    PreActivation.prototype.traverse = function(parentOutletMap) {
+      var futureRoot = this.future._root;
+      var currRoot = this.curr ? this.curr._root : null;
+      this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
+    };
+    PreActivation.prototype.checkGuards = function() {
+      var _this = this;
+      if (this.checks.length === 0)
+        return rxjs_observable_of.of(true);
+      var checks$ = rxjs_observable_from.from(this.checks);
+      var runningChecks$ = rxjs_operator_map.map.call(checks$, function(s) {
+        if (s instanceof CanActivate) {
+          return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
+        } else if (s instanceof CanDeactivate) {
+          var s2 = s;
+          return _this.runCanDeactivate(s2.component, s2.route);
+        } else {
+          throw new Error('Cannot be reached');
+        }
+      });
+      var mergedChecks$ = rxjs_operator_mergeAll.mergeAll.call(runningChecks$);
+      return rxjs_operator_every.every.call(mergedChecks$, function(result) {
+        return result === true;
+      });
+    };
+    PreActivation.prototype.resolveData = function() {
+      var _this = this;
+      if (this.checks.length === 0)
+        return rxjs_observable_of.of(null);
+      var checks$ = rxjs_observable_from.from(this.checks);
+      var runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function(s) {
+        if (s instanceof CanActivate) {
+          return _this.runResolve(s.route);
+        } else {
+          return rxjs_observable_of.of(null);
+        }
+      });
+      return rxjs_operator_reduce.reduce.call(runningChecks$, function(_, __) {
+        return _;
+      });
+    };
+    PreActivation.prototype.traverseChildRoutes = function(futureNode, currNode, outletMap, futurePath) {
+      var _this = this;
+      var prevChildren = nodeChildrenAsMap(currNode);
+      futureNode.children.forEach(function(c) {
+        _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
+        delete prevChildren[c.value.outlet];
+      });
+      forEach(prevChildren, function(v, k) {
+        return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]);
+      });
+    };
+    PreActivation.prototype.traverseRoutes = function(futureNode, currNode, parentOutletMap, futurePath) {
+      var future = futureNode.value;
+      var curr = currNode ? currNode.value : null;
+      var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
+      if (curr && future._routeConfig === curr._routeConfig) {
+        if (!shallowEqual(future.params, curr.params)) {
+          this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
+        } else {
+          future.data = curr.data;
+        }
+        if (future.component) {
+          this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
+        } else {
+          this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
+        }
+      } else {
+        if (curr) {
+          if (curr.component) {
+            this.deactivateOutletAndItChildren(curr, outlet);
+          } else {
+            this.deactivateOutletMap(parentOutletMap);
+          }
+        }
+        this.checks.push(new CanActivate(futurePath));
+        if (future.component) {
+          this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
+        } else {
+          this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
+        }
+      }
+    };
+    PreActivation.prototype.deactivateOutletAndItChildren = function(route, outlet) {
+      if (outlet && outlet.isActivated) {
+        this.deactivateOutletMap(outlet.outletMap);
+        this.checks.push(new CanDeactivate(outlet.component, route));
+      }
+    };
+    PreActivation.prototype.deactivateOutletMap = function(outletMap) {
+      var _this = this;
+      forEach(outletMap._outlets, function(v) {
+        if (v.isActivated) {
+          _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
+        }
+      });
+    };
+    PreActivation.prototype.runCanActivate = function(future) {
+      var _this = this;
+      var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
+      if (!canActivate || canActivate.length === 0)
+        return rxjs_observable_of.of(true);
+      var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canActivate), function(c) {
+        var guard = _this.getToken(c, future);
+        if (guard.canActivate) {
+          return wrapIntoObservable(guard.canActivate(future, _this.future));
+        } else {
+          return wrapIntoObservable(guard(future, _this.future));
+        }
+      });
+      return andObservables(obs);
+    };
+    PreActivation.prototype.runCanActivateChild = function(path) {
+      var _this = this;
+      var future = path[path.length - 1];
+      var canActivateChildGuards = path.slice(0, path.length - 1).reverse().map(function(p) {
+        return _this.extractCanActivateChild(p);
+      }).filter(function(_) {
+        return _ !== null;
+      });
+      return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function(d) {
+        var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function(c) {
+          var guard = _this.getToken(c, c.node);
+          if (guard.canActivateChild) {
+            return wrapIntoObservable(guard.canActivateChild(future, _this.future));
+          } else {
+            return wrapIntoObservable(guard(future, _this.future));
+          }
+        });
+        return andObservables(obs);
+      }));
+    };
+    PreActivation.prototype.extractCanActivateChild = function(p) {
+      var canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
+      if (!canActivateChild || canActivateChild.length === 0)
+        return null;
+      return {
+        node: p,
+        guards: canActivateChild
+      };
+    };
+    PreActivation.prototype.runCanDeactivate = function(component, curr) {
+      var _this = this;
+      var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
+      if (!canDeactivate || canDeactivate.length === 0)
+        return rxjs_observable_of.of(true);
+      var canDeactivate$ = rxjs_operator_map.map.call(rxjs_observable_from.from(canDeactivate), function(c) {
+        var guard = _this.getToken(c, curr);
+        if (guard.canDeactivate) {
+          return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
+        } else {
+          return wrapIntoObservable(guard(component, curr, _this.curr));
+        }
+      });
+      var merged$ = rxjs_operator_mergeAll.mergeAll.call(canDeactivate$);
+      return rxjs_operator_every.every.call(merged$, function(result) {
+        return result === true;
+      });
+    };
+    PreActivation.prototype.runResolve = function(future) {
+      var resolve = future._resolve;
+      return rxjs_operator_map.map.call(this.resolveNode(resolve.current, future), function(resolvedData) {
+        resolve.resolvedData = resolvedData;
+        future.data = merge(future.data, resolve.flattenedResolvedData);
+        return null;
+      });
+    };
+    PreActivation.prototype.resolveNode = function(resolve, future) {
+      var _this = this;
+      return waitForMap(resolve, function(k, v) {
+        var resolver = _this.getToken(v, future);
+        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) : wrapIntoObservable(resolver(future, _this.future));
+      });
+    };
+    PreActivation.prototype.getToken = function(token, snapshot) {
+      var config = closestLoadedConfig(snapshot);
+      var injector = config ? config.injector : this.injector;
+      return injector.get(token);
+    };
+    return PreActivation;
+  }());
+  var ActivateRoutes = (function() {
+    function ActivateRoutes(futureState, currState) {
+      this.futureState = futureState;
+      this.currState = currState;
+    }
+    ActivateRoutes.prototype.activate = function(parentOutletMap) {
+      var futureRoot = this.futureState._root;
+      var currRoot = this.currState ? this.currState._root : null;
+      advanceActivatedRoute(this.futureState.root);
+      this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
+    };
+    ActivateRoutes.prototype.activateChildRoutes = function(futureNode, currNode, outletMap) {
+      var _this = this;
+      var prevChildren = nodeChildrenAsMap(currNode);
+      futureNode.children.forEach(function(c) {
+        _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
+        delete prevChildren[c.value.outlet];
+      });
+      forEach(prevChildren, function(v, k) {
+        return _this.deactivateOutletAndItChildren(outletMap._outlets[k]);
+      });
+    };
+    ActivateRoutes.prototype.activateRoutes = function(futureNode, currNode, parentOutletMap) {
+      var future = futureNode.value;
+      var curr = currNode ? currNode.value : null;
+      if (future === curr) {
+        advanceActivatedRoute(future);
+        if (future.component) {
+          var outlet = getOutlet(parentOutletMap, futureNode.value);
+          this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
+        } else {
+          this.activateChildRoutes(futureNode, currNode, parentOutletMap);
+        }
+      } else {
+        if (curr) {
+          if (curr.component) {
+            var outlet = getOutlet(parentOutletMap, futureNode.value);
+            this.deactivateOutletAndItChildren(outlet);
+          } else {
+            this.deactivateOutletMap(parentOutletMap);
+          }
+        }
+        if (future.component) {
+          advanceActivatedRoute(future);
+          var outlet = getOutlet(parentOutletMap, futureNode.value);
+          var outletMap = new RouterOutletMap();
+          this.placeComponentIntoOutlet(outletMap, future, outlet);
+          this.activateChildRoutes(futureNode, null, outletMap);
+        } else {
+          advanceActivatedRoute(future);
+          this.activateChildRoutes(futureNode, null, parentOutletMap);
+        }
+      }
+    };
+    ActivateRoutes.prototype.placeComponentIntoOutlet = function(outletMap, future, outlet) {
+      var resolved = [{
+        provide: ActivatedRoute,
+        useValue: future
+      }, {
+        provide: RouterOutletMap,
+        useValue: outletMap
+      }];
+      var config = parentLoadedConfig(future.snapshot);
+      var loadedFactoryResolver = null;
+      var loadedInjector = null;
+      if (config) {
+        loadedFactoryResolver = config.factoryResolver;
+        loadedInjector = config.injector;
+        resolved.push({
+          provide: _angular_core.ComponentFactoryResolver,
+          useValue: loadedFactoryResolver
+        });
+      }
+      outlet.activate(future, loadedFactoryResolver, loadedInjector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
+    };
+    ActivateRoutes.prototype.deactivateOutletAndItChildren = function(outlet) {
+      if (outlet && outlet.isActivated) {
+        this.deactivateOutletMap(outlet.outletMap);
+        outlet.deactivate();
+      }
+    };
+    ActivateRoutes.prototype.deactivateOutletMap = function(outletMap) {
+      var _this = this;
+      forEach(outletMap._outlets, function(v) {
+        return _this.deactivateOutletAndItChildren(v);
+      });
+    };
+    return ActivateRoutes;
+  }());
+  function parentLoadedConfig(snapshot) {
+    var s = snapshot.parent;
+    while (s) {
+      var c = s._routeConfig;
+      if (c && c._loadedConfig)
+        return c._loadedConfig;
+      if (c && c.component)
+        return null;
+      s = s.parent;
+    }
+    return null;
+  }
+  function closestLoadedConfig(snapshot) {
+    if (!snapshot)
+      return null;
+    var s = snapshot.parent;
+    while (s) {
+      var c = s._routeConfig;
+      if (c && c._loadedConfig)
+        return c._loadedConfig;
+      s = s.parent;
+    }
+    return null;
+  }
+  function nodeChildrenAsMap(node) {
+    return node ? node.children.reduce(function(m, c) {
+      m[c.value.outlet] = c;
+      return m;
+    }, {}) : {};
+  }
+  function getOutlet(outletMap, route) {
+    var outlet = outletMap._outlets[route.outlet];
+    if (!outlet) {
+      var componentName = route.component.name;
+      if (route.outlet === PRIMARY_OUTLET) {
+        throw new Error("Cannot find primary outlet to load '" + componentName + "'");
+      } else {
+        throw new Error("Cannot find the outlet " + route.outlet + " to load '" + componentName + "'");
+      }
+    }
+    return outlet;
+  }
+  var RouterLink = (function() {
+    function RouterLink(router, route, locationStrategy) {
+      this.router = router;
+      this.route = route;
+      this.locationStrategy = locationStrategy;
+      this.commands = [];
+    }
+    Object.defineProperty(RouterLink.prototype, "routerLink", {
+      set: function(data) {
+        if (Array.isArray(data)) {
+          this.commands = data;
+        } else {
+          this.commands = [data];
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterLink.prototype.onClick = function(button, ctrlKey, metaKey) {
+      if (button !== 0 || ctrlKey || metaKey) {
+        return true;
+      }
+      this.router.navigateByUrl(this.urlTree);
+      return false;
+    };
+    Object.defineProperty(RouterLink.prototype, "urlTree", {
+      get: function() {
+        return this.router.createUrlTree(this.commands, {
+          relativeTo: this.route,
+          queryParams: this.queryParams,
+          fragment: this.fragment,
+          preserveQueryParams: toBool(this.preserveQueryParams),
+          preserveFragment: toBool(this.preserveFragment)
+        });
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterLink.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: ':not(a)[routerLink]'}]
+    }];
+    RouterLink.ctorParameters = [{type: Router}, {type: ActivatedRoute}, {type: _angular_common.LocationStrategy}];
+    RouterLink.propDecorators = {
+      'queryParams': [{type: _angular_core.Input}],
+      'fragment': [{type: _angular_core.Input}],
+      'preserveQueryParams': [{type: _angular_core.Input}],
+      'preserveFragment': [{type: _angular_core.Input}],
+      'routerLink': [{type: _angular_core.Input}],
+      'onClick': [{
+        type: _angular_core.HostListener,
+        args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey']]
+      }]
+    };
+    return RouterLink;
+  }());
+  var RouterLinkWithHref = (function() {
+    function RouterLinkWithHref(router, route, locationStrategy) {
+      var _this = this;
+      this.router = router;
+      this.route = route;
+      this.locationStrategy = locationStrategy;
+      this.commands = [];
+      this.subscription = router.events.subscribe(function(s) {
+        if (s instanceof NavigationEnd) {
+          _this.updateTargetUrlAndHref();
+        }
+      });
+    }
+    Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
+      set: function(data) {
+        if (Array.isArray(data)) {
+          this.commands = data;
+        } else {
+          this.commands = [data];
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterLinkWithHref.prototype.ngOnChanges = function(changes) {
+      this.updateTargetUrlAndHref();
+    };
+    RouterLinkWithHref.prototype.ngOnDestroy = function() {
+      this.subscription.unsubscribe();
+    };
+    RouterLinkWithHref.prototype.onClick = function(button, ctrlKey, metaKey) {
+      if (button !== 0 || ctrlKey || metaKey) {
+        return true;
+      }
+      if (typeof this.target === 'string' && this.target != '_self') {
+        return true;
+      }
+      this.router.navigateByUrl(this.urlTree);
+      return false;
+    };
+    RouterLinkWithHref.prototype.updateTargetUrlAndHref = function() {
+      this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
+    };
+    Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
+      get: function() {
+        return this.router.createUrlTree(this.commands, {
+          relativeTo: this.route,
+          queryParams: this.queryParams,
+          fragment: this.fragment,
+          preserveQueryParams: toBool(this.preserveQueryParams),
+          preserveFragment: toBool(this.preserveFragment)
+        });
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterLinkWithHref.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: 'a[routerLink]'}]
+    }];
+    RouterLinkWithHref.ctorParameters = [{type: Router}, {type: ActivatedRoute}, {type: _angular_common.LocationStrategy}];
+    RouterLinkWithHref.propDecorators = {
+      'target': [{type: _angular_core.Input}],
+      'queryParams': [{type: _angular_core.Input}],
+      'fragment': [{type: _angular_core.Input}],
+      'routerLinkOptions': [{type: _angular_core.Input}],
+      'preserveQueryParams': [{type: _angular_core.Input}],
+      'preserveFragment': [{type: _angular_core.Input}],
+      'href': [{type: _angular_core.HostBinding}],
+      'routerLink': [{type: _angular_core.Input}],
+      'onClick': [{
+        type: _angular_core.HostListener,
+        args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey']]
+      }]
+    };
+    return RouterLinkWithHref;
+  }());
+  function toBool(s) {
+    if (s === '')
+      return true;
+    return !!s;
+  }
+  var RouterLinkActive = (function() {
+    function RouterLinkActive(router, element, renderer) {
+      var _this = this;
+      this.router = router;
+      this.element = element;
+      this.renderer = renderer;
+      this.classes = [];
+      this.routerLinkActiveOptions = {exact: false};
+      this.subscription = router.events.subscribe(function(s) {
+        if (s instanceof NavigationEnd) {
+          _this.update();
+        }
+      });
+    }
+    RouterLinkActive.prototype.ngAfterContentInit = function() {
+      var _this = this;
+      this.links.changes.subscribe(function(s) {
+        return _this.update();
+      });
+      this.linksWithHrefs.changes.subscribe(function(s) {
+        return _this.update();
+      });
+      this.update();
+    };
+    Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
+      set: function(data) {
+        if (Array.isArray(data)) {
+          this.classes = data;
+        } else {
+          this.classes = data.split(' ');
+        }
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterLinkActive.prototype.ngOnChanges = function(changes) {
+      this.update();
+    };
+    RouterLinkActive.prototype.ngOnDestroy = function() {
+      this.subscription.unsubscribe();
+    };
+    RouterLinkActive.prototype.update = function() {
+      var _this = this;
+      if (!this.links || !this.linksWithHrefs || !this.router.navigated)
+        return;
+      var isActiveLinks = this.reduceList(this.links);
+      var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
+      this.classes.forEach(function(c) {
+        return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs);
+      });
+    };
+    RouterLinkActive.prototype.reduceList = function(q) {
+      var _this = this;
+      return q.reduce(function(res, link) {
+        return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
+      }, false);
+    };
+    RouterLinkActive.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: '[routerLinkActive]'}]
+    }];
+    RouterLinkActive.ctorParameters = [{type: Router}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
+    RouterLinkActive.propDecorators = {
+      'links': [{
+        type: _angular_core.ContentChildren,
+        args: [RouterLink, {descendants: true}]
+      }],
+      'linksWithHrefs': [{
+        type: _angular_core.ContentChildren,
+        args: [RouterLinkWithHref, {descendants: true}]
+      }],
+      'routerLinkActiveOptions': [{type: _angular_core.Input}],
+      'routerLinkActive': [{type: _angular_core.Input}]
+    };
+    return RouterLinkActive;
+  }());
+  var RouterOutlet = (function() {
+    function RouterOutlet(parentOutletMap, location, resolver, name) {
+      this.parentOutletMap = parentOutletMap;
+      this.location = location;
+      this.resolver = resolver;
+      this.name = name;
+      this.activateEvents = new _angular_core.EventEmitter();
+      this.deactivateEvents = new _angular_core.EventEmitter();
+      parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
+    }
+    RouterOutlet.prototype.ngOnDestroy = function() {
+      this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET);
+    };
+    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
+      get: function() {
+        return !!this.activated;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "component", {
+      get: function() {
+        if (!this.activated)
+          throw new Error('Outlet is not activated');
+        return this.activated.instance;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
+      get: function() {
+        if (!this.activated)
+          throw new Error('Outlet is not activated');
+        return this._activatedRoute;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    RouterOutlet.prototype.deactivate = function() {
+      if (this.activated) {
+        var c = this.component;
+        this.activated.destroy();
+        this.activated = null;
+        this.deactivateEvents.emit(c);
+      }
+    };
+    RouterOutlet.prototype.activate = function(activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
+      this.outletMap = outletMap;
+      this._activatedRoute = activatedRoute;
+      var snapshot = activatedRoute._futureSnapshot;
+      var component = snapshot._routeConfig.component;
+      var factory;
+      if (loadedResolver) {
+        factory = loadedResolver.resolveComponentFactory(component);
+      } else {
+        factory = this.resolver.resolveComponentFactory(component);
+      }
+      var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
+      var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
+      this.activated = this.location.createComponent(factory, this.location.length, inj, []);
+      this.activated.changeDetectorRef.detectChanges();
+      this.activateEvents.emit(this.activated.instance);
+    };
+    RouterOutlet.decorators = [{
+      type: _angular_core.Directive,
+      args: [{selector: 'router-outlet'}]
+    }];
+    RouterOutlet.ctorParameters = [{type: RouterOutletMap}, {type: _angular_core.ViewContainerRef}, {type: _angular_core.ComponentFactoryResolver}, {
+      type: undefined,
+      decorators: [{
+        type: _angular_core.Attribute,
+        args: ['name']
+      }]
+    }];
+    RouterOutlet.propDecorators = {
+      'activateEvents': [{
+        type: _angular_core.Output,
+        args: ['activate']
+      }],
+      'deactivateEvents': [{
+        type: _angular_core.Output,
+        args: ['deactivate']
+      }]
+    };
+    return RouterOutlet;
+  }());
+  var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
+  var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
+  var ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
+  var ROUTER_PROVIDERS = [_angular_common.Location, {
+    provide: UrlSerializer,
+    useClass: DefaultUrlSerializer
+  }, {
+    provide: Router,
+    useFactory: setupRouter,
+    deps: [_angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION]
+  }, RouterOutletMap, {
+    provide: ActivatedRoute,
+    useFactory: rootRoute,
+    deps: [Router]
+  }, {
+    provide: _angular_core.NgModuleFactoryLoader,
+    useClass: _angular_core.SystemJsNgModuleLoader
+  }, {
+    provide: ROUTER_CONFIGURATION,
+    useValue: {enableTracing: false}
+  }];
+  var RouterModule = (function() {
+    function RouterModule(guard) {}
+    RouterModule.forRoot = function(routes, config) {
+      return {
+        ngModule: RouterModule,
+        providers: [ROUTER_PROVIDERS, provideRoutes(routes), {
+          provide: ROUTER_FORROOT_GUARD,
+          useFactory: provideForRootGuard,
+          deps: [[Router, new _angular_core.Optional(), new _angular_core.SkipSelf()]]
+        }, {
+          provide: ROUTER_CONFIGURATION,
+          useValue: config ? config : {}
+        }, {
+          provide: _angular_common.LocationStrategy,
+          useFactory: provideLocationStrategy,
+          deps: [_angular_common.PlatformLocation, [new _angular_core.Inject(_angular_common.APP_BASE_HREF), new _angular_core.Optional()], ROUTER_CONFIGURATION]
+        }, provideRouterInitializer()]
+      };
+    };
+    RouterModule.forChild = function(routes) {
+      return {
+        ngModule: RouterModule,
+        providers: [provideRoutes(routes)]
+      };
+    };
+    RouterModule.decorators = [{
+      type: _angular_core.NgModule,
+      args: [{
+        declarations: ROUTER_DIRECTIVES,
+        exports: ROUTER_DIRECTIVES
+      }]
+    }];
+    RouterModule.ctorParameters = [{
+      type: undefined,
+      decorators: [{type: _angular_core.Optional}, {
+        type: _angular_core.Inject,
+        args: [ROUTER_FORROOT_GUARD]
+      }]
+    }];
+    return RouterModule;
+  }());
+  function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
+    if (options === void 0) {
+      options = {};
+    }
+    return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) : new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
+  }
+  function provideForRootGuard(router) {
+    if (router) {
+      throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
+    }
+    return 'guarded';
+  }
+  function provideRoutes(routes) {
+    return [{
+      provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS,
+      multi: true,
+      useValue: routes
+    }, {
+      provide: ROUTES,
+      multi: true,
+      useValue: routes
+    }];
+  }
+  function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
+    if (opts === void 0) {
+      opts = {};
+    }
+    if (ref.componentTypes.length == 0) {
+      throw new Error('Bootstrap at least one component before injecting Router.');
+    }
+    var componentType = ref.componentTypes[0];
+    var r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
+    if (opts.errorHandler) {
+      r.errorHandler = opts.errorHandler;
+    }
+    if (opts.enableTracing) {
+      r.events.subscribe(function(e) {
+        console.group("Router Event: " + e.constructor.name);
+        console.log(e.toString());
+        console.log(e);
+        console.groupEnd();
+      });
+    }
+    return r;
+  }
+  function rootRoute(router) {
+    return router.routerState.root;
+  }
+  function initialRouterNavigation(router, opts) {
+    return function() {
+      if (opts.initialNavigation === false) {
+        router.setUpLocationChangeListener();
+      } else {
+        router.initialNavigation();
+      }
+    };
+  }
+  function provideRouterInitializer() {
+    return {
+      provide: _angular_core.APP_BOOTSTRAP_LISTENER,
+      multi: true,
+      useFactory: initialRouterNavigation,
+      deps: [Router, ROUTER_CONFIGURATION]
+    };
+  }
+  var __router_private__ = {
+    ROUTER_PROVIDERS: ROUTER_PROVIDERS,
+    ROUTES: ROUTES,
+    flatten: flatten
+  };
+  exports.RouterLink = RouterLink;
+  exports.RouterLinkWithHref = RouterLinkWithHref;
+  exports.RouterLinkActive = RouterLinkActive;
+  exports.RouterOutlet = RouterOutlet;
+  exports.NavigationCancel = NavigationCancel;
+  exports.NavigationEnd = NavigationEnd;
+  exports.NavigationError = NavigationError;
+  exports.NavigationStart = NavigationStart;
+  exports.Router = Router;
+  exports.RoutesRecognized = RoutesRecognized;
+  exports.RouterModule = RouterModule;
+  exports.provideRoutes = provideRoutes;
+  exports.RouterOutletMap = RouterOutletMap;
+  exports.ActivatedRoute = ActivatedRoute;
+  exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
+  exports.RouterState = RouterState;
+  exports.RouterStateSnapshot = RouterStateSnapshot;
+  exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
+  exports.DefaultUrlSerializer = DefaultUrlSerializer;
+  exports.UrlSegment = UrlSegment;
+  exports.UrlSerializer = UrlSerializer;
+  exports.UrlTree = UrlTree;
+  exports.__router_private__ = __router_private__;
+}));
+
+})();
+$__System.register('65', ['3', '13', '8'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
     var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
         var c = arguments.length,
             r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
@@ -23132,303 +28033,83 @@ $__System.registerDynamic("48", ["3", "7", "2c", "45", "46"], true, function ($_
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1 = $__require("3");
-    var http_1 = $__require("7");
-    var Observable_1 = $__require("2c");
-    $__require("45");
-    $__require("46");
-    var AuthConfigConsts = function () {
-        function AuthConfigConsts() {}
-        AuthConfigConsts.DEFAULT_TOKEN_NAME = 'id_token';
-        AuthConfigConsts.DEFAULT_HEADER_NAME = 'Authorization';
-        AuthConfigConsts.HEADER_PREFIX_BEARER = 'Bearer ';
-        return AuthConfigConsts;
-    }();
-    exports.AuthConfigConsts = AuthConfigConsts;
-    var AuthConfigDefaults = {
-        headerName: AuthConfigConsts.DEFAULT_HEADER_NAME,
-        headerPrefix: null,
-        tokenName: AuthConfigConsts.DEFAULT_TOKEN_NAME,
-        tokenGetter: function () {
-            return localStorage.getItem(AuthConfigDefaults.tokenName);
-        },
-        noJwtError: false,
-        globalHeaders: [],
-        noTokenScheme: false
-    };
-    /**
-     * Sets up the authentication configuration.
-     */
-    var AuthConfig = function () {
-        function AuthConfig(config) {
-            config = config || {};
-            this._config = objectAssign({}, AuthConfigDefaults, config);
-            if (this._config.headerPrefix) {
-                this._config.headerPrefix += ' ';
-            } else if (this._config.noTokenScheme) {
-                this._config.headerPrefix = '';
-            } else {
-                this._config.headerPrefix = AuthConfigConsts.HEADER_PREFIX_BEARER;
-            }
-        }
-        AuthConfig.prototype.getConfig = function () {
-            return this._config;
-        };
-        return AuthConfig;
-    }();
-    exports.AuthConfig = AuthConfig;
-    var AuthHttpError = function (_super) {
-        __extends(AuthHttpError, _super);
-        function AuthHttpError() {
-            _super.apply(this, arguments);
-        }
-        return AuthHttpError;
-    }(Error);
-    exports.AuthHttpError = AuthHttpError;
-    /**
-     * Allows for explicit authenticated HTTP requests.
-     */
-    var AuthHttp = function () {
-        function AuthHttp(options, http, defOpts) {
-            var _this = this;
-            this.http = http;
-            this.defOpts = defOpts;
-            this.config = options.getConfig();
-            this.tokenStream = new Observable_1.Observable(function (obs) {
-                obs.next(_this.config.tokenGetter());
-            });
-        }
-        AuthHttp.prototype.mergeOptions = function (providedOpts, defaultOpts) {
-            var newOptions = defaultOpts || new http_1.RequestOptions();
-            if (this.config.globalHeaders) {
-                this.setGlobalHeaders(this.config.globalHeaders, providedOpts);
-            }
-            newOptions = newOptions.merge(new http_1.RequestOptions(providedOpts));
-            return newOptions;
-        };
-        AuthHttp.prototype.requestHelper = function (requestArgs, additionalOptions) {
-            var options = new http_1.RequestOptions(requestArgs);
-            if (additionalOptions) {
-                options = options.merge(additionalOptions);
-            }
-            return this.request(new http_1.Request(this.mergeOptions(options, this.defOpts)));
-        };
-        AuthHttp.prototype.requestWithToken = function (req, token) {
-            if (!tokenNotExpired(undefined, token)) {
-                if (!this.config.noJwtError) {
-                    return new Observable_1.Observable(function (obs) {
-                        obs.error(new AuthHttpError('No JWT present or has expired'));
+    var core_1, encuesta_service_1, router_1;
+    var EstadisticasEncuestaComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (encuesta_service_1_1) {
+            encuesta_service_1 = encuesta_service_1_1;
+        }, function (router_1_1) {
+            router_1 = router_1_1;
+        }],
+        execute: function () {
+            EstadisticasEncuestaComponent = class EstadisticasEncuestaComponent {
+                constructor(encuestaService, route) {
+                    this.pie_ChartData = [['Condición', 'Cantidad']];
+                    var id = route.snapshot.params['id'];
+                    encuestaService.obtenerEstadisticas(id).subscribe(estadistica => {
+                        console.log(estadistica);
+                        this.estadisticas = estadistica.estadisticas;
+                        this.materias = estadistica.encuesta.materias;
+                        this.titulo = 'Estadísticas de inscripción ' + estadistica.encuesta.anho + ' del semestre ' + estadistica.encuesta.semestre + ' - ' + estadistica.encuesta.carrera;
+                    }, error => {
+                        console.log(error);
+                    });
+                    encuestaService.completaron(id).subscribe(res => {
+                        console.log(res);
+                        this.completaron = res.completaron;
+                        this.noIniciarion = res.total - res.completaronAlgunaOpcion;
+                        this.completaronAlgunaOpcion = res.completaronAlgunaOpcion;
+                        this.total = res.total;
+                        this.pie_ChartData.push(['Completaron y cursan por lo menos una', res.completaron - res.completaronYNoCursanNada]);
+                        this.pie_ChartData.push(['No iniciaron la encuesta', res.total - res.completaron]);
+                        this.pie_ChartData.push(['Completaron y no cursan nada', res.completaronYNoCursanNada]);
+                        //this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
+                    }, error => {
+                        console.log(error);
                     });
                 }
-            } else {
-                req.headers.set(this.config.headerName, this.config.headerPrefix + token);
-            }
-            return this.http.request(req);
-        };
-        AuthHttp.prototype.setGlobalHeaders = function (headers, request) {
-            if (!request.headers) {
-                request.headers = new http_1.Headers();
-            }
-            headers.forEach(function (header) {
-                var key = Object.keys(header)[0];
-                var headerValue = header[key];
-                request.headers.set(key, headerValue);
-            });
-        };
-        AuthHttp.prototype.request = function (url, options) {
-            var _this = this;
-            if (typeof url === 'string') {
-                return this.get(url, options); // Recursion: transform url from String to Request
-            }
-            // else if ( ! url instanceof Request ) {
-            //   throw new Error('First argument must be a url string or Request instance.');
-            // }
-            // from this point url is always an instance of Request;
-            var req = url;
-            var token = this.config.tokenGetter();
-            if (token instanceof Promise) {
-                return Observable_1.Observable.fromPromise(token).mergeMap(function (jwtToken) {
-                    return _this.requestWithToken(req, jwtToken);
-                });
-            } else {
-                return this.requestWithToken(req, token);
-            }
-        };
-        AuthHttp.prototype.get = function (url, options) {
-            return this.requestHelper({ body: '', method: http_1.RequestMethod.Get, url: url }, options);
-        };
-        AuthHttp.prototype.post = function (url, body, options) {
-            return this.requestHelper({ body: body, method: http_1.RequestMethod.Post, url: url }, options);
-        };
-        AuthHttp.prototype.put = function (url, body, options) {
-            return this.requestHelper({ body: body, method: http_1.RequestMethod.Put, url: url }, options);
-        };
-        AuthHttp.prototype.delete = function (url, options) {
-            return this.requestHelper({ body: '', method: http_1.RequestMethod.Delete, url: url }, options);
-        };
-        AuthHttp.prototype.patch = function (url, body, options) {
-            return this.requestHelper({ body: body, method: http_1.RequestMethod.Patch, url: url }, options);
-        };
-        AuthHttp.prototype.head = function (url, options) {
-            return this.requestHelper({ body: '', method: http_1.RequestMethod.Head, url: url }, options);
-        };
-        AuthHttp.prototype.options = function (url, options) {
-            return this.requestHelper({ body: '', method: http_1.RequestMethod.Options, url: url }, options);
-        };
-        AuthHttp = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [AuthConfig, http_1.Http, http_1.RequestOptions])], AuthHttp);
-        return AuthHttp;
-    }();
-    exports.AuthHttp = AuthHttp;
-    /**
-     * Helper class to decode and find JWT expiration.
-     */
-    var JwtHelper = function () {
-        function JwtHelper() {}
-        JwtHelper.prototype.urlBase64Decode = function (str) {
-            var output = str.replace(/-/g, '+').replace(/_/g, '/');
-            switch (output.length % 4) {
-                case 0:
-                    {
-                        break;
+                cantidadPara(materia, opcion) {
+                    var estadistica = this.estadisticas.filter(estadistica => estadistica._id.materia == materia.nombre && estadistica._id.opcion == opcion.descripcion)[0];
+                    if (estadistica) {
+                        if (opcion.limite <= estadistica.count) {
+                            materia.tieneOpcionConLimiteSuperado = true;
+                        }
+                        return estadistica.count;
                     }
-                case 2:
-                    {
-                        output += '==';
-                        break;
-                    }
-                case 3:
-                    {
-                        output += '=';
-                        break;
-                    }
-                default:
-                    {
-                        throw 'Illegal base64url string!';
-                    }
-            }
-            return this.b64DecodeUnicode(output);
-        };
-        // https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
-        JwtHelper.prototype.b64DecodeUnicode = function (str) {
-            return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
-                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-        };
-        JwtHelper.prototype.decodeToken = function (token) {
-            var parts = token.split('.');
-            if (parts.length !== 3) {
-                throw new Error('JWT must have 3 parts');
-            }
-            var decoded = this.urlBase64Decode(parts[1]);
-            if (!decoded) {
-                throw new Error('Cannot decode the token');
-            }
-            return JSON.parse(decoded);
-        };
-        JwtHelper.prototype.getTokenExpirationDate = function (token) {
-            var decoded;
-            decoded = this.decodeToken(token);
-            if (!decoded.hasOwnProperty('exp')) {
-                return null;
-            }
-            var date = new Date(0); // The 0 here is the key, which sets the date to the epoch
-            date.setUTCSeconds(decoded.exp);
-            return date;
-        };
-        JwtHelper.prototype.isTokenExpired = function (token, offsetSeconds) {
-            var date = this.getTokenExpirationDate(token);
-            offsetSeconds = offsetSeconds || 0;
-            if (date == null) {
-                return false;
-            }
-            // Token expired?
-            return !(date.valueOf() > new Date().valueOf() + offsetSeconds * 1000);
-        };
-        return JwtHelper;
-    }();
-    exports.JwtHelper = JwtHelper;
-    /**
-     * Checks for presence of token and that token hasn't expired.
-     * For use with the @CanActivate router decorator and NgIf
-     */
-    function tokenNotExpired(tokenName, jwt) {
-        if (tokenName === void 0) {
-            tokenName = AuthConfigConsts.DEFAULT_TOKEN_NAME;
-        }
-        var token = jwt || localStorage.getItem(tokenName);
-        var jwtHelper = new JwtHelper();
-        return token != null && !jwtHelper.isTokenExpired(token);
-    }
-    exports.tokenNotExpired = tokenNotExpired;
-    exports.AUTH_PROVIDERS = [{
-        provide: AuthHttp,
-        deps: [http_1.Http, http_1.RequestOptions],
-        useFactory: function (http, options) {
-            return new AuthHttp(new AuthConfig(), http, options);
-        }
-    }];
-    function provideAuth(config) {
-        return [{
-            provide: AuthHttp,
-            deps: [http_1.Http, http_1.RequestOptions],
-            useFactory: function (http, options) {
-                return new AuthHttp(new AuthConfig(config), http, options);
-            }
-        }];
-    }
-    exports.provideAuth = provideAuth;
-    var hasOwnProperty = Object.prototype.hasOwnProperty;
-    var propIsEnumerable = Object.prototype.propertyIsEnumerable;
-    function toObject(val) {
-        if (val === null || val === undefined) {
-            throw new TypeError('Object.assign cannot be called with null or undefined');
-        }
-        return Object(val);
-    }
-    function objectAssign(target) {
-        var source = [];
-        for (var _i = 1; _i < arguments.length; _i++) {
-            source[_i - 1] = arguments[_i];
-        }
-        var from;
-        var to = toObject(target);
-        var symbols;
-        for (var s = 1; s < arguments.length; s++) {
-            from = Object(arguments[s]);
-            for (var key in from) {
-                if (hasOwnProperty.call(from, key)) {
-                    to[key] = from[key];
+                    return 0;
                 }
-            }
-            if (Object.getOwnPropertySymbols) {
-                symbols = Object.getOwnPropertySymbols(from);
-                for (var i = 0; i < symbols.length; i++) {
-                    if (propIsEnumerable.call(from, symbols[i])) {
-                        to[symbols[i]] = from[symbols[i]];
+                ngOnInit() {
+                    google.charts.load('current', {
+                        'packages': ['corechart', 'gauge']
+                    });
+                    setTimeout(() => this.drawGraph(this.pie_ChartData), 1000);
+                }
+                drawGraph(pie_ChartData) {
+                    google.charts.setOnLoadCallback(drawChart);
+                    function drawChart() {
+                        var data = google.visualization.arrayToDataTable(pie_ChartData);
+                        var options = {
+                            title: 'Gráfico estadístico sobre el total de alumnos asignados',
+                            is3D: true
+                        };
+                        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+                        chart.draw(data, options);
                     }
                 }
-            }
+            };
+            EstadisticasEncuestaComponent = __decorate([core_1.Component({
+                selector: 'estadisticas-encuesta',
+                templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
+                providers: [encuesta_service_1.EncuestaService]
+            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService, router_1.ActivatedRoute])], EstadisticasEncuestaComponent);
+            exports_1("EstadisticasEncuestaComponent", EstadisticasEncuestaComponent);
         }
-        return to;
-    }
-    
-
-    return module.exports;
+    };
 });
-$__System.registerDynamic('9', ['2c', '49'], true, function ($__require, exports, module) {
-  "use strict";
 
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var Observable_1 = $__require('2c');
-  var map_1 = $__require('49');
-  Observable_1.Observable.prototype.map = map_1.map;
-  
-
-  return module.exports;
-});
-$__System.register("e", ["3", "48", "9"], function (exports_1, context_1) {
+$__System.register("13", ["3", "12"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -23443,4588 +28124,110 @@ $__System.register("e", ["3", "48", "9"], function (exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, angular2_jwt_1;
-    var ApiService;
+    var EncuestaService;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
         }, function (angular2_jwt_1_1) {
             angular2_jwt_1 = angular2_jwt_1_1;
-        }, function (_1) {}],
-        execute: function () {
-            ApiService = function () {
-                function ApiService(authHttp) {
-                    this.authHttp = authHttp;
-                }
-                ApiService.prototype.get = function (url) {
-                    return this.authHttp.get(url).map(function (response) {
-                        return response.json();
-                    });
-                };
-                ApiService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], ApiService);
-                return ApiService;
-            }();
-            exports_1("ApiService", ApiService);
-        }
-    };
-});
-
-$__System.register("14", ["3", "13", "e"], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, common_1, api_service_1;
-    var SharedModule;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (common_1_1) {
-            common_1 = common_1_1;
-        }, function (api_service_1_1) {
-            api_service_1 = api_service_1_1;
         }],
         execute: function () {
-            SharedModule = function () {
-                function SharedModule() {}
-                SharedModule.forRoot = function () {
-                    return {
-                        ngModule: SharedModule,
-                        providers: [api_service_1.ApiService]
-                    };
-                };
-                SharedModule = __decorate([core_1.NgModule({
-                    imports: [common_1.CommonModule],
-                    declarations: [],
-                    exports: []
-                }), __metadata('design:paramtypes', [])], SharedModule);
-                return SharedModule;
-            }();
-            exports_1("SharedModule", SharedModule);
-        }
-    };
-});
-
-(function() {
-var define = $__System.amdDefine;
-(function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) : typeof define === 'function' && define.amd ? define("5", ["exports", "13", "3"], factory) : (factory((global.ng = global.ng || {}, global.ng.platformBrowser = global.ng.platformBrowser || {}), global.ng.common, global.ng.core));
-}(this, function(exports, _angular_common, _angular_core) {
-  'use strict';
-  var DebugDomRootRenderer = _angular_core.__core_private__.DebugDomRootRenderer;
-  var NoOpAnimationPlayer = _angular_core.__core_private__.NoOpAnimationPlayer;
-  var _NoOpAnimationDriver = (function() {
-    function _NoOpAnimationDriver() {}
-    _NoOpAnimationDriver.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
-      return new NoOpAnimationPlayer();
-    };
-    return _NoOpAnimationDriver;
-  }());
-  var AnimationDriver = (function() {
-    function AnimationDriver() {}
-    AnimationDriver.NOOP = new _NoOpAnimationDriver();
-    return AnimationDriver;
-  }());
-  var globalScope;
-  if (typeof window === 'undefined') {
-    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-      globalScope = self;
-    } else {
-      globalScope = global;
-    }
-  } else {
-    globalScope = window;
-  }
-  var global$1 = globalScope;
-  var Date = global$1.Date;
-  global$1.assert = function assert(condition) {};
-  function isPresent(obj) {
-    return obj !== undefined && obj !== null;
-  }
-  function isBlank(obj) {
-    return obj === undefined || obj === null;
-  }
-  function isNumber(obj) {
-    return typeof obj === 'number';
-  }
-  function isString(obj) {
-    return typeof obj === 'string';
-  }
-  function isFunction(obj) {
-    return typeof obj === 'function';
-  }
-  function isArray(obj) {
-    return Array.isArray(obj);
-  }
-  function stringify(token) {
-    if (typeof token === 'string') {
-      return token;
-    }
-    if (token === undefined || token === null) {
-      return '' + token;
-    }
-    if (token.overriddenName) {
-      return token.overriddenName;
-    }
-    if (token.name) {
-      return token.name;
-    }
-    var res = token.toString();
-    var newLineIndex = res.indexOf('\n');
-    return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
-  }
-  var StringWrapper = (function() {
-    function StringWrapper() {}
-    StringWrapper.fromCharCode = function(code) {
-      return String.fromCharCode(code);
-    };
-    StringWrapper.charCodeAt = function(s, index) {
-      return s.charCodeAt(index);
-    };
-    StringWrapper.split = function(s, regExp) {
-      return s.split(regExp);
-    };
-    StringWrapper.equals = function(s, s2) {
-      return s === s2;
-    };
-    StringWrapper.stripLeft = function(s, charVal) {
-      if (s && s.length) {
-        var pos = 0;
-        for (var i = 0; i < s.length; i++) {
-          if (s[i] != charVal)
-            break;
-          pos++;
-        }
-        s = s.substring(pos);
-      }
-      return s;
-    };
-    StringWrapper.stripRight = function(s, charVal) {
-      if (s && s.length) {
-        var pos = s.length;
-        for (var i = s.length - 1; i >= 0; i--) {
-          if (s[i] != charVal)
-            break;
-          pos--;
-        }
-        s = s.substring(0, pos);
-      }
-      return s;
-    };
-    StringWrapper.replace = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.replaceAll = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.slice = function(s, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return s.slice(from, to === null ? undefined : to);
-    };
-    StringWrapper.replaceAllMapped = function(s, from, cb) {
-      return s.replace(from, function() {
-        var matches = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          matches[_i - 0] = arguments[_i];
-        }
-        matches.splice(-2, 2);
-        return cb(matches);
-      });
-    };
-    StringWrapper.contains = function(s, substr) {
-      return s.indexOf(substr) != -1;
-    };
-    StringWrapper.compare = function(a, b) {
-      if (a < b) {
-        return -1;
-      } else if (a > b) {
-        return 1;
-      } else {
-        return 0;
-      }
-    };
-    return StringWrapper;
-  }());
-  var NumberWrapper = (function() {
-    function NumberWrapper() {}
-    NumberWrapper.toFixed = function(n, fractionDigits) {
-      return n.toFixed(fractionDigits);
-    };
-    NumberWrapper.equal = function(a, b) {
-      return a === b;
-    };
-    NumberWrapper.parseIntAutoRadix = function(text) {
-      var result = parseInt(text);
-      if (isNaN(result)) {
-        throw new Error('Invalid integer literal when parsing ' + text);
-      }
-      return result;
-    };
-    NumberWrapper.parseInt = function(text, radix) {
-      if (radix == 10) {
-        if (/^(\-|\+)?[0-9]+$/.test(text)) {
-          return parseInt(text, radix);
-        }
-      } else if (radix == 16) {
-        if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
-          return parseInt(text, radix);
-        }
-      } else {
-        var result = parseInt(text, radix);
-        if (!isNaN(result)) {
-          return result;
-        }
-      }
-      throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
-    };
-    Object.defineProperty(NumberWrapper, "NaN", {
-      get: function() {
-        return NaN;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NumberWrapper.isNumeric = function(value) {
-      return !isNaN(value - parseFloat(value));
-    };
-    NumberWrapper.isNaN = function(value) {
-      return isNaN(value);
-    };
-    NumberWrapper.isInteger = function(value) {
-      return Number.isInteger(value);
-    };
-    return NumberWrapper;
-  }());
-  var Json = (function() {
-    function Json() {}
-    Json.parse = function(s) {
-      return global$1.JSON.parse(s);
-    };
-    Json.stringify = function(data) {
-      return global$1.JSON.stringify(data, null, 2);
-    };
-    return Json;
-  }());
-  var DateWrapper = (function() {
-    function DateWrapper() {}
-    DateWrapper.create = function(year, month, day, hour, minutes, seconds, milliseconds) {
-      if (month === void 0) {
-        month = 1;
-      }
-      if (day === void 0) {
-        day = 1;
-      }
-      if (hour === void 0) {
-        hour = 0;
-      }
-      if (minutes === void 0) {
-        minutes = 0;
-      }
-      if (seconds === void 0) {
-        seconds = 0;
-      }
-      if (milliseconds === void 0) {
-        milliseconds = 0;
-      }
-      return new Date(year, month - 1, day, hour, minutes, seconds, milliseconds);
-    };
-    DateWrapper.fromISOString = function(str) {
-      return new Date(str);
-    };
-    DateWrapper.fromMillis = function(ms) {
-      return new Date(ms);
-    };
-    DateWrapper.toMillis = function(date) {
-      return date.getTime();
-    };
-    DateWrapper.now = function() {
-      return new Date();
-    };
-    DateWrapper.toJson = function(date) {
-      return date.toJSON();
-    };
-    return DateWrapper;
-  }());
-  function setValueOnPath(global, path, value) {
-    var parts = path.split('.');
-    var obj = global;
-    while (parts.length > 1) {
-      var name = parts.shift();
-      if (obj.hasOwnProperty(name) && isPresent(obj[name])) {
-        obj = obj[name];
-      } else {
-        obj = obj[name] = {};
-      }
-    }
-    if (obj === undefined || obj === null) {
-      obj = {};
-    }
-    obj[parts.shift()] = value;
-  }
-  var Map$1 = global$1.Map;
-  var Set$1 = global$1.Set;
-  var createMapFromPairs = (function() {
-    try {
-      if (new Map$1([[1, 2]]).size === 1) {
-        return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
-      for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        map.set(pair[0], pair[1]);
-      }
-      return map;
-    };
-  })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
-  var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
-      return function _clearValues(m) {
-        var keyIterator = m.keys();
-        var k;
-        while (!((k = keyIterator.next()).done)) {
-          m.set(k.value, null);
-        }
-      };
-    } else {
-      return function _clearValuesWithForeEach(m) {
-        m.forEach(function(v, k) {
-          m.set(k, null);
-        });
-      };
-    }
-  })();
-  var _arrayFromMap = (function() {
-    try {
-      if ((new Map$1()).values().next) {
-        return function createArrayFromMap(m, getValues) {
-          return getValues ? Array.from(m.values()) : Array.from(m.keys());
-        };
-      }
-    } catch (e) {}
-    return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
-          i = 0;
-      m.forEach(function(v, k) {
-        res[i] = getValues ? v : k;
-        i++;
-      });
-      return res;
-    };
-  })();
-  var StringMapWrapper = (function() {
-    function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
-    StringMapWrapper.get = function(map, key) {
-      return map.hasOwnProperty(key) ? map[key] : undefined;
-    };
-    StringMapWrapper.set = function(map, key, value) {
-      map[key] = value;
-    };
-    StringMapWrapper.keys = function(map) {
-      return Object.keys(map);
-    };
-    StringMapWrapper.values = function(map) {
-      return Object.keys(map).map(function(k) {
-        return map[k];
-      });
-    };
-    StringMapWrapper.isEmpty = function(map) {
-      for (var prop in map) {
-        return false;
-      }
-      return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
-    };
-    StringMapWrapper.forEach = function(map, callback) {
-      for (var _i = 0,
-          _a = Object.keys(map); _i < _a.length; _i++) {
-        var k = _a[_i];
-        callback(map[k], k);
-      }
-    };
-    StringMapWrapper.merge = function(m1, m2) {
-      var m = {};
-      for (var _i = 0,
-          _a = Object.keys(m1); _i < _a.length; _i++) {
-        var k = _a[_i];
-        m[k] = m1[k];
-      }
-      for (var _b = 0,
-          _c = Object.keys(m2); _b < _c.length; _b++) {
-        var k = _c[_b];
-        m[k] = m2[k];
-      }
-      return m;
-    };
-    StringMapWrapper.equals = function(m1, m2) {
-      var k1 = Object.keys(m1);
-      var k2 = Object.keys(m2);
-      if (k1.length != k2.length) {
-        return false;
-      }
-      for (var i = 0; i < k1.length; i++) {
-        var key = k1[i];
-        if (m1[key] !== m2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    return StringMapWrapper;
-  }());
-  var ListWrapper = (function() {
-    function ListWrapper() {}
-    ListWrapper.createFixedSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.createGrowableSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.clone = function(array) {
-      return array.slice(0);
-    };
-    ListWrapper.forEachWithIndex = function(array, fn) {
-      for (var i = 0; i < array.length; i++) {
-        fn(array[i], i);
-      }
-    };
-    ListWrapper.first = function(array) {
-      if (!array)
-        return null;
-      return array[0];
-    };
-    ListWrapper.last = function(array) {
-      if (!array || array.length == 0)
-        return null;
-      return array[array.length - 1];
-    };
-    ListWrapper.indexOf = function(array, value, startIndex) {
-      if (startIndex === void 0) {
-        startIndex = 0;
-      }
-      return array.indexOf(value, startIndex);
-    };
-    ListWrapper.contains = function(list, el) {
-      return list.indexOf(el) !== -1;
-    };
-    ListWrapper.reversed = function(array) {
-      var a = ListWrapper.clone(array);
-      return a.reverse();
-    };
-    ListWrapper.concat = function(a, b) {
-      return a.concat(b);
-    };
-    ListWrapper.insert = function(list, index, value) {
-      list.splice(index, 0, value);
-    };
-    ListWrapper.removeAt = function(list, index) {
-      var res = list[index];
-      list.splice(index, 1);
-      return res;
-    };
-    ListWrapper.removeAll = function(list, items) {
-      for (var i = 0; i < items.length; ++i) {
-        var index = list.indexOf(items[i]);
-        list.splice(index, 1);
-      }
-    };
-    ListWrapper.remove = function(list, el) {
-      var index = list.indexOf(el);
-      if (index > -1) {
-        list.splice(index, 1);
-        return true;
-      }
-      return false;
-    };
-    ListWrapper.clear = function(list) {
-      list.length = 0;
-    };
-    ListWrapper.isEmpty = function(list) {
-      return list.length == 0;
-    };
-    ListWrapper.fill = function(list, value, start, end) {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (end === void 0) {
-        end = null;
-      }
-      list.fill(value, start, end === null ? list.length : end);
-    };
-    ListWrapper.equals = function(a, b) {
-      if (a.length != b.length)
-        return false;
-      for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i])
-          return false;
-      }
-      return true;
-    };
-    ListWrapper.slice = function(l, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return l.slice(from, to === null ? undefined : to);
-    };
-    ListWrapper.splice = function(l, from, length) {
-      return l.splice(from, length);
-    };
-    ListWrapper.sort = function(l, compareFn) {
-      if (isPresent(compareFn)) {
-        l.sort(compareFn);
-      } else {
-        l.sort();
-      }
-    };
-    ListWrapper.toString = function(l) {
-      return l.toString();
-    };
-    ListWrapper.toJSON = function(l) {
-      return JSON.stringify(l);
-    };
-    ListWrapper.maximum = function(list, predicate) {
-      if (list.length == 0) {
-        return null;
-      }
-      var solution = null;
-      var maxValue = -Infinity;
-      for (var index = 0; index < list.length; index++) {
-        var candidate = list[index];
-        if (isBlank(candidate)) {
-          continue;
-        }
-        var candidateValue = predicate(candidate);
-        if (candidateValue > maxValue) {
-          solution = candidate;
-          maxValue = candidateValue;
-        }
-      }
-      return solution;
-    };
-    ListWrapper.flatten = function(list) {
-      var target = [];
-      _flattenArray(list, target);
-      return target;
-    };
-    ListWrapper.addAll = function(list, source) {
-      for (var i = 0; i < source.length; i++) {
-        list.push(source[i]);
-      }
-    };
-    return ListWrapper;
-  }());
-  function _flattenArray(source, target) {
-    if (isPresent(source)) {
-      for (var i = 0; i < source.length; i++) {
-        var item = source[i];
-        if (isArray(item)) {
-          _flattenArray(item, target);
-        } else {
-          target.push(item);
-        }
-      }
-    }
-    return target;
-  }
-  var createSetFromList = (function() {
-    var test = new Set$1([1, 2, 3]);
-    if (test.size === 3) {
-      return function createSetFromList(lst) {
-        return new Set$1(lst);
-      };
-    } else {
-      return function createSetAndPopulateFromList(lst) {
-        var res = new Set$1(lst);
-        if (res.size !== lst.length) {
-          for (var i = 0; i < lst.length; i++) {
-            res.add(lst[i]);
-          }
-        }
-        return res;
-      };
-    }
-  })();
-  var CAMEL_CASE_REGEXP = /([A-Z])/g;
-  var DASH_CASE_REGEXP = /-([a-z])/g;
-  function camelCaseToDashCase(input) {
-    return StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function(m) {
-      return '-' + m[1].toLowerCase();
-    });
-  }
-  function dashCaseToCamelCase(input) {
-    return StringWrapper.replaceAllMapped(input, DASH_CASE_REGEXP, function(m) {
-      return m[1].toUpperCase();
-    });
-  }
-  var _DOM = null;
-  function getDOM() {
-    return _DOM;
-  }
-  function setRootDomAdapter(adapter) {
-    if (isBlank(_DOM)) {
-      _DOM = adapter;
-    }
-  }
-  var DomAdapter = (function() {
-    function DomAdapter() {
-      this.resourceLoaderType = null;
-    }
-    Object.defineProperty(DomAdapter.prototype, "attrToPropMap", {
-      get: function() {
-        return this._attrToPropMap;
-      },
-      set: function(value) {
-        this._attrToPropMap = value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ;
-    ;
-    return DomAdapter;
-  }());
-  var WebAnimationsPlayer = (function() {
-    function WebAnimationsPlayer(element, keyframes, options) {
-      this.element = element;
-      this.keyframes = keyframes;
-      this.options = options;
-      this._onDoneFns = [];
-      this._onStartFns = [];
-      this._finished = false;
-      this._initialized = false;
-      this._started = false;
-      this.parentPlayer = null;
-      this._duration = options['duration'];
-    }
-    WebAnimationsPlayer.prototype._onFinish = function() {
-      if (!this._finished) {
-        this._finished = true;
-        if (!isPresent(this.parentPlayer)) {
-          this.destroy();
-        }
-        this._onDoneFns.forEach(function(fn) {
-          return fn();
-        });
-        this._onDoneFns = [];
-      }
-    };
-    WebAnimationsPlayer.prototype.init = function() {
-      var _this = this;
-      if (this._initialized)
-        return;
-      this._initialized = true;
-      var keyframes = this.keyframes.map(function(styles) {
-        var formattedKeyframe = {};
-        StringMapWrapper.forEach(styles, function(value, prop) {
-          formattedKeyframe[prop] = value == _angular_core.AUTO_STYLE ? _computeStyle(_this.element, prop) : value;
-        });
-        return formattedKeyframe;
-      });
-      this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
-      this.reset();
-      this._player.onfinish = function() {
-        return _this._onFinish();
-      };
-    };
-    WebAnimationsPlayer.prototype._triggerWebAnimation = function(element, keyframes, options) {
-      return element.animate(keyframes, options);
-    };
-    WebAnimationsPlayer.prototype.onStart = function(fn) {
-      this._onStartFns.push(fn);
-    };
-    WebAnimationsPlayer.prototype.onDone = function(fn) {
-      this._onDoneFns.push(fn);
-    };
-    WebAnimationsPlayer.prototype.play = function() {
-      this.init();
-      if (!this.hasStarted()) {
-        this._onStartFns.forEach(function(fn) {
-          return fn();
-        });
-        this._onStartFns = [];
-        this._started = true;
-      }
-      this._player.play();
-    };
-    WebAnimationsPlayer.prototype.pause = function() {
-      this.init();
-      this._player.pause();
-    };
-    WebAnimationsPlayer.prototype.finish = function() {
-      this.init();
-      this._onFinish();
-      this._player.finish();
-    };
-    WebAnimationsPlayer.prototype.reset = function() {
-      this._player.cancel();
-    };
-    WebAnimationsPlayer.prototype.restart = function() {
-      this.reset();
-      this.play();
-    };
-    WebAnimationsPlayer.prototype.hasStarted = function() {
-      return this._started;
-    };
-    WebAnimationsPlayer.prototype.destroy = function() {
-      this.reset();
-      this._onFinish();
-    };
-    Object.defineProperty(WebAnimationsPlayer.prototype, "totalTime", {
-      get: function() {
-        return this._duration;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    WebAnimationsPlayer.prototype.setPosition = function(p) {
-      this._player.currentTime = p * this.totalTime;
-    };
-    WebAnimationsPlayer.prototype.getPosition = function() {
-      return this._player.currentTime / this.totalTime;
-    };
-    return WebAnimationsPlayer;
-  }());
-  function _computeStyle(element, prop) {
-    return getDOM().getComputedStyle(element)[prop];
-  }
-  var WebAnimationsDriver = (function() {
-    function WebAnimationsDriver() {}
-    WebAnimationsDriver.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
-      var formattedSteps = [];
-      var startingStyleLookup = {};
-      if (isPresent(startingStyles) && startingStyles.styles.length > 0) {
-        startingStyleLookup = _populateStyles(element, startingStyles, {});
-        startingStyleLookup['offset'] = 0;
-        formattedSteps.push(startingStyleLookup);
-      }
-      keyframes.forEach(function(keyframe) {
-        var data = _populateStyles(element, keyframe.styles, startingStyleLookup);
-        data['offset'] = keyframe.offset;
-        formattedSteps.push(data);
-      });
-      if (formattedSteps.length == 1) {
-        var start = formattedSteps[0];
-        start['offset'] = null;
-        formattedSteps = [start, start];
-      }
-      var playerOptions = {
-        'duration': duration,
-        'delay': delay,
-        'fill': 'both'
-      };
-      if (easing) {
-        playerOptions['easing'] = easing;
-      }
-      return new WebAnimationsPlayer(element, formattedSteps, playerOptions);
-    };
-    return WebAnimationsDriver;
-  }());
-  function _populateStyles(element, styles, defaultStyles) {
-    var data = {};
-    styles.styles.forEach(function(entry) {
-      StringMapWrapper.forEach(entry, function(val, prop) {
-        var formattedProp = dashCaseToCamelCase(prop);
-        data[formattedProp] = val == _angular_core.AUTO_STYLE ? val : val.toString() + _resolveStyleUnit(val, prop, formattedProp);
-      });
-    });
-    StringMapWrapper.forEach(defaultStyles, function(value, prop) {
-      if (!isPresent(data[prop])) {
-        data[prop] = value;
-      }
-    });
-    return data;
-  }
-  function _resolveStyleUnit(val, userProvidedProp, formattedProp) {
-    var unit = '';
-    if (_isPixelDimensionStyle(formattedProp) && val != 0 && val != '0') {
-      if (isNumber(val)) {
-        unit = 'px';
-      } else if (_findDimensionalSuffix(val.toString()).length == 0) {
-        throw new Error('Please provide a CSS unit value for ' + userProvidedProp + ':' + val);
-      }
-    }
-    return unit;
-  }
-  var _$0 = 48;
-  var _$9 = 57;
-  var _$PERIOD = 46;
-  function _findDimensionalSuffix(value) {
-    for (var i = 0; i < value.length; i++) {
-      var c = StringWrapper.charCodeAt(value, i);
-      if ((c >= _$0 && c <= _$9) || c == _$PERIOD)
-        continue;
-      return value.substring(i, value.length);
-    }
-    return '';
-  }
-  function _isPixelDimensionStyle(prop) {
-    switch (prop) {
-      case 'width':
-      case 'height':
-      case 'minWidth':
-      case 'minHeight':
-      case 'maxWidth':
-      case 'maxHeight':
-      case 'left':
-      case 'top':
-      case 'bottom':
-      case 'right':
-      case 'fontSize':
-      case 'outlineWidth':
-      case 'outlineOffset':
-      case 'paddingTop':
-      case 'paddingLeft':
-      case 'paddingBottom':
-      case 'paddingRight':
-      case 'marginTop':
-      case 'marginLeft':
-      case 'marginBottom':
-      case 'marginRight':
-      case 'borderRadius':
-      case 'borderWidth':
-      case 'borderTopWidth':
-      case 'borderLeftWidth':
-      case 'borderRightWidth':
-      case 'borderBottomWidth':
-      case 'textIndent':
-        return true;
-      default:
-        return false;
-    }
-  }
-  var __extends$1 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var GenericBrowserDomAdapter = (function(_super) {
-    __extends$1(GenericBrowserDomAdapter, _super);
-    function GenericBrowserDomAdapter() {
-      var _this = this;
-      _super.call(this);
-      this._animationPrefix = null;
-      this._transitionEnd = null;
-      try {
-        var element = this.createElement('div', this.defaultDoc());
-        if (isPresent(this.getStyle(element, 'animationName'))) {
-          this._animationPrefix = '';
-        } else {
-          var domPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
-          for (var i = 0; i < domPrefixes.length; i++) {
-            if (isPresent(this.getStyle(element, domPrefixes[i] + 'AnimationName'))) {
-              this._animationPrefix = '-' + domPrefixes[i].toLowerCase() + '-';
-              break;
-            }
-          }
-        }
-        var transEndEventNames = {
-          WebkitTransition: 'webkitTransitionEnd',
-          MozTransition: 'transitionend',
-          OTransition: 'oTransitionEnd otransitionend',
-          transition: 'transitionend'
-        };
-        StringMapWrapper.forEach(transEndEventNames, function(value, key) {
-          if (isPresent(_this.getStyle(element, key))) {
-            _this._transitionEnd = value;
-          }
-        });
-      } catch (e) {
-        this._animationPrefix = null;
-        this._transitionEnd = null;
-      }
-    }
-    GenericBrowserDomAdapter.prototype.getDistributedNodes = function(el) {
-      return el.getDistributedNodes();
-    };
-    GenericBrowserDomAdapter.prototype.resolveAndSetHref = function(el, baseUrl, href) {
-      el.href = href == null ? baseUrl : baseUrl + '/../' + href;
-    };
-    GenericBrowserDomAdapter.prototype.supportsDOMEvents = function() {
-      return true;
-    };
-    GenericBrowserDomAdapter.prototype.supportsNativeShadowDOM = function() {
-      return isFunction(this.defaultDoc().body.createShadowRoot);
-    };
-    GenericBrowserDomAdapter.prototype.getAnimationPrefix = function() {
-      return isPresent(this._animationPrefix) ? this._animationPrefix : '';
-    };
-    GenericBrowserDomAdapter.prototype.getTransitionEnd = function() {
-      return isPresent(this._transitionEnd) ? this._transitionEnd : '';
-    };
-    GenericBrowserDomAdapter.prototype.supportsAnimation = function() {
-      return isPresent(this._animationPrefix) && isPresent(this._transitionEnd);
-    };
-    return GenericBrowserDomAdapter;
-  }(DomAdapter));
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var _attrToPropMap = {
-    'class': 'className',
-    'innerHtml': 'innerHTML',
-    'readonly': 'readOnly',
-    'tabindex': 'tabIndex'
-  };
-  var DOM_KEY_LOCATION_NUMPAD = 3;
-  var _keyMap = {
-    '\b': 'Backspace',
-    '\t': 'Tab',
-    '\x7F': 'Delete',
-    '\x1B': 'Escape',
-    'Del': 'Delete',
-    'Esc': 'Escape',
-    'Left': 'ArrowLeft',
-    'Right': 'ArrowRight',
-    'Up': 'ArrowUp',
-    'Down': 'ArrowDown',
-    'Menu': 'ContextMenu',
-    'Scroll': 'ScrollLock',
-    'Win': 'OS'
-  };
-  var _chromeNumKeyPadMap = {
-    'A': '1',
-    'B': '2',
-    'C': '3',
-    'D': '4',
-    'E': '5',
-    'F': '6',
-    'G': '7',
-    'H': '8',
-    'I': '9',
-    'J': '*',
-    'K': '+',
-    'M': '-',
-    'N': '.',
-    'O': '/',
-    '\x60': '0',
-    '\x90': 'NumLock'
-  };
-  var BrowserDomAdapter = (function(_super) {
-    __extends(BrowserDomAdapter, _super);
-    function BrowserDomAdapter() {
-      _super.apply(this, arguments);
-    }
-    BrowserDomAdapter.prototype.parse = function(templateHtml) {
-      throw new Error('parse not implemented');
-    };
-    BrowserDomAdapter.makeCurrent = function() {
-      setRootDomAdapter(new BrowserDomAdapter());
-    };
-    BrowserDomAdapter.prototype.hasProperty = function(element, name) {
-      return name in element;
-    };
-    BrowserDomAdapter.prototype.setProperty = function(el, name, value) {
-      el[name] = value;
-    };
-    BrowserDomAdapter.prototype.getProperty = function(el, name) {
-      return el[name];
-    };
-    BrowserDomAdapter.prototype.invoke = function(el, methodName, args) {
-      el[methodName].apply(el, args);
-    };
-    BrowserDomAdapter.prototype.logError = function(error) {
-      if (window.console.error) {
-        window.console.error(error);
-      } else {
-        window.console.log(error);
-      }
-    };
-    BrowserDomAdapter.prototype.log = function(error) {
-      window.console.log(error);
-    };
-    BrowserDomAdapter.prototype.logGroup = function(error) {
-      if (window.console.group) {
-        window.console.group(error);
-        this.logError(error);
-      } else {
-        window.console.log(error);
-      }
-    };
-    BrowserDomAdapter.prototype.logGroupEnd = function() {
-      if (window.console.groupEnd) {
-        window.console.groupEnd();
-      }
-    };
-    Object.defineProperty(BrowserDomAdapter.prototype, "attrToPropMap", {
-      get: function() {
-        return _attrToPropMap;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    BrowserDomAdapter.prototype.query = function(selector) {
-      return document.querySelector(selector);
-    };
-    BrowserDomAdapter.prototype.querySelector = function(el, selector) {
-      return el.querySelector(selector);
-    };
-    BrowserDomAdapter.prototype.querySelectorAll = function(el, selector) {
-      return el.querySelectorAll(selector);
-    };
-    BrowserDomAdapter.prototype.on = function(el, evt, listener) {
-      el.addEventListener(evt, listener, false);
-    };
-    BrowserDomAdapter.prototype.onAndCancel = function(el, evt, listener) {
-      el.addEventListener(evt, listener, false);
-      return function() {
-        el.removeEventListener(evt, listener, false);
-      };
-    };
-    BrowserDomAdapter.prototype.dispatchEvent = function(el, evt) {
-      el.dispatchEvent(evt);
-    };
-    BrowserDomAdapter.prototype.createMouseEvent = function(eventType) {
-      var evt = document.createEvent('MouseEvent');
-      evt.initEvent(eventType, true, true);
-      return evt;
-    };
-    BrowserDomAdapter.prototype.createEvent = function(eventType) {
-      var evt = document.createEvent('Event');
-      evt.initEvent(eventType, true, true);
-      return evt;
-    };
-    BrowserDomAdapter.prototype.preventDefault = function(evt) {
-      evt.preventDefault();
-      evt.returnValue = false;
-    };
-    BrowserDomAdapter.prototype.isPrevented = function(evt) {
-      return evt.defaultPrevented || isPresent(evt.returnValue) && !evt.returnValue;
-    };
-    BrowserDomAdapter.prototype.getInnerHTML = function(el) {
-      return el.innerHTML;
-    };
-    BrowserDomAdapter.prototype.getTemplateContent = function(el) {
-      return 'content' in el && el instanceof HTMLTemplateElement ? el.content : null;
-    };
-    BrowserDomAdapter.prototype.getOuterHTML = function(el) {
-      return el.outerHTML;
-    };
-    BrowserDomAdapter.prototype.nodeName = function(node) {
-      return node.nodeName;
-    };
-    BrowserDomAdapter.prototype.nodeValue = function(node) {
-      return node.nodeValue;
-    };
-    BrowserDomAdapter.prototype.type = function(node) {
-      return node.type;
-    };
-    BrowserDomAdapter.prototype.content = function(node) {
-      if (this.hasProperty(node, 'content')) {
-        return node.content;
-      } else {
-        return node;
-      }
-    };
-    BrowserDomAdapter.prototype.firstChild = function(el) {
-      return el.firstChild;
-    };
-    BrowserDomAdapter.prototype.nextSibling = function(el) {
-      return el.nextSibling;
-    };
-    BrowserDomAdapter.prototype.parentElement = function(el) {
-      return el.parentNode;
-    };
-    BrowserDomAdapter.prototype.childNodes = function(el) {
-      return el.childNodes;
-    };
-    BrowserDomAdapter.prototype.childNodesAsList = function(el) {
-      var childNodes = el.childNodes;
-      var res = ListWrapper.createFixedSize(childNodes.length);
-      for (var i = 0; i < childNodes.length; i++) {
-        res[i] = childNodes[i];
-      }
-      return res;
-    };
-    BrowserDomAdapter.prototype.clearNodes = function(el) {
-      while (el.firstChild) {
-        el.removeChild(el.firstChild);
-      }
-    };
-    BrowserDomAdapter.prototype.appendChild = function(el, node) {
-      el.appendChild(node);
-    };
-    BrowserDomAdapter.prototype.removeChild = function(el, node) {
-      el.removeChild(node);
-    };
-    BrowserDomAdapter.prototype.replaceChild = function(el, newChild, oldChild) {
-      el.replaceChild(newChild, oldChild);
-    };
-    BrowserDomAdapter.prototype.remove = function(node) {
-      if (node.parentNode) {
-        node.parentNode.removeChild(node);
-      }
-      return node;
-    };
-    BrowserDomAdapter.prototype.insertBefore = function(el, node) {
-      el.parentNode.insertBefore(node, el);
-    };
-    BrowserDomAdapter.prototype.insertAllBefore = function(el, nodes) {
-      nodes.forEach(function(n) {
-        return el.parentNode.insertBefore(n, el);
-      });
-    };
-    BrowserDomAdapter.prototype.insertAfter = function(el, node) {
-      el.parentNode.insertBefore(node, el.nextSibling);
-    };
-    BrowserDomAdapter.prototype.setInnerHTML = function(el, value) {
-      el.innerHTML = value;
-    };
-    BrowserDomAdapter.prototype.getText = function(el) {
-      return el.textContent;
-    };
-    BrowserDomAdapter.prototype.setText = function(el, value) {
-      el.textContent = value;
-    };
-    BrowserDomAdapter.prototype.getValue = function(el) {
-      return el.value;
-    };
-    BrowserDomAdapter.prototype.setValue = function(el, value) {
-      el.value = value;
-    };
-    BrowserDomAdapter.prototype.getChecked = function(el) {
-      return el.checked;
-    };
-    BrowserDomAdapter.prototype.setChecked = function(el, value) {
-      el.checked = value;
-    };
-    BrowserDomAdapter.prototype.createComment = function(text) {
-      return document.createComment(text);
-    };
-    BrowserDomAdapter.prototype.createTemplate = function(html) {
-      var t = document.createElement('template');
-      t.innerHTML = html;
-      return t;
-    };
-    BrowserDomAdapter.prototype.createElement = function(tagName, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      return doc.createElement(tagName);
-    };
-    BrowserDomAdapter.prototype.createElementNS = function(ns, tagName, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      return doc.createElementNS(ns, tagName);
-    };
-    BrowserDomAdapter.prototype.createTextNode = function(text, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      return doc.createTextNode(text);
-    };
-    BrowserDomAdapter.prototype.createScriptTag = function(attrName, attrValue, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      var el = doc.createElement('SCRIPT');
-      el.setAttribute(attrName, attrValue);
-      return el;
-    };
-    BrowserDomAdapter.prototype.createStyleElement = function(css, doc) {
-      if (doc === void 0) {
-        doc = document;
-      }
-      var style = doc.createElement('style');
-      this.appendChild(style, this.createTextNode(css));
-      return style;
-    };
-    BrowserDomAdapter.prototype.createShadowRoot = function(el) {
-      return el.createShadowRoot();
-    };
-    BrowserDomAdapter.prototype.getShadowRoot = function(el) {
-      return el.shadowRoot;
-    };
-    BrowserDomAdapter.prototype.getHost = function(el) {
-      return el.host;
-    };
-    BrowserDomAdapter.prototype.clone = function(node) {
-      return node.cloneNode(true);
-    };
-    BrowserDomAdapter.prototype.getElementsByClassName = function(element, name) {
-      return element.getElementsByClassName(name);
-    };
-    BrowserDomAdapter.prototype.getElementsByTagName = function(element, name) {
-      return element.getElementsByTagName(name);
-    };
-    BrowserDomAdapter.prototype.classList = function(element) {
-      return Array.prototype.slice.call(element.classList, 0);
-    };
-    BrowserDomAdapter.prototype.addClass = function(element, className) {
-      element.classList.add(className);
-    };
-    BrowserDomAdapter.prototype.removeClass = function(element, className) {
-      element.classList.remove(className);
-    };
-    BrowserDomAdapter.prototype.hasClass = function(element, className) {
-      return element.classList.contains(className);
-    };
-    BrowserDomAdapter.prototype.setStyle = function(element, styleName, styleValue) {
-      element.style[styleName] = styleValue;
-    };
-    BrowserDomAdapter.prototype.removeStyle = function(element, stylename) {
-      element.style[stylename] = null;
-    };
-    BrowserDomAdapter.prototype.getStyle = function(element, stylename) {
-      return element.style[stylename];
-    };
-    BrowserDomAdapter.prototype.hasStyle = function(element, styleName, styleValue) {
-      if (styleValue === void 0) {
-        styleValue = null;
-      }
-      var value = this.getStyle(element, styleName) || '';
-      return styleValue ? value == styleValue : value.length > 0;
-    };
-    BrowserDomAdapter.prototype.tagName = function(element) {
-      return element.tagName;
-    };
-    BrowserDomAdapter.prototype.attributeMap = function(element) {
-      var res = new Map();
-      var elAttrs = element.attributes;
-      for (var i = 0; i < elAttrs.length; i++) {
-        var attrib = elAttrs[i];
-        res.set(attrib.name, attrib.value);
-      }
-      return res;
-    };
-    BrowserDomAdapter.prototype.hasAttribute = function(element, attribute) {
-      return element.hasAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.hasAttributeNS = function(element, ns, attribute) {
-      return element.hasAttributeNS(ns, attribute);
-    };
-    BrowserDomAdapter.prototype.getAttribute = function(element, attribute) {
-      return element.getAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.getAttributeNS = function(element, ns, name) {
-      return element.getAttributeNS(ns, name);
-    };
-    BrowserDomAdapter.prototype.setAttribute = function(element, name, value) {
-      element.setAttribute(name, value);
-    };
-    BrowserDomAdapter.prototype.setAttributeNS = function(element, ns, name, value) {
-      element.setAttributeNS(ns, name, value);
-    };
-    BrowserDomAdapter.prototype.removeAttribute = function(element, attribute) {
-      element.removeAttribute(attribute);
-    };
-    BrowserDomAdapter.prototype.removeAttributeNS = function(element, ns, name) {
-      element.removeAttributeNS(ns, name);
-    };
-    BrowserDomAdapter.prototype.templateAwareRoot = function(el) {
-      return this.isTemplateElement(el) ? this.content(el) : el;
-    };
-    BrowserDomAdapter.prototype.createHtmlDocument = function() {
-      return document.implementation.createHTMLDocument('fakeTitle');
-    };
-    BrowserDomAdapter.prototype.defaultDoc = function() {
-      return document;
-    };
-    BrowserDomAdapter.prototype.getBoundingClientRect = function(el) {
-      try {
-        return el.getBoundingClientRect();
-      } catch (e) {
-        return {
-          top: 0,
-          bottom: 0,
-          left: 0,
-          right: 0,
-          width: 0,
-          height: 0
-        };
-      }
-    };
-    BrowserDomAdapter.prototype.getTitle = function() {
-      return document.title;
-    };
-    BrowserDomAdapter.prototype.setTitle = function(newTitle) {
-      document.title = newTitle || '';
-    };
-    BrowserDomAdapter.prototype.elementMatches = function(n, selector) {
-      var matches = false;
-      if (n instanceof HTMLElement) {
-        if (n.matches) {
-          matches = n.matches(selector);
-        } else if (n.msMatchesSelector) {
-          matches = n.msMatchesSelector(selector);
-        } else if (n.webkitMatchesSelector) {
-          matches = n.webkitMatchesSelector(selector);
-        }
-      }
-      return matches;
-    };
-    BrowserDomAdapter.prototype.isTemplateElement = function(el) {
-      return el instanceof HTMLElement && el.nodeName == 'TEMPLATE';
-    };
-    BrowserDomAdapter.prototype.isTextNode = function(node) {
-      return node.nodeType === Node.TEXT_NODE;
-    };
-    BrowserDomAdapter.prototype.isCommentNode = function(node) {
-      return node.nodeType === Node.COMMENT_NODE;
-    };
-    BrowserDomAdapter.prototype.isElementNode = function(node) {
-      return node.nodeType === Node.ELEMENT_NODE;
-    };
-    BrowserDomAdapter.prototype.hasShadowRoot = function(node) {
-      return isPresent(node.shadowRoot) && node instanceof HTMLElement;
-    };
-    BrowserDomAdapter.prototype.isShadowRoot = function(node) {
-      return node instanceof DocumentFragment;
-    };
-    BrowserDomAdapter.prototype.importIntoDoc = function(node) {
-      var toImport = node;
-      if (this.isTemplateElement(node)) {
-        toImport = this.content(node);
-      }
-      return document.importNode(toImport, true);
-    };
-    BrowserDomAdapter.prototype.adoptNode = function(node) {
-      return document.adoptNode(node);
-    };
-    BrowserDomAdapter.prototype.getHref = function(el) {
-      return el.href;
-    };
-    BrowserDomAdapter.prototype.getEventKey = function(event) {
-      var key = event.key;
-      if (isBlank(key)) {
-        key = event.keyIdentifier;
-        if (isBlank(key)) {
-          return 'Unidentified';
-        }
-        if (key.startsWith('U+')) {
-          key = String.fromCharCode(parseInt(key.substring(2), 16));
-          if (event.location === DOM_KEY_LOCATION_NUMPAD && _chromeNumKeyPadMap.hasOwnProperty(key)) {
-            key = _chromeNumKeyPadMap[key];
-          }
-        }
-      }
-      if (_keyMap.hasOwnProperty(key)) {
-        key = _keyMap[key];
-      }
-      return key;
-    };
-    BrowserDomAdapter.prototype.getGlobalEventTarget = function(target) {
-      if (target == 'window') {
-        return window;
-      } else if (target == 'document') {
-        return document;
-      } else if (target == 'body') {
-        return document.body;
-      }
-    };
-    BrowserDomAdapter.prototype.getHistory = function() {
-      return window.history;
-    };
-    BrowserDomAdapter.prototype.getLocation = function() {
-      return window.location;
-    };
-    BrowserDomAdapter.prototype.getBaseHref = function() {
-      var href = getBaseElementHref();
-      if (isBlank(href)) {
-        return null;
-      }
-      return relativePath(href);
-    };
-    BrowserDomAdapter.prototype.resetBaseElement = function() {
-      baseElement = null;
-    };
-    BrowserDomAdapter.prototype.getUserAgent = function() {
-      return window.navigator.userAgent;
-    };
-    BrowserDomAdapter.prototype.setData = function(element, name, value) {
-      this.setAttribute(element, 'data-' + name, value);
-    };
-    BrowserDomAdapter.prototype.getData = function(element, name) {
-      return this.getAttribute(element, 'data-' + name);
-    };
-    BrowserDomAdapter.prototype.getComputedStyle = function(element) {
-      return getComputedStyle(element);
-    };
-    BrowserDomAdapter.prototype.setGlobalVar = function(path, value) {
-      setValueOnPath(global$1, path, value);
-    };
-    BrowserDomAdapter.prototype.supportsWebAnimation = function() {
-      return isFunction(Element.prototype['animate']);
-    };
-    BrowserDomAdapter.prototype.performanceNow = function() {
-      if (isPresent(window.performance) && isPresent(window.performance.now)) {
-        return window.performance.now();
-      } else {
-        return DateWrapper.toMillis(DateWrapper.now());
-      }
-    };
-    BrowserDomAdapter.prototype.supportsCookies = function() {
-      return true;
-    };
-    BrowserDomAdapter.prototype.getCookie = function(name) {
-      return parseCookieValue(document.cookie, name);
-    };
-    BrowserDomAdapter.prototype.setCookie = function(name, value) {
-      document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
-    };
-    return BrowserDomAdapter;
-  }(GenericBrowserDomAdapter));
-  var baseElement = null;
-  function getBaseElementHref() {
-    if (isBlank(baseElement)) {
-      baseElement = document.querySelector('base');
-      if (isBlank(baseElement)) {
-        return null;
-      }
-    }
-    return baseElement.getAttribute('href');
-  }
-  var urlParsingNode = null;
-  function relativePath(url) {
-    if (isBlank(urlParsingNode)) {
-      urlParsingNode = document.createElement('a');
-    }
-    urlParsingNode.setAttribute('href', url);
-    return (urlParsingNode.pathname.charAt(0) === '/') ? urlParsingNode.pathname : '/' + urlParsingNode.pathname;
-  }
-  function parseCookieValue(cookieStr, name) {
-    name = encodeURIComponent(name);
-    for (var _i = 0,
-        _a = cookieStr.split(';'); _i < _a.length; _i++) {
-      var cookie = _a[_i];
-      var eqIndex = cookie.indexOf('=');
-      var _b = eqIndex == -1 ? [cookie, ''] : [cookie.slice(0, eqIndex), cookie.slice(eqIndex + 1)],
-          cookieName = _b[0],
-          cookieValue = _b[1];
-      if (cookieName.trim() === name) {
-        return decodeURIComponent(cookieValue);
-      }
-    }
-    return null;
-  }
-  function supportsState() {
-    return !!window.history.pushState;
-  }
-  var __extends$2 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var BrowserPlatformLocation = (function(_super) {
-    __extends$2(BrowserPlatformLocation, _super);
-    function BrowserPlatformLocation() {
-      _super.call(this);
-      this._init();
-    }
-    BrowserPlatformLocation.prototype._init = function() {
-      this._location = getDOM().getLocation();
-      this._history = getDOM().getHistory();
-    };
-    Object.defineProperty(BrowserPlatformLocation.prototype, "location", {
-      get: function() {
-        return this._location;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    BrowserPlatformLocation.prototype.getBaseHrefFromDOM = function() {
-      return getDOM().getBaseHref();
-    };
-    BrowserPlatformLocation.prototype.onPopState = function(fn) {
-      getDOM().getGlobalEventTarget('window').addEventListener('popstate', fn, false);
-    };
-    BrowserPlatformLocation.prototype.onHashChange = function(fn) {
-      getDOM().getGlobalEventTarget('window').addEventListener('hashchange', fn, false);
-    };
-    Object.defineProperty(BrowserPlatformLocation.prototype, "pathname", {
-      get: function() {
-        return this._location.pathname;
-      },
-      set: function(newPath) {
-        this._location.pathname = newPath;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(BrowserPlatformLocation.prototype, "search", {
-      get: function() {
-        return this._location.search;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(BrowserPlatformLocation.prototype, "hash", {
-      get: function() {
-        return this._location.hash;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    BrowserPlatformLocation.prototype.pushState = function(state, title, url) {
-      if (supportsState()) {
-        this._history.pushState(state, title, url);
-      } else {
-        this._location.hash = url;
-      }
-    };
-    BrowserPlatformLocation.prototype.replaceState = function(state, title, url) {
-      if (supportsState()) {
-        this._history.replaceState(state, title, url);
-      } else {
-        this._location.hash = url;
-      }
-    };
-    BrowserPlatformLocation.prototype.forward = function() {
-      this._history.forward();
-    };
-    BrowserPlatformLocation.prototype.back = function() {
-      this._history.back();
-    };
-    BrowserPlatformLocation.decorators = [{type: _angular_core.Injectable}];
-    BrowserPlatformLocation.ctorParameters = [];
-    return BrowserPlatformLocation;
-  }(_angular_common.PlatformLocation));
-  var BrowserGetTestability = (function() {
-    function BrowserGetTestability() {}
-    BrowserGetTestability.init = function() {
-      _angular_core.setTestabilityGetter(new BrowserGetTestability());
-    };
-    BrowserGetTestability.prototype.addToWindow = function(registry) {
-      global$1.getAngularTestability = function(elem, findInAncestors) {
-        if (findInAncestors === void 0) {
-          findInAncestors = true;
-        }
-        var testability = registry.findTestabilityInTree(elem, findInAncestors);
-        if (testability == null) {
-          throw new Error('Could not find testability for element.');
-        }
-        return testability;
-      };
-      global$1.getAllAngularTestabilities = function() {
-        return registry.getAllTestabilities();
-      };
-      global$1.getAllAngularRootElements = function() {
-        return registry.getAllRootElements();
-      };
-      var whenAllStable = function(callback) {
-        var testabilities = global$1.getAllAngularTestabilities();
-        var count = testabilities.length;
-        var didWork = false;
-        var decrement = function(didWork_) {
-          didWork = didWork || didWork_;
-          count--;
-          if (count == 0) {
-            callback(didWork);
-          }
-        };
-        testabilities.forEach(function(testability) {
-          testability.whenStable(decrement);
-        });
-      };
-      if (!global$1['frameworkStabilizers']) {
-        global$1['frameworkStabilizers'] = ListWrapper.createGrowableSize(0);
-      }
-      global$1['frameworkStabilizers'].push(whenAllStable);
-    };
-    BrowserGetTestability.prototype.findTestabilityInTree = function(registry, elem, findInAncestors) {
-      if (elem == null) {
-        return null;
-      }
-      var t = registry.getTestability(elem);
-      if (isPresent(t)) {
-        return t;
-      } else if (!findInAncestors) {
-        return null;
-      }
-      if (getDOM().isShadowRoot(elem)) {
-        return this.findTestabilityInTree(registry, getDOM().getHost(elem), true);
-      }
-      return this.findTestabilityInTree(registry, getDOM().parentElement(elem), true);
-    };
-    return BrowserGetTestability;
-  }());
-  var Title = (function() {
-    function Title() {}
-    Title.prototype.getTitle = function() {
-      return getDOM().getTitle();
-    };
-    Title.prototype.setTitle = function(newTitle) {
-      getDOM().setTitle(newTitle);
-    };
-    return Title;
-  }());
-  var DOCUMENT = new _angular_core.OpaqueToken('DocumentToken');
-  var EVENT_MANAGER_PLUGINS = new _angular_core.OpaqueToken('EventManagerPlugins');
-  var EventManager = (function() {
-    function EventManager(plugins, _zone) {
-      var _this = this;
-      this._zone = _zone;
-      plugins.forEach(function(p) {
-        return p.manager = _this;
-      });
-      this._plugins = plugins.slice().reverse();
-    }
-    EventManager.prototype.addEventListener = function(element, eventName, handler) {
-      var plugin = this._findPluginFor(eventName);
-      return plugin.addEventListener(element, eventName, handler);
-    };
-    EventManager.prototype.addGlobalEventListener = function(target, eventName, handler) {
-      var plugin = this._findPluginFor(eventName);
-      return plugin.addGlobalEventListener(target, eventName, handler);
-    };
-    EventManager.prototype.getZone = function() {
-      return this._zone;
-    };
-    EventManager.prototype._findPluginFor = function(eventName) {
-      var plugins = this._plugins;
-      for (var i = 0; i < plugins.length; i++) {
-        var plugin = plugins[i];
-        if (plugin.supports(eventName)) {
-          return plugin;
-        }
-      }
-      throw new Error("No event manager plugin found for event " + eventName);
-    };
-    EventManager.decorators = [{type: _angular_core.Injectable}];
-    EventManager.ctorParameters = [{
-      type: Array,
-      decorators: [{
-        type: _angular_core.Inject,
-        args: [EVENT_MANAGER_PLUGINS]
-      }]
-    }, {type: _angular_core.NgZone}];
-    return EventManager;
-  }());
-  var EventManagerPlugin = (function() {
-    function EventManagerPlugin() {}
-    EventManagerPlugin.prototype.supports = function(eventName) {
-      return false;
-    };
-    EventManagerPlugin.prototype.addEventListener = function(element, eventName, handler) {
-      throw 'not implemented';
-    };
-    EventManagerPlugin.prototype.addGlobalEventListener = function(element, eventName, handler) {
-      throw 'not implemented';
-    };
-    return EventManagerPlugin;
-  }());
-  var __extends$4 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var SharedStylesHost = (function() {
-    function SharedStylesHost() {
-      this._styles = [];
-      this._stylesSet = new Set();
-    }
-    SharedStylesHost.prototype.addStyles = function(styles) {
-      var _this = this;
-      var additions = [];
-      styles.forEach(function(style) {
-        if (!_this._stylesSet.has(style)) {
-          _this._stylesSet.add(style);
-          _this._styles.push(style);
-          additions.push(style);
-        }
-      });
-      this.onStylesAdded(additions);
-    };
-    SharedStylesHost.prototype.onStylesAdded = function(additions) {};
-    SharedStylesHost.prototype.getAllStyles = function() {
-      return this._styles;
-    };
-    SharedStylesHost.decorators = [{type: _angular_core.Injectable}];
-    SharedStylesHost.ctorParameters = [];
-    return SharedStylesHost;
-  }());
-  var DomSharedStylesHost = (function(_super) {
-    __extends$4(DomSharedStylesHost, _super);
-    function DomSharedStylesHost(doc) {
-      _super.call(this);
-      this._hostNodes = new Set();
-      this._hostNodes.add(doc.head);
-    }
-    DomSharedStylesHost.prototype._addStylesToHost = function(styles, host) {
-      for (var i = 0; i < styles.length; i++) {
-        var style = styles[i];
-        getDOM().appendChild(host, getDOM().createStyleElement(style));
-      }
-    };
-    DomSharedStylesHost.prototype.addHost = function(hostNode) {
-      this._addStylesToHost(this._styles, hostNode);
-      this._hostNodes.add(hostNode);
-    };
-    DomSharedStylesHost.prototype.removeHost = function(hostNode) {
-      this._hostNodes.delete(hostNode);
-    };
-    DomSharedStylesHost.prototype.onStylesAdded = function(additions) {
-      var _this = this;
-      this._hostNodes.forEach(function(hostNode) {
-        _this._addStylesToHost(additions, hostNode);
-      });
-    };
-    DomSharedStylesHost.decorators = [{type: _angular_core.Injectable}];
-    DomSharedStylesHost.ctorParameters = [{
-      type: undefined,
-      decorators: [{
-        type: _angular_core.Inject,
-        args: [DOCUMENT]
-      }]
-    }];
-    return DomSharedStylesHost;
-  }(SharedStylesHost));
-  var __extends$3 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var NAMESPACE_URIS = {
-    'xlink': 'http://www.w3.org/1999/xlink',
-    'svg': 'http://www.w3.org/2000/svg',
-    'xhtml': 'http://www.w3.org/1999/xhtml'
-  };
-  var TEMPLATE_COMMENT_TEXT = 'template bindings={}';
-  var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/;
-  var DomRootRenderer = (function() {
-    function DomRootRenderer(document, eventManager, sharedStylesHost, animationDriver) {
-      this.document = document;
-      this.eventManager = eventManager;
-      this.sharedStylesHost = sharedStylesHost;
-      this.animationDriver = animationDriver;
-      this.registeredComponents = new Map();
-    }
-    DomRootRenderer.prototype.renderComponent = function(componentProto) {
-      var renderer = this.registeredComponents.get(componentProto.id);
-      if (isBlank(renderer)) {
-        renderer = new DomRenderer(this, componentProto, this.animationDriver);
-        this.registeredComponents.set(componentProto.id, renderer);
-      }
-      return renderer;
-    };
-    return DomRootRenderer;
-  }());
-  var DomRootRenderer_ = (function(_super) {
-    __extends$3(DomRootRenderer_, _super);
-    function DomRootRenderer_(_document, _eventManager, sharedStylesHost, animationDriver) {
-      _super.call(this, _document, _eventManager, sharedStylesHost, animationDriver);
-    }
-    DomRootRenderer_.decorators = [{type: _angular_core.Injectable}];
-    DomRootRenderer_.ctorParameters = [{
-      type: undefined,
-      decorators: [{
-        type: _angular_core.Inject,
-        args: [DOCUMENT]
-      }]
-    }, {type: EventManager}, {type: DomSharedStylesHost}, {type: AnimationDriver}];
-    return DomRootRenderer_;
-  }(DomRootRenderer));
-  var DomRenderer = (function() {
-    function DomRenderer(_rootRenderer, componentProto, _animationDriver) {
-      this._rootRenderer = _rootRenderer;
-      this.componentProto = componentProto;
-      this._animationDriver = _animationDriver;
-      this._styles = _flattenStyles(componentProto.id, componentProto.styles, []);
-      if (componentProto.encapsulation !== _angular_core.ViewEncapsulation.Native) {
-        this._rootRenderer.sharedStylesHost.addStyles(this._styles);
-      }
-      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Emulated) {
-        this._contentAttr = _shimContentAttribute(componentProto.id);
-        this._hostAttr = _shimHostAttribute(componentProto.id);
-      } else {
-        this._contentAttr = null;
-        this._hostAttr = null;
-      }
-    }
-    DomRenderer.prototype.selectRootElement = function(selectorOrNode, debugInfo) {
-      var el;
-      if (isString(selectorOrNode)) {
-        el = getDOM().querySelector(this._rootRenderer.document, selectorOrNode);
-        if (isBlank(el)) {
-          throw new Error("The selector \"" + selectorOrNode + "\" did not match any elements");
-        }
-      } else {
-        el = selectorOrNode;
-      }
-      getDOM().clearNodes(el);
-      return el;
-    };
-    DomRenderer.prototype.createElement = function(parent, name, debugInfo) {
-      var nsAndName = splitNamespace(name);
-      var el = isPresent(nsAndName[0]) ? getDOM().createElementNS(NAMESPACE_URIS[nsAndName[0]], nsAndName[1]) : getDOM().createElement(nsAndName[1]);
-      if (isPresent(this._contentAttr)) {
-        getDOM().setAttribute(el, this._contentAttr, '');
-      }
-      if (isPresent(parent)) {
-        getDOM().appendChild(parent, el);
-      }
-      return el;
-    };
-    DomRenderer.prototype.createViewRoot = function(hostElement) {
-      var nodesParent;
-      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Native) {
-        nodesParent = getDOM().createShadowRoot(hostElement);
-        this._rootRenderer.sharedStylesHost.addHost(nodesParent);
-        for (var i = 0; i < this._styles.length; i++) {
-          getDOM().appendChild(nodesParent, getDOM().createStyleElement(this._styles[i]));
-        }
-      } else {
-        if (isPresent(this._hostAttr)) {
-          getDOM().setAttribute(hostElement, this._hostAttr, '');
-        }
-        nodesParent = hostElement;
-      }
-      return nodesParent;
-    };
-    DomRenderer.prototype.createTemplateAnchor = function(parentElement, debugInfo) {
-      var comment = getDOM().createComment(TEMPLATE_COMMENT_TEXT);
-      if (isPresent(parentElement)) {
-        getDOM().appendChild(parentElement, comment);
-      }
-      return comment;
-    };
-    DomRenderer.prototype.createText = function(parentElement, value, debugInfo) {
-      var node = getDOM().createTextNode(value);
-      if (isPresent(parentElement)) {
-        getDOM().appendChild(parentElement, node);
-      }
-      return node;
-    };
-    DomRenderer.prototype.projectNodes = function(parentElement, nodes) {
-      if (isBlank(parentElement))
-        return;
-      appendNodes(parentElement, nodes);
-    };
-    DomRenderer.prototype.attachViewAfter = function(node, viewRootNodes) {
-      moveNodesAfterSibling(node, viewRootNodes);
-    };
-    DomRenderer.prototype.detachView = function(viewRootNodes) {
-      for (var i = 0; i < viewRootNodes.length; i++) {
-        getDOM().remove(viewRootNodes[i]);
-      }
-    };
-    DomRenderer.prototype.destroyView = function(hostElement, viewAllNodes) {
-      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Native && isPresent(hostElement)) {
-        this._rootRenderer.sharedStylesHost.removeHost(getDOM().getShadowRoot(hostElement));
-      }
-    };
-    DomRenderer.prototype.listen = function(renderElement, name, callback) {
-      return this._rootRenderer.eventManager.addEventListener(renderElement, name, decoratePreventDefault(callback));
-    };
-    DomRenderer.prototype.listenGlobal = function(target, name, callback) {
-      return this._rootRenderer.eventManager.addGlobalEventListener(target, name, decoratePreventDefault(callback));
-    };
-    DomRenderer.prototype.setElementProperty = function(renderElement, propertyName, propertyValue) {
-      getDOM().setProperty(renderElement, propertyName, propertyValue);
-    };
-    DomRenderer.prototype.setElementAttribute = function(renderElement, attributeName, attributeValue) {
-      var attrNs;
-      var nsAndName = splitNamespace(attributeName);
-      if (isPresent(nsAndName[0])) {
-        attributeName = nsAndName[0] + ':' + nsAndName[1];
-        attrNs = NAMESPACE_URIS[nsAndName[0]];
-      }
-      if (isPresent(attributeValue)) {
-        if (isPresent(attrNs)) {
-          getDOM().setAttributeNS(renderElement, attrNs, attributeName, attributeValue);
-        } else {
-          getDOM().setAttribute(renderElement, attributeName, attributeValue);
-        }
-      } else {
-        if (isPresent(attrNs)) {
-          getDOM().removeAttributeNS(renderElement, attrNs, nsAndName[1]);
-        } else {
-          getDOM().removeAttribute(renderElement, attributeName);
-        }
-      }
-    };
-    DomRenderer.prototype.setBindingDebugInfo = function(renderElement, propertyName, propertyValue) {
-      var dashCasedPropertyName = camelCaseToDashCase(propertyName);
-      if (getDOM().isCommentNode(renderElement)) {
-        var existingBindings = StringWrapper.replaceAll(getDOM().getText(renderElement), /\n/g, '').match(TEMPLATE_BINDINGS_EXP);
-        var parsedBindings = Json.parse(existingBindings[1]);
-        parsedBindings[dashCasedPropertyName] = propertyValue;
-        getDOM().setText(renderElement, StringWrapper.replace(TEMPLATE_COMMENT_TEXT, '{}', Json.stringify(parsedBindings)));
-      } else {
-        this.setElementAttribute(renderElement, propertyName, propertyValue);
-      }
-    };
-    DomRenderer.prototype.setElementClass = function(renderElement, className, isAdd) {
-      if (isAdd) {
-        getDOM().addClass(renderElement, className);
-      } else {
-        getDOM().removeClass(renderElement, className);
-      }
-    };
-    DomRenderer.prototype.setElementStyle = function(renderElement, styleName, styleValue) {
-      if (isPresent(styleValue)) {
-        getDOM().setStyle(renderElement, styleName, stringify(styleValue));
-      } else {
-        getDOM().removeStyle(renderElement, styleName);
-      }
-    };
-    DomRenderer.prototype.invokeElementMethod = function(renderElement, methodName, args) {
-      getDOM().invoke(renderElement, methodName, args);
-    };
-    DomRenderer.prototype.setText = function(renderNode, text) {
-      getDOM().setText(renderNode, text);
-    };
-    DomRenderer.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
-      return this._animationDriver.animate(element, startingStyles, keyframes, duration, delay, easing);
-    };
-    return DomRenderer;
-  }());
-  function moveNodesAfterSibling(sibling, nodes) {
-    var parent = getDOM().parentElement(sibling);
-    if (nodes.length > 0 && isPresent(parent)) {
-      var nextSibling = getDOM().nextSibling(sibling);
-      if (isPresent(nextSibling)) {
-        for (var i = 0; i < nodes.length; i++) {
-          getDOM().insertBefore(nextSibling, nodes[i]);
-        }
-      } else {
-        for (var i = 0; i < nodes.length; i++) {
-          getDOM().appendChild(parent, nodes[i]);
-        }
-      }
-    }
-  }
-  function appendNodes(parent, nodes) {
-    for (var i = 0; i < nodes.length; i++) {
-      getDOM().appendChild(parent, nodes[i]);
-    }
-  }
-  function decoratePreventDefault(eventHandler) {
-    return function(event) {
-      var allowDefaultBehavior = eventHandler(event);
-      if (allowDefaultBehavior === false) {
-        getDOM().preventDefault(event);
-      }
-    };
-  }
-  var COMPONENT_REGEX = /%COMP%/g;
-  var COMPONENT_VARIABLE = '%COMP%';
-  var HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
-  var CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
-  function _shimContentAttribute(componentShortId) {
-    return StringWrapper.replaceAll(CONTENT_ATTR, COMPONENT_REGEX, componentShortId);
-  }
-  function _shimHostAttribute(componentShortId) {
-    return StringWrapper.replaceAll(HOST_ATTR, COMPONENT_REGEX, componentShortId);
-  }
-  function _flattenStyles(compId, styles, target) {
-    for (var i = 0; i < styles.length; i++) {
-      var style = styles[i];
-      if (isArray(style)) {
-        _flattenStyles(compId, style, target);
-      } else {
-        style = StringWrapper.replaceAll(style, COMPONENT_REGEX, compId);
-        target.push(style);
-      }
-    }
-    return target;
-  }
-  var NS_PREFIX_RE = /^:([^:]+):(.+)$/;
-  function splitNamespace(name) {
-    if (name[0] != ':') {
-      return [null, name];
-    }
-    var match = name.match(NS_PREFIX_RE);
-    return [match[1], match[2]];
-  }
-  var CORE_TOKENS = {
-    'ApplicationRef': _angular_core.ApplicationRef,
-    'NgZone': _angular_core.NgZone
-  };
-  var INSPECT_GLOBAL_NAME = 'ng.probe';
-  var CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
-  function inspectNativeElement(element) {
-    return _angular_core.getDebugNode(element);
-  }
-  var NgProbeToken = (function() {
-    function NgProbeToken(name, token) {
-      this.name = name;
-      this.token = token;
-    }
-    return NgProbeToken;
-  }());
-  function _createConditionalRootRenderer(rootRenderer, extraTokens) {
-    if (_angular_core.isDevMode()) {
-      return _createRootRenderer(rootRenderer, extraTokens);
-    }
-    return rootRenderer;
-  }
-  function _createRootRenderer(rootRenderer, extraTokens) {
-    getDOM().setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
-    getDOM().setGlobalVar(CORE_TOKENS_GLOBAL_NAME, StringMapWrapper.merge(CORE_TOKENS, _ngProbeTokensToMap(extraTokens || [])));
-    return new DebugDomRootRenderer(rootRenderer);
-  }
-  function _ngProbeTokensToMap(tokens) {
-    return tokens.reduce(function(prev, t) {
-      return (prev[t.name] = t.token, prev);
-    }, {});
-  }
-  var ELEMENT_PROBE_PROVIDERS = [{
-    provide: _angular_core.RootRenderer,
-    useFactory: _createConditionalRootRenderer,
-    deps: [DomRootRenderer, [NgProbeToken, new _angular_core.Optional()]]
-  }];
-  var ELEMENT_PROBE_PROVIDERS_PROD_MODE = [{
-    provide: _angular_core.RootRenderer,
-    useFactory: _createRootRenderer,
-    deps: [DomRootRenderer, [NgProbeToken, new _angular_core.Optional()]]
-  }];
-  var __extends$5 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var DomEventsPlugin = (function(_super) {
-    __extends$5(DomEventsPlugin, _super);
-    function DomEventsPlugin() {
-      _super.apply(this, arguments);
-    }
-    DomEventsPlugin.prototype.supports = function(eventName) {
-      return true;
-    };
-    DomEventsPlugin.prototype.addEventListener = function(element, eventName, handler) {
-      var zone = this.manager.getZone();
-      var outsideHandler = function(event) {
-        return zone.runGuarded(function() {
-          return handler(event);
-        });
-      };
-      return this.manager.getZone().runOutsideAngular(function() {
-        return getDOM().onAndCancel(element, eventName, outsideHandler);
-      });
-    };
-    DomEventsPlugin.prototype.addGlobalEventListener = function(target, eventName, handler) {
-      var element = getDOM().getGlobalEventTarget(target);
-      var zone = this.manager.getZone();
-      var outsideHandler = function(event) {
-        return zone.runGuarded(function() {
-          return handler(event);
-        });
-      };
-      return this.manager.getZone().runOutsideAngular(function() {
-        return getDOM().onAndCancel(element, eventName, outsideHandler);
-      });
-    };
-    DomEventsPlugin.decorators = [{type: _angular_core.Injectable}];
-    DomEventsPlugin.ctorParameters = [];
-    return DomEventsPlugin;
-  }(EventManagerPlugin));
-  var __extends$7 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var _eventNames = {
-    'pan': true,
-    'panstart': true,
-    'panmove': true,
-    'panend': true,
-    'pancancel': true,
-    'panleft': true,
-    'panright': true,
-    'panup': true,
-    'pandown': true,
-    'pinch': true,
-    'pinchstart': true,
-    'pinchmove': true,
-    'pinchend': true,
-    'pinchcancel': true,
-    'pinchin': true,
-    'pinchout': true,
-    'press': true,
-    'pressup': true,
-    'rotate': true,
-    'rotatestart': true,
-    'rotatemove': true,
-    'rotateend': true,
-    'rotatecancel': true,
-    'swipe': true,
-    'swipeleft': true,
-    'swiperight': true,
-    'swipeup': true,
-    'swipedown': true,
-    'tap': true
-  };
-  var HammerGesturesPluginCommon = (function(_super) {
-    __extends$7(HammerGesturesPluginCommon, _super);
-    function HammerGesturesPluginCommon() {
-      _super.call(this);
-    }
-    HammerGesturesPluginCommon.prototype.supports = function(eventName) {
-      eventName = eventName.toLowerCase();
-      return StringMapWrapper.contains(_eventNames, eventName);
-    };
-    return HammerGesturesPluginCommon;
-  }(EventManagerPlugin));
-  var __extends$6 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var HAMMER_GESTURE_CONFIG = new _angular_core.OpaqueToken('HammerGestureConfig');
-  var HammerGestureConfig = (function() {
-    function HammerGestureConfig() {
-      this.events = [];
-      this.overrides = {};
-    }
-    HammerGestureConfig.prototype.buildHammer = function(element) {
-      var mc = new Hammer(element);
-      mc.get('pinch').set({enable: true});
-      mc.get('rotate').set({enable: true});
-      for (var eventName in this.overrides) {
-        mc.get(eventName).set(this.overrides[eventName]);
-      }
-      return mc;
-    };
-    HammerGestureConfig.decorators = [{type: _angular_core.Injectable}];
-    HammerGestureConfig.ctorParameters = [];
-    return HammerGestureConfig;
-  }());
-  var HammerGesturesPlugin = (function(_super) {
-    __extends$6(HammerGesturesPlugin, _super);
-    function HammerGesturesPlugin(_config) {
-      _super.call(this);
-      this._config = _config;
-    }
-    HammerGesturesPlugin.prototype.supports = function(eventName) {
-      if (!_super.prototype.supports.call(this, eventName) && !this.isCustomEvent(eventName))
-        return false;
-      if (!isPresent(window['Hammer'])) {
-        throw new Error("Hammer.js is not loaded, can not bind " + eventName + " event");
-      }
-      return true;
-    };
-    HammerGesturesPlugin.prototype.addEventListener = function(element, eventName, handler) {
-      var _this = this;
-      var zone = this.manager.getZone();
-      eventName = eventName.toLowerCase();
-      return zone.runOutsideAngular(function() {
-        var mc = _this._config.buildHammer(element);
-        var callback = function(eventObj) {
-          zone.runGuarded(function() {
-            handler(eventObj);
-          });
-        };
-        mc.on(eventName, callback);
-        return function() {
-          mc.off(eventName, callback);
-        };
-      });
-    };
-    HammerGesturesPlugin.prototype.isCustomEvent = function(eventName) {
-      return this._config.events.indexOf(eventName) > -1;
-    };
-    HammerGesturesPlugin.decorators = [{type: _angular_core.Injectable}];
-    HammerGesturesPlugin.ctorParameters = [{
-      type: HammerGestureConfig,
-      decorators: [{
-        type: _angular_core.Inject,
-        args: [HAMMER_GESTURE_CONFIG]
-      }]
-    }];
-    return HammerGesturesPlugin;
-  }(HammerGesturesPluginCommon));
-  var __extends$8 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var modifierKeys = ['alt', 'control', 'meta', 'shift'];
-  var modifierKeyGetters = {
-    'alt': function(event) {
-      return event.altKey;
-    },
-    'control': function(event) {
-      return event.ctrlKey;
-    },
-    'meta': function(event) {
-      return event.metaKey;
-    },
-    'shift': function(event) {
-      return event.shiftKey;
-    }
-  };
-  var KeyEventsPlugin = (function(_super) {
-    __extends$8(KeyEventsPlugin, _super);
-    function KeyEventsPlugin() {
-      _super.call(this);
-    }
-    KeyEventsPlugin.prototype.supports = function(eventName) {
-      return isPresent(KeyEventsPlugin.parseEventName(eventName));
-    };
-    KeyEventsPlugin.prototype.addEventListener = function(element, eventName, handler) {
-      var parsedEvent = KeyEventsPlugin.parseEventName(eventName);
-      var outsideHandler = KeyEventsPlugin.eventCallback(element, StringMapWrapper.get(parsedEvent, 'fullKey'), handler, this.manager.getZone());
-      return this.manager.getZone().runOutsideAngular(function() {
-        return getDOM().onAndCancel(element, StringMapWrapper.get(parsedEvent, 'domEventName'), outsideHandler);
-      });
-    };
-    KeyEventsPlugin.parseEventName = function(eventName) {
-      var parts = eventName.toLowerCase().split('.');
-      var domEventName = parts.shift();
-      if ((parts.length === 0) || !(StringWrapper.equals(domEventName, 'keydown') || StringWrapper.equals(domEventName, 'keyup'))) {
-        return null;
-      }
-      var key = KeyEventsPlugin._normalizeKey(parts.pop());
-      var fullKey = '';
-      modifierKeys.forEach(function(modifierName) {
-        if (ListWrapper.contains(parts, modifierName)) {
-          ListWrapper.remove(parts, modifierName);
-          fullKey += modifierName + '.';
-        }
-      });
-      fullKey += key;
-      if (parts.length != 0 || key.length === 0) {
-        return null;
-      }
-      var result = StringMapWrapper.create();
-      StringMapWrapper.set(result, 'domEventName', domEventName);
-      StringMapWrapper.set(result, 'fullKey', fullKey);
-      return result;
-    };
-    KeyEventsPlugin.getEventFullKey = function(event) {
-      var fullKey = '';
-      var key = getDOM().getEventKey(event);
-      key = key.toLowerCase();
-      if (StringWrapper.equals(key, ' ')) {
-        key = 'space';
-      } else if (StringWrapper.equals(key, '.')) {
-        key = 'dot';
-      }
-      modifierKeys.forEach(function(modifierName) {
-        if (modifierName != key) {
-          var modifierGetter = StringMapWrapper.get(modifierKeyGetters, modifierName);
-          if (modifierGetter(event)) {
-            fullKey += modifierName + '.';
-          }
-        }
-      });
-      fullKey += key;
-      return fullKey;
-    };
-    KeyEventsPlugin.eventCallback = function(element, fullKey, handler, zone) {
-      return function(event) {
-        if (StringWrapper.equals(KeyEventsPlugin.getEventFullKey(event), fullKey)) {
-          zone.runGuarded(function() {
-            return handler(event);
-          });
-        }
-      };
-    };
-    KeyEventsPlugin._normalizeKey = function(keyName) {
-      switch (keyName) {
-        case 'esc':
-          return 'escape';
-        default:
-          return keyName;
-      }
-    };
-    KeyEventsPlugin.decorators = [{type: _angular_core.Injectable}];
-    KeyEventsPlugin.ctorParameters = [];
-    return KeyEventsPlugin;
-  }(EventManagerPlugin));
-  var SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^&:/?#]*(?:[/?#]|$))/gi;
-  var DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[a-z0-9+\/]+=*$/i;
-  function sanitizeUrl(url) {
-    url = String(url);
-    if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN))
-      return url;
-    if (_angular_core.isDevMode()) {
-      getDOM().log("WARNING: sanitizing unsafe URL value " + url + " (see http://g.co/ng/security#xss)");
-    }
-    return 'unsafe:' + url;
-  }
-  function sanitizeSrcset(srcset) {
-    srcset = String(srcset);
-    return srcset.split(',').map(function(srcset) {
-      return sanitizeUrl(srcset.trim());
-    }).join(', ');
-  }
-  var inertElement = null;
-  var DOM = null;
-  function getInertElement() {
-    if (inertElement)
-      return inertElement;
-    DOM = getDOM();
-    var templateEl = DOM.createElement('template');
-    if ('content' in templateEl)
-      return templateEl;
-    var doc = DOM.createHtmlDocument();
-    inertElement = DOM.querySelector(doc, 'body');
-    if (inertElement == null) {
-      var html = DOM.createElement('html', doc);
-      inertElement = DOM.createElement('body', doc);
-      DOM.appendChild(html, inertElement);
-      DOM.appendChild(doc, html);
-    }
-    return inertElement;
-  }
-  function tagSet(tags) {
-    var res = {};
-    for (var _i = 0,
-        _a = tags.split(','); _i < _a.length; _i++) {
-      var t = _a[_i];
-      res[t] = true;
-    }
-    return res;
-  }
-  function merge() {
-    var sets = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-      sets[_i - 0] = arguments[_i];
-    }
-    var res = {};
-    for (var _a = 0,
-        sets_1 = sets; _a < sets_1.length; _a++) {
-      var s = sets_1[_a];
-      for (var v in s) {
-        if (s.hasOwnProperty(v))
-          res[v] = true;
-      }
-    }
-    return res;
-  }
-  var VOID_ELEMENTS = tagSet('area,br,col,hr,img,wbr');
-  var OPTIONAL_END_TAG_BLOCK_ELEMENTS = tagSet('colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr');
-  var OPTIONAL_END_TAG_INLINE_ELEMENTS = tagSet('rp,rt');
-  var OPTIONAL_END_TAG_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, OPTIONAL_END_TAG_BLOCK_ELEMENTS);
-  var BLOCK_ELEMENTS = merge(OPTIONAL_END_TAG_BLOCK_ELEMENTS, tagSet('address,article,' + 'aside,blockquote,caption,center,del,details,dialog,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,' + 'h6,header,hgroup,hr,ins,main,map,menu,nav,ol,pre,section,summary,table,ul'));
-  var INLINE_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, tagSet('a,abbr,acronym,audio,b,' + 'bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,picture,q,ruby,rp,rt,s,' + 'samp,small,source,span,strike,strong,sub,sup,time,track,tt,u,var,video'));
-  var VALID_ELEMENTS = merge(VOID_ELEMENTS, BLOCK_ELEMENTS, INLINE_ELEMENTS, OPTIONAL_END_TAG_ELEMENTS);
-  var URI_ATTRS = tagSet('background,cite,href,itemtype,longdesc,poster,src,xlink:href');
-  var SRCSET_ATTRS = tagSet('srcset');
-  var HTML_ATTRS = tagSet('abbr,accesskey,align,alt,autoplay,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,' + 'compact,controls,coords,datetime,default,dir,download,face,headers,height,hidden,hreflang,hspace,' + 'ismap,itemscope,itemprop,kind,label,lang,language,loop,media,muted,nohref,nowrap,open,preload,rel,rev,role,rows,rowspan,rules,' + 'scope,scrolling,shape,size,sizes,span,srclang,start,summary,tabindex,target,title,translate,type,usemap,' + 'valign,value,vspace,width');
-  var VALID_ATTRS = merge(URI_ATTRS, SRCSET_ATTRS, HTML_ATTRS);
-  var SanitizingHtmlSerializer = (function() {
-    function SanitizingHtmlSerializer() {
-      this.sanitizedSomething = false;
-      this.buf = [];
-    }
-    SanitizingHtmlSerializer.prototype.sanitizeChildren = function(el) {
-      var current = el.firstChild;
-      while (current) {
-        if (DOM.isElementNode(current)) {
-          this.startElement(current);
-        } else if (DOM.isTextNode(current)) {
-          this.chars(DOM.nodeValue(current));
-        } else {
-          this.sanitizedSomething = true;
-        }
-        if (DOM.firstChild(current)) {
-          current = DOM.firstChild(current);
-          continue;
-        }
-        while (current) {
-          if (DOM.isElementNode(current)) {
-            this.endElement(current);
-          }
-          if (DOM.nextSibling(current)) {
-            current = DOM.nextSibling(current);
-            break;
-          }
-          current = DOM.parentElement(current);
-        }
-      }
-      return this.buf.join('');
-    };
-    SanitizingHtmlSerializer.prototype.startElement = function(element) {
-      var _this = this;
-      var tagName = DOM.nodeName(element).toLowerCase();
-      if (!VALID_ELEMENTS.hasOwnProperty(tagName)) {
-        this.sanitizedSomething = true;
-        return;
-      }
-      this.buf.push('<');
-      this.buf.push(tagName);
-      DOM.attributeMap(element).forEach(function(value, attrName) {
-        var lower = attrName.toLowerCase();
-        if (!VALID_ATTRS.hasOwnProperty(lower)) {
-          _this.sanitizedSomething = true;
-          return;
-        }
-        if (URI_ATTRS[lower])
-          value = sanitizeUrl(value);
-        if (SRCSET_ATTRS[lower])
-          value = sanitizeSrcset(value);
-        _this.buf.push(' ');
-        _this.buf.push(attrName);
-        _this.buf.push('="');
-        _this.buf.push(encodeEntities(value));
-        _this.buf.push('"');
-      });
-      this.buf.push('>');
-    };
-    SanitizingHtmlSerializer.prototype.endElement = function(current) {
-      var tagName = DOM.nodeName(current).toLowerCase();
-      if (VALID_ELEMENTS.hasOwnProperty(tagName) && !VOID_ELEMENTS.hasOwnProperty(tagName)) {
-        this.buf.push('</');
-        this.buf.push(tagName);
-        this.buf.push('>');
-      }
-    };
-    SanitizingHtmlSerializer.prototype.chars = function(chars) {
-      this.buf.push(encodeEntities(chars));
-    };
-    return SanitizingHtmlSerializer;
-  }());
-  var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
-  var NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
-  function encodeEntities(value) {
-    return value.replace(/&/g, '&amp;').replace(SURROGATE_PAIR_REGEXP, function(match) {
-      var hi = match.charCodeAt(0);
-      var low = match.charCodeAt(1);
-      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
-    }).replace(NON_ALPHANUMERIC_REGEXP, function(match) {
-      return '&#' + match.charCodeAt(0) + ';';
-    }).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  }
-  function stripCustomNsAttrs(el) {
-    DOM.attributeMap(el).forEach(function(_, attrName) {
-      if (attrName === 'xmlns:ns1' || attrName.indexOf('ns1:') === 0) {
-        DOM.removeAttribute(el, attrName);
-      }
-    });
-    for (var _i = 0,
-        _a = DOM.childNodesAsList(el); _i < _a.length; _i++) {
-      var n = _a[_i];
-      if (DOM.isElementNode(n))
-        stripCustomNsAttrs(n);
-    }
-  }
-  function sanitizeHtml(unsafeHtmlInput) {
-    try {
-      var containerEl = getInertElement();
-      var unsafeHtml = unsafeHtmlInput ? String(unsafeHtmlInput) : '';
-      var mXSSAttempts = 5;
-      var parsedHtml = unsafeHtml;
-      do {
-        if (mXSSAttempts === 0) {
-          throw new Error('Failed to sanitize html because the input is unstable');
-        }
-        mXSSAttempts--;
-        unsafeHtml = parsedHtml;
-        DOM.setInnerHTML(containerEl, unsafeHtml);
-        if (DOM.defaultDoc().documentMode) {
-          stripCustomNsAttrs(containerEl);
-        }
-        parsedHtml = DOM.getInnerHTML(containerEl);
-      } while (unsafeHtml !== parsedHtml);
-      var sanitizer = new SanitizingHtmlSerializer();
-      var safeHtml = sanitizer.sanitizeChildren(DOM.getTemplateContent(containerEl) || containerEl);
-      var parent_1 = DOM.getTemplateContent(containerEl) || containerEl;
-      for (var _i = 0,
-          _a = DOM.childNodesAsList(parent_1); _i < _a.length; _i++) {
-        var child = _a[_i];
-        DOM.removeChild(parent_1, child);
-      }
-      if (_angular_core.isDevMode() && sanitizer.sanitizedSomething) {
-        DOM.log('WARNING: sanitizing HTML stripped some content (see http://g.co/ng/security#xss).');
-      }
-      return safeHtml;
-    } catch (e) {
-      inertElement = null;
-      throw e;
-    }
-  }
-  var VALUES = '[-,."\'%_!# a-zA-Z0-9]+';
-  var TRANSFORMATION_FNS = '(?:matrix|translate|scale|rotate|skew|perspective)(?:X|Y|3d)?';
-  var COLOR_FNS = '(?:rgb|hsl)a?';
-  var FN_ARGS = '\\([-0-9.%, a-zA-Z]+\\)';
-  var SAFE_STYLE_VALUE = new RegExp("^(" + VALUES + "|(?:" + TRANSFORMATION_FNS + "|" + COLOR_FNS + ")" + FN_ARGS + ")$", 'g');
-  var URL_RE = /^url\(([^)]+)\)$/;
-  function hasBalancedQuotes(value) {
-    var outsideSingle = true;
-    var outsideDouble = true;
-    for (var i = 0; i < value.length; i++) {
-      var c = value.charAt(i);
-      if (c === '\'' && outsideDouble) {
-        outsideSingle = !outsideSingle;
-      } else if (c === '"' && outsideSingle) {
-        outsideDouble = !outsideDouble;
-      }
-    }
-    return outsideSingle && outsideDouble;
-  }
-  function sanitizeStyle(value) {
-    value = String(value).trim();
-    if (!value)
-      return '';
-    var urlMatch = value.match(URL_RE);
-    if ((urlMatch && sanitizeUrl(urlMatch[1]) === urlMatch[1]) || value.match(SAFE_STYLE_VALUE) && hasBalancedQuotes(value)) {
-      return value;
-    }
-    if (_angular_core.isDevMode()) {
-      getDOM().log("WARNING: sanitizing unsafe style value " + value + " (see http://g.co/ng/security#xss).");
-    }
-    return 'unsafe';
-  }
-  var __extends$9 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var DomSanitizer = (function() {
-    function DomSanitizer() {}
-    return DomSanitizer;
-  }());
-  var DomSanitizerImpl = (function(_super) {
-    __extends$9(DomSanitizerImpl, _super);
-    function DomSanitizerImpl() {
-      _super.apply(this, arguments);
-    }
-    DomSanitizerImpl.prototype.sanitize = function(ctx, value) {
-      if (value == null)
-        return null;
-      switch (ctx) {
-        case _angular_core.SecurityContext.NONE:
-          return value;
-        case _angular_core.SecurityContext.HTML:
-          if (value instanceof SafeHtmlImpl)
-            return value.changingThisBreaksApplicationSecurity;
-          this.checkNotSafeValue(value, 'HTML');
-          return sanitizeHtml(String(value));
-        case _angular_core.SecurityContext.STYLE:
-          if (value instanceof SafeStyleImpl)
-            return value.changingThisBreaksApplicationSecurity;
-          this.checkNotSafeValue(value, 'Style');
-          return sanitizeStyle(value);
-        case _angular_core.SecurityContext.SCRIPT:
-          if (value instanceof SafeScriptImpl)
-            return value.changingThisBreaksApplicationSecurity;
-          this.checkNotSafeValue(value, 'Script');
-          throw new Error('unsafe value used in a script context');
-        case _angular_core.SecurityContext.URL:
-          if (value instanceof SafeResourceUrlImpl || value instanceof SafeUrlImpl) {
-            return value.changingThisBreaksApplicationSecurity;
-          }
-          this.checkNotSafeValue(value, 'URL');
-          return sanitizeUrl(String(value));
-        case _angular_core.SecurityContext.RESOURCE_URL:
-          if (value instanceof SafeResourceUrlImpl) {
-            return value.changingThisBreaksApplicationSecurity;
-          }
-          this.checkNotSafeValue(value, 'ResourceURL');
-          throw new Error('unsafe value used in a resource URL context (see http://g.co/ng/security#xss)');
-        default:
-          throw new Error("Unexpected SecurityContext " + ctx + " (see http://g.co/ng/security#xss)");
-      }
-    };
-    DomSanitizerImpl.prototype.checkNotSafeValue = function(value, expectedType) {
-      if (value instanceof SafeValueImpl) {
-        throw new Error(("Required a safe " + expectedType + ", got a " + value.getTypeName() + " ") + "(see http://g.co/ng/security#xss)");
-      }
-    };
-    DomSanitizerImpl.prototype.bypassSecurityTrustHtml = function(value) {
-      return new SafeHtmlImpl(value);
-    };
-    DomSanitizerImpl.prototype.bypassSecurityTrustStyle = function(value) {
-      return new SafeStyleImpl(value);
-    };
-    DomSanitizerImpl.prototype.bypassSecurityTrustScript = function(value) {
-      return new SafeScriptImpl(value);
-    };
-    DomSanitizerImpl.prototype.bypassSecurityTrustUrl = function(value) {
-      return new SafeUrlImpl(value);
-    };
-    DomSanitizerImpl.prototype.bypassSecurityTrustResourceUrl = function(value) {
-      return new SafeResourceUrlImpl(value);
-    };
-    DomSanitizerImpl.decorators = [{type: _angular_core.Injectable}];
-    DomSanitizerImpl.ctorParameters = [];
-    return DomSanitizerImpl;
-  }(DomSanitizer));
-  var SafeValueImpl = (function() {
-    function SafeValueImpl(changingThisBreaksApplicationSecurity) {
-      this.changingThisBreaksApplicationSecurity = changingThisBreaksApplicationSecurity;
-    }
-    SafeValueImpl.prototype.toString = function() {
-      return ("SafeValue must use [property]=binding: " + this.changingThisBreaksApplicationSecurity) + " (see http://g.co/ng/security#xss)";
-    };
-    return SafeValueImpl;
-  }());
-  var SafeHtmlImpl = (function(_super) {
-    __extends$9(SafeHtmlImpl, _super);
-    function SafeHtmlImpl() {
-      _super.apply(this, arguments);
-    }
-    SafeHtmlImpl.prototype.getTypeName = function() {
-      return 'HTML';
-    };
-    return SafeHtmlImpl;
-  }(SafeValueImpl));
-  var SafeStyleImpl = (function(_super) {
-    __extends$9(SafeStyleImpl, _super);
-    function SafeStyleImpl() {
-      _super.apply(this, arguments);
-    }
-    SafeStyleImpl.prototype.getTypeName = function() {
-      return 'Style';
-    };
-    return SafeStyleImpl;
-  }(SafeValueImpl));
-  var SafeScriptImpl = (function(_super) {
-    __extends$9(SafeScriptImpl, _super);
-    function SafeScriptImpl() {
-      _super.apply(this, arguments);
-    }
-    SafeScriptImpl.prototype.getTypeName = function() {
-      return 'Script';
-    };
-    return SafeScriptImpl;
-  }(SafeValueImpl));
-  var SafeUrlImpl = (function(_super) {
-    __extends$9(SafeUrlImpl, _super);
-    function SafeUrlImpl() {
-      _super.apply(this, arguments);
-    }
-    SafeUrlImpl.prototype.getTypeName = function() {
-      return 'URL';
-    };
-    return SafeUrlImpl;
-  }(SafeValueImpl));
-  var SafeResourceUrlImpl = (function(_super) {
-    __extends$9(SafeResourceUrlImpl, _super);
-    function SafeResourceUrlImpl() {
-      _super.apply(this, arguments);
-    }
-    SafeResourceUrlImpl.prototype.getTypeName = function() {
-      return 'ResourceURL';
-    };
-    return SafeResourceUrlImpl;
-  }(SafeValueImpl));
-  var INTERNAL_BROWSER_PLATFORM_PROVIDERS = [{
-    provide: _angular_core.PLATFORM_INITIALIZER,
-    useValue: initDomAdapter,
-    multi: true
-  }, {
-    provide: _angular_common.PlatformLocation,
-    useClass: BrowserPlatformLocation
-  }];
-  var BROWSER_SANITIZATION_PROVIDERS = [{
-    provide: _angular_core.Sanitizer,
-    useExisting: DomSanitizer
-  }, {
-    provide: DomSanitizer,
-    useClass: DomSanitizerImpl
-  }];
-  var platformBrowser = _angular_core.createPlatformFactory(_angular_core.platformCore, 'browser', INTERNAL_BROWSER_PLATFORM_PROVIDERS);
-  function initDomAdapter() {
-    BrowserDomAdapter.makeCurrent();
-    BrowserGetTestability.init();
-  }
-  function errorHandler() {
-    return new _angular_core.ErrorHandler();
-  }
-  function _document() {
-    return getDOM().defaultDoc();
-  }
-  function _resolveDefaultAnimationDriver() {
-    if (getDOM().supportsWebAnimation()) {
-      return new WebAnimationsDriver();
-    }
-    return AnimationDriver.NOOP;
-  }
-  var BrowserModule = (function() {
-    function BrowserModule(parentModule) {
-      if (parentModule) {
-        throw new Error("BrowserModule has already been loaded. If you need access to common directives such as NgIf and NgFor from a lazy loaded module, import CommonModule instead.");
-      }
-    }
-    BrowserModule.decorators = [{
-      type: _angular_core.NgModule,
-      args: [{
-        providers: [BROWSER_SANITIZATION_PROVIDERS, {
-          provide: _angular_core.ErrorHandler,
-          useFactory: errorHandler,
-          deps: []
-        }, {
-          provide: DOCUMENT,
-          useFactory: _document,
-          deps: []
-        }, {
-          provide: EVENT_MANAGER_PLUGINS,
-          useClass: DomEventsPlugin,
-          multi: true
-        }, {
-          provide: EVENT_MANAGER_PLUGINS,
-          useClass: KeyEventsPlugin,
-          multi: true
-        }, {
-          provide: EVENT_MANAGER_PLUGINS,
-          useClass: HammerGesturesPlugin,
-          multi: true
-        }, {
-          provide: HAMMER_GESTURE_CONFIG,
-          useClass: HammerGestureConfig
-        }, {
-          provide: DomRootRenderer,
-          useClass: DomRootRenderer_
-        }, {
-          provide: _angular_core.RootRenderer,
-          useExisting: DomRootRenderer
-        }, {
-          provide: SharedStylesHost,
-          useExisting: DomSharedStylesHost
-        }, {
-          provide: AnimationDriver,
-          useFactory: _resolveDefaultAnimationDriver
-        }, DomSharedStylesHost, _angular_core.Testability, EventManager, ELEMENT_PROBE_PROVIDERS, Title],
-        exports: [_angular_common.CommonModule, _angular_core.ApplicationModule]
-      }]
-    }];
-    BrowserModule.ctorParameters = [{
-      type: BrowserModule,
-      decorators: [{type: _angular_core.Optional}, {type: _angular_core.SkipSelf}]
-    }];
-    return BrowserModule;
-  }());
-  var win = typeof window !== 'undefined' && window || {};
-  var ChangeDetectionPerfRecord = (function() {
-    function ChangeDetectionPerfRecord(msPerTick, numTicks) {
-      this.msPerTick = msPerTick;
-      this.numTicks = numTicks;
-    }
-    return ChangeDetectionPerfRecord;
-  }());
-  var AngularTools = (function() {
-    function AngularTools(ref) {
-      this.profiler = new AngularProfiler(ref);
-    }
-    return AngularTools;
-  }());
-  var AngularProfiler = (function() {
-    function AngularProfiler(ref) {
-      this.appRef = ref.injector.get(_angular_core.ApplicationRef);
-    }
-    AngularProfiler.prototype.timeChangeDetection = function(config) {
-      var record = isPresent(config) && config['record'];
-      var profileName = 'Change Detection';
-      var isProfilerAvailable = isPresent(win.console.profile);
-      if (record && isProfilerAvailable) {
-        win.console.profile(profileName);
-      }
-      var start = getDOM().performanceNow();
-      var numTicks = 0;
-      while (numTicks < 5 || (getDOM().performanceNow() - start) < 500) {
-        this.appRef.tick();
-        numTicks++;
-      }
-      var end = getDOM().performanceNow();
-      if (record && isProfilerAvailable) {
-        win.console.profileEnd(profileName);
-      }
-      var msPerTick = (end - start) / numTicks;
-      win.console.log("ran " + numTicks + " change detection cycles");
-      win.console.log(NumberWrapper.toFixed(msPerTick, 2) + " ms per check");
-      return new ChangeDetectionPerfRecord(msPerTick, numTicks);
-    };
-    return AngularProfiler;
-  }());
-  var context = global$1;
-  function enableDebugTools(ref) {
-    context.ng = new AngularTools(ref);
-    return ref;
-  }
-  function disableDebugTools() {
-    delete context.ng;
-  }
-  var By = (function() {
-    function By() {}
-    By.all = function() {
-      return function(debugElement) {
-        return true;
-      };
-    };
-    By.css = function(selector) {
-      return function(debugElement) {
-        return isPresent(debugElement.nativeElement) ? getDOM().elementMatches(debugElement.nativeElement, selector) : false;
-      };
-    };
-    By.directive = function(type) {
-      return function(debugElement) {
-        return debugElement.providerTokens.indexOf(type) !== -1;
-      };
-    };
-    return By;
-  }());
-  var __platform_browser_private__ = {
-    BrowserPlatformLocation: BrowserPlatformLocation,
-    DomAdapter: DomAdapter,
-    BrowserDomAdapter: BrowserDomAdapter,
-    BrowserGetTestability: BrowserGetTestability,
-    getDOM: getDOM,
-    setRootDomAdapter: setRootDomAdapter,
-    DomRootRenderer_: DomRootRenderer_,
-    DomRootRenderer: DomRootRenderer,
-    DomSharedStylesHost: DomSharedStylesHost,
-    SharedStylesHost: SharedStylesHost,
-    ELEMENT_PROBE_PROVIDERS: ELEMENT_PROBE_PROVIDERS,
-    DomEventsPlugin: DomEventsPlugin,
-    KeyEventsPlugin: KeyEventsPlugin,
-    HammerGesturesPlugin: HammerGesturesPlugin,
-    initDomAdapter: initDomAdapter,
-    INTERNAL_BROWSER_PLATFORM_PROVIDERS: INTERNAL_BROWSER_PLATFORM_PROVIDERS,
-    BROWSER_SANITIZATION_PROVIDERS: BROWSER_SANITIZATION_PROVIDERS
-  };
-  exports.BrowserModule = BrowserModule;
-  exports.platformBrowser = platformBrowser;
-  exports.Title = Title;
-  exports.disableDebugTools = disableDebugTools;
-  exports.enableDebugTools = enableDebugTools;
-  exports.AnimationDriver = AnimationDriver;
-  exports.By = By;
-  exports.NgProbeToken = NgProbeToken;
-  exports.DOCUMENT = DOCUMENT;
-  exports.EVENT_MANAGER_PLUGINS = EVENT_MANAGER_PLUGINS;
-  exports.EventManager = EventManager;
-  exports.HAMMER_GESTURE_CONFIG = HAMMER_GESTURE_CONFIG;
-  exports.HammerGestureConfig = HammerGestureConfig;
-  exports.DomSanitizer = DomSanitizer;
-  exports.__platform_browser_private__ = __platform_browser_private__;
-}));
-
-})();
-(function() {
-var define = $__System.amdDefine;
-(function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Observable'), require('@angular/platform-browser')) : typeof define === 'function' && define.amd ? define("7", ["exports", "3", "2c", "5"], factory) : (factory((global.ng = global.ng || {}, global.ng.http = global.ng.http || {}), global.ng.core, global.Rx, global.ng.platformBrowser));
-}(this, function(exports, _angular_core, rxjs_Observable, _angular_platformBrowser) {
-  'use strict';
-  var BrowserXhr = (function() {
-    function BrowserXhr() {}
-    BrowserXhr.prototype.build = function() {
-      return (new XMLHttpRequest());
-    };
-    BrowserXhr.decorators = [{type: _angular_core.Injectable}];
-    BrowserXhr.ctorParameters = [];
-    return BrowserXhr;
-  }());
-  var globalScope;
-  if (typeof window === 'undefined') {
-    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
-      globalScope = self;
-    } else {
-      globalScope = global;
-    }
-  } else {
-    globalScope = window;
-  }
-  var global$1 = globalScope;
-  global$1.assert = function assert(condition) {};
-  function isPresent(obj) {
-    return obj !== undefined && obj !== null;
-  }
-  function isBlank(obj) {
-    return obj === undefined || obj === null;
-  }
-  function isString(obj) {
-    return typeof obj === 'string';
-  }
-  function isArray(obj) {
-    return Array.isArray(obj);
-  }
-  var StringWrapper = (function() {
-    function StringWrapper() {}
-    StringWrapper.fromCharCode = function(code) {
-      return String.fromCharCode(code);
-    };
-    StringWrapper.charCodeAt = function(s, index) {
-      return s.charCodeAt(index);
-    };
-    StringWrapper.split = function(s, regExp) {
-      return s.split(regExp);
-    };
-    StringWrapper.equals = function(s, s2) {
-      return s === s2;
-    };
-    StringWrapper.stripLeft = function(s, charVal) {
-      if (s && s.length) {
-        var pos = 0;
-        for (var i = 0; i < s.length; i++) {
-          if (s[i] != charVal)
-            break;
-          pos++;
-        }
-        s = s.substring(pos);
-      }
-      return s;
-    };
-    StringWrapper.stripRight = function(s, charVal) {
-      if (s && s.length) {
-        var pos = s.length;
-        for (var i = s.length - 1; i >= 0; i--) {
-          if (s[i] != charVal)
-            break;
-          pos--;
-        }
-        s = s.substring(0, pos);
-      }
-      return s;
-    };
-    StringWrapper.replace = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.replaceAll = function(s, from, replace) {
-      return s.replace(from, replace);
-    };
-    StringWrapper.slice = function(s, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return s.slice(from, to === null ? undefined : to);
-    };
-    StringWrapper.replaceAllMapped = function(s, from, cb) {
-      return s.replace(from, function() {
-        var matches = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-          matches[_i - 0] = arguments[_i];
-        }
-        matches.splice(-2, 2);
-        return cb(matches);
-      });
-    };
-    StringWrapper.contains = function(s, substr) {
-      return s.indexOf(substr) != -1;
-    };
-    StringWrapper.compare = function(a, b) {
-      if (a < b) {
-        return -1;
-      } else if (a > b) {
-        return 1;
-      } else {
-        return 0;
-      }
-    };
-    return StringWrapper;
-  }());
-  var NumberWrapper = (function() {
-    function NumberWrapper() {}
-    NumberWrapper.toFixed = function(n, fractionDigits) {
-      return n.toFixed(fractionDigits);
-    };
-    NumberWrapper.equal = function(a, b) {
-      return a === b;
-    };
-    NumberWrapper.parseIntAutoRadix = function(text) {
-      var result = parseInt(text);
-      if (isNaN(result)) {
-        throw new Error('Invalid integer literal when parsing ' + text);
-      }
-      return result;
-    };
-    NumberWrapper.parseInt = function(text, radix) {
-      if (radix == 10) {
-        if (/^(\-|\+)?[0-9]+$/.test(text)) {
-          return parseInt(text, radix);
-        }
-      } else if (radix == 16) {
-        if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
-          return parseInt(text, radix);
-        }
-      } else {
-        var result = parseInt(text, radix);
-        if (!isNaN(result)) {
-          return result;
-        }
-      }
-      throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
-    };
-    Object.defineProperty(NumberWrapper, "NaN", {
-      get: function() {
-        return NaN;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    NumberWrapper.isNumeric = function(value) {
-      return !isNaN(value - parseFloat(value));
-    };
-    NumberWrapper.isNaN = function(value) {
-      return isNaN(value);
-    };
-    NumberWrapper.isInteger = function(value) {
-      return Number.isInteger(value);
-    };
-    return NumberWrapper;
-  }());
-  function isJsObject(o) {
-    return o !== null && (typeof o === 'function' || typeof o === 'object');
-  }
-  var Json = (function() {
-    function Json() {}
-    Json.parse = function(s) {
-      return global$1.JSON.parse(s);
-    };
-    Json.stringify = function(data) {
-      return global$1.JSON.stringify(data, null, 2);
-    };
-    return Json;
-  }());
-  var _symbolIterator = null;
-  function getSymbolIterator() {
-    if (isBlank(_symbolIterator)) {
-      if (isPresent(globalScope.Symbol) && isPresent(Symbol.iterator)) {
-        _symbolIterator = Symbol.iterator;
-      } else {
-        var keys = Object.getOwnPropertyNames(Map.prototype);
-        for (var i = 0; i < keys.length; ++i) {
-          var key = keys[i];
-          if (key !== 'entries' && key !== 'size' && Map.prototype[key] === Map.prototype['entries']) {
-            _symbolIterator = key;
-          }
-        }
-      }
-    }
-    return _symbolIterator;
-  }
-  exports.RequestMethod;
-  (function(RequestMethod) {
-    RequestMethod[RequestMethod["Get"] = 0] = "Get";
-    RequestMethod[RequestMethod["Post"] = 1] = "Post";
-    RequestMethod[RequestMethod["Put"] = 2] = "Put";
-    RequestMethod[RequestMethod["Delete"] = 3] = "Delete";
-    RequestMethod[RequestMethod["Options"] = 4] = "Options";
-    RequestMethod[RequestMethod["Head"] = 5] = "Head";
-    RequestMethod[RequestMethod["Patch"] = 6] = "Patch";
-  })(exports.RequestMethod || (exports.RequestMethod = {}));
-  exports.ReadyState;
-  (function(ReadyState) {
-    ReadyState[ReadyState["Unsent"] = 0] = "Unsent";
-    ReadyState[ReadyState["Open"] = 1] = "Open";
-    ReadyState[ReadyState["HeadersReceived"] = 2] = "HeadersReceived";
-    ReadyState[ReadyState["Loading"] = 3] = "Loading";
-    ReadyState[ReadyState["Done"] = 4] = "Done";
-    ReadyState[ReadyState["Cancelled"] = 5] = "Cancelled";
-  })(exports.ReadyState || (exports.ReadyState = {}));
-  exports.ResponseType;
-  (function(ResponseType) {
-    ResponseType[ResponseType["Basic"] = 0] = "Basic";
-    ResponseType[ResponseType["Cors"] = 1] = "Cors";
-    ResponseType[ResponseType["Default"] = 2] = "Default";
-    ResponseType[ResponseType["Error"] = 3] = "Error";
-    ResponseType[ResponseType["Opaque"] = 4] = "Opaque";
-  })(exports.ResponseType || (exports.ResponseType = {}));
-  var ContentType;
-  (function(ContentType) {
-    ContentType[ContentType["NONE"] = 0] = "NONE";
-    ContentType[ContentType["JSON"] = 1] = "JSON";
-    ContentType[ContentType["FORM"] = 2] = "FORM";
-    ContentType[ContentType["FORM_DATA"] = 3] = "FORM_DATA";
-    ContentType[ContentType["TEXT"] = 4] = "TEXT";
-    ContentType[ContentType["BLOB"] = 5] = "BLOB";
-    ContentType[ContentType["ARRAY_BUFFER"] = 6] = "ARRAY_BUFFER";
-  })(ContentType || (ContentType = {}));
-  exports.ResponseContentType;
-  (function(ResponseContentType) {
-    ResponseContentType[ResponseContentType["Text"] = 0] = "Text";
-    ResponseContentType[ResponseContentType["Json"] = 1] = "Json";
-    ResponseContentType[ResponseContentType["ArrayBuffer"] = 2] = "ArrayBuffer";
-    ResponseContentType[ResponseContentType["Blob"] = 3] = "Blob";
-  })(exports.ResponseContentType || (exports.ResponseContentType = {}));
-  var Map$1 = global$1.Map;
-  var Set = global$1.Set;
-  var createMapFromPairs = (function() {
-    try {
-      if (new Map$1([[1, 2]]).size === 1) {
-        return function createMapFromPairs(pairs) {
-          return new Map$1(pairs);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromPairs(pairs) {
-      var map = new Map$1();
-      for (var i = 0; i < pairs.length; i++) {
-        var pair = pairs[i];
-        map.set(pair[0], pair[1]);
-      }
-      return map;
-    };
-  })();
-  var createMapFromMap = (function() {
-    try {
-      if (new Map$1(new Map$1())) {
-        return function createMapFromMap(m) {
-          return new Map$1(m);
-        };
-      }
-    } catch (e) {}
-    return function createMapAndPopulateFromMap(m) {
-      var map = new Map$1();
-      m.forEach(function(v, k) {
-        map.set(k, v);
-      });
-      return map;
-    };
-  })();
-  var _clearValues = (function() {
-    if ((new Map$1()).keys().next) {
-      return function _clearValues(m) {
-        var keyIterator = m.keys();
-        var k;
-        while (!((k = keyIterator.next()).done)) {
-          m.set(k.value, null);
-        }
-      };
-    } else {
-      return function _clearValuesWithForeEach(m) {
-        m.forEach(function(v, k) {
-          m.set(k, null);
-        });
-      };
-    }
-  })();
-  var _arrayFromMap = (function() {
-    try {
-      if ((new Map$1()).values().next) {
-        return function createArrayFromMap(m, getValues) {
-          return getValues ? Array.from(m.values()) : Array.from(m.keys());
-        };
-      }
-    } catch (e) {}
-    return function createArrayFromMapWithForeach(m, getValues) {
-      var res = ListWrapper.createFixedSize(m.size),
-          i = 0;
-      m.forEach(function(v, k) {
-        res[i] = getValues ? v : k;
-        i++;
-      });
-      return res;
-    };
-  })();
-  var MapWrapper = (function() {
-    function MapWrapper() {}
-    MapWrapper.clone = function(m) {
-      return createMapFromMap(m);
-    };
-    MapWrapper.createFromStringMap = function(stringMap) {
-      var result = new Map$1();
-      for (var prop in stringMap) {
-        result.set(prop, stringMap[prop]);
-      }
-      return result;
-    };
-    MapWrapper.toStringMap = function(m) {
-      var r = {};
-      m.forEach(function(v, k) {
-        return r[k] = v;
-      });
-      return r;
-    };
-    MapWrapper.createFromPairs = function(pairs) {
-      return createMapFromPairs(pairs);
-    };
-    MapWrapper.clearValues = function(m) {
-      _clearValues(m);
-    };
-    MapWrapper.iterable = function(m) {
-      return m;
-    };
-    MapWrapper.keys = function(m) {
-      return _arrayFromMap(m, false);
-    };
-    MapWrapper.values = function(m) {
-      return _arrayFromMap(m, true);
-    };
-    return MapWrapper;
-  }());
-  var StringMapWrapper = (function() {
-    function StringMapWrapper() {}
-    StringMapWrapper.create = function() {
-      return {};
-    };
-    StringMapWrapper.contains = function(map, key) {
-      return map.hasOwnProperty(key);
-    };
-    StringMapWrapper.get = function(map, key) {
-      return map.hasOwnProperty(key) ? map[key] : undefined;
-    };
-    StringMapWrapper.set = function(map, key, value) {
-      map[key] = value;
-    };
-    StringMapWrapper.keys = function(map) {
-      return Object.keys(map);
-    };
-    StringMapWrapper.values = function(map) {
-      return Object.keys(map).map(function(k) {
-        return map[k];
-      });
-    };
-    StringMapWrapper.isEmpty = function(map) {
-      for (var prop in map) {
-        return false;
-      }
-      return true;
-    };
-    StringMapWrapper.delete = function(map, key) {
-      delete map[key];
-    };
-    StringMapWrapper.forEach = function(map, callback) {
-      for (var _i = 0,
-          _a = Object.keys(map); _i < _a.length; _i++) {
-        var k = _a[_i];
-        callback(map[k], k);
-      }
-    };
-    StringMapWrapper.merge = function(m1, m2) {
-      var m = {};
-      for (var _i = 0,
-          _a = Object.keys(m1); _i < _a.length; _i++) {
-        var k = _a[_i];
-        m[k] = m1[k];
-      }
-      for (var _b = 0,
-          _c = Object.keys(m2); _b < _c.length; _b++) {
-        var k = _c[_b];
-        m[k] = m2[k];
-      }
-      return m;
-    };
-    StringMapWrapper.equals = function(m1, m2) {
-      var k1 = Object.keys(m1);
-      var k2 = Object.keys(m2);
-      if (k1.length != k2.length) {
-        return false;
-      }
-      for (var i = 0; i < k1.length; i++) {
-        var key = k1[i];
-        if (m1[key] !== m2[key]) {
-          return false;
-        }
-      }
-      return true;
-    };
-    return StringMapWrapper;
-  }());
-  var ListWrapper = (function() {
-    function ListWrapper() {}
-    ListWrapper.createFixedSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.createGrowableSize = function(size) {
-      return new Array(size);
-    };
-    ListWrapper.clone = function(array) {
-      return array.slice(0);
-    };
-    ListWrapper.forEachWithIndex = function(array, fn) {
-      for (var i = 0; i < array.length; i++) {
-        fn(array[i], i);
-      }
-    };
-    ListWrapper.first = function(array) {
-      if (!array)
-        return null;
-      return array[0];
-    };
-    ListWrapper.last = function(array) {
-      if (!array || array.length == 0)
-        return null;
-      return array[array.length - 1];
-    };
-    ListWrapper.indexOf = function(array, value, startIndex) {
-      if (startIndex === void 0) {
-        startIndex = 0;
-      }
-      return array.indexOf(value, startIndex);
-    };
-    ListWrapper.contains = function(list, el) {
-      return list.indexOf(el) !== -1;
-    };
-    ListWrapper.reversed = function(array) {
-      var a = ListWrapper.clone(array);
-      return a.reverse();
-    };
-    ListWrapper.concat = function(a, b) {
-      return a.concat(b);
-    };
-    ListWrapper.insert = function(list, index, value) {
-      list.splice(index, 0, value);
-    };
-    ListWrapper.removeAt = function(list, index) {
-      var res = list[index];
-      list.splice(index, 1);
-      return res;
-    };
-    ListWrapper.removeAll = function(list, items) {
-      for (var i = 0; i < items.length; ++i) {
-        var index = list.indexOf(items[i]);
-        list.splice(index, 1);
-      }
-    };
-    ListWrapper.remove = function(list, el) {
-      var index = list.indexOf(el);
-      if (index > -1) {
-        list.splice(index, 1);
-        return true;
-      }
-      return false;
-    };
-    ListWrapper.clear = function(list) {
-      list.length = 0;
-    };
-    ListWrapper.isEmpty = function(list) {
-      return list.length == 0;
-    };
-    ListWrapper.fill = function(list, value, start, end) {
-      if (start === void 0) {
-        start = 0;
-      }
-      if (end === void 0) {
-        end = null;
-      }
-      list.fill(value, start, end === null ? list.length : end);
-    };
-    ListWrapper.equals = function(a, b) {
-      if (a.length != b.length)
-        return false;
-      for (var i = 0; i < a.length; ++i) {
-        if (a[i] !== b[i])
-          return false;
-      }
-      return true;
-    };
-    ListWrapper.slice = function(l, from, to) {
-      if (from === void 0) {
-        from = 0;
-      }
-      if (to === void 0) {
-        to = null;
-      }
-      return l.slice(from, to === null ? undefined : to);
-    };
-    ListWrapper.splice = function(l, from, length) {
-      return l.splice(from, length);
-    };
-    ListWrapper.sort = function(l, compareFn) {
-      if (isPresent(compareFn)) {
-        l.sort(compareFn);
-      } else {
-        l.sort();
-      }
-    };
-    ListWrapper.toString = function(l) {
-      return l.toString();
-    };
-    ListWrapper.toJSON = function(l) {
-      return JSON.stringify(l);
-    };
-    ListWrapper.maximum = function(list, predicate) {
-      if (list.length == 0) {
-        return null;
-      }
-      var solution = null;
-      var maxValue = -Infinity;
-      for (var index = 0; index < list.length; index++) {
-        var candidate = list[index];
-        if (isBlank(candidate)) {
-          continue;
-        }
-        var candidateValue = predicate(candidate);
-        if (candidateValue > maxValue) {
-          solution = candidate;
-          maxValue = candidateValue;
-        }
-      }
-      return solution;
-    };
-    ListWrapper.flatten = function(list) {
-      var target = [];
-      _flattenArray(list, target);
-      return target;
-    };
-    ListWrapper.addAll = function(list, source) {
-      for (var i = 0; i < source.length; i++) {
-        list.push(source[i]);
-      }
-    };
-    return ListWrapper;
-  }());
-  function _flattenArray(source, target) {
-    if (isPresent(source)) {
-      for (var i = 0; i < source.length; i++) {
-        var item = source[i];
-        if (isArray(item)) {
-          _flattenArray(item, target);
-        } else {
-          target.push(item);
-        }
-      }
-    }
-    return target;
-  }
-  function isListLikeIterable(obj) {
-    if (!isJsObject(obj))
-      return false;
-    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
-  }
-  function iterateListLike(obj, fn) {
-    if (isArray(obj)) {
-      for (var i = 0; i < obj.length; i++) {
-        fn(obj[i]);
-      }
-    } else {
-      var iterator = obj[getSymbolIterator()]();
-      var item;
-      while (!((item = iterator.next()).done)) {
-        fn(item.value);
-      }
-    }
-  }
-  var createSetFromList = (function() {
-    var test = new Set([1, 2, 3]);
-    if (test.size === 3) {
-      return function createSetFromList(lst) {
-        return new Set(lst);
-      };
-    } else {
-      return function createSetAndPopulateFromList(lst) {
-        var res = new Set(lst);
-        if (res.size !== lst.length) {
-          for (var i = 0; i < lst.length; i++) {
-            res.add(lst[i]);
-          }
-        }
-        return res;
-      };
-    }
-  })();
-  var Headers = (function() {
-    function Headers(headers) {
-      var _this = this;
-      if (headers instanceof Headers) {
-        this._headersMap = new Map$1(headers._headersMap);
-        return;
-      }
-      this._headersMap = new Map$1();
-      if (isBlank(headers)) {
-        return;
-      }
-      StringMapWrapper.forEach(headers, function(v, k) {
-        _this._headersMap.set(normalize(k), isListLikeIterable(v) ? v : [v]);
-      });
-    }
-    Headers.fromResponseHeaderString = function(headersString) {
-      var headers = new Headers();
-      headersString.split('\n').forEach(function(line) {
-        var index = line.indexOf(':');
-        if (index > 0) {
-          var key = line.substring(0, index);
-          var value = line.substring(index + 1).trim();
-          headers.set(key, value);
-        }
-      });
-      return headers;
-    };
-    Headers.prototype.append = function(name, value) {
-      name = normalize(name);
-      var mapName = this._headersMap.get(name);
-      var list = isListLikeIterable(mapName) ? mapName : [];
-      list.push(value);
-      this._headersMap.set(name, list);
-    };
-    Headers.prototype.delete = function(name) {
-      this._headersMap.delete(normalize(name));
-    };
-    Headers.prototype.forEach = function(fn) {
-      this._headersMap.forEach(fn);
-    };
-    Headers.prototype.get = function(header) {
-      return ListWrapper.first(this._headersMap.get(normalize(header)));
-    };
-    Headers.prototype.has = function(header) {
-      return this._headersMap.has(normalize(header));
-    };
-    Headers.prototype.keys = function() {
-      return MapWrapper.keys(this._headersMap);
-    };
-    Headers.prototype.set = function(header, value) {
-      var list = [];
-      if (isListLikeIterable(value)) {
-        var pushValue = value.join(',');
-        list.push(pushValue);
-      } else {
-        list.push(value);
-      }
-      this._headersMap.set(normalize(header), list);
-    };
-    Headers.prototype.values = function() {
-      return MapWrapper.values(this._headersMap);
-    };
-    Headers.prototype.toJSON = function() {
-      var serializableHeaders = {};
-      this._headersMap.forEach(function(values, name) {
-        var list = [];
-        iterateListLike(values, function(val) {
-          return list = ListWrapper.concat(list, val.split(','));
-        });
-        serializableHeaders[normalize(name)] = list;
-      });
-      return serializableHeaders;
-    };
-    Headers.prototype.getAll = function(header) {
-      var headers = this._headersMap.get(normalize(header));
-      return isListLikeIterable(headers) ? headers : [];
-    };
-    Headers.prototype.entries = function() {
-      throw new Error('"entries" method is not implemented on Headers class');
-    };
-    return Headers;
-  }());
-  function normalize(name) {
-    return name.toLowerCase();
-  }
-  var __extends$1 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var ResponseOptions = (function() {
-    function ResponseOptions(_a) {
-      var _b = _a === void 0 ? {} : _a,
-          body = _b.body,
-          status = _b.status,
-          headers = _b.headers,
-          statusText = _b.statusText,
-          type = _b.type,
-          url = _b.url;
-      this.body = isPresent(body) ? body : null;
-      this.status = isPresent(status) ? status : null;
-      this.headers = isPresent(headers) ? headers : null;
-      this.statusText = isPresent(statusText) ? statusText : null;
-      this.type = isPresent(type) ? type : null;
-      this.url = isPresent(url) ? url : null;
-    }
-    ResponseOptions.prototype.merge = function(options) {
-      return new ResponseOptions({
-        body: isPresent(options) && isPresent(options.body) ? options.body : this.body,
-        status: isPresent(options) && isPresent(options.status) ? options.status : this.status,
-        headers: isPresent(options) && isPresent(options.headers) ? options.headers : this.headers,
-        statusText: isPresent(options) && isPresent(options.statusText) ? options.statusText : this.statusText,
-        type: isPresent(options) && isPresent(options.type) ? options.type : this.type,
-        url: isPresent(options) && isPresent(options.url) ? options.url : this.url
-      });
-    };
-    return ResponseOptions;
-  }());
-  var BaseResponseOptions = (function(_super) {
-    __extends$1(BaseResponseOptions, _super);
-    function BaseResponseOptions() {
-      _super.call(this, {
-        status: 200,
-        statusText: 'Ok',
-        type: exports.ResponseType.Default,
-        headers: new Headers()
-      });
-    }
-    BaseResponseOptions.decorators = [{type: _angular_core.Injectable}];
-    BaseResponseOptions.ctorParameters = [];
-    return BaseResponseOptions;
-  }(ResponseOptions));
-  var ConnectionBackend = (function() {
-    function ConnectionBackend() {}
-    return ConnectionBackend;
-  }());
-  var Connection = (function() {
-    function Connection() {}
-    return Connection;
-  }());
-  var XSRFStrategy = (function() {
-    function XSRFStrategy() {}
-    return XSRFStrategy;
-  }());
-  function normalizeMethodName(method) {
-    if (isString(method)) {
-      var originalMethod = method;
-      method = method.replace(/(\w)(\w*)/g, function(g0, g1, g2) {
-        return g1.toUpperCase() + g2.toLowerCase();
-      });
-      method = exports.RequestMethod[method];
-      if (typeof method !== 'number')
-        throw new Error("Invalid request method. The method \"" + originalMethod + "\" is not supported.");
-    }
-    return method;
-  }
-  var isSuccess = function(status) {
-    return (status >= 200 && status < 300);
-  };
-  function getResponseURL(xhr) {
-    if ('responseURL' in xhr) {
-      return xhr.responseURL;
-    }
-    if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
-      return xhr.getResponseHeader('X-Request-URL');
-    }
-    return;
-  }
-  function stringToArrayBuffer(input) {
-    var view = new Uint16Array(input.length);
-    for (var i = 0,
-        strLen = input.length; i < strLen; i++) {
-      view[i] = input.charCodeAt(i);
-    }
-    return view.buffer;
-  }
-  function paramParser(rawParams) {
-    if (rawParams === void 0) {
-      rawParams = '';
-    }
-    var map = new Map$1();
-    if (rawParams.length > 0) {
-      var params = rawParams.split('&');
-      params.forEach(function(param) {
-        var eqIdx = param.indexOf('=');
-        var _a = eqIdx == -1 ? [param, ''] : [param.slice(0, eqIdx), param.slice(eqIdx + 1)],
-            key = _a[0],
-            val = _a[1];
-        var list = map.get(key) || [];
-        list.push(val);
-        map.set(key, list);
-      });
-    }
-    return map;
-  }
-  var QueryEncoder = (function() {
-    function QueryEncoder() {}
-    QueryEncoder.prototype.encodeKey = function(k) {
-      return standardEncoding(k);
-    };
-    QueryEncoder.prototype.encodeValue = function(v) {
-      return standardEncoding(v);
-    };
-    return QueryEncoder;
-  }());
-  function standardEncoding(v) {
-    return encodeURIComponent(v).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/gi, '$').replace(/%2C/gi, ',').replace(/%3B/gi, ';').replace(/%2B/gi, '+').replace(/%3D/gi, '=').replace(/%3F/gi, '?').replace(/%2F/gi, '/');
-  }
-  var URLSearchParams = (function() {
-    function URLSearchParams(rawParams, queryEncoder) {
-      if (rawParams === void 0) {
-        rawParams = '';
-      }
-      if (queryEncoder === void 0) {
-        queryEncoder = new QueryEncoder();
-      }
-      this.rawParams = rawParams;
-      this.queryEncoder = queryEncoder;
-      this.paramsMap = paramParser(rawParams);
-    }
-    URLSearchParams.prototype.clone = function() {
-      var clone = new URLSearchParams('', this.queryEncoder);
-      clone.appendAll(this);
-      return clone;
-    };
-    URLSearchParams.prototype.has = function(param) {
-      return this.paramsMap.has(param);
-    };
-    URLSearchParams.prototype.get = function(param) {
-      var storedParam = this.paramsMap.get(param);
-      if (isListLikeIterable(storedParam)) {
-        return ListWrapper.first(storedParam);
-      } else {
-        return null;
-      }
-    };
-    URLSearchParams.prototype.getAll = function(param) {
-      var mapParam = this.paramsMap.get(param);
-      return isPresent(mapParam) ? mapParam : [];
-    };
-    URLSearchParams.prototype.set = function(param, val) {
-      var mapParam = this.paramsMap.get(param);
-      var list = isPresent(mapParam) ? mapParam : [];
-      ListWrapper.clear(list);
-      list.push(val);
-      this.paramsMap.set(param, list);
-    };
-    URLSearchParams.prototype.setAll = function(searchParams) {
-      var _this = this;
-      searchParams.paramsMap.forEach(function(value, param) {
-        var mapParam = _this.paramsMap.get(param);
-        var list = isPresent(mapParam) ? mapParam : [];
-        ListWrapper.clear(list);
-        list.push(value[0]);
-        _this.paramsMap.set(param, list);
-      });
-    };
-    URLSearchParams.prototype.append = function(param, val) {
-      var mapParam = this.paramsMap.get(param);
-      var list = isPresent(mapParam) ? mapParam : [];
-      list.push(val);
-      this.paramsMap.set(param, list);
-    };
-    URLSearchParams.prototype.appendAll = function(searchParams) {
-      var _this = this;
-      searchParams.paramsMap.forEach(function(value, param) {
-        var mapParam = _this.paramsMap.get(param);
-        var list = isPresent(mapParam) ? mapParam : [];
-        for (var i = 0; i < value.length; ++i) {
-          list.push(value[i]);
-        }
-        _this.paramsMap.set(param, list);
-      });
-    };
-    URLSearchParams.prototype.replaceAll = function(searchParams) {
-      var _this = this;
-      searchParams.paramsMap.forEach(function(value, param) {
-        var mapParam = _this.paramsMap.get(param);
-        var list = isPresent(mapParam) ? mapParam : [];
-        ListWrapper.clear(list);
-        for (var i = 0; i < value.length; ++i) {
-          list.push(value[i]);
-        }
-        _this.paramsMap.set(param, list);
-      });
-    };
-    URLSearchParams.prototype.toString = function() {
-      var _this = this;
-      var paramsList = [];
-      this.paramsMap.forEach(function(values, k) {
-        values.forEach(function(v) {
-          return paramsList.push(_this.queryEncoder.encodeKey(k) + '=' + _this.queryEncoder.encodeValue(v));
-        });
-      });
-      return paramsList.join('&');
-    };
-    URLSearchParams.prototype.delete = function(param) {
-      this.paramsMap.delete(param);
-    };
-    return URLSearchParams;
-  }());
-  var Body = (function() {
-    function Body() {}
-    Body.prototype.json = function() {
-      if (isString(this._body)) {
-        return Json.parse(this._body);
-      }
-      if (this._body instanceof ArrayBuffer) {
-        return Json.parse(this.text());
-      }
-      return this._body;
-    };
-    Body.prototype.text = function() {
-      if (this._body instanceof URLSearchParams) {
-        return this._body.toString();
-      }
-      if (this._body instanceof ArrayBuffer) {
-        return String.fromCharCode.apply(null, new Uint16Array(this._body));
-      }
-      if (this._body === null) {
-        return '';
-      }
-      if (isJsObject(this._body)) {
-        return Json.stringify(this._body);
-      }
-      return this._body.toString();
-    };
-    Body.prototype.arrayBuffer = function() {
-      if (this._body instanceof ArrayBuffer) {
-        return this._body;
-      }
-      return stringToArrayBuffer(this.text());
-    };
-    Body.prototype.blob = function() {
-      if (this._body instanceof Blob) {
-        return this._body;
-      }
-      if (this._body instanceof ArrayBuffer) {
-        return new Blob([this._body]);
-      }
-      throw new Error('The request body isn\'t either a blob or an array buffer');
-    };
-    return Body;
-  }());
-  var __extends$2 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var Response = (function(_super) {
-    __extends$2(Response, _super);
-    function Response(responseOptions) {
-      _super.call(this);
-      this._body = responseOptions.body;
-      this.status = responseOptions.status;
-      this.ok = (this.status >= 200 && this.status <= 299);
-      this.statusText = responseOptions.statusText;
-      this.headers = responseOptions.headers;
-      this.type = responseOptions.type;
-      this.url = responseOptions.url;
-    }
-    Response.prototype.toString = function() {
-      return "Response with status: " + this.status + " " + this.statusText + " for URL: " + this.url;
-    };
-    return Response;
-  }(Body));
-  var _nextRequestId = 0;
-  var JSONP_HOME = '__ng_jsonp__';
-  var _jsonpConnections = null;
-  function _getJsonpConnections() {
-    if (_jsonpConnections === null) {
-      _jsonpConnections = global$1[JSONP_HOME] = {};
-    }
-    return _jsonpConnections;
-  }
-  var BrowserJsonp = (function() {
-    function BrowserJsonp() {}
-    BrowserJsonp.prototype.build = function(url) {
-      var node = document.createElement('script');
-      node.src = url;
-      return node;
-    };
-    BrowserJsonp.prototype.nextRequestID = function() {
-      return "__req" + _nextRequestId++;
-    };
-    BrowserJsonp.prototype.requestCallback = function(id) {
-      return JSONP_HOME + "." + id + ".finished";
-    };
-    BrowserJsonp.prototype.exposeConnection = function(id, connection) {
-      var connections = _getJsonpConnections();
-      connections[id] = connection;
-    };
-    BrowserJsonp.prototype.removeConnection = function(id) {
-      var connections = _getJsonpConnections();
-      connections[id] = null;
-    };
-    BrowserJsonp.prototype.send = function(node) {
-      document.body.appendChild((node));
-    };
-    BrowserJsonp.prototype.cleanup = function(node) {
-      if (node.parentNode) {
-        node.parentNode.removeChild((node));
-      }
-    };
-    BrowserJsonp.decorators = [{type: _angular_core.Injectable}];
-    BrowserJsonp.ctorParameters = [];
-    return BrowserJsonp;
-  }());
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var JSONP_ERR_NO_CALLBACK = 'JSONP injected script did not invoke callback.';
-  var JSONP_ERR_WRONG_METHOD = 'JSONP requests must use GET request method.';
-  var JSONPConnection = (function() {
-    function JSONPConnection() {}
-    return JSONPConnection;
-  }());
-  var JSONPConnection_ = (function(_super) {
-    __extends(JSONPConnection_, _super);
-    function JSONPConnection_(req, _dom, baseResponseOptions) {
-      var _this = this;
-      _super.call(this);
-      this._dom = _dom;
-      this.baseResponseOptions = baseResponseOptions;
-      this._finished = false;
-      if (req.method !== exports.RequestMethod.Get) {
-        throw new TypeError(JSONP_ERR_WRONG_METHOD);
-      }
-      this.request = req;
-      this.response = new rxjs_Observable.Observable(function(responseObserver) {
-        _this.readyState = exports.ReadyState.Loading;
-        var id = _this._id = _dom.nextRequestID();
-        _dom.exposeConnection(id, _this);
-        var callback = _dom.requestCallback(_this._id);
-        var url = req.url;
-        if (url.indexOf('=JSONP_CALLBACK&') > -1) {
-          url = StringWrapper.replace(url, '=JSONP_CALLBACK&', "=" + callback + "&");
-        } else if (url.lastIndexOf('=JSONP_CALLBACK') === url.length - '=JSONP_CALLBACK'.length) {
-          url = url.substring(0, url.length - '=JSONP_CALLBACK'.length) + ("=" + callback);
-        }
-        var script = _this._script = _dom.build(url);
-        var onLoad = function(event) {
-          if (_this.readyState === exports.ReadyState.Cancelled)
-            return;
-          _this.readyState = exports.ReadyState.Done;
-          _dom.cleanup(script);
-          if (!_this._finished) {
-            var responseOptions_1 = new ResponseOptions({
-              body: JSONP_ERR_NO_CALLBACK,
-              type: exports.ResponseType.Error,
-              url: url
-            });
-            if (isPresent(baseResponseOptions)) {
-              responseOptions_1 = baseResponseOptions.merge(responseOptions_1);
-            }
-            responseObserver.error(new Response(responseOptions_1));
-            return;
-          }
-          var responseOptions = new ResponseOptions({
-            body: _this._responseData,
-            url: url
-          });
-          if (isPresent(_this.baseResponseOptions)) {
-            responseOptions = _this.baseResponseOptions.merge(responseOptions);
-          }
-          responseObserver.next(new Response(responseOptions));
-          responseObserver.complete();
-        };
-        var onError = function(error) {
-          if (_this.readyState === exports.ReadyState.Cancelled)
-            return;
-          _this.readyState = exports.ReadyState.Done;
-          _dom.cleanup(script);
-          var responseOptions = new ResponseOptions({
-            body: error.message,
-            type: exports.ResponseType.Error
-          });
-          if (isPresent(baseResponseOptions)) {
-            responseOptions = baseResponseOptions.merge(responseOptions);
-          }
-          responseObserver.error(new Response(responseOptions));
-        };
-        script.addEventListener('load', onLoad);
-        script.addEventListener('error', onError);
-        _dom.send(script);
-        return function() {
-          _this.readyState = exports.ReadyState.Cancelled;
-          script.removeEventListener('load', onLoad);
-          script.removeEventListener('error', onError);
-          if (isPresent(script)) {
-            _this._dom.cleanup(script);
-          }
-        };
-      });
-    }
-    JSONPConnection_.prototype.finished = function(data) {
-      this._finished = true;
-      this._dom.removeConnection(this._id);
-      if (this.readyState === exports.ReadyState.Cancelled)
-        return;
-      this._responseData = data;
-    };
-    return JSONPConnection_;
-  }(JSONPConnection));
-  var JSONPBackend = (function(_super) {
-    __extends(JSONPBackend, _super);
-    function JSONPBackend() {
-      _super.apply(this, arguments);
-    }
-    return JSONPBackend;
-  }(ConnectionBackend));
-  var JSONPBackend_ = (function(_super) {
-    __extends(JSONPBackend_, _super);
-    function JSONPBackend_(_browserJSONP, _baseResponseOptions) {
-      _super.call(this);
-      this._browserJSONP = _browserJSONP;
-      this._baseResponseOptions = _baseResponseOptions;
-    }
-    JSONPBackend_.prototype.createConnection = function(request) {
-      return new JSONPConnection_(request, this._browserJSONP, this._baseResponseOptions);
-    };
-    JSONPBackend_.decorators = [{type: _angular_core.Injectable}];
-    JSONPBackend_.ctorParameters = [{type: BrowserJsonp}, {type: ResponseOptions}];
-    return JSONPBackend_;
-  }(JSONPBackend));
-  var XSSI_PREFIX = /^\)\]\}',?\n/;
-  var XHRConnection = (function() {
-    function XHRConnection(req, browserXHR, baseResponseOptions) {
-      var _this = this;
-      this.request = req;
-      this.response = new rxjs_Observable.Observable(function(responseObserver) {
-        var _xhr = browserXHR.build();
-        _xhr.open(exports.RequestMethod[req.method].toUpperCase(), req.url);
-        if (isPresent(req.withCredentials)) {
-          _xhr.withCredentials = req.withCredentials;
-        }
-        var onLoad = function() {
-          var body = isPresent(_xhr.response) ? _xhr.response : _xhr.responseText;
-          if (isString(body))
-            body = body.replace(XSSI_PREFIX, '');
-          var headers = Headers.fromResponseHeaderString(_xhr.getAllResponseHeaders());
-          var url = getResponseURL(_xhr);
-          var status = _xhr.status === 1223 ? 204 : _xhr.status;
-          if (status === 0) {
-            status = body ? 200 : 0;
-          }
-          var statusText = _xhr.statusText || 'OK';
-          var responseOptions = new ResponseOptions({
-            body: body,
-            status: status,
-            headers: headers,
-            statusText: statusText,
-            url: url
-          });
-          if (isPresent(baseResponseOptions)) {
-            responseOptions = baseResponseOptions.merge(responseOptions);
-          }
-          var response = new Response(responseOptions);
-          response.ok = isSuccess(status);
-          if (response.ok) {
-            responseObserver.next(response);
-            responseObserver.complete();
-            return;
-          }
-          responseObserver.error(response);
-        };
-        var onError = function(err) {
-          var responseOptions = new ResponseOptions({
-            body: err,
-            type: exports.ResponseType.Error,
-            status: _xhr.status,
-            statusText: _xhr.statusText
-          });
-          if (isPresent(baseResponseOptions)) {
-            responseOptions = baseResponseOptions.merge(responseOptions);
-          }
-          responseObserver.error(new Response(responseOptions));
-        };
-        _this.setDetectedContentType(req, _xhr);
-        if (isPresent(req.headers)) {
-          req.headers.forEach(function(values, name) {
-            return _xhr.setRequestHeader(name, values.join(','));
-          });
-        }
-        if (isPresent(req.responseType) && isPresent(_xhr.responseType)) {
-          switch (req.responseType) {
-            case exports.ResponseContentType.ArrayBuffer:
-              _xhr.responseType = 'arraybuffer';
-              break;
-            case exports.ResponseContentType.Json:
-              _xhr.responseType = 'json';
-              break;
-            case exports.ResponseContentType.Text:
-              _xhr.responseType = 'text';
-              break;
-            case exports.ResponseContentType.Blob:
-              _xhr.responseType = 'blob';
-              break;
-            default:
-              throw new Error('The selected responseType is not supported');
-          }
-        }
-        _xhr.addEventListener('load', onLoad);
-        _xhr.addEventListener('error', onError);
-        _xhr.send(_this.request.getBody());
-        return function() {
-          _xhr.removeEventListener('load', onLoad);
-          _xhr.removeEventListener('error', onError);
-          _xhr.abort();
-        };
-      });
-    }
-    XHRConnection.prototype.setDetectedContentType = function(req, _xhr) {
-      if (isPresent(req.headers) && isPresent(req.headers.get('Content-Type'))) {
-        return;
-      }
-      switch (req.contentType) {
-        case ContentType.NONE:
-          break;
-        case ContentType.JSON:
-          _xhr.setRequestHeader('content-type', 'application/json');
-          break;
-        case ContentType.FORM:
-          _xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
-          break;
-        case ContentType.TEXT:
-          _xhr.setRequestHeader('content-type', 'text/plain');
-          break;
-        case ContentType.BLOB:
-          var blob = req.blob();
-          if (blob.type) {
-            _xhr.setRequestHeader('content-type', blob.type);
-          }
-          break;
-      }
-    };
-    return XHRConnection;
-  }());
-  var CookieXSRFStrategy = (function() {
-    function CookieXSRFStrategy(_cookieName, _headerName) {
-      if (_cookieName === void 0) {
-        _cookieName = 'XSRF-TOKEN';
-      }
-      if (_headerName === void 0) {
-        _headerName = 'X-XSRF-TOKEN';
-      }
-      this._cookieName = _cookieName;
-      this._headerName = _headerName;
-    }
-    CookieXSRFStrategy.prototype.configureRequest = function(req) {
-      var xsrfToken = _angular_platformBrowser.__platform_browser_private__.getDOM().getCookie(this._cookieName);
-      if (xsrfToken && !req.headers.has(this._headerName)) {
-        req.headers.set(this._headerName, xsrfToken);
-      }
-    };
-    return CookieXSRFStrategy;
-  }());
-  var XHRBackend = (function() {
-    function XHRBackend(_browserXHR, _baseResponseOptions, _xsrfStrategy) {
-      this._browserXHR = _browserXHR;
-      this._baseResponseOptions = _baseResponseOptions;
-      this._xsrfStrategy = _xsrfStrategy;
-    }
-    XHRBackend.prototype.createConnection = function(request) {
-      this._xsrfStrategy.configureRequest(request);
-      return new XHRConnection(request, this._browserXHR, this._baseResponseOptions);
-    };
-    XHRBackend.decorators = [{type: _angular_core.Injectable}];
-    XHRBackend.ctorParameters = [{type: BrowserXhr}, {type: ResponseOptions}, {type: XSRFStrategy}];
-    return XHRBackend;
-  }());
-  var __extends$3 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var RequestOptions = (function() {
-    function RequestOptions(_a) {
-      var _b = _a === void 0 ? {} : _a,
-          method = _b.method,
-          headers = _b.headers,
-          body = _b.body,
-          url = _b.url,
-          search = _b.search,
-          withCredentials = _b.withCredentials,
-          responseType = _b.responseType;
-      this.method = isPresent(method) ? normalizeMethodName(method) : null;
-      this.headers = isPresent(headers) ? headers : null;
-      this.body = isPresent(body) ? body : null;
-      this.url = isPresent(url) ? url : null;
-      this.search = isPresent(search) ? (isString(search) ? new URLSearchParams((search)) : (search)) : null;
-      this.withCredentials = isPresent(withCredentials) ? withCredentials : null;
-      this.responseType = isPresent(responseType) ? responseType : null;
-    }
-    RequestOptions.prototype.merge = function(options) {
-      return new RequestOptions({
-        method: isPresent(options) && isPresent(options.method) ? options.method : this.method,
-        headers: isPresent(options) && isPresent(options.headers) ? options.headers : this.headers,
-        body: isPresent(options) && isPresent(options.body) ? options.body : this.body,
-        url: isPresent(options) && isPresent(options.url) ? options.url : this.url,
-        search: isPresent(options) && isPresent(options.search) ? (isString(options.search) ? new URLSearchParams((options.search)) : (options.search).clone()) : this.search,
-        withCredentials: isPresent(options) && isPresent(options.withCredentials) ? options.withCredentials : this.withCredentials,
-        responseType: isPresent(options) && isPresent(options.responseType) ? options.responseType : this.responseType
-      });
-    };
-    return RequestOptions;
-  }());
-  var BaseRequestOptions = (function(_super) {
-    __extends$3(BaseRequestOptions, _super);
-    function BaseRequestOptions() {
-      _super.call(this, {
-        method: exports.RequestMethod.Get,
-        headers: new Headers()
-      });
-    }
-    BaseRequestOptions.decorators = [{type: _angular_core.Injectable}];
-    BaseRequestOptions.ctorParameters = [];
-    return BaseRequestOptions;
-  }(RequestOptions));
-  var __extends$5 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var Request = (function(_super) {
-    __extends$5(Request, _super);
-    function Request(requestOptions) {
-      _super.call(this);
-      var url = requestOptions.url;
-      this.url = requestOptions.url;
-      if (isPresent(requestOptions.search)) {
-        var search = requestOptions.search.toString();
-        if (search.length > 0) {
-          var prefix = '?';
-          if (StringWrapper.contains(this.url, '?')) {
-            prefix = (this.url[this.url.length - 1] == '&') ? '' : '&';
-          }
-          this.url = url + prefix + search;
-        }
-      }
-      this._body = requestOptions.body;
-      this.method = normalizeMethodName(requestOptions.method);
-      this.headers = new Headers(requestOptions.headers);
-      this.contentType = this.detectContentType();
-      this.withCredentials = requestOptions.withCredentials;
-      this.responseType = requestOptions.responseType;
-    }
-    Request.prototype.detectContentType = function() {
-      switch (this.headers.get('content-type')) {
-        case 'application/json':
-          return ContentType.JSON;
-        case 'application/x-www-form-urlencoded':
-          return ContentType.FORM;
-        case 'multipart/form-data':
-          return ContentType.FORM_DATA;
-        case 'text/plain':
-        case 'text/html':
-          return ContentType.TEXT;
-        case 'application/octet-stream':
-          return ContentType.BLOB;
-        default:
-          return this.detectContentTypeFromBody();
-      }
-    };
-    Request.prototype.detectContentTypeFromBody = function() {
-      if (this._body == null) {
-        return ContentType.NONE;
-      } else if (this._body instanceof URLSearchParams) {
-        return ContentType.FORM;
-      } else if (this._body instanceof FormData) {
-        return ContentType.FORM_DATA;
-      } else if (this._body instanceof Blob$1) {
-        return ContentType.BLOB;
-      } else if (this._body instanceof ArrayBuffer$1) {
-        return ContentType.ARRAY_BUFFER;
-      } else if (this._body && typeof this._body == 'object') {
-        return ContentType.JSON;
-      } else {
-        return ContentType.TEXT;
-      }
-    };
-    Request.prototype.getBody = function() {
-      switch (this.contentType) {
-        case ContentType.JSON:
-          return this.text();
-        case ContentType.FORM:
-          return this.text();
-        case ContentType.FORM_DATA:
-          return this._body;
-        case ContentType.TEXT:
-          return this.text();
-        case ContentType.BLOB:
-          return this.blob();
-        case ContentType.ARRAY_BUFFER:
-          return this.arrayBuffer();
-        default:
-          return null;
-      }
-    };
-    return Request;
-  }(Body));
-  var noop$1 = function() {};
-  var w = typeof window == 'object' ? window : noop$1;
-  var FormData = w['FormData'] || noop$1;
-  var Blob$1 = w['Blob'] || noop$1;
-  var ArrayBuffer$1 = w['ArrayBuffer'] || noop$1;
-  var __extends$4 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  function httpRequest(backend, request) {
-    return backend.createConnection(request).response;
-  }
-  function mergeOptions(defaultOpts, providedOpts, method, url) {
-    var newOptions = defaultOpts;
-    if (isPresent(providedOpts)) {
-      return newOptions.merge(new RequestOptions({
-        method: providedOpts.method || method,
-        url: providedOpts.url || url,
-        search: providedOpts.search,
-        headers: providedOpts.headers,
-        body: providedOpts.body,
-        withCredentials: providedOpts.withCredentials,
-        responseType: providedOpts.responseType
-      }));
-    }
-    if (isPresent(method)) {
-      return newOptions.merge(new RequestOptions({
-        method: method,
-        url: url
-      }));
-    } else {
-      return newOptions.merge(new RequestOptions({url: url}));
-    }
-  }
-  var Http = (function() {
-    function Http(_backend, _defaultOptions) {
-      this._backend = _backend;
-      this._defaultOptions = _defaultOptions;
-    }
-    Http.prototype.request = function(url, options) {
-      var responseObservable;
-      if (isString(url)) {
-        responseObservable = httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url)));
-      } else if (url instanceof Request) {
-        responseObservable = httpRequest(this._backend, url);
-      } else {
-        throw new Error('First argument must be a url string or Request instance.');
-      }
-      return responseObservable;
-    };
-    Http.prototype.get = function(url, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url)));
-    };
-    Http.prototype.post = function(url, body, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Post, url)));
-    };
-    Http.prototype.put = function(url, body, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Put, url)));
-    };
-    Http.prototype.delete = function(url, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Delete, url)));
-    };
-    Http.prototype.patch = function(url, body, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Patch, url)));
-    };
-    Http.prototype.head = function(url, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Head, url)));
-    };
-    Http.prototype.options = function(url, options) {
-      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Options, url)));
-    };
-    Http.decorators = [{type: _angular_core.Injectable}];
-    Http.ctorParameters = [{type: ConnectionBackend}, {type: RequestOptions}];
-    return Http;
-  }());
-  var Jsonp = (function(_super) {
-    __extends$4(Jsonp, _super);
-    function Jsonp(backend, defaultOptions) {
-      _super.call(this, backend, defaultOptions);
-    }
-    Jsonp.prototype.request = function(url, options) {
-      var responseObservable;
-      if (isString(url)) {
-        url = new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url));
-      }
-      if (url instanceof Request) {
-        if (url.method !== exports.RequestMethod.Get) {
-          throw new Error('JSONP requests must use GET request method.');
-        }
-        responseObservable = httpRequest(this._backend, url);
-      } else {
-        throw new Error('First argument must be a url string or Request instance.');
-      }
-      return responseObservable;
-    };
-    Jsonp.decorators = [{type: _angular_core.Injectable}];
-    Jsonp.ctorParameters = [{type: ConnectionBackend}, {type: RequestOptions}];
-    return Jsonp;
-  }(Http));
-  function _createDefaultCookieXSRFStrategy() {
-    return new CookieXSRFStrategy();
-  }
-  function httpFactory(xhrBackend, requestOptions) {
-    return new Http(xhrBackend, requestOptions);
-  }
-  function jsonpFactory(jsonpBackend, requestOptions) {
-    return new Jsonp(jsonpBackend, requestOptions);
-  }
-  var HttpModule = (function() {
-    function HttpModule() {}
-    HttpModule.decorators = [{
-      type: _angular_core.NgModule,
-      args: [{providers: [{
-          provide: Http,
-          useFactory: httpFactory,
-          deps: [XHRBackend, RequestOptions]
-        }, BrowserXhr, {
-          provide: RequestOptions,
-          useClass: BaseRequestOptions
-        }, {
-          provide: ResponseOptions,
-          useClass: BaseResponseOptions
-        }, XHRBackend, {
-          provide: XSRFStrategy,
-          useFactory: _createDefaultCookieXSRFStrategy
-        }]}]
-    }];
-    HttpModule.ctorParameters = [];
-    return HttpModule;
-  }());
-  var JsonpModule = (function() {
-    function JsonpModule() {}
-    JsonpModule.decorators = [{
-      type: _angular_core.NgModule,
-      args: [{providers: [{
-          provide: Jsonp,
-          useFactory: jsonpFactory,
-          deps: [JSONPBackend, RequestOptions]
-        }, BrowserJsonp, {
-          provide: RequestOptions,
-          useClass: BaseRequestOptions
-        }, {
-          provide: ResponseOptions,
-          useClass: BaseResponseOptions
-        }, {
-          provide: JSONPBackend,
-          useClass: JSONPBackend_
-        }]}]
-    }];
-    JsonpModule.ctorParameters = [];
-    return JsonpModule;
-  }());
-  exports.BrowserXhr = BrowserXhr;
-  exports.JSONPBackend = JSONPBackend;
-  exports.JSONPConnection = JSONPConnection;
-  exports.CookieXSRFStrategy = CookieXSRFStrategy;
-  exports.XHRBackend = XHRBackend;
-  exports.XHRConnection = XHRConnection;
-  exports.BaseRequestOptions = BaseRequestOptions;
-  exports.RequestOptions = RequestOptions;
-  exports.BaseResponseOptions = BaseResponseOptions;
-  exports.ResponseOptions = ResponseOptions;
-  exports.Headers = Headers;
-  exports.Http = Http;
-  exports.Jsonp = Jsonp;
-  exports.HttpModule = HttpModule;
-  exports.JsonpModule = JsonpModule;
-  exports.Connection = Connection;
-  exports.ConnectionBackend = ConnectionBackend;
-  exports.XSRFStrategy = XSRFStrategy;
-  exports.Request = Request;
-  exports.Response = Response;
-  exports.QueryEncoder = QueryEncoder;
-  exports.URLSearchParams = URLSearchParams;
-}));
-
-})();
-$__System.register('43', ['3', '7'], function (exports_1, context_1) {
-    "use strict";
-
-    var __moduleName = context_1 && context_1.id;
-    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-        var c = arguments.length,
-            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-            d;
-        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-        return c > 3 && r && Object.defineProperty(target, key, r), r;
-    };
-    var __metadata = this && this.__metadata || function (k, v) {
-        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-    };
-    var core_1, http_1;
-    var RespuestaEncuestaService;
-    return {
-        setters: [function (core_1_1) {
-            core_1 = core_1_1;
-        }, function (http_1_1) {
-            http_1 = http_1_1;
-        }],
-        execute: function () {
-            RespuestaEncuestaService = function () {
-                //materiasService: MateriasService, opcionService: OpcionService, 
-                function RespuestaEncuestaService(http) {
+            EncuestaService = class EncuestaService {
+                constructor(http) {
                     this.http = http;
-                    //this.materiaService = materiasService;
-                    //this.opcionService = opcionService;
                 }
-                RespuestaEncuestaService.prototype.obtenerRespuestaEncuesta = function (token) {
-                    return this.http.get('/api/respuestas/encuesta/detalle?token=' + token).map(function (response) {
-                        return response.json();
+                obtenerEncuesta(id) {
+                    return this.http.get('/api/encuestas/detalle?id=' + id).map(response => response.json());
+                }
+                obtenerTodasLasEncuestas() {
+                    return this.http.get('/api/encuestas/listado').map(response => response.json());
+                }
+                obtenerEstadisticas(id) {
+                    return this.http.get('/api/encuestas/estadisticas?id=' + id).map(response => response.json());
+                }
+                completaron(id) {
+                    return this.http.get('/api/encuestas/completaron?id=' + id).map(response => response.json());
+                }
+            };
+            EncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], EncuestaService);
+            exports_1("EncuestaService", EncuestaService);
+        }
+    };
+});
+
+$__System.register("66", ["3", "13"], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, encuesta_service_1;
+    var ListadoEncuestaComponent;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (encuesta_service_1_1) {
+            encuesta_service_1 = encuesta_service_1_1;
+        }],
+        execute: function () {
+            ListadoEncuestaComponent = class ListadoEncuestaComponent {
+                constructor(encuestaService) {
+                    encuestaService.obtenerTodasLasEncuestas().subscribe(encuestas => {
+                        this.encuestas = encuestas;
+                    }, error => {
+                        console.log(error);
                     });
-                };
-                RespuestaEncuestaService.prototype.actualizarRespuestas = function (respuestaEncuestaId, respuestas) {
-                    return this.http.post('/api/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuestaId, { respuestas: respuestas }).map(function (response) {
-                        return response.json();
-                    });
-                };
-                RespuestaEncuestaService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [http_1.Http])], RespuestaEncuestaService);
-                return RespuestaEncuestaService;
-            }();
-            exports_1("RespuestaEncuestaService", RespuestaEncuestaService);
+                }
+                formatearFecha(fecha) {
+                    if (!fecha) {
+                        return '-';
+                    }
+                    fecha = new Date(fecha);
+                    var fechaFormateada = this.agregarCero(fecha.getDate()) + "-" + this.agregarCero(fecha.getMonth() + 1) + "-" + fecha.getFullYear() + " ";
+                    return fechaFormateada;
+                }
+                agregarCero(numero) {
+                    if (numero < 10) {
+                        return '0' + numero;
+                    }
+                    return numero;
+                }
+            };
+            ListadoEncuestaComponent = __decorate([core_1.Component({
+                selector: 'encuestas',
+                templateUrl: 'client/components/encuesta/listadoEncuesta.component.html',
+                providers: [encuesta_service_1.EncuestaService]
+            }), __metadata('design:paramtypes', [encuesta_service_1.EncuestaService])], ListadoEncuestaComponent);
+            exports_1("ListadoEncuestaComponent", ListadoEncuestaComponent);
+        }
+    };
+});
+
+$__System.register('67', ['8', '65', '66'], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var router_1, estadisticasEncuesta_component_1, listadoEncuesta_component_1;
+    var routes, routing;
+    return {
+        setters: [function (router_1_1) {
+            router_1 = router_1_1;
+        }, function (estadisticasEncuesta_component_1_1) {
+            estadisticasEncuesta_component_1 = estadisticasEncuesta_component_1_1;
+        }, function (listadoEncuesta_component_1_1) {
+            listadoEncuesta_component_1 = listadoEncuesta_component_1_1;
+        }],
+        execute: function () {
+            exports_1("routes", routes = [{ path: 'encuestas/listado', component: listadoEncuesta_component_1.ListadoEncuestaComponent }, { path: 'encuestas/estadisticas/:id', component: estadisticasEncuesta_component_1.EstadisticasEncuestaComponent }]);
+            exports_1("routing", routing = router_1.RouterModule.forChild(routes));
         }
     };
 });
@@ -28032,7 +28235,7 @@ $__System.register('43', ['3', '7'], function (exports_1, context_1) {
 (function() {
 var define = $__System.amdDefine;
 (function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) : typeof define === 'function' && define.amd ? define("13", ["exports", "3"], factory) : (factory((global.ng = global.ng || {}, global.ng.common = global.ng.common || {}), global.ng.core));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core')) : typeof define === 'function' && define.amd ? define("15", ["exports", "3"], factory) : (factory((global.ng = global.ng || {}, global.ng.common = global.ng.common || {}), global.ng.core));
 }(this, function(exports, _angular_core) {
   'use strict';
   var PlatformLocation = (function() {
@@ -30590,10 +30793,263 @@ var define = $__System.amdDefine;
 }));
 
 })();
+$__System.registerDynamic('62', [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    /**
+     * An error thrown when an action is invalid because the object has been
+     * unsubscribed.
+     *
+     * @see {@link Subject}
+     * @see {@link BehaviorSubject}
+     *
+     * @class ObjectUnsubscribedError
+     */
+    var ObjectUnsubscribedError = function (_super) {
+        __extends(ObjectUnsubscribedError, _super);
+        function ObjectUnsubscribedError() {
+            var err = _super.call(this, 'object unsubscribed');
+            this.name = err.name = 'ObjectUnsubscribedError';
+            this.stack = err.stack;
+            this.message = err.message;
+        }
+        return ObjectUnsubscribedError;
+    }(Error);
+    exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("68", ["29"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscription_1 = $__require("29");
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var SubjectSubscription = function (_super) {
+        __extends(SubjectSubscription, _super);
+        function SubjectSubscription(subject, subscriber) {
+            _super.call(this);
+            this.subject = subject;
+            this.subscriber = subscriber;
+            this.closed = false;
+        }
+        SubjectSubscription.prototype.unsubscribe = function () {
+            if (this.closed) {
+                return;
+            }
+            this.closed = true;
+            var subject = this.subject;
+            var observers = subject.observers;
+            this.subject = null;
+            if (!observers || observers.length === 0 || subject.isStopped || subject.closed) {
+                return;
+            }
+            var subscriberIndex = observers.indexOf(this.subscriber);
+            if (subscriberIndex !== -1) {
+                observers.splice(subscriberIndex, 1);
+            }
+        };
+        return SubjectSubscription;
+    }(Subscription_1.Subscription);
+    exports.SubjectSubscription = SubjectSubscription;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('46', ['32', '30', '29', '62', '68', '69'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Observable_1 = $__require('32');
+    var Subscriber_1 = $__require('30');
+    var Subscription_1 = $__require('29');
+    var ObjectUnsubscribedError_1 = $__require('62');
+    var SubjectSubscription_1 = $__require('68');
+    var rxSubscriber_1 = $__require('69');
+    /**
+     * @class SubjectSubscriber<T>
+     */
+    var SubjectSubscriber = function (_super) {
+        __extends(SubjectSubscriber, _super);
+        function SubjectSubscriber(destination) {
+            _super.call(this, destination);
+            this.destination = destination;
+        }
+        return SubjectSubscriber;
+    }(Subscriber_1.Subscriber);
+    exports.SubjectSubscriber = SubjectSubscriber;
+    /**
+     * @class Subject<T>
+     */
+    var Subject = function (_super) {
+        __extends(Subject, _super);
+        function Subject() {
+            _super.call(this);
+            this.observers = [];
+            this.closed = false;
+            this.isStopped = false;
+            this.hasError = false;
+            this.thrownError = null;
+        }
+        Subject.prototype[rxSubscriber_1.$$rxSubscriber] = function () {
+            return new SubjectSubscriber(this);
+        };
+        Subject.prototype.lift = function (operator) {
+            var subject = new AnonymousSubject(this, this);
+            subject.operator = operator;
+            return subject;
+        };
+        Subject.prototype.next = function (value) {
+            if (this.closed) {
+                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+            }
+            if (!this.isStopped) {
+                var observers = this.observers;
+                var len = observers.length;
+                var copy = observers.slice();
+                for (var i = 0; i < len; i++) {
+                    copy[i].next(value);
+                }
+            }
+        };
+        Subject.prototype.error = function (err) {
+            if (this.closed) {
+                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+            }
+            this.hasError = true;
+            this.thrownError = err;
+            this.isStopped = true;
+            var observers = this.observers;
+            var len = observers.length;
+            var copy = observers.slice();
+            for (var i = 0; i < len; i++) {
+                copy[i].error(err);
+            }
+            this.observers.length = 0;
+        };
+        Subject.prototype.complete = function () {
+            if (this.closed) {
+                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+            }
+            this.isStopped = true;
+            var observers = this.observers;
+            var len = observers.length;
+            var copy = observers.slice();
+            for (var i = 0; i < len; i++) {
+                copy[i].complete();
+            }
+            this.observers.length = 0;
+        };
+        Subject.prototype.unsubscribe = function () {
+            this.isStopped = true;
+            this.closed = true;
+            this.observers = null;
+        };
+        Subject.prototype._subscribe = function (subscriber) {
+            if (this.closed) {
+                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
+            } else if (this.hasError) {
+                subscriber.error(this.thrownError);
+                return Subscription_1.Subscription.EMPTY;
+            } else if (this.isStopped) {
+                subscriber.complete();
+                return Subscription_1.Subscription.EMPTY;
+            } else {
+                this.observers.push(subscriber);
+                return new SubjectSubscription_1.SubjectSubscription(this, subscriber);
+            }
+        };
+        Subject.prototype.asObservable = function () {
+            var observable = new Observable_1.Observable();
+            observable.source = this;
+            return observable;
+        };
+        Subject.create = function (destination, source) {
+            return new AnonymousSubject(destination, source);
+        };
+        return Subject;
+    }(Observable_1.Observable);
+    exports.Subject = Subject;
+    /**
+     * @class AnonymousSubject<T>
+     */
+    var AnonymousSubject = function (_super) {
+        __extends(AnonymousSubject, _super);
+        function AnonymousSubject(destination, source) {
+            _super.call(this);
+            this.destination = destination;
+            this.source = source;
+        }
+        AnonymousSubject.prototype.next = function (value) {
+            var destination = this.destination;
+            if (destination && destination.next) {
+                destination.next(value);
+            }
+        };
+        AnonymousSubject.prototype.error = function (err) {
+            var destination = this.destination;
+            if (destination && destination.error) {
+                this.destination.error(err);
+            }
+        };
+        AnonymousSubject.prototype.complete = function () {
+            var destination = this.destination;
+            if (destination && destination.complete) {
+                this.destination.complete();
+            }
+        };
+        AnonymousSubject.prototype._subscribe = function (subscriber) {
+            var source = this.source;
+            if (source) {
+                return this.source.subscribe(subscriber);
+            } else {
+                return Subscription_1.Subscription.EMPTY;
+            }
+        };
+        return AnonymousSubject;
+    }(Subject);
+    exports.AnonymousSubject = AnonymousSubject;
+    
+
+    return module.exports;
+});
 (function() {
 var define = $__System.amdDefine;
 (function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('rxjs/Observable')) : typeof define === 'function' && define.amd ? define("3", ["exports", "40", "2c"], factory) : (factory((global.ng = global.ng || {}, global.ng.core = global.ng.core || {}), global.Rx, global.Rx));
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('rxjs/Subject'), require('rxjs/Observable')) : typeof define === 'function' && define.amd ? define("3", ["exports", "46", "32"], factory) : (factory((global.ng = global.ng || {}, global.ng.core = global.ng.core || {}), global.Rx, global.Rx));
 }(this, function(exports, rxjs_Subject, rxjs_Observable) {
   'use strict';
   var globalScope;
@@ -37899,7 +38355,4475 @@ var define = $__System.amdDefine;
 }));
 
 })();
-$__System.registerDynamic('4a', ['25', '2c', '4b'], true, function ($__require, exports, module) {
+(function() {
+var define = $__System.amdDefine;
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core')) : typeof define === 'function' && define.amd ? define("5", ["exports", "15", "3"], factory) : (factory((global.ng = global.ng || {}, global.ng.platformBrowser = global.ng.platformBrowser || {}), global.ng.common, global.ng.core));
+}(this, function(exports, _angular_common, _angular_core) {
+  'use strict';
+  var DebugDomRootRenderer = _angular_core.__core_private__.DebugDomRootRenderer;
+  var NoOpAnimationPlayer = _angular_core.__core_private__.NoOpAnimationPlayer;
+  var _NoOpAnimationDriver = (function() {
+    function _NoOpAnimationDriver() {}
+    _NoOpAnimationDriver.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
+      return new NoOpAnimationPlayer();
+    };
+    return _NoOpAnimationDriver;
+  }());
+  var AnimationDriver = (function() {
+    function AnimationDriver() {}
+    AnimationDriver.NOOP = new _NoOpAnimationDriver();
+    return AnimationDriver;
+  }());
+  var globalScope;
+  if (typeof window === 'undefined') {
+    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+      globalScope = self;
+    } else {
+      globalScope = global;
+    }
+  } else {
+    globalScope = window;
+  }
+  var global$1 = globalScope;
+  var Date = global$1.Date;
+  global$1.assert = function assert(condition) {};
+  function isPresent(obj) {
+    return obj !== undefined && obj !== null;
+  }
+  function isBlank(obj) {
+    return obj === undefined || obj === null;
+  }
+  function isNumber(obj) {
+    return typeof obj === 'number';
+  }
+  function isString(obj) {
+    return typeof obj === 'string';
+  }
+  function isFunction(obj) {
+    return typeof obj === 'function';
+  }
+  function isArray(obj) {
+    return Array.isArray(obj);
+  }
+  function stringify(token) {
+    if (typeof token === 'string') {
+      return token;
+    }
+    if (token === undefined || token === null) {
+      return '' + token;
+    }
+    if (token.overriddenName) {
+      return token.overriddenName;
+    }
+    if (token.name) {
+      return token.name;
+    }
+    var res = token.toString();
+    var newLineIndex = res.indexOf('\n');
+    return (newLineIndex === -1) ? res : res.substring(0, newLineIndex);
+  }
+  var StringWrapper = (function() {
+    function StringWrapper() {}
+    StringWrapper.fromCharCode = function(code) {
+      return String.fromCharCode(code);
+    };
+    StringWrapper.charCodeAt = function(s, index) {
+      return s.charCodeAt(index);
+    };
+    StringWrapper.split = function(s, regExp) {
+      return s.split(regExp);
+    };
+    StringWrapper.equals = function(s, s2) {
+      return s === s2;
+    };
+    StringWrapper.stripLeft = function(s, charVal) {
+      if (s && s.length) {
+        var pos = 0;
+        for (var i = 0; i < s.length; i++) {
+          if (s[i] != charVal)
+            break;
+          pos++;
+        }
+        s = s.substring(pos);
+      }
+      return s;
+    };
+    StringWrapper.stripRight = function(s, charVal) {
+      if (s && s.length) {
+        var pos = s.length;
+        for (var i = s.length - 1; i >= 0; i--) {
+          if (s[i] != charVal)
+            break;
+          pos--;
+        }
+        s = s.substring(0, pos);
+      }
+      return s;
+    };
+    StringWrapper.replace = function(s, from, replace) {
+      return s.replace(from, replace);
+    };
+    StringWrapper.replaceAll = function(s, from, replace) {
+      return s.replace(from, replace);
+    };
+    StringWrapper.slice = function(s, from, to) {
+      if (from === void 0) {
+        from = 0;
+      }
+      if (to === void 0) {
+        to = null;
+      }
+      return s.slice(from, to === null ? undefined : to);
+    };
+    StringWrapper.replaceAllMapped = function(s, from, cb) {
+      return s.replace(from, function() {
+        var matches = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          matches[_i - 0] = arguments[_i];
+        }
+        matches.splice(-2, 2);
+        return cb(matches);
+      });
+    };
+    StringWrapper.contains = function(s, substr) {
+      return s.indexOf(substr) != -1;
+    };
+    StringWrapper.compare = function(a, b) {
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    };
+    return StringWrapper;
+  }());
+  var NumberWrapper = (function() {
+    function NumberWrapper() {}
+    NumberWrapper.toFixed = function(n, fractionDigits) {
+      return n.toFixed(fractionDigits);
+    };
+    NumberWrapper.equal = function(a, b) {
+      return a === b;
+    };
+    NumberWrapper.parseIntAutoRadix = function(text) {
+      var result = parseInt(text);
+      if (isNaN(result)) {
+        throw new Error('Invalid integer literal when parsing ' + text);
+      }
+      return result;
+    };
+    NumberWrapper.parseInt = function(text, radix) {
+      if (radix == 10) {
+        if (/^(\-|\+)?[0-9]+$/.test(text)) {
+          return parseInt(text, radix);
+        }
+      } else if (radix == 16) {
+        if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
+          return parseInt(text, radix);
+        }
+      } else {
+        var result = parseInt(text, radix);
+        if (!isNaN(result)) {
+          return result;
+        }
+      }
+      throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
+    };
+    Object.defineProperty(NumberWrapper, "NaN", {
+      get: function() {
+        return NaN;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
+    NumberWrapper.isNaN = function(value) {
+      return isNaN(value);
+    };
+    NumberWrapper.isInteger = function(value) {
+      return Number.isInteger(value);
+    };
+    return NumberWrapper;
+  }());
+  var Json = (function() {
+    function Json() {}
+    Json.parse = function(s) {
+      return global$1.JSON.parse(s);
+    };
+    Json.stringify = function(data) {
+      return global$1.JSON.stringify(data, null, 2);
+    };
+    return Json;
+  }());
+  var DateWrapper = (function() {
+    function DateWrapper() {}
+    DateWrapper.create = function(year, month, day, hour, minutes, seconds, milliseconds) {
+      if (month === void 0) {
+        month = 1;
+      }
+      if (day === void 0) {
+        day = 1;
+      }
+      if (hour === void 0) {
+        hour = 0;
+      }
+      if (minutes === void 0) {
+        minutes = 0;
+      }
+      if (seconds === void 0) {
+        seconds = 0;
+      }
+      if (milliseconds === void 0) {
+        milliseconds = 0;
+      }
+      return new Date(year, month - 1, day, hour, minutes, seconds, milliseconds);
+    };
+    DateWrapper.fromISOString = function(str) {
+      return new Date(str);
+    };
+    DateWrapper.fromMillis = function(ms) {
+      return new Date(ms);
+    };
+    DateWrapper.toMillis = function(date) {
+      return date.getTime();
+    };
+    DateWrapper.now = function() {
+      return new Date();
+    };
+    DateWrapper.toJson = function(date) {
+      return date.toJSON();
+    };
+    return DateWrapper;
+  }());
+  function setValueOnPath(global, path, value) {
+    var parts = path.split('.');
+    var obj = global;
+    while (parts.length > 1) {
+      var name = parts.shift();
+      if (obj.hasOwnProperty(name) && isPresent(obj[name])) {
+        obj = obj[name];
+      } else {
+        obj = obj[name] = {};
+      }
+    }
+    if (obj === undefined || obj === null) {
+      obj = {};
+    }
+    obj[parts.shift()] = value;
+  }
+  var Map$1 = global$1.Map;
+  var Set$1 = global$1.Set;
+  var createMapFromPairs = (function() {
+    try {
+      if (new Map$1([[1, 2]]).size === 1) {
+        return function createMapFromPairs(pairs) {
+          return new Map$1(pairs);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromPairs(pairs) {
+      var map = new Map$1();
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i];
+        map.set(pair[0], pair[1]);
+      }
+      return map;
+    };
+  })();
+  var createMapFromMap = (function() {
+    try {
+      if (new Map$1(new Map$1())) {
+        return function createMapFromMap(m) {
+          return new Map$1(m);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromMap(m) {
+      var map = new Map$1();
+      m.forEach(function(v, k) {
+        map.set(k, v);
+      });
+      return map;
+    };
+  })();
+  var _clearValues = (function() {
+    if ((new Map$1()).keys().next) {
+      return function _clearValues(m) {
+        var keyIterator = m.keys();
+        var k;
+        while (!((k = keyIterator.next()).done)) {
+          m.set(k.value, null);
+        }
+      };
+    } else {
+      return function _clearValuesWithForeEach(m) {
+        m.forEach(function(v, k) {
+          m.set(k, null);
+        });
+      };
+    }
+  })();
+  var _arrayFromMap = (function() {
+    try {
+      if ((new Map$1()).values().next) {
+        return function createArrayFromMap(m, getValues) {
+          return getValues ? Array.from(m.values()) : Array.from(m.keys());
+        };
+      }
+    } catch (e) {}
+    return function createArrayFromMapWithForeach(m, getValues) {
+      var res = ListWrapper.createFixedSize(m.size),
+          i = 0;
+      m.forEach(function(v, k) {
+        res[i] = getValues ? v : k;
+        i++;
+      });
+      return res;
+    };
+  })();
+  var StringMapWrapper = (function() {
+    function StringMapWrapper() {}
+    StringMapWrapper.create = function() {
+      return {};
+    };
+    StringMapWrapper.contains = function(map, key) {
+      return map.hasOwnProperty(key);
+    };
+    StringMapWrapper.get = function(map, key) {
+      return map.hasOwnProperty(key) ? map[key] : undefined;
+    };
+    StringMapWrapper.set = function(map, key, value) {
+      map[key] = value;
+    };
+    StringMapWrapper.keys = function(map) {
+      return Object.keys(map);
+    };
+    StringMapWrapper.values = function(map) {
+      return Object.keys(map).map(function(k) {
+        return map[k];
+      });
+    };
+    StringMapWrapper.isEmpty = function(map) {
+      for (var prop in map) {
+        return false;
+      }
+      return true;
+    };
+    StringMapWrapper.delete = function(map, key) {
+      delete map[key];
+    };
+    StringMapWrapper.forEach = function(map, callback) {
+      for (var _i = 0,
+          _a = Object.keys(map); _i < _a.length; _i++) {
+        var k = _a[_i];
+        callback(map[k], k);
+      }
+    };
+    StringMapWrapper.merge = function(m1, m2) {
+      var m = {};
+      for (var _i = 0,
+          _a = Object.keys(m1); _i < _a.length; _i++) {
+        var k = _a[_i];
+        m[k] = m1[k];
+      }
+      for (var _b = 0,
+          _c = Object.keys(m2); _b < _c.length; _b++) {
+        var k = _c[_b];
+        m[k] = m2[k];
+      }
+      return m;
+    };
+    StringMapWrapper.equals = function(m1, m2) {
+      var k1 = Object.keys(m1);
+      var k2 = Object.keys(m2);
+      if (k1.length != k2.length) {
+        return false;
+      }
+      for (var i = 0; i < k1.length; i++) {
+        var key = k1[i];
+        if (m1[key] !== m2[key]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    return StringMapWrapper;
+  }());
+  var ListWrapper = (function() {
+    function ListWrapper() {}
+    ListWrapper.createFixedSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.createGrowableSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.clone = function(array) {
+      return array.slice(0);
+    };
+    ListWrapper.forEachWithIndex = function(array, fn) {
+      for (var i = 0; i < array.length; i++) {
+        fn(array[i], i);
+      }
+    };
+    ListWrapper.first = function(array) {
+      if (!array)
+        return null;
+      return array[0];
+    };
+    ListWrapper.last = function(array) {
+      if (!array || array.length == 0)
+        return null;
+      return array[array.length - 1];
+    };
+    ListWrapper.indexOf = function(array, value, startIndex) {
+      if (startIndex === void 0) {
+        startIndex = 0;
+      }
+      return array.indexOf(value, startIndex);
+    };
+    ListWrapper.contains = function(list, el) {
+      return list.indexOf(el) !== -1;
+    };
+    ListWrapper.reversed = function(array) {
+      var a = ListWrapper.clone(array);
+      return a.reverse();
+    };
+    ListWrapper.concat = function(a, b) {
+      return a.concat(b);
+    };
+    ListWrapper.insert = function(list, index, value) {
+      list.splice(index, 0, value);
+    };
+    ListWrapper.removeAt = function(list, index) {
+      var res = list[index];
+      list.splice(index, 1);
+      return res;
+    };
+    ListWrapper.removeAll = function(list, items) {
+      for (var i = 0; i < items.length; ++i) {
+        var index = list.indexOf(items[i]);
+        list.splice(index, 1);
+      }
+    };
+    ListWrapper.remove = function(list, el) {
+      var index = list.indexOf(el);
+      if (index > -1) {
+        list.splice(index, 1);
+        return true;
+      }
+      return false;
+    };
+    ListWrapper.clear = function(list) {
+      list.length = 0;
+    };
+    ListWrapper.isEmpty = function(list) {
+      return list.length == 0;
+    };
+    ListWrapper.fill = function(list, value, start, end) {
+      if (start === void 0) {
+        start = 0;
+      }
+      if (end === void 0) {
+        end = null;
+      }
+      list.fill(value, start, end === null ? list.length : end);
+    };
+    ListWrapper.equals = function(a, b) {
+      if (a.length != b.length)
+        return false;
+      for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i])
+          return false;
+      }
+      return true;
+    };
+    ListWrapper.slice = function(l, from, to) {
+      if (from === void 0) {
+        from = 0;
+      }
+      if (to === void 0) {
+        to = null;
+      }
+      return l.slice(from, to === null ? undefined : to);
+    };
+    ListWrapper.splice = function(l, from, length) {
+      return l.splice(from, length);
+    };
+    ListWrapper.sort = function(l, compareFn) {
+      if (isPresent(compareFn)) {
+        l.sort(compareFn);
+      } else {
+        l.sort();
+      }
+    };
+    ListWrapper.toString = function(l) {
+      return l.toString();
+    };
+    ListWrapper.toJSON = function(l) {
+      return JSON.stringify(l);
+    };
+    ListWrapper.maximum = function(list, predicate) {
+      if (list.length == 0) {
+        return null;
+      }
+      var solution = null;
+      var maxValue = -Infinity;
+      for (var index = 0; index < list.length; index++) {
+        var candidate = list[index];
+        if (isBlank(candidate)) {
+          continue;
+        }
+        var candidateValue = predicate(candidate);
+        if (candidateValue > maxValue) {
+          solution = candidate;
+          maxValue = candidateValue;
+        }
+      }
+      return solution;
+    };
+    ListWrapper.flatten = function(list) {
+      var target = [];
+      _flattenArray(list, target);
+      return target;
+    };
+    ListWrapper.addAll = function(list, source) {
+      for (var i = 0; i < source.length; i++) {
+        list.push(source[i]);
+      }
+    };
+    return ListWrapper;
+  }());
+  function _flattenArray(source, target) {
+    if (isPresent(source)) {
+      for (var i = 0; i < source.length; i++) {
+        var item = source[i];
+        if (isArray(item)) {
+          _flattenArray(item, target);
+        } else {
+          target.push(item);
+        }
+      }
+    }
+    return target;
+  }
+  var createSetFromList = (function() {
+    var test = new Set$1([1, 2, 3]);
+    if (test.size === 3) {
+      return function createSetFromList(lst) {
+        return new Set$1(lst);
+      };
+    } else {
+      return function createSetAndPopulateFromList(lst) {
+        var res = new Set$1(lst);
+        if (res.size !== lst.length) {
+          for (var i = 0; i < lst.length; i++) {
+            res.add(lst[i]);
+          }
+        }
+        return res;
+      };
+    }
+  })();
+  var CAMEL_CASE_REGEXP = /([A-Z])/g;
+  var DASH_CASE_REGEXP = /-([a-z])/g;
+  function camelCaseToDashCase(input) {
+    return StringWrapper.replaceAllMapped(input, CAMEL_CASE_REGEXP, function(m) {
+      return '-' + m[1].toLowerCase();
+    });
+  }
+  function dashCaseToCamelCase(input) {
+    return StringWrapper.replaceAllMapped(input, DASH_CASE_REGEXP, function(m) {
+      return m[1].toUpperCase();
+    });
+  }
+  var _DOM = null;
+  function getDOM() {
+    return _DOM;
+  }
+  function setRootDomAdapter(adapter) {
+    if (isBlank(_DOM)) {
+      _DOM = adapter;
+    }
+  }
+  var DomAdapter = (function() {
+    function DomAdapter() {
+      this.resourceLoaderType = null;
+    }
+    Object.defineProperty(DomAdapter.prototype, "attrToPropMap", {
+      get: function() {
+        return this._attrToPropMap;
+      },
+      set: function(value) {
+        this._attrToPropMap = value;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    ;
+    ;
+    return DomAdapter;
+  }());
+  var WebAnimationsPlayer = (function() {
+    function WebAnimationsPlayer(element, keyframes, options) {
+      this.element = element;
+      this.keyframes = keyframes;
+      this.options = options;
+      this._onDoneFns = [];
+      this._onStartFns = [];
+      this._finished = false;
+      this._initialized = false;
+      this._started = false;
+      this.parentPlayer = null;
+      this._duration = options['duration'];
+    }
+    WebAnimationsPlayer.prototype._onFinish = function() {
+      if (!this._finished) {
+        this._finished = true;
+        if (!isPresent(this.parentPlayer)) {
+          this.destroy();
+        }
+        this._onDoneFns.forEach(function(fn) {
+          return fn();
+        });
+        this._onDoneFns = [];
+      }
+    };
+    WebAnimationsPlayer.prototype.init = function() {
+      var _this = this;
+      if (this._initialized)
+        return;
+      this._initialized = true;
+      var keyframes = this.keyframes.map(function(styles) {
+        var formattedKeyframe = {};
+        StringMapWrapper.forEach(styles, function(value, prop) {
+          formattedKeyframe[prop] = value == _angular_core.AUTO_STYLE ? _computeStyle(_this.element, prop) : value;
+        });
+        return formattedKeyframe;
+      });
+      this._player = this._triggerWebAnimation(this.element, keyframes, this.options);
+      this.reset();
+      this._player.onfinish = function() {
+        return _this._onFinish();
+      };
+    };
+    WebAnimationsPlayer.prototype._triggerWebAnimation = function(element, keyframes, options) {
+      return element.animate(keyframes, options);
+    };
+    WebAnimationsPlayer.prototype.onStart = function(fn) {
+      this._onStartFns.push(fn);
+    };
+    WebAnimationsPlayer.prototype.onDone = function(fn) {
+      this._onDoneFns.push(fn);
+    };
+    WebAnimationsPlayer.prototype.play = function() {
+      this.init();
+      if (!this.hasStarted()) {
+        this._onStartFns.forEach(function(fn) {
+          return fn();
+        });
+        this._onStartFns = [];
+        this._started = true;
+      }
+      this._player.play();
+    };
+    WebAnimationsPlayer.prototype.pause = function() {
+      this.init();
+      this._player.pause();
+    };
+    WebAnimationsPlayer.prototype.finish = function() {
+      this.init();
+      this._onFinish();
+      this._player.finish();
+    };
+    WebAnimationsPlayer.prototype.reset = function() {
+      this._player.cancel();
+    };
+    WebAnimationsPlayer.prototype.restart = function() {
+      this.reset();
+      this.play();
+    };
+    WebAnimationsPlayer.prototype.hasStarted = function() {
+      return this._started;
+    };
+    WebAnimationsPlayer.prototype.destroy = function() {
+      this.reset();
+      this._onFinish();
+    };
+    Object.defineProperty(WebAnimationsPlayer.prototype, "totalTime", {
+      get: function() {
+        return this._duration;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    WebAnimationsPlayer.prototype.setPosition = function(p) {
+      this._player.currentTime = p * this.totalTime;
+    };
+    WebAnimationsPlayer.prototype.getPosition = function() {
+      return this._player.currentTime / this.totalTime;
+    };
+    return WebAnimationsPlayer;
+  }());
+  function _computeStyle(element, prop) {
+    return getDOM().getComputedStyle(element)[prop];
+  }
+  var WebAnimationsDriver = (function() {
+    function WebAnimationsDriver() {}
+    WebAnimationsDriver.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
+      var formattedSteps = [];
+      var startingStyleLookup = {};
+      if (isPresent(startingStyles) && startingStyles.styles.length > 0) {
+        startingStyleLookup = _populateStyles(element, startingStyles, {});
+        startingStyleLookup['offset'] = 0;
+        formattedSteps.push(startingStyleLookup);
+      }
+      keyframes.forEach(function(keyframe) {
+        var data = _populateStyles(element, keyframe.styles, startingStyleLookup);
+        data['offset'] = keyframe.offset;
+        formattedSteps.push(data);
+      });
+      if (formattedSteps.length == 1) {
+        var start = formattedSteps[0];
+        start['offset'] = null;
+        formattedSteps = [start, start];
+      }
+      var playerOptions = {
+        'duration': duration,
+        'delay': delay,
+        'fill': 'both'
+      };
+      if (easing) {
+        playerOptions['easing'] = easing;
+      }
+      return new WebAnimationsPlayer(element, formattedSteps, playerOptions);
+    };
+    return WebAnimationsDriver;
+  }());
+  function _populateStyles(element, styles, defaultStyles) {
+    var data = {};
+    styles.styles.forEach(function(entry) {
+      StringMapWrapper.forEach(entry, function(val, prop) {
+        var formattedProp = dashCaseToCamelCase(prop);
+        data[formattedProp] = val == _angular_core.AUTO_STYLE ? val : val.toString() + _resolveStyleUnit(val, prop, formattedProp);
+      });
+    });
+    StringMapWrapper.forEach(defaultStyles, function(value, prop) {
+      if (!isPresent(data[prop])) {
+        data[prop] = value;
+      }
+    });
+    return data;
+  }
+  function _resolveStyleUnit(val, userProvidedProp, formattedProp) {
+    var unit = '';
+    if (_isPixelDimensionStyle(formattedProp) && val != 0 && val != '0') {
+      if (isNumber(val)) {
+        unit = 'px';
+      } else if (_findDimensionalSuffix(val.toString()).length == 0) {
+        throw new Error('Please provide a CSS unit value for ' + userProvidedProp + ':' + val);
+      }
+    }
+    return unit;
+  }
+  var _$0 = 48;
+  var _$9 = 57;
+  var _$PERIOD = 46;
+  function _findDimensionalSuffix(value) {
+    for (var i = 0; i < value.length; i++) {
+      var c = StringWrapper.charCodeAt(value, i);
+      if ((c >= _$0 && c <= _$9) || c == _$PERIOD)
+        continue;
+      return value.substring(i, value.length);
+    }
+    return '';
+  }
+  function _isPixelDimensionStyle(prop) {
+    switch (prop) {
+      case 'width':
+      case 'height':
+      case 'minWidth':
+      case 'minHeight':
+      case 'maxWidth':
+      case 'maxHeight':
+      case 'left':
+      case 'top':
+      case 'bottom':
+      case 'right':
+      case 'fontSize':
+      case 'outlineWidth':
+      case 'outlineOffset':
+      case 'paddingTop':
+      case 'paddingLeft':
+      case 'paddingBottom':
+      case 'paddingRight':
+      case 'marginTop':
+      case 'marginLeft':
+      case 'marginBottom':
+      case 'marginRight':
+      case 'borderRadius':
+      case 'borderWidth':
+      case 'borderTopWidth':
+      case 'borderLeftWidth':
+      case 'borderRightWidth':
+      case 'borderBottomWidth':
+      case 'textIndent':
+        return true;
+      default:
+        return false;
+    }
+  }
+  var __extends$1 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var GenericBrowserDomAdapter = (function(_super) {
+    __extends$1(GenericBrowserDomAdapter, _super);
+    function GenericBrowserDomAdapter() {
+      var _this = this;
+      _super.call(this);
+      this._animationPrefix = null;
+      this._transitionEnd = null;
+      try {
+        var element = this.createElement('div', this.defaultDoc());
+        if (isPresent(this.getStyle(element, 'animationName'))) {
+          this._animationPrefix = '';
+        } else {
+          var domPrefixes = ['Webkit', 'Moz', 'O', 'ms'];
+          for (var i = 0; i < domPrefixes.length; i++) {
+            if (isPresent(this.getStyle(element, domPrefixes[i] + 'AnimationName'))) {
+              this._animationPrefix = '-' + domPrefixes[i].toLowerCase() + '-';
+              break;
+            }
+          }
+        }
+        var transEndEventNames = {
+          WebkitTransition: 'webkitTransitionEnd',
+          MozTransition: 'transitionend',
+          OTransition: 'oTransitionEnd otransitionend',
+          transition: 'transitionend'
+        };
+        StringMapWrapper.forEach(transEndEventNames, function(value, key) {
+          if (isPresent(_this.getStyle(element, key))) {
+            _this._transitionEnd = value;
+          }
+        });
+      } catch (e) {
+        this._animationPrefix = null;
+        this._transitionEnd = null;
+      }
+    }
+    GenericBrowserDomAdapter.prototype.getDistributedNodes = function(el) {
+      return el.getDistributedNodes();
+    };
+    GenericBrowserDomAdapter.prototype.resolveAndSetHref = function(el, baseUrl, href) {
+      el.href = href == null ? baseUrl : baseUrl + '/../' + href;
+    };
+    GenericBrowserDomAdapter.prototype.supportsDOMEvents = function() {
+      return true;
+    };
+    GenericBrowserDomAdapter.prototype.supportsNativeShadowDOM = function() {
+      return isFunction(this.defaultDoc().body.createShadowRoot);
+    };
+    GenericBrowserDomAdapter.prototype.getAnimationPrefix = function() {
+      return isPresent(this._animationPrefix) ? this._animationPrefix : '';
+    };
+    GenericBrowserDomAdapter.prototype.getTransitionEnd = function() {
+      return isPresent(this._transitionEnd) ? this._transitionEnd : '';
+    };
+    GenericBrowserDomAdapter.prototype.supportsAnimation = function() {
+      return isPresent(this._animationPrefix) && isPresent(this._transitionEnd);
+    };
+    return GenericBrowserDomAdapter;
+  }(DomAdapter));
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var _attrToPropMap = {
+    'class': 'className',
+    'innerHtml': 'innerHTML',
+    'readonly': 'readOnly',
+    'tabindex': 'tabIndex'
+  };
+  var DOM_KEY_LOCATION_NUMPAD = 3;
+  var _keyMap = {
+    '\b': 'Backspace',
+    '\t': 'Tab',
+    '\x7F': 'Delete',
+    '\x1B': 'Escape',
+    'Del': 'Delete',
+    'Esc': 'Escape',
+    'Left': 'ArrowLeft',
+    'Right': 'ArrowRight',
+    'Up': 'ArrowUp',
+    'Down': 'ArrowDown',
+    'Menu': 'ContextMenu',
+    'Scroll': 'ScrollLock',
+    'Win': 'OS'
+  };
+  var _chromeNumKeyPadMap = {
+    'A': '1',
+    'B': '2',
+    'C': '3',
+    'D': '4',
+    'E': '5',
+    'F': '6',
+    'G': '7',
+    'H': '8',
+    'I': '9',
+    'J': '*',
+    'K': '+',
+    'M': '-',
+    'N': '.',
+    'O': '/',
+    '\x60': '0',
+    '\x90': 'NumLock'
+  };
+  var BrowserDomAdapter = (function(_super) {
+    __extends(BrowserDomAdapter, _super);
+    function BrowserDomAdapter() {
+      _super.apply(this, arguments);
+    }
+    BrowserDomAdapter.prototype.parse = function(templateHtml) {
+      throw new Error('parse not implemented');
+    };
+    BrowserDomAdapter.makeCurrent = function() {
+      setRootDomAdapter(new BrowserDomAdapter());
+    };
+    BrowserDomAdapter.prototype.hasProperty = function(element, name) {
+      return name in element;
+    };
+    BrowserDomAdapter.prototype.setProperty = function(el, name, value) {
+      el[name] = value;
+    };
+    BrowserDomAdapter.prototype.getProperty = function(el, name) {
+      return el[name];
+    };
+    BrowserDomAdapter.prototype.invoke = function(el, methodName, args) {
+      el[methodName].apply(el, args);
+    };
+    BrowserDomAdapter.prototype.logError = function(error) {
+      if (window.console.error) {
+        window.console.error(error);
+      } else {
+        window.console.log(error);
+      }
+    };
+    BrowserDomAdapter.prototype.log = function(error) {
+      window.console.log(error);
+    };
+    BrowserDomAdapter.prototype.logGroup = function(error) {
+      if (window.console.group) {
+        window.console.group(error);
+        this.logError(error);
+      } else {
+        window.console.log(error);
+      }
+    };
+    BrowserDomAdapter.prototype.logGroupEnd = function() {
+      if (window.console.groupEnd) {
+        window.console.groupEnd();
+      }
+    };
+    Object.defineProperty(BrowserDomAdapter.prototype, "attrToPropMap", {
+      get: function() {
+        return _attrToPropMap;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    BrowserDomAdapter.prototype.query = function(selector) {
+      return document.querySelector(selector);
+    };
+    BrowserDomAdapter.prototype.querySelector = function(el, selector) {
+      return el.querySelector(selector);
+    };
+    BrowserDomAdapter.prototype.querySelectorAll = function(el, selector) {
+      return el.querySelectorAll(selector);
+    };
+    BrowserDomAdapter.prototype.on = function(el, evt, listener) {
+      el.addEventListener(evt, listener, false);
+    };
+    BrowserDomAdapter.prototype.onAndCancel = function(el, evt, listener) {
+      el.addEventListener(evt, listener, false);
+      return function() {
+        el.removeEventListener(evt, listener, false);
+      };
+    };
+    BrowserDomAdapter.prototype.dispatchEvent = function(el, evt) {
+      el.dispatchEvent(evt);
+    };
+    BrowserDomAdapter.prototype.createMouseEvent = function(eventType) {
+      var evt = document.createEvent('MouseEvent');
+      evt.initEvent(eventType, true, true);
+      return evt;
+    };
+    BrowserDomAdapter.prototype.createEvent = function(eventType) {
+      var evt = document.createEvent('Event');
+      evt.initEvent(eventType, true, true);
+      return evt;
+    };
+    BrowserDomAdapter.prototype.preventDefault = function(evt) {
+      evt.preventDefault();
+      evt.returnValue = false;
+    };
+    BrowserDomAdapter.prototype.isPrevented = function(evt) {
+      return evt.defaultPrevented || isPresent(evt.returnValue) && !evt.returnValue;
+    };
+    BrowserDomAdapter.prototype.getInnerHTML = function(el) {
+      return el.innerHTML;
+    };
+    BrowserDomAdapter.prototype.getTemplateContent = function(el) {
+      return 'content' in el && el instanceof HTMLTemplateElement ? el.content : null;
+    };
+    BrowserDomAdapter.prototype.getOuterHTML = function(el) {
+      return el.outerHTML;
+    };
+    BrowserDomAdapter.prototype.nodeName = function(node) {
+      return node.nodeName;
+    };
+    BrowserDomAdapter.prototype.nodeValue = function(node) {
+      return node.nodeValue;
+    };
+    BrowserDomAdapter.prototype.type = function(node) {
+      return node.type;
+    };
+    BrowserDomAdapter.prototype.content = function(node) {
+      if (this.hasProperty(node, 'content')) {
+        return node.content;
+      } else {
+        return node;
+      }
+    };
+    BrowserDomAdapter.prototype.firstChild = function(el) {
+      return el.firstChild;
+    };
+    BrowserDomAdapter.prototype.nextSibling = function(el) {
+      return el.nextSibling;
+    };
+    BrowserDomAdapter.prototype.parentElement = function(el) {
+      return el.parentNode;
+    };
+    BrowserDomAdapter.prototype.childNodes = function(el) {
+      return el.childNodes;
+    };
+    BrowserDomAdapter.prototype.childNodesAsList = function(el) {
+      var childNodes = el.childNodes;
+      var res = ListWrapper.createFixedSize(childNodes.length);
+      for (var i = 0; i < childNodes.length; i++) {
+        res[i] = childNodes[i];
+      }
+      return res;
+    };
+    BrowserDomAdapter.prototype.clearNodes = function(el) {
+      while (el.firstChild) {
+        el.removeChild(el.firstChild);
+      }
+    };
+    BrowserDomAdapter.prototype.appendChild = function(el, node) {
+      el.appendChild(node);
+    };
+    BrowserDomAdapter.prototype.removeChild = function(el, node) {
+      el.removeChild(node);
+    };
+    BrowserDomAdapter.prototype.replaceChild = function(el, newChild, oldChild) {
+      el.replaceChild(newChild, oldChild);
+    };
+    BrowserDomAdapter.prototype.remove = function(node) {
+      if (node.parentNode) {
+        node.parentNode.removeChild(node);
+      }
+      return node;
+    };
+    BrowserDomAdapter.prototype.insertBefore = function(el, node) {
+      el.parentNode.insertBefore(node, el);
+    };
+    BrowserDomAdapter.prototype.insertAllBefore = function(el, nodes) {
+      nodes.forEach(function(n) {
+        return el.parentNode.insertBefore(n, el);
+      });
+    };
+    BrowserDomAdapter.prototype.insertAfter = function(el, node) {
+      el.parentNode.insertBefore(node, el.nextSibling);
+    };
+    BrowserDomAdapter.prototype.setInnerHTML = function(el, value) {
+      el.innerHTML = value;
+    };
+    BrowserDomAdapter.prototype.getText = function(el) {
+      return el.textContent;
+    };
+    BrowserDomAdapter.prototype.setText = function(el, value) {
+      el.textContent = value;
+    };
+    BrowserDomAdapter.prototype.getValue = function(el) {
+      return el.value;
+    };
+    BrowserDomAdapter.prototype.setValue = function(el, value) {
+      el.value = value;
+    };
+    BrowserDomAdapter.prototype.getChecked = function(el) {
+      return el.checked;
+    };
+    BrowserDomAdapter.prototype.setChecked = function(el, value) {
+      el.checked = value;
+    };
+    BrowserDomAdapter.prototype.createComment = function(text) {
+      return document.createComment(text);
+    };
+    BrowserDomAdapter.prototype.createTemplate = function(html) {
+      var t = document.createElement('template');
+      t.innerHTML = html;
+      return t;
+    };
+    BrowserDomAdapter.prototype.createElement = function(tagName, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      return doc.createElement(tagName);
+    };
+    BrowserDomAdapter.prototype.createElementNS = function(ns, tagName, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      return doc.createElementNS(ns, tagName);
+    };
+    BrowserDomAdapter.prototype.createTextNode = function(text, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      return doc.createTextNode(text);
+    };
+    BrowserDomAdapter.prototype.createScriptTag = function(attrName, attrValue, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      var el = doc.createElement('SCRIPT');
+      el.setAttribute(attrName, attrValue);
+      return el;
+    };
+    BrowserDomAdapter.prototype.createStyleElement = function(css, doc) {
+      if (doc === void 0) {
+        doc = document;
+      }
+      var style = doc.createElement('style');
+      this.appendChild(style, this.createTextNode(css));
+      return style;
+    };
+    BrowserDomAdapter.prototype.createShadowRoot = function(el) {
+      return el.createShadowRoot();
+    };
+    BrowserDomAdapter.prototype.getShadowRoot = function(el) {
+      return el.shadowRoot;
+    };
+    BrowserDomAdapter.prototype.getHost = function(el) {
+      return el.host;
+    };
+    BrowserDomAdapter.prototype.clone = function(node) {
+      return node.cloneNode(true);
+    };
+    BrowserDomAdapter.prototype.getElementsByClassName = function(element, name) {
+      return element.getElementsByClassName(name);
+    };
+    BrowserDomAdapter.prototype.getElementsByTagName = function(element, name) {
+      return element.getElementsByTagName(name);
+    };
+    BrowserDomAdapter.prototype.classList = function(element) {
+      return Array.prototype.slice.call(element.classList, 0);
+    };
+    BrowserDomAdapter.prototype.addClass = function(element, className) {
+      element.classList.add(className);
+    };
+    BrowserDomAdapter.prototype.removeClass = function(element, className) {
+      element.classList.remove(className);
+    };
+    BrowserDomAdapter.prototype.hasClass = function(element, className) {
+      return element.classList.contains(className);
+    };
+    BrowserDomAdapter.prototype.setStyle = function(element, styleName, styleValue) {
+      element.style[styleName] = styleValue;
+    };
+    BrowserDomAdapter.prototype.removeStyle = function(element, stylename) {
+      element.style[stylename] = null;
+    };
+    BrowserDomAdapter.prototype.getStyle = function(element, stylename) {
+      return element.style[stylename];
+    };
+    BrowserDomAdapter.prototype.hasStyle = function(element, styleName, styleValue) {
+      if (styleValue === void 0) {
+        styleValue = null;
+      }
+      var value = this.getStyle(element, styleName) || '';
+      return styleValue ? value == styleValue : value.length > 0;
+    };
+    BrowserDomAdapter.prototype.tagName = function(element) {
+      return element.tagName;
+    };
+    BrowserDomAdapter.prototype.attributeMap = function(element) {
+      var res = new Map();
+      var elAttrs = element.attributes;
+      for (var i = 0; i < elAttrs.length; i++) {
+        var attrib = elAttrs[i];
+        res.set(attrib.name, attrib.value);
+      }
+      return res;
+    };
+    BrowserDomAdapter.prototype.hasAttribute = function(element, attribute) {
+      return element.hasAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.hasAttributeNS = function(element, ns, attribute) {
+      return element.hasAttributeNS(ns, attribute);
+    };
+    BrowserDomAdapter.prototype.getAttribute = function(element, attribute) {
+      return element.getAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.getAttributeNS = function(element, ns, name) {
+      return element.getAttributeNS(ns, name);
+    };
+    BrowserDomAdapter.prototype.setAttribute = function(element, name, value) {
+      element.setAttribute(name, value);
+    };
+    BrowserDomAdapter.prototype.setAttributeNS = function(element, ns, name, value) {
+      element.setAttributeNS(ns, name, value);
+    };
+    BrowserDomAdapter.prototype.removeAttribute = function(element, attribute) {
+      element.removeAttribute(attribute);
+    };
+    BrowserDomAdapter.prototype.removeAttributeNS = function(element, ns, name) {
+      element.removeAttributeNS(ns, name);
+    };
+    BrowserDomAdapter.prototype.templateAwareRoot = function(el) {
+      return this.isTemplateElement(el) ? this.content(el) : el;
+    };
+    BrowserDomAdapter.prototype.createHtmlDocument = function() {
+      return document.implementation.createHTMLDocument('fakeTitle');
+    };
+    BrowserDomAdapter.prototype.defaultDoc = function() {
+      return document;
+    };
+    BrowserDomAdapter.prototype.getBoundingClientRect = function(el) {
+      try {
+        return el.getBoundingClientRect();
+      } catch (e) {
+        return {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          width: 0,
+          height: 0
+        };
+      }
+    };
+    BrowserDomAdapter.prototype.getTitle = function() {
+      return document.title;
+    };
+    BrowserDomAdapter.prototype.setTitle = function(newTitle) {
+      document.title = newTitle || '';
+    };
+    BrowserDomAdapter.prototype.elementMatches = function(n, selector) {
+      var matches = false;
+      if (n instanceof HTMLElement) {
+        if (n.matches) {
+          matches = n.matches(selector);
+        } else if (n.msMatchesSelector) {
+          matches = n.msMatchesSelector(selector);
+        } else if (n.webkitMatchesSelector) {
+          matches = n.webkitMatchesSelector(selector);
+        }
+      }
+      return matches;
+    };
+    BrowserDomAdapter.prototype.isTemplateElement = function(el) {
+      return el instanceof HTMLElement && el.nodeName == 'TEMPLATE';
+    };
+    BrowserDomAdapter.prototype.isTextNode = function(node) {
+      return node.nodeType === Node.TEXT_NODE;
+    };
+    BrowserDomAdapter.prototype.isCommentNode = function(node) {
+      return node.nodeType === Node.COMMENT_NODE;
+    };
+    BrowserDomAdapter.prototype.isElementNode = function(node) {
+      return node.nodeType === Node.ELEMENT_NODE;
+    };
+    BrowserDomAdapter.prototype.hasShadowRoot = function(node) {
+      return isPresent(node.shadowRoot) && node instanceof HTMLElement;
+    };
+    BrowserDomAdapter.prototype.isShadowRoot = function(node) {
+      return node instanceof DocumentFragment;
+    };
+    BrowserDomAdapter.prototype.importIntoDoc = function(node) {
+      var toImport = node;
+      if (this.isTemplateElement(node)) {
+        toImport = this.content(node);
+      }
+      return document.importNode(toImport, true);
+    };
+    BrowserDomAdapter.prototype.adoptNode = function(node) {
+      return document.adoptNode(node);
+    };
+    BrowserDomAdapter.prototype.getHref = function(el) {
+      return el.href;
+    };
+    BrowserDomAdapter.prototype.getEventKey = function(event) {
+      var key = event.key;
+      if (isBlank(key)) {
+        key = event.keyIdentifier;
+        if (isBlank(key)) {
+          return 'Unidentified';
+        }
+        if (key.startsWith('U+')) {
+          key = String.fromCharCode(parseInt(key.substring(2), 16));
+          if (event.location === DOM_KEY_LOCATION_NUMPAD && _chromeNumKeyPadMap.hasOwnProperty(key)) {
+            key = _chromeNumKeyPadMap[key];
+          }
+        }
+      }
+      if (_keyMap.hasOwnProperty(key)) {
+        key = _keyMap[key];
+      }
+      return key;
+    };
+    BrowserDomAdapter.prototype.getGlobalEventTarget = function(target) {
+      if (target == 'window') {
+        return window;
+      } else if (target == 'document') {
+        return document;
+      } else if (target == 'body') {
+        return document.body;
+      }
+    };
+    BrowserDomAdapter.prototype.getHistory = function() {
+      return window.history;
+    };
+    BrowserDomAdapter.prototype.getLocation = function() {
+      return window.location;
+    };
+    BrowserDomAdapter.prototype.getBaseHref = function() {
+      var href = getBaseElementHref();
+      if (isBlank(href)) {
+        return null;
+      }
+      return relativePath(href);
+    };
+    BrowserDomAdapter.prototype.resetBaseElement = function() {
+      baseElement = null;
+    };
+    BrowserDomAdapter.prototype.getUserAgent = function() {
+      return window.navigator.userAgent;
+    };
+    BrowserDomAdapter.prototype.setData = function(element, name, value) {
+      this.setAttribute(element, 'data-' + name, value);
+    };
+    BrowserDomAdapter.prototype.getData = function(element, name) {
+      return this.getAttribute(element, 'data-' + name);
+    };
+    BrowserDomAdapter.prototype.getComputedStyle = function(element) {
+      return getComputedStyle(element);
+    };
+    BrowserDomAdapter.prototype.setGlobalVar = function(path, value) {
+      setValueOnPath(global$1, path, value);
+    };
+    BrowserDomAdapter.prototype.supportsWebAnimation = function() {
+      return isFunction(Element.prototype['animate']);
+    };
+    BrowserDomAdapter.prototype.performanceNow = function() {
+      if (isPresent(window.performance) && isPresent(window.performance.now)) {
+        return window.performance.now();
+      } else {
+        return DateWrapper.toMillis(DateWrapper.now());
+      }
+    };
+    BrowserDomAdapter.prototype.supportsCookies = function() {
+      return true;
+    };
+    BrowserDomAdapter.prototype.getCookie = function(name) {
+      return parseCookieValue(document.cookie, name);
+    };
+    BrowserDomAdapter.prototype.setCookie = function(name, value) {
+      document.cookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+    };
+    return BrowserDomAdapter;
+  }(GenericBrowserDomAdapter));
+  var baseElement = null;
+  function getBaseElementHref() {
+    if (isBlank(baseElement)) {
+      baseElement = document.querySelector('base');
+      if (isBlank(baseElement)) {
+        return null;
+      }
+    }
+    return baseElement.getAttribute('href');
+  }
+  var urlParsingNode = null;
+  function relativePath(url) {
+    if (isBlank(urlParsingNode)) {
+      urlParsingNode = document.createElement('a');
+    }
+    urlParsingNode.setAttribute('href', url);
+    return (urlParsingNode.pathname.charAt(0) === '/') ? urlParsingNode.pathname : '/' + urlParsingNode.pathname;
+  }
+  function parseCookieValue(cookieStr, name) {
+    name = encodeURIComponent(name);
+    for (var _i = 0,
+        _a = cookieStr.split(';'); _i < _a.length; _i++) {
+      var cookie = _a[_i];
+      var eqIndex = cookie.indexOf('=');
+      var _b = eqIndex == -1 ? [cookie, ''] : [cookie.slice(0, eqIndex), cookie.slice(eqIndex + 1)],
+          cookieName = _b[0],
+          cookieValue = _b[1];
+      if (cookieName.trim() === name) {
+        return decodeURIComponent(cookieValue);
+      }
+    }
+    return null;
+  }
+  function supportsState() {
+    return !!window.history.pushState;
+  }
+  var __extends$2 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var BrowserPlatformLocation = (function(_super) {
+    __extends$2(BrowserPlatformLocation, _super);
+    function BrowserPlatformLocation() {
+      _super.call(this);
+      this._init();
+    }
+    BrowserPlatformLocation.prototype._init = function() {
+      this._location = getDOM().getLocation();
+      this._history = getDOM().getHistory();
+    };
+    Object.defineProperty(BrowserPlatformLocation.prototype, "location", {
+      get: function() {
+        return this._location;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    BrowserPlatformLocation.prototype.getBaseHrefFromDOM = function() {
+      return getDOM().getBaseHref();
+    };
+    BrowserPlatformLocation.prototype.onPopState = function(fn) {
+      getDOM().getGlobalEventTarget('window').addEventListener('popstate', fn, false);
+    };
+    BrowserPlatformLocation.prototype.onHashChange = function(fn) {
+      getDOM().getGlobalEventTarget('window').addEventListener('hashchange', fn, false);
+    };
+    Object.defineProperty(BrowserPlatformLocation.prototype, "pathname", {
+      get: function() {
+        return this._location.pathname;
+      },
+      set: function(newPath) {
+        this._location.pathname = newPath;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(BrowserPlatformLocation.prototype, "search", {
+      get: function() {
+        return this._location.search;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    Object.defineProperty(BrowserPlatformLocation.prototype, "hash", {
+      get: function() {
+        return this._location.hash;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    BrowserPlatformLocation.prototype.pushState = function(state, title, url) {
+      if (supportsState()) {
+        this._history.pushState(state, title, url);
+      } else {
+        this._location.hash = url;
+      }
+    };
+    BrowserPlatformLocation.prototype.replaceState = function(state, title, url) {
+      if (supportsState()) {
+        this._history.replaceState(state, title, url);
+      } else {
+        this._location.hash = url;
+      }
+    };
+    BrowserPlatformLocation.prototype.forward = function() {
+      this._history.forward();
+    };
+    BrowserPlatformLocation.prototype.back = function() {
+      this._history.back();
+    };
+    BrowserPlatformLocation.decorators = [{type: _angular_core.Injectable}];
+    BrowserPlatformLocation.ctorParameters = [];
+    return BrowserPlatformLocation;
+  }(_angular_common.PlatformLocation));
+  var BrowserGetTestability = (function() {
+    function BrowserGetTestability() {}
+    BrowserGetTestability.init = function() {
+      _angular_core.setTestabilityGetter(new BrowserGetTestability());
+    };
+    BrowserGetTestability.prototype.addToWindow = function(registry) {
+      global$1.getAngularTestability = function(elem, findInAncestors) {
+        if (findInAncestors === void 0) {
+          findInAncestors = true;
+        }
+        var testability = registry.findTestabilityInTree(elem, findInAncestors);
+        if (testability == null) {
+          throw new Error('Could not find testability for element.');
+        }
+        return testability;
+      };
+      global$1.getAllAngularTestabilities = function() {
+        return registry.getAllTestabilities();
+      };
+      global$1.getAllAngularRootElements = function() {
+        return registry.getAllRootElements();
+      };
+      var whenAllStable = function(callback) {
+        var testabilities = global$1.getAllAngularTestabilities();
+        var count = testabilities.length;
+        var didWork = false;
+        var decrement = function(didWork_) {
+          didWork = didWork || didWork_;
+          count--;
+          if (count == 0) {
+            callback(didWork);
+          }
+        };
+        testabilities.forEach(function(testability) {
+          testability.whenStable(decrement);
+        });
+      };
+      if (!global$1['frameworkStabilizers']) {
+        global$1['frameworkStabilizers'] = ListWrapper.createGrowableSize(0);
+      }
+      global$1['frameworkStabilizers'].push(whenAllStable);
+    };
+    BrowserGetTestability.prototype.findTestabilityInTree = function(registry, elem, findInAncestors) {
+      if (elem == null) {
+        return null;
+      }
+      var t = registry.getTestability(elem);
+      if (isPresent(t)) {
+        return t;
+      } else if (!findInAncestors) {
+        return null;
+      }
+      if (getDOM().isShadowRoot(elem)) {
+        return this.findTestabilityInTree(registry, getDOM().getHost(elem), true);
+      }
+      return this.findTestabilityInTree(registry, getDOM().parentElement(elem), true);
+    };
+    return BrowserGetTestability;
+  }());
+  var Title = (function() {
+    function Title() {}
+    Title.prototype.getTitle = function() {
+      return getDOM().getTitle();
+    };
+    Title.prototype.setTitle = function(newTitle) {
+      getDOM().setTitle(newTitle);
+    };
+    return Title;
+  }());
+  var DOCUMENT = new _angular_core.OpaqueToken('DocumentToken');
+  var EVENT_MANAGER_PLUGINS = new _angular_core.OpaqueToken('EventManagerPlugins');
+  var EventManager = (function() {
+    function EventManager(plugins, _zone) {
+      var _this = this;
+      this._zone = _zone;
+      plugins.forEach(function(p) {
+        return p.manager = _this;
+      });
+      this._plugins = plugins.slice().reverse();
+    }
+    EventManager.prototype.addEventListener = function(element, eventName, handler) {
+      var plugin = this._findPluginFor(eventName);
+      return plugin.addEventListener(element, eventName, handler);
+    };
+    EventManager.prototype.addGlobalEventListener = function(target, eventName, handler) {
+      var plugin = this._findPluginFor(eventName);
+      return plugin.addGlobalEventListener(target, eventName, handler);
+    };
+    EventManager.prototype.getZone = function() {
+      return this._zone;
+    };
+    EventManager.prototype._findPluginFor = function(eventName) {
+      var plugins = this._plugins;
+      for (var i = 0; i < plugins.length; i++) {
+        var plugin = plugins[i];
+        if (plugin.supports(eventName)) {
+          return plugin;
+        }
+      }
+      throw new Error("No event manager plugin found for event " + eventName);
+    };
+    EventManager.decorators = [{type: _angular_core.Injectable}];
+    EventManager.ctorParameters = [{
+      type: Array,
+      decorators: [{
+        type: _angular_core.Inject,
+        args: [EVENT_MANAGER_PLUGINS]
+      }]
+    }, {type: _angular_core.NgZone}];
+    return EventManager;
+  }());
+  var EventManagerPlugin = (function() {
+    function EventManagerPlugin() {}
+    EventManagerPlugin.prototype.supports = function(eventName) {
+      return false;
+    };
+    EventManagerPlugin.prototype.addEventListener = function(element, eventName, handler) {
+      throw 'not implemented';
+    };
+    EventManagerPlugin.prototype.addGlobalEventListener = function(element, eventName, handler) {
+      throw 'not implemented';
+    };
+    return EventManagerPlugin;
+  }());
+  var __extends$4 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var SharedStylesHost = (function() {
+    function SharedStylesHost() {
+      this._styles = [];
+      this._stylesSet = new Set();
+    }
+    SharedStylesHost.prototype.addStyles = function(styles) {
+      var _this = this;
+      var additions = [];
+      styles.forEach(function(style) {
+        if (!_this._stylesSet.has(style)) {
+          _this._stylesSet.add(style);
+          _this._styles.push(style);
+          additions.push(style);
+        }
+      });
+      this.onStylesAdded(additions);
+    };
+    SharedStylesHost.prototype.onStylesAdded = function(additions) {};
+    SharedStylesHost.prototype.getAllStyles = function() {
+      return this._styles;
+    };
+    SharedStylesHost.decorators = [{type: _angular_core.Injectable}];
+    SharedStylesHost.ctorParameters = [];
+    return SharedStylesHost;
+  }());
+  var DomSharedStylesHost = (function(_super) {
+    __extends$4(DomSharedStylesHost, _super);
+    function DomSharedStylesHost(doc) {
+      _super.call(this);
+      this._hostNodes = new Set();
+      this._hostNodes.add(doc.head);
+    }
+    DomSharedStylesHost.prototype._addStylesToHost = function(styles, host) {
+      for (var i = 0; i < styles.length; i++) {
+        var style = styles[i];
+        getDOM().appendChild(host, getDOM().createStyleElement(style));
+      }
+    };
+    DomSharedStylesHost.prototype.addHost = function(hostNode) {
+      this._addStylesToHost(this._styles, hostNode);
+      this._hostNodes.add(hostNode);
+    };
+    DomSharedStylesHost.prototype.removeHost = function(hostNode) {
+      this._hostNodes.delete(hostNode);
+    };
+    DomSharedStylesHost.prototype.onStylesAdded = function(additions) {
+      var _this = this;
+      this._hostNodes.forEach(function(hostNode) {
+        _this._addStylesToHost(additions, hostNode);
+      });
+    };
+    DomSharedStylesHost.decorators = [{type: _angular_core.Injectable}];
+    DomSharedStylesHost.ctorParameters = [{
+      type: undefined,
+      decorators: [{
+        type: _angular_core.Inject,
+        args: [DOCUMENT]
+      }]
+    }];
+    return DomSharedStylesHost;
+  }(SharedStylesHost));
+  var __extends$3 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var NAMESPACE_URIS = {
+    'xlink': 'http://www.w3.org/1999/xlink',
+    'svg': 'http://www.w3.org/2000/svg',
+    'xhtml': 'http://www.w3.org/1999/xhtml'
+  };
+  var TEMPLATE_COMMENT_TEXT = 'template bindings={}';
+  var TEMPLATE_BINDINGS_EXP = /^template bindings=(.*)$/;
+  var DomRootRenderer = (function() {
+    function DomRootRenderer(document, eventManager, sharedStylesHost, animationDriver) {
+      this.document = document;
+      this.eventManager = eventManager;
+      this.sharedStylesHost = sharedStylesHost;
+      this.animationDriver = animationDriver;
+      this.registeredComponents = new Map();
+    }
+    DomRootRenderer.prototype.renderComponent = function(componentProto) {
+      var renderer = this.registeredComponents.get(componentProto.id);
+      if (isBlank(renderer)) {
+        renderer = new DomRenderer(this, componentProto, this.animationDriver);
+        this.registeredComponents.set(componentProto.id, renderer);
+      }
+      return renderer;
+    };
+    return DomRootRenderer;
+  }());
+  var DomRootRenderer_ = (function(_super) {
+    __extends$3(DomRootRenderer_, _super);
+    function DomRootRenderer_(_document, _eventManager, sharedStylesHost, animationDriver) {
+      _super.call(this, _document, _eventManager, sharedStylesHost, animationDriver);
+    }
+    DomRootRenderer_.decorators = [{type: _angular_core.Injectable}];
+    DomRootRenderer_.ctorParameters = [{
+      type: undefined,
+      decorators: [{
+        type: _angular_core.Inject,
+        args: [DOCUMENT]
+      }]
+    }, {type: EventManager}, {type: DomSharedStylesHost}, {type: AnimationDriver}];
+    return DomRootRenderer_;
+  }(DomRootRenderer));
+  var DomRenderer = (function() {
+    function DomRenderer(_rootRenderer, componentProto, _animationDriver) {
+      this._rootRenderer = _rootRenderer;
+      this.componentProto = componentProto;
+      this._animationDriver = _animationDriver;
+      this._styles = _flattenStyles(componentProto.id, componentProto.styles, []);
+      if (componentProto.encapsulation !== _angular_core.ViewEncapsulation.Native) {
+        this._rootRenderer.sharedStylesHost.addStyles(this._styles);
+      }
+      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Emulated) {
+        this._contentAttr = _shimContentAttribute(componentProto.id);
+        this._hostAttr = _shimHostAttribute(componentProto.id);
+      } else {
+        this._contentAttr = null;
+        this._hostAttr = null;
+      }
+    }
+    DomRenderer.prototype.selectRootElement = function(selectorOrNode, debugInfo) {
+      var el;
+      if (isString(selectorOrNode)) {
+        el = getDOM().querySelector(this._rootRenderer.document, selectorOrNode);
+        if (isBlank(el)) {
+          throw new Error("The selector \"" + selectorOrNode + "\" did not match any elements");
+        }
+      } else {
+        el = selectorOrNode;
+      }
+      getDOM().clearNodes(el);
+      return el;
+    };
+    DomRenderer.prototype.createElement = function(parent, name, debugInfo) {
+      var nsAndName = splitNamespace(name);
+      var el = isPresent(nsAndName[0]) ? getDOM().createElementNS(NAMESPACE_URIS[nsAndName[0]], nsAndName[1]) : getDOM().createElement(nsAndName[1]);
+      if (isPresent(this._contentAttr)) {
+        getDOM().setAttribute(el, this._contentAttr, '');
+      }
+      if (isPresent(parent)) {
+        getDOM().appendChild(parent, el);
+      }
+      return el;
+    };
+    DomRenderer.prototype.createViewRoot = function(hostElement) {
+      var nodesParent;
+      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Native) {
+        nodesParent = getDOM().createShadowRoot(hostElement);
+        this._rootRenderer.sharedStylesHost.addHost(nodesParent);
+        for (var i = 0; i < this._styles.length; i++) {
+          getDOM().appendChild(nodesParent, getDOM().createStyleElement(this._styles[i]));
+        }
+      } else {
+        if (isPresent(this._hostAttr)) {
+          getDOM().setAttribute(hostElement, this._hostAttr, '');
+        }
+        nodesParent = hostElement;
+      }
+      return nodesParent;
+    };
+    DomRenderer.prototype.createTemplateAnchor = function(parentElement, debugInfo) {
+      var comment = getDOM().createComment(TEMPLATE_COMMENT_TEXT);
+      if (isPresent(parentElement)) {
+        getDOM().appendChild(parentElement, comment);
+      }
+      return comment;
+    };
+    DomRenderer.prototype.createText = function(parentElement, value, debugInfo) {
+      var node = getDOM().createTextNode(value);
+      if (isPresent(parentElement)) {
+        getDOM().appendChild(parentElement, node);
+      }
+      return node;
+    };
+    DomRenderer.prototype.projectNodes = function(parentElement, nodes) {
+      if (isBlank(parentElement))
+        return;
+      appendNodes(parentElement, nodes);
+    };
+    DomRenderer.prototype.attachViewAfter = function(node, viewRootNodes) {
+      moveNodesAfterSibling(node, viewRootNodes);
+    };
+    DomRenderer.prototype.detachView = function(viewRootNodes) {
+      for (var i = 0; i < viewRootNodes.length; i++) {
+        getDOM().remove(viewRootNodes[i]);
+      }
+    };
+    DomRenderer.prototype.destroyView = function(hostElement, viewAllNodes) {
+      if (this.componentProto.encapsulation === _angular_core.ViewEncapsulation.Native && isPresent(hostElement)) {
+        this._rootRenderer.sharedStylesHost.removeHost(getDOM().getShadowRoot(hostElement));
+      }
+    };
+    DomRenderer.prototype.listen = function(renderElement, name, callback) {
+      return this._rootRenderer.eventManager.addEventListener(renderElement, name, decoratePreventDefault(callback));
+    };
+    DomRenderer.prototype.listenGlobal = function(target, name, callback) {
+      return this._rootRenderer.eventManager.addGlobalEventListener(target, name, decoratePreventDefault(callback));
+    };
+    DomRenderer.prototype.setElementProperty = function(renderElement, propertyName, propertyValue) {
+      getDOM().setProperty(renderElement, propertyName, propertyValue);
+    };
+    DomRenderer.prototype.setElementAttribute = function(renderElement, attributeName, attributeValue) {
+      var attrNs;
+      var nsAndName = splitNamespace(attributeName);
+      if (isPresent(nsAndName[0])) {
+        attributeName = nsAndName[0] + ':' + nsAndName[1];
+        attrNs = NAMESPACE_URIS[nsAndName[0]];
+      }
+      if (isPresent(attributeValue)) {
+        if (isPresent(attrNs)) {
+          getDOM().setAttributeNS(renderElement, attrNs, attributeName, attributeValue);
+        } else {
+          getDOM().setAttribute(renderElement, attributeName, attributeValue);
+        }
+      } else {
+        if (isPresent(attrNs)) {
+          getDOM().removeAttributeNS(renderElement, attrNs, nsAndName[1]);
+        } else {
+          getDOM().removeAttribute(renderElement, attributeName);
+        }
+      }
+    };
+    DomRenderer.prototype.setBindingDebugInfo = function(renderElement, propertyName, propertyValue) {
+      var dashCasedPropertyName = camelCaseToDashCase(propertyName);
+      if (getDOM().isCommentNode(renderElement)) {
+        var existingBindings = StringWrapper.replaceAll(getDOM().getText(renderElement), /\n/g, '').match(TEMPLATE_BINDINGS_EXP);
+        var parsedBindings = Json.parse(existingBindings[1]);
+        parsedBindings[dashCasedPropertyName] = propertyValue;
+        getDOM().setText(renderElement, StringWrapper.replace(TEMPLATE_COMMENT_TEXT, '{}', Json.stringify(parsedBindings)));
+      } else {
+        this.setElementAttribute(renderElement, propertyName, propertyValue);
+      }
+    };
+    DomRenderer.prototype.setElementClass = function(renderElement, className, isAdd) {
+      if (isAdd) {
+        getDOM().addClass(renderElement, className);
+      } else {
+        getDOM().removeClass(renderElement, className);
+      }
+    };
+    DomRenderer.prototype.setElementStyle = function(renderElement, styleName, styleValue) {
+      if (isPresent(styleValue)) {
+        getDOM().setStyle(renderElement, styleName, stringify(styleValue));
+      } else {
+        getDOM().removeStyle(renderElement, styleName);
+      }
+    };
+    DomRenderer.prototype.invokeElementMethod = function(renderElement, methodName, args) {
+      getDOM().invoke(renderElement, methodName, args);
+    };
+    DomRenderer.prototype.setText = function(renderNode, text) {
+      getDOM().setText(renderNode, text);
+    };
+    DomRenderer.prototype.animate = function(element, startingStyles, keyframes, duration, delay, easing) {
+      return this._animationDriver.animate(element, startingStyles, keyframes, duration, delay, easing);
+    };
+    return DomRenderer;
+  }());
+  function moveNodesAfterSibling(sibling, nodes) {
+    var parent = getDOM().parentElement(sibling);
+    if (nodes.length > 0 && isPresent(parent)) {
+      var nextSibling = getDOM().nextSibling(sibling);
+      if (isPresent(nextSibling)) {
+        for (var i = 0; i < nodes.length; i++) {
+          getDOM().insertBefore(nextSibling, nodes[i]);
+        }
+      } else {
+        for (var i = 0; i < nodes.length; i++) {
+          getDOM().appendChild(parent, nodes[i]);
+        }
+      }
+    }
+  }
+  function appendNodes(parent, nodes) {
+    for (var i = 0; i < nodes.length; i++) {
+      getDOM().appendChild(parent, nodes[i]);
+    }
+  }
+  function decoratePreventDefault(eventHandler) {
+    return function(event) {
+      var allowDefaultBehavior = eventHandler(event);
+      if (allowDefaultBehavior === false) {
+        getDOM().preventDefault(event);
+      }
+    };
+  }
+  var COMPONENT_REGEX = /%COMP%/g;
+  var COMPONENT_VARIABLE = '%COMP%';
+  var HOST_ATTR = "_nghost-" + COMPONENT_VARIABLE;
+  var CONTENT_ATTR = "_ngcontent-" + COMPONENT_VARIABLE;
+  function _shimContentAttribute(componentShortId) {
+    return StringWrapper.replaceAll(CONTENT_ATTR, COMPONENT_REGEX, componentShortId);
+  }
+  function _shimHostAttribute(componentShortId) {
+    return StringWrapper.replaceAll(HOST_ATTR, COMPONENT_REGEX, componentShortId);
+  }
+  function _flattenStyles(compId, styles, target) {
+    for (var i = 0; i < styles.length; i++) {
+      var style = styles[i];
+      if (isArray(style)) {
+        _flattenStyles(compId, style, target);
+      } else {
+        style = StringWrapper.replaceAll(style, COMPONENT_REGEX, compId);
+        target.push(style);
+      }
+    }
+    return target;
+  }
+  var NS_PREFIX_RE = /^:([^:]+):(.+)$/;
+  function splitNamespace(name) {
+    if (name[0] != ':') {
+      return [null, name];
+    }
+    var match = name.match(NS_PREFIX_RE);
+    return [match[1], match[2]];
+  }
+  var CORE_TOKENS = {
+    'ApplicationRef': _angular_core.ApplicationRef,
+    'NgZone': _angular_core.NgZone
+  };
+  var INSPECT_GLOBAL_NAME = 'ng.probe';
+  var CORE_TOKENS_GLOBAL_NAME = 'ng.coreTokens';
+  function inspectNativeElement(element) {
+    return _angular_core.getDebugNode(element);
+  }
+  var NgProbeToken = (function() {
+    function NgProbeToken(name, token) {
+      this.name = name;
+      this.token = token;
+    }
+    return NgProbeToken;
+  }());
+  function _createConditionalRootRenderer(rootRenderer, extraTokens) {
+    if (_angular_core.isDevMode()) {
+      return _createRootRenderer(rootRenderer, extraTokens);
+    }
+    return rootRenderer;
+  }
+  function _createRootRenderer(rootRenderer, extraTokens) {
+    getDOM().setGlobalVar(INSPECT_GLOBAL_NAME, inspectNativeElement);
+    getDOM().setGlobalVar(CORE_TOKENS_GLOBAL_NAME, StringMapWrapper.merge(CORE_TOKENS, _ngProbeTokensToMap(extraTokens || [])));
+    return new DebugDomRootRenderer(rootRenderer);
+  }
+  function _ngProbeTokensToMap(tokens) {
+    return tokens.reduce(function(prev, t) {
+      return (prev[t.name] = t.token, prev);
+    }, {});
+  }
+  var ELEMENT_PROBE_PROVIDERS = [{
+    provide: _angular_core.RootRenderer,
+    useFactory: _createConditionalRootRenderer,
+    deps: [DomRootRenderer, [NgProbeToken, new _angular_core.Optional()]]
+  }];
+  var ELEMENT_PROBE_PROVIDERS_PROD_MODE = [{
+    provide: _angular_core.RootRenderer,
+    useFactory: _createRootRenderer,
+    deps: [DomRootRenderer, [NgProbeToken, new _angular_core.Optional()]]
+  }];
+  var __extends$5 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var DomEventsPlugin = (function(_super) {
+    __extends$5(DomEventsPlugin, _super);
+    function DomEventsPlugin() {
+      _super.apply(this, arguments);
+    }
+    DomEventsPlugin.prototype.supports = function(eventName) {
+      return true;
+    };
+    DomEventsPlugin.prototype.addEventListener = function(element, eventName, handler) {
+      var zone = this.manager.getZone();
+      var outsideHandler = function(event) {
+        return zone.runGuarded(function() {
+          return handler(event);
+        });
+      };
+      return this.manager.getZone().runOutsideAngular(function() {
+        return getDOM().onAndCancel(element, eventName, outsideHandler);
+      });
+    };
+    DomEventsPlugin.prototype.addGlobalEventListener = function(target, eventName, handler) {
+      var element = getDOM().getGlobalEventTarget(target);
+      var zone = this.manager.getZone();
+      var outsideHandler = function(event) {
+        return zone.runGuarded(function() {
+          return handler(event);
+        });
+      };
+      return this.manager.getZone().runOutsideAngular(function() {
+        return getDOM().onAndCancel(element, eventName, outsideHandler);
+      });
+    };
+    DomEventsPlugin.decorators = [{type: _angular_core.Injectable}];
+    DomEventsPlugin.ctorParameters = [];
+    return DomEventsPlugin;
+  }(EventManagerPlugin));
+  var __extends$7 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var _eventNames = {
+    'pan': true,
+    'panstart': true,
+    'panmove': true,
+    'panend': true,
+    'pancancel': true,
+    'panleft': true,
+    'panright': true,
+    'panup': true,
+    'pandown': true,
+    'pinch': true,
+    'pinchstart': true,
+    'pinchmove': true,
+    'pinchend': true,
+    'pinchcancel': true,
+    'pinchin': true,
+    'pinchout': true,
+    'press': true,
+    'pressup': true,
+    'rotate': true,
+    'rotatestart': true,
+    'rotatemove': true,
+    'rotateend': true,
+    'rotatecancel': true,
+    'swipe': true,
+    'swipeleft': true,
+    'swiperight': true,
+    'swipeup': true,
+    'swipedown': true,
+    'tap': true
+  };
+  var HammerGesturesPluginCommon = (function(_super) {
+    __extends$7(HammerGesturesPluginCommon, _super);
+    function HammerGesturesPluginCommon() {
+      _super.call(this);
+    }
+    HammerGesturesPluginCommon.prototype.supports = function(eventName) {
+      eventName = eventName.toLowerCase();
+      return StringMapWrapper.contains(_eventNames, eventName);
+    };
+    return HammerGesturesPluginCommon;
+  }(EventManagerPlugin));
+  var __extends$6 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var HAMMER_GESTURE_CONFIG = new _angular_core.OpaqueToken('HammerGestureConfig');
+  var HammerGestureConfig = (function() {
+    function HammerGestureConfig() {
+      this.events = [];
+      this.overrides = {};
+    }
+    HammerGestureConfig.prototype.buildHammer = function(element) {
+      var mc = new Hammer(element);
+      mc.get('pinch').set({enable: true});
+      mc.get('rotate').set({enable: true});
+      for (var eventName in this.overrides) {
+        mc.get(eventName).set(this.overrides[eventName]);
+      }
+      return mc;
+    };
+    HammerGestureConfig.decorators = [{type: _angular_core.Injectable}];
+    HammerGestureConfig.ctorParameters = [];
+    return HammerGestureConfig;
+  }());
+  var HammerGesturesPlugin = (function(_super) {
+    __extends$6(HammerGesturesPlugin, _super);
+    function HammerGesturesPlugin(_config) {
+      _super.call(this);
+      this._config = _config;
+    }
+    HammerGesturesPlugin.prototype.supports = function(eventName) {
+      if (!_super.prototype.supports.call(this, eventName) && !this.isCustomEvent(eventName))
+        return false;
+      if (!isPresent(window['Hammer'])) {
+        throw new Error("Hammer.js is not loaded, can not bind " + eventName + " event");
+      }
+      return true;
+    };
+    HammerGesturesPlugin.prototype.addEventListener = function(element, eventName, handler) {
+      var _this = this;
+      var zone = this.manager.getZone();
+      eventName = eventName.toLowerCase();
+      return zone.runOutsideAngular(function() {
+        var mc = _this._config.buildHammer(element);
+        var callback = function(eventObj) {
+          zone.runGuarded(function() {
+            handler(eventObj);
+          });
+        };
+        mc.on(eventName, callback);
+        return function() {
+          mc.off(eventName, callback);
+        };
+      });
+    };
+    HammerGesturesPlugin.prototype.isCustomEvent = function(eventName) {
+      return this._config.events.indexOf(eventName) > -1;
+    };
+    HammerGesturesPlugin.decorators = [{type: _angular_core.Injectable}];
+    HammerGesturesPlugin.ctorParameters = [{
+      type: HammerGestureConfig,
+      decorators: [{
+        type: _angular_core.Inject,
+        args: [HAMMER_GESTURE_CONFIG]
+      }]
+    }];
+    return HammerGesturesPlugin;
+  }(HammerGesturesPluginCommon));
+  var __extends$8 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var modifierKeys = ['alt', 'control', 'meta', 'shift'];
+  var modifierKeyGetters = {
+    'alt': function(event) {
+      return event.altKey;
+    },
+    'control': function(event) {
+      return event.ctrlKey;
+    },
+    'meta': function(event) {
+      return event.metaKey;
+    },
+    'shift': function(event) {
+      return event.shiftKey;
+    }
+  };
+  var KeyEventsPlugin = (function(_super) {
+    __extends$8(KeyEventsPlugin, _super);
+    function KeyEventsPlugin() {
+      _super.call(this);
+    }
+    KeyEventsPlugin.prototype.supports = function(eventName) {
+      return isPresent(KeyEventsPlugin.parseEventName(eventName));
+    };
+    KeyEventsPlugin.prototype.addEventListener = function(element, eventName, handler) {
+      var parsedEvent = KeyEventsPlugin.parseEventName(eventName);
+      var outsideHandler = KeyEventsPlugin.eventCallback(element, StringMapWrapper.get(parsedEvent, 'fullKey'), handler, this.manager.getZone());
+      return this.manager.getZone().runOutsideAngular(function() {
+        return getDOM().onAndCancel(element, StringMapWrapper.get(parsedEvent, 'domEventName'), outsideHandler);
+      });
+    };
+    KeyEventsPlugin.parseEventName = function(eventName) {
+      var parts = eventName.toLowerCase().split('.');
+      var domEventName = parts.shift();
+      if ((parts.length === 0) || !(StringWrapper.equals(domEventName, 'keydown') || StringWrapper.equals(domEventName, 'keyup'))) {
+        return null;
+      }
+      var key = KeyEventsPlugin._normalizeKey(parts.pop());
+      var fullKey = '';
+      modifierKeys.forEach(function(modifierName) {
+        if (ListWrapper.contains(parts, modifierName)) {
+          ListWrapper.remove(parts, modifierName);
+          fullKey += modifierName + '.';
+        }
+      });
+      fullKey += key;
+      if (parts.length != 0 || key.length === 0) {
+        return null;
+      }
+      var result = StringMapWrapper.create();
+      StringMapWrapper.set(result, 'domEventName', domEventName);
+      StringMapWrapper.set(result, 'fullKey', fullKey);
+      return result;
+    };
+    KeyEventsPlugin.getEventFullKey = function(event) {
+      var fullKey = '';
+      var key = getDOM().getEventKey(event);
+      key = key.toLowerCase();
+      if (StringWrapper.equals(key, ' ')) {
+        key = 'space';
+      } else if (StringWrapper.equals(key, '.')) {
+        key = 'dot';
+      }
+      modifierKeys.forEach(function(modifierName) {
+        if (modifierName != key) {
+          var modifierGetter = StringMapWrapper.get(modifierKeyGetters, modifierName);
+          if (modifierGetter(event)) {
+            fullKey += modifierName + '.';
+          }
+        }
+      });
+      fullKey += key;
+      return fullKey;
+    };
+    KeyEventsPlugin.eventCallback = function(element, fullKey, handler, zone) {
+      return function(event) {
+        if (StringWrapper.equals(KeyEventsPlugin.getEventFullKey(event), fullKey)) {
+          zone.runGuarded(function() {
+            return handler(event);
+          });
+        }
+      };
+    };
+    KeyEventsPlugin._normalizeKey = function(keyName) {
+      switch (keyName) {
+        case 'esc':
+          return 'escape';
+        default:
+          return keyName;
+      }
+    };
+    KeyEventsPlugin.decorators = [{type: _angular_core.Injectable}];
+    KeyEventsPlugin.ctorParameters = [];
+    return KeyEventsPlugin;
+  }(EventManagerPlugin));
+  var SAFE_URL_PATTERN = /^(?:(?:https?|mailto|ftp|tel|file):|[^&:/?#]*(?:[/?#]|$))/gi;
+  var DATA_URL_PATTERN = /^data:(?:image\/(?:bmp|gif|jpeg|jpg|png|tiff|webp)|video\/(?:mpeg|mp4|ogg|webm)|audio\/(?:mp3|oga|ogg|opus));base64,[a-z0-9+\/]+=*$/i;
+  function sanitizeUrl(url) {
+    url = String(url);
+    if (url.match(SAFE_URL_PATTERN) || url.match(DATA_URL_PATTERN))
+      return url;
+    if (_angular_core.isDevMode()) {
+      getDOM().log("WARNING: sanitizing unsafe URL value " + url + " (see http://g.co/ng/security#xss)");
+    }
+    return 'unsafe:' + url;
+  }
+  function sanitizeSrcset(srcset) {
+    srcset = String(srcset);
+    return srcset.split(',').map(function(srcset) {
+      return sanitizeUrl(srcset.trim());
+    }).join(', ');
+  }
+  var inertElement = null;
+  var DOM = null;
+  function getInertElement() {
+    if (inertElement)
+      return inertElement;
+    DOM = getDOM();
+    var templateEl = DOM.createElement('template');
+    if ('content' in templateEl)
+      return templateEl;
+    var doc = DOM.createHtmlDocument();
+    inertElement = DOM.querySelector(doc, 'body');
+    if (inertElement == null) {
+      var html = DOM.createElement('html', doc);
+      inertElement = DOM.createElement('body', doc);
+      DOM.appendChild(html, inertElement);
+      DOM.appendChild(doc, html);
+    }
+    return inertElement;
+  }
+  function tagSet(tags) {
+    var res = {};
+    for (var _i = 0,
+        _a = tags.split(','); _i < _a.length; _i++) {
+      var t = _a[_i];
+      res[t] = true;
+    }
+    return res;
+  }
+  function merge() {
+    var sets = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+      sets[_i - 0] = arguments[_i];
+    }
+    var res = {};
+    for (var _a = 0,
+        sets_1 = sets; _a < sets_1.length; _a++) {
+      var s = sets_1[_a];
+      for (var v in s) {
+        if (s.hasOwnProperty(v))
+          res[v] = true;
+      }
+    }
+    return res;
+  }
+  var VOID_ELEMENTS = tagSet('area,br,col,hr,img,wbr');
+  var OPTIONAL_END_TAG_BLOCK_ELEMENTS = tagSet('colgroup,dd,dt,li,p,tbody,td,tfoot,th,thead,tr');
+  var OPTIONAL_END_TAG_INLINE_ELEMENTS = tagSet('rp,rt');
+  var OPTIONAL_END_TAG_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, OPTIONAL_END_TAG_BLOCK_ELEMENTS);
+  var BLOCK_ELEMENTS = merge(OPTIONAL_END_TAG_BLOCK_ELEMENTS, tagSet('address,article,' + 'aside,blockquote,caption,center,del,details,dialog,dir,div,dl,figure,figcaption,footer,h1,h2,h3,h4,h5,' + 'h6,header,hgroup,hr,ins,main,map,menu,nav,ol,pre,section,summary,table,ul'));
+  var INLINE_ELEMENTS = merge(OPTIONAL_END_TAG_INLINE_ELEMENTS, tagSet('a,abbr,acronym,audio,b,' + 'bdi,bdo,big,br,cite,code,del,dfn,em,font,i,img,ins,kbd,label,map,mark,picture,q,ruby,rp,rt,s,' + 'samp,small,source,span,strike,strong,sub,sup,time,track,tt,u,var,video'));
+  var VALID_ELEMENTS = merge(VOID_ELEMENTS, BLOCK_ELEMENTS, INLINE_ELEMENTS, OPTIONAL_END_TAG_ELEMENTS);
+  var URI_ATTRS = tagSet('background,cite,href,itemtype,longdesc,poster,src,xlink:href');
+  var SRCSET_ATTRS = tagSet('srcset');
+  var HTML_ATTRS = tagSet('abbr,accesskey,align,alt,autoplay,axis,bgcolor,border,cellpadding,cellspacing,class,clear,color,cols,colspan,' + 'compact,controls,coords,datetime,default,dir,download,face,headers,height,hidden,hreflang,hspace,' + 'ismap,itemscope,itemprop,kind,label,lang,language,loop,media,muted,nohref,nowrap,open,preload,rel,rev,role,rows,rowspan,rules,' + 'scope,scrolling,shape,size,sizes,span,srclang,start,summary,tabindex,target,title,translate,type,usemap,' + 'valign,value,vspace,width');
+  var VALID_ATTRS = merge(URI_ATTRS, SRCSET_ATTRS, HTML_ATTRS);
+  var SanitizingHtmlSerializer = (function() {
+    function SanitizingHtmlSerializer() {
+      this.sanitizedSomething = false;
+      this.buf = [];
+    }
+    SanitizingHtmlSerializer.prototype.sanitizeChildren = function(el) {
+      var current = el.firstChild;
+      while (current) {
+        if (DOM.isElementNode(current)) {
+          this.startElement(current);
+        } else if (DOM.isTextNode(current)) {
+          this.chars(DOM.nodeValue(current));
+        } else {
+          this.sanitizedSomething = true;
+        }
+        if (DOM.firstChild(current)) {
+          current = DOM.firstChild(current);
+          continue;
+        }
+        while (current) {
+          if (DOM.isElementNode(current)) {
+            this.endElement(current);
+          }
+          if (DOM.nextSibling(current)) {
+            current = DOM.nextSibling(current);
+            break;
+          }
+          current = DOM.parentElement(current);
+        }
+      }
+      return this.buf.join('');
+    };
+    SanitizingHtmlSerializer.prototype.startElement = function(element) {
+      var _this = this;
+      var tagName = DOM.nodeName(element).toLowerCase();
+      if (!VALID_ELEMENTS.hasOwnProperty(tagName)) {
+        this.sanitizedSomething = true;
+        return;
+      }
+      this.buf.push('<');
+      this.buf.push(tagName);
+      DOM.attributeMap(element).forEach(function(value, attrName) {
+        var lower = attrName.toLowerCase();
+        if (!VALID_ATTRS.hasOwnProperty(lower)) {
+          _this.sanitizedSomething = true;
+          return;
+        }
+        if (URI_ATTRS[lower])
+          value = sanitizeUrl(value);
+        if (SRCSET_ATTRS[lower])
+          value = sanitizeSrcset(value);
+        _this.buf.push(' ');
+        _this.buf.push(attrName);
+        _this.buf.push('="');
+        _this.buf.push(encodeEntities(value));
+        _this.buf.push('"');
+      });
+      this.buf.push('>');
+    };
+    SanitizingHtmlSerializer.prototype.endElement = function(current) {
+      var tagName = DOM.nodeName(current).toLowerCase();
+      if (VALID_ELEMENTS.hasOwnProperty(tagName) && !VOID_ELEMENTS.hasOwnProperty(tagName)) {
+        this.buf.push('</');
+        this.buf.push(tagName);
+        this.buf.push('>');
+      }
+    };
+    SanitizingHtmlSerializer.prototype.chars = function(chars) {
+      this.buf.push(encodeEntities(chars));
+    };
+    return SanitizingHtmlSerializer;
+  }());
+  var SURROGATE_PAIR_REGEXP = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+  var NON_ALPHANUMERIC_REGEXP = /([^\#-~ |!])/g;
+  function encodeEntities(value) {
+    return value.replace(/&/g, '&amp;').replace(SURROGATE_PAIR_REGEXP, function(match) {
+      var hi = match.charCodeAt(0);
+      var low = match.charCodeAt(1);
+      return '&#' + (((hi - 0xD800) * 0x400) + (low - 0xDC00) + 0x10000) + ';';
+    }).replace(NON_ALPHANUMERIC_REGEXP, function(match) {
+      return '&#' + match.charCodeAt(0) + ';';
+    }).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+  function stripCustomNsAttrs(el) {
+    DOM.attributeMap(el).forEach(function(_, attrName) {
+      if (attrName === 'xmlns:ns1' || attrName.indexOf('ns1:') === 0) {
+        DOM.removeAttribute(el, attrName);
+      }
+    });
+    for (var _i = 0,
+        _a = DOM.childNodesAsList(el); _i < _a.length; _i++) {
+      var n = _a[_i];
+      if (DOM.isElementNode(n))
+        stripCustomNsAttrs(n);
+    }
+  }
+  function sanitizeHtml(unsafeHtmlInput) {
+    try {
+      var containerEl = getInertElement();
+      var unsafeHtml = unsafeHtmlInput ? String(unsafeHtmlInput) : '';
+      var mXSSAttempts = 5;
+      var parsedHtml = unsafeHtml;
+      do {
+        if (mXSSAttempts === 0) {
+          throw new Error('Failed to sanitize html because the input is unstable');
+        }
+        mXSSAttempts--;
+        unsafeHtml = parsedHtml;
+        DOM.setInnerHTML(containerEl, unsafeHtml);
+        if (DOM.defaultDoc().documentMode) {
+          stripCustomNsAttrs(containerEl);
+        }
+        parsedHtml = DOM.getInnerHTML(containerEl);
+      } while (unsafeHtml !== parsedHtml);
+      var sanitizer = new SanitizingHtmlSerializer();
+      var safeHtml = sanitizer.sanitizeChildren(DOM.getTemplateContent(containerEl) || containerEl);
+      var parent_1 = DOM.getTemplateContent(containerEl) || containerEl;
+      for (var _i = 0,
+          _a = DOM.childNodesAsList(parent_1); _i < _a.length; _i++) {
+        var child = _a[_i];
+        DOM.removeChild(parent_1, child);
+      }
+      if (_angular_core.isDevMode() && sanitizer.sanitizedSomething) {
+        DOM.log('WARNING: sanitizing HTML stripped some content (see http://g.co/ng/security#xss).');
+      }
+      return safeHtml;
+    } catch (e) {
+      inertElement = null;
+      throw e;
+    }
+  }
+  var VALUES = '[-,."\'%_!# a-zA-Z0-9]+';
+  var TRANSFORMATION_FNS = '(?:matrix|translate|scale|rotate|skew|perspective)(?:X|Y|3d)?';
+  var COLOR_FNS = '(?:rgb|hsl)a?';
+  var FN_ARGS = '\\([-0-9.%, a-zA-Z]+\\)';
+  var SAFE_STYLE_VALUE = new RegExp("^(" + VALUES + "|(?:" + TRANSFORMATION_FNS + "|" + COLOR_FNS + ")" + FN_ARGS + ")$", 'g');
+  var URL_RE = /^url\(([^)]+)\)$/;
+  function hasBalancedQuotes(value) {
+    var outsideSingle = true;
+    var outsideDouble = true;
+    for (var i = 0; i < value.length; i++) {
+      var c = value.charAt(i);
+      if (c === '\'' && outsideDouble) {
+        outsideSingle = !outsideSingle;
+      } else if (c === '"' && outsideSingle) {
+        outsideDouble = !outsideDouble;
+      }
+    }
+    return outsideSingle && outsideDouble;
+  }
+  function sanitizeStyle(value) {
+    value = String(value).trim();
+    if (!value)
+      return '';
+    var urlMatch = value.match(URL_RE);
+    if ((urlMatch && sanitizeUrl(urlMatch[1]) === urlMatch[1]) || value.match(SAFE_STYLE_VALUE) && hasBalancedQuotes(value)) {
+      return value;
+    }
+    if (_angular_core.isDevMode()) {
+      getDOM().log("WARNING: sanitizing unsafe style value " + value + " (see http://g.co/ng/security#xss).");
+    }
+    return 'unsafe';
+  }
+  var __extends$9 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var DomSanitizer = (function() {
+    function DomSanitizer() {}
+    return DomSanitizer;
+  }());
+  var DomSanitizerImpl = (function(_super) {
+    __extends$9(DomSanitizerImpl, _super);
+    function DomSanitizerImpl() {
+      _super.apply(this, arguments);
+    }
+    DomSanitizerImpl.prototype.sanitize = function(ctx, value) {
+      if (value == null)
+        return null;
+      switch (ctx) {
+        case _angular_core.SecurityContext.NONE:
+          return value;
+        case _angular_core.SecurityContext.HTML:
+          if (value instanceof SafeHtmlImpl)
+            return value.changingThisBreaksApplicationSecurity;
+          this.checkNotSafeValue(value, 'HTML');
+          return sanitizeHtml(String(value));
+        case _angular_core.SecurityContext.STYLE:
+          if (value instanceof SafeStyleImpl)
+            return value.changingThisBreaksApplicationSecurity;
+          this.checkNotSafeValue(value, 'Style');
+          return sanitizeStyle(value);
+        case _angular_core.SecurityContext.SCRIPT:
+          if (value instanceof SafeScriptImpl)
+            return value.changingThisBreaksApplicationSecurity;
+          this.checkNotSafeValue(value, 'Script');
+          throw new Error('unsafe value used in a script context');
+        case _angular_core.SecurityContext.URL:
+          if (value instanceof SafeResourceUrlImpl || value instanceof SafeUrlImpl) {
+            return value.changingThisBreaksApplicationSecurity;
+          }
+          this.checkNotSafeValue(value, 'URL');
+          return sanitizeUrl(String(value));
+        case _angular_core.SecurityContext.RESOURCE_URL:
+          if (value instanceof SafeResourceUrlImpl) {
+            return value.changingThisBreaksApplicationSecurity;
+          }
+          this.checkNotSafeValue(value, 'ResourceURL');
+          throw new Error('unsafe value used in a resource URL context (see http://g.co/ng/security#xss)');
+        default:
+          throw new Error("Unexpected SecurityContext " + ctx + " (see http://g.co/ng/security#xss)");
+      }
+    };
+    DomSanitizerImpl.prototype.checkNotSafeValue = function(value, expectedType) {
+      if (value instanceof SafeValueImpl) {
+        throw new Error(("Required a safe " + expectedType + ", got a " + value.getTypeName() + " ") + "(see http://g.co/ng/security#xss)");
+      }
+    };
+    DomSanitizerImpl.prototype.bypassSecurityTrustHtml = function(value) {
+      return new SafeHtmlImpl(value);
+    };
+    DomSanitizerImpl.prototype.bypassSecurityTrustStyle = function(value) {
+      return new SafeStyleImpl(value);
+    };
+    DomSanitizerImpl.prototype.bypassSecurityTrustScript = function(value) {
+      return new SafeScriptImpl(value);
+    };
+    DomSanitizerImpl.prototype.bypassSecurityTrustUrl = function(value) {
+      return new SafeUrlImpl(value);
+    };
+    DomSanitizerImpl.prototype.bypassSecurityTrustResourceUrl = function(value) {
+      return new SafeResourceUrlImpl(value);
+    };
+    DomSanitizerImpl.decorators = [{type: _angular_core.Injectable}];
+    DomSanitizerImpl.ctorParameters = [];
+    return DomSanitizerImpl;
+  }(DomSanitizer));
+  var SafeValueImpl = (function() {
+    function SafeValueImpl(changingThisBreaksApplicationSecurity) {
+      this.changingThisBreaksApplicationSecurity = changingThisBreaksApplicationSecurity;
+    }
+    SafeValueImpl.prototype.toString = function() {
+      return ("SafeValue must use [property]=binding: " + this.changingThisBreaksApplicationSecurity) + " (see http://g.co/ng/security#xss)";
+    };
+    return SafeValueImpl;
+  }());
+  var SafeHtmlImpl = (function(_super) {
+    __extends$9(SafeHtmlImpl, _super);
+    function SafeHtmlImpl() {
+      _super.apply(this, arguments);
+    }
+    SafeHtmlImpl.prototype.getTypeName = function() {
+      return 'HTML';
+    };
+    return SafeHtmlImpl;
+  }(SafeValueImpl));
+  var SafeStyleImpl = (function(_super) {
+    __extends$9(SafeStyleImpl, _super);
+    function SafeStyleImpl() {
+      _super.apply(this, arguments);
+    }
+    SafeStyleImpl.prototype.getTypeName = function() {
+      return 'Style';
+    };
+    return SafeStyleImpl;
+  }(SafeValueImpl));
+  var SafeScriptImpl = (function(_super) {
+    __extends$9(SafeScriptImpl, _super);
+    function SafeScriptImpl() {
+      _super.apply(this, arguments);
+    }
+    SafeScriptImpl.prototype.getTypeName = function() {
+      return 'Script';
+    };
+    return SafeScriptImpl;
+  }(SafeValueImpl));
+  var SafeUrlImpl = (function(_super) {
+    __extends$9(SafeUrlImpl, _super);
+    function SafeUrlImpl() {
+      _super.apply(this, arguments);
+    }
+    SafeUrlImpl.prototype.getTypeName = function() {
+      return 'URL';
+    };
+    return SafeUrlImpl;
+  }(SafeValueImpl));
+  var SafeResourceUrlImpl = (function(_super) {
+    __extends$9(SafeResourceUrlImpl, _super);
+    function SafeResourceUrlImpl() {
+      _super.apply(this, arguments);
+    }
+    SafeResourceUrlImpl.prototype.getTypeName = function() {
+      return 'ResourceURL';
+    };
+    return SafeResourceUrlImpl;
+  }(SafeValueImpl));
+  var INTERNAL_BROWSER_PLATFORM_PROVIDERS = [{
+    provide: _angular_core.PLATFORM_INITIALIZER,
+    useValue: initDomAdapter,
+    multi: true
+  }, {
+    provide: _angular_common.PlatformLocation,
+    useClass: BrowserPlatformLocation
+  }];
+  var BROWSER_SANITIZATION_PROVIDERS = [{
+    provide: _angular_core.Sanitizer,
+    useExisting: DomSanitizer
+  }, {
+    provide: DomSanitizer,
+    useClass: DomSanitizerImpl
+  }];
+  var platformBrowser = _angular_core.createPlatformFactory(_angular_core.platformCore, 'browser', INTERNAL_BROWSER_PLATFORM_PROVIDERS);
+  function initDomAdapter() {
+    BrowserDomAdapter.makeCurrent();
+    BrowserGetTestability.init();
+  }
+  function errorHandler() {
+    return new _angular_core.ErrorHandler();
+  }
+  function _document() {
+    return getDOM().defaultDoc();
+  }
+  function _resolveDefaultAnimationDriver() {
+    if (getDOM().supportsWebAnimation()) {
+      return new WebAnimationsDriver();
+    }
+    return AnimationDriver.NOOP;
+  }
+  var BrowserModule = (function() {
+    function BrowserModule(parentModule) {
+      if (parentModule) {
+        throw new Error("BrowserModule has already been loaded. If you need access to common directives such as NgIf and NgFor from a lazy loaded module, import CommonModule instead.");
+      }
+    }
+    BrowserModule.decorators = [{
+      type: _angular_core.NgModule,
+      args: [{
+        providers: [BROWSER_SANITIZATION_PROVIDERS, {
+          provide: _angular_core.ErrorHandler,
+          useFactory: errorHandler,
+          deps: []
+        }, {
+          provide: DOCUMENT,
+          useFactory: _document,
+          deps: []
+        }, {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: DomEventsPlugin,
+          multi: true
+        }, {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: KeyEventsPlugin,
+          multi: true
+        }, {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: HammerGesturesPlugin,
+          multi: true
+        }, {
+          provide: HAMMER_GESTURE_CONFIG,
+          useClass: HammerGestureConfig
+        }, {
+          provide: DomRootRenderer,
+          useClass: DomRootRenderer_
+        }, {
+          provide: _angular_core.RootRenderer,
+          useExisting: DomRootRenderer
+        }, {
+          provide: SharedStylesHost,
+          useExisting: DomSharedStylesHost
+        }, {
+          provide: AnimationDriver,
+          useFactory: _resolveDefaultAnimationDriver
+        }, DomSharedStylesHost, _angular_core.Testability, EventManager, ELEMENT_PROBE_PROVIDERS, Title],
+        exports: [_angular_common.CommonModule, _angular_core.ApplicationModule]
+      }]
+    }];
+    BrowserModule.ctorParameters = [{
+      type: BrowserModule,
+      decorators: [{type: _angular_core.Optional}, {type: _angular_core.SkipSelf}]
+    }];
+    return BrowserModule;
+  }());
+  var win = typeof window !== 'undefined' && window || {};
+  var ChangeDetectionPerfRecord = (function() {
+    function ChangeDetectionPerfRecord(msPerTick, numTicks) {
+      this.msPerTick = msPerTick;
+      this.numTicks = numTicks;
+    }
+    return ChangeDetectionPerfRecord;
+  }());
+  var AngularTools = (function() {
+    function AngularTools(ref) {
+      this.profiler = new AngularProfiler(ref);
+    }
+    return AngularTools;
+  }());
+  var AngularProfiler = (function() {
+    function AngularProfiler(ref) {
+      this.appRef = ref.injector.get(_angular_core.ApplicationRef);
+    }
+    AngularProfiler.prototype.timeChangeDetection = function(config) {
+      var record = isPresent(config) && config['record'];
+      var profileName = 'Change Detection';
+      var isProfilerAvailable = isPresent(win.console.profile);
+      if (record && isProfilerAvailable) {
+        win.console.profile(profileName);
+      }
+      var start = getDOM().performanceNow();
+      var numTicks = 0;
+      while (numTicks < 5 || (getDOM().performanceNow() - start) < 500) {
+        this.appRef.tick();
+        numTicks++;
+      }
+      var end = getDOM().performanceNow();
+      if (record && isProfilerAvailable) {
+        win.console.profileEnd(profileName);
+      }
+      var msPerTick = (end - start) / numTicks;
+      win.console.log("ran " + numTicks + " change detection cycles");
+      win.console.log(NumberWrapper.toFixed(msPerTick, 2) + " ms per check");
+      return new ChangeDetectionPerfRecord(msPerTick, numTicks);
+    };
+    return AngularProfiler;
+  }());
+  var context = global$1;
+  function enableDebugTools(ref) {
+    context.ng = new AngularTools(ref);
+    return ref;
+  }
+  function disableDebugTools() {
+    delete context.ng;
+  }
+  var By = (function() {
+    function By() {}
+    By.all = function() {
+      return function(debugElement) {
+        return true;
+      };
+    };
+    By.css = function(selector) {
+      return function(debugElement) {
+        return isPresent(debugElement.nativeElement) ? getDOM().elementMatches(debugElement.nativeElement, selector) : false;
+      };
+    };
+    By.directive = function(type) {
+      return function(debugElement) {
+        return debugElement.providerTokens.indexOf(type) !== -1;
+      };
+    };
+    return By;
+  }());
+  var __platform_browser_private__ = {
+    BrowserPlatformLocation: BrowserPlatformLocation,
+    DomAdapter: DomAdapter,
+    BrowserDomAdapter: BrowserDomAdapter,
+    BrowserGetTestability: BrowserGetTestability,
+    getDOM: getDOM,
+    setRootDomAdapter: setRootDomAdapter,
+    DomRootRenderer_: DomRootRenderer_,
+    DomRootRenderer: DomRootRenderer,
+    DomSharedStylesHost: DomSharedStylesHost,
+    SharedStylesHost: SharedStylesHost,
+    ELEMENT_PROBE_PROVIDERS: ELEMENT_PROBE_PROVIDERS,
+    DomEventsPlugin: DomEventsPlugin,
+    KeyEventsPlugin: KeyEventsPlugin,
+    HammerGesturesPlugin: HammerGesturesPlugin,
+    initDomAdapter: initDomAdapter,
+    INTERNAL_BROWSER_PLATFORM_PROVIDERS: INTERNAL_BROWSER_PLATFORM_PROVIDERS,
+    BROWSER_SANITIZATION_PROVIDERS: BROWSER_SANITIZATION_PROVIDERS
+  };
+  exports.BrowserModule = BrowserModule;
+  exports.platformBrowser = platformBrowser;
+  exports.Title = Title;
+  exports.disableDebugTools = disableDebugTools;
+  exports.enableDebugTools = enableDebugTools;
+  exports.AnimationDriver = AnimationDriver;
+  exports.By = By;
+  exports.NgProbeToken = NgProbeToken;
+  exports.DOCUMENT = DOCUMENT;
+  exports.EVENT_MANAGER_PLUGINS = EVENT_MANAGER_PLUGINS;
+  exports.EventManager = EventManager;
+  exports.HAMMER_GESTURE_CONFIG = HAMMER_GESTURE_CONFIG;
+  exports.HammerGestureConfig = HammerGestureConfig;
+  exports.DomSanitizer = DomSanitizer;
+  exports.__platform_browser_private__ = __platform_browser_private__;
+}));
+
+})();
+(function() {
+var define = $__System.amdDefine;
+(function(global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/core'), require('rxjs/Observable'), require('@angular/platform-browser')) : typeof define === 'function' && define.amd ? define("7", ["exports", "3", "32", "5"], factory) : (factory((global.ng = global.ng || {}, global.ng.http = global.ng.http || {}), global.ng.core, global.Rx, global.ng.platformBrowser));
+}(this, function(exports, _angular_core, rxjs_Observable, _angular_platformBrowser) {
+  'use strict';
+  var BrowserXhr = (function() {
+    function BrowserXhr() {}
+    BrowserXhr.prototype.build = function() {
+      return (new XMLHttpRequest());
+    };
+    BrowserXhr.decorators = [{type: _angular_core.Injectable}];
+    BrowserXhr.ctorParameters = [];
+    return BrowserXhr;
+  }());
+  var globalScope;
+  if (typeof window === 'undefined') {
+    if (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) {
+      globalScope = self;
+    } else {
+      globalScope = global;
+    }
+  } else {
+    globalScope = window;
+  }
+  var global$1 = globalScope;
+  global$1.assert = function assert(condition) {};
+  function isPresent(obj) {
+    return obj !== undefined && obj !== null;
+  }
+  function isBlank(obj) {
+    return obj === undefined || obj === null;
+  }
+  function isString(obj) {
+    return typeof obj === 'string';
+  }
+  function isArray(obj) {
+    return Array.isArray(obj);
+  }
+  var StringWrapper = (function() {
+    function StringWrapper() {}
+    StringWrapper.fromCharCode = function(code) {
+      return String.fromCharCode(code);
+    };
+    StringWrapper.charCodeAt = function(s, index) {
+      return s.charCodeAt(index);
+    };
+    StringWrapper.split = function(s, regExp) {
+      return s.split(regExp);
+    };
+    StringWrapper.equals = function(s, s2) {
+      return s === s2;
+    };
+    StringWrapper.stripLeft = function(s, charVal) {
+      if (s && s.length) {
+        var pos = 0;
+        for (var i = 0; i < s.length; i++) {
+          if (s[i] != charVal)
+            break;
+          pos++;
+        }
+        s = s.substring(pos);
+      }
+      return s;
+    };
+    StringWrapper.stripRight = function(s, charVal) {
+      if (s && s.length) {
+        var pos = s.length;
+        for (var i = s.length - 1; i >= 0; i--) {
+          if (s[i] != charVal)
+            break;
+          pos--;
+        }
+        s = s.substring(0, pos);
+      }
+      return s;
+    };
+    StringWrapper.replace = function(s, from, replace) {
+      return s.replace(from, replace);
+    };
+    StringWrapper.replaceAll = function(s, from, replace) {
+      return s.replace(from, replace);
+    };
+    StringWrapper.slice = function(s, from, to) {
+      if (from === void 0) {
+        from = 0;
+      }
+      if (to === void 0) {
+        to = null;
+      }
+      return s.slice(from, to === null ? undefined : to);
+    };
+    StringWrapper.replaceAllMapped = function(s, from, cb) {
+      return s.replace(from, function() {
+        var matches = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+          matches[_i - 0] = arguments[_i];
+        }
+        matches.splice(-2, 2);
+        return cb(matches);
+      });
+    };
+    StringWrapper.contains = function(s, substr) {
+      return s.indexOf(substr) != -1;
+    };
+    StringWrapper.compare = function(a, b) {
+      if (a < b) {
+        return -1;
+      } else if (a > b) {
+        return 1;
+      } else {
+        return 0;
+      }
+    };
+    return StringWrapper;
+  }());
+  var NumberWrapper = (function() {
+    function NumberWrapper() {}
+    NumberWrapper.toFixed = function(n, fractionDigits) {
+      return n.toFixed(fractionDigits);
+    };
+    NumberWrapper.equal = function(a, b) {
+      return a === b;
+    };
+    NumberWrapper.parseIntAutoRadix = function(text) {
+      var result = parseInt(text);
+      if (isNaN(result)) {
+        throw new Error('Invalid integer literal when parsing ' + text);
+      }
+      return result;
+    };
+    NumberWrapper.parseInt = function(text, radix) {
+      if (radix == 10) {
+        if (/^(\-|\+)?[0-9]+$/.test(text)) {
+          return parseInt(text, radix);
+        }
+      } else if (radix == 16) {
+        if (/^(\-|\+)?[0-9ABCDEFabcdef]+$/.test(text)) {
+          return parseInt(text, radix);
+        }
+      } else {
+        var result = parseInt(text, radix);
+        if (!isNaN(result)) {
+          return result;
+        }
+      }
+      throw new Error('Invalid integer literal when parsing ' + text + ' in base ' + radix);
+    };
+    Object.defineProperty(NumberWrapper, "NaN", {
+      get: function() {
+        return NaN;
+      },
+      enumerable: true,
+      configurable: true
+    });
+    NumberWrapper.isNumeric = function(value) {
+      return !isNaN(value - parseFloat(value));
+    };
+    NumberWrapper.isNaN = function(value) {
+      return isNaN(value);
+    };
+    NumberWrapper.isInteger = function(value) {
+      return Number.isInteger(value);
+    };
+    return NumberWrapper;
+  }());
+  function isJsObject(o) {
+    return o !== null && (typeof o === 'function' || typeof o === 'object');
+  }
+  var Json = (function() {
+    function Json() {}
+    Json.parse = function(s) {
+      return global$1.JSON.parse(s);
+    };
+    Json.stringify = function(data) {
+      return global$1.JSON.stringify(data, null, 2);
+    };
+    return Json;
+  }());
+  var _symbolIterator = null;
+  function getSymbolIterator() {
+    if (isBlank(_symbolIterator)) {
+      if (isPresent(globalScope.Symbol) && isPresent(Symbol.iterator)) {
+        _symbolIterator = Symbol.iterator;
+      } else {
+        var keys = Object.getOwnPropertyNames(Map.prototype);
+        for (var i = 0; i < keys.length; ++i) {
+          var key = keys[i];
+          if (key !== 'entries' && key !== 'size' && Map.prototype[key] === Map.prototype['entries']) {
+            _symbolIterator = key;
+          }
+        }
+      }
+    }
+    return _symbolIterator;
+  }
+  exports.RequestMethod;
+  (function(RequestMethod) {
+    RequestMethod[RequestMethod["Get"] = 0] = "Get";
+    RequestMethod[RequestMethod["Post"] = 1] = "Post";
+    RequestMethod[RequestMethod["Put"] = 2] = "Put";
+    RequestMethod[RequestMethod["Delete"] = 3] = "Delete";
+    RequestMethod[RequestMethod["Options"] = 4] = "Options";
+    RequestMethod[RequestMethod["Head"] = 5] = "Head";
+    RequestMethod[RequestMethod["Patch"] = 6] = "Patch";
+  })(exports.RequestMethod || (exports.RequestMethod = {}));
+  exports.ReadyState;
+  (function(ReadyState) {
+    ReadyState[ReadyState["Unsent"] = 0] = "Unsent";
+    ReadyState[ReadyState["Open"] = 1] = "Open";
+    ReadyState[ReadyState["HeadersReceived"] = 2] = "HeadersReceived";
+    ReadyState[ReadyState["Loading"] = 3] = "Loading";
+    ReadyState[ReadyState["Done"] = 4] = "Done";
+    ReadyState[ReadyState["Cancelled"] = 5] = "Cancelled";
+  })(exports.ReadyState || (exports.ReadyState = {}));
+  exports.ResponseType;
+  (function(ResponseType) {
+    ResponseType[ResponseType["Basic"] = 0] = "Basic";
+    ResponseType[ResponseType["Cors"] = 1] = "Cors";
+    ResponseType[ResponseType["Default"] = 2] = "Default";
+    ResponseType[ResponseType["Error"] = 3] = "Error";
+    ResponseType[ResponseType["Opaque"] = 4] = "Opaque";
+  })(exports.ResponseType || (exports.ResponseType = {}));
+  var ContentType;
+  (function(ContentType) {
+    ContentType[ContentType["NONE"] = 0] = "NONE";
+    ContentType[ContentType["JSON"] = 1] = "JSON";
+    ContentType[ContentType["FORM"] = 2] = "FORM";
+    ContentType[ContentType["FORM_DATA"] = 3] = "FORM_DATA";
+    ContentType[ContentType["TEXT"] = 4] = "TEXT";
+    ContentType[ContentType["BLOB"] = 5] = "BLOB";
+    ContentType[ContentType["ARRAY_BUFFER"] = 6] = "ARRAY_BUFFER";
+  })(ContentType || (ContentType = {}));
+  exports.ResponseContentType;
+  (function(ResponseContentType) {
+    ResponseContentType[ResponseContentType["Text"] = 0] = "Text";
+    ResponseContentType[ResponseContentType["Json"] = 1] = "Json";
+    ResponseContentType[ResponseContentType["ArrayBuffer"] = 2] = "ArrayBuffer";
+    ResponseContentType[ResponseContentType["Blob"] = 3] = "Blob";
+  })(exports.ResponseContentType || (exports.ResponseContentType = {}));
+  var Map$1 = global$1.Map;
+  var Set = global$1.Set;
+  var createMapFromPairs = (function() {
+    try {
+      if (new Map$1([[1, 2]]).size === 1) {
+        return function createMapFromPairs(pairs) {
+          return new Map$1(pairs);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromPairs(pairs) {
+      var map = new Map$1();
+      for (var i = 0; i < pairs.length; i++) {
+        var pair = pairs[i];
+        map.set(pair[0], pair[1]);
+      }
+      return map;
+    };
+  })();
+  var createMapFromMap = (function() {
+    try {
+      if (new Map$1(new Map$1())) {
+        return function createMapFromMap(m) {
+          return new Map$1(m);
+        };
+      }
+    } catch (e) {}
+    return function createMapAndPopulateFromMap(m) {
+      var map = new Map$1();
+      m.forEach(function(v, k) {
+        map.set(k, v);
+      });
+      return map;
+    };
+  })();
+  var _clearValues = (function() {
+    if ((new Map$1()).keys().next) {
+      return function _clearValues(m) {
+        var keyIterator = m.keys();
+        var k;
+        while (!((k = keyIterator.next()).done)) {
+          m.set(k.value, null);
+        }
+      };
+    } else {
+      return function _clearValuesWithForeEach(m) {
+        m.forEach(function(v, k) {
+          m.set(k, null);
+        });
+      };
+    }
+  })();
+  var _arrayFromMap = (function() {
+    try {
+      if ((new Map$1()).values().next) {
+        return function createArrayFromMap(m, getValues) {
+          return getValues ? Array.from(m.values()) : Array.from(m.keys());
+        };
+      }
+    } catch (e) {}
+    return function createArrayFromMapWithForeach(m, getValues) {
+      var res = ListWrapper.createFixedSize(m.size),
+          i = 0;
+      m.forEach(function(v, k) {
+        res[i] = getValues ? v : k;
+        i++;
+      });
+      return res;
+    };
+  })();
+  var MapWrapper = (function() {
+    function MapWrapper() {}
+    MapWrapper.clone = function(m) {
+      return createMapFromMap(m);
+    };
+    MapWrapper.createFromStringMap = function(stringMap) {
+      var result = new Map$1();
+      for (var prop in stringMap) {
+        result.set(prop, stringMap[prop]);
+      }
+      return result;
+    };
+    MapWrapper.toStringMap = function(m) {
+      var r = {};
+      m.forEach(function(v, k) {
+        return r[k] = v;
+      });
+      return r;
+    };
+    MapWrapper.createFromPairs = function(pairs) {
+      return createMapFromPairs(pairs);
+    };
+    MapWrapper.clearValues = function(m) {
+      _clearValues(m);
+    };
+    MapWrapper.iterable = function(m) {
+      return m;
+    };
+    MapWrapper.keys = function(m) {
+      return _arrayFromMap(m, false);
+    };
+    MapWrapper.values = function(m) {
+      return _arrayFromMap(m, true);
+    };
+    return MapWrapper;
+  }());
+  var StringMapWrapper = (function() {
+    function StringMapWrapper() {}
+    StringMapWrapper.create = function() {
+      return {};
+    };
+    StringMapWrapper.contains = function(map, key) {
+      return map.hasOwnProperty(key);
+    };
+    StringMapWrapper.get = function(map, key) {
+      return map.hasOwnProperty(key) ? map[key] : undefined;
+    };
+    StringMapWrapper.set = function(map, key, value) {
+      map[key] = value;
+    };
+    StringMapWrapper.keys = function(map) {
+      return Object.keys(map);
+    };
+    StringMapWrapper.values = function(map) {
+      return Object.keys(map).map(function(k) {
+        return map[k];
+      });
+    };
+    StringMapWrapper.isEmpty = function(map) {
+      for (var prop in map) {
+        return false;
+      }
+      return true;
+    };
+    StringMapWrapper.delete = function(map, key) {
+      delete map[key];
+    };
+    StringMapWrapper.forEach = function(map, callback) {
+      for (var _i = 0,
+          _a = Object.keys(map); _i < _a.length; _i++) {
+        var k = _a[_i];
+        callback(map[k], k);
+      }
+    };
+    StringMapWrapper.merge = function(m1, m2) {
+      var m = {};
+      for (var _i = 0,
+          _a = Object.keys(m1); _i < _a.length; _i++) {
+        var k = _a[_i];
+        m[k] = m1[k];
+      }
+      for (var _b = 0,
+          _c = Object.keys(m2); _b < _c.length; _b++) {
+        var k = _c[_b];
+        m[k] = m2[k];
+      }
+      return m;
+    };
+    StringMapWrapper.equals = function(m1, m2) {
+      var k1 = Object.keys(m1);
+      var k2 = Object.keys(m2);
+      if (k1.length != k2.length) {
+        return false;
+      }
+      for (var i = 0; i < k1.length; i++) {
+        var key = k1[i];
+        if (m1[key] !== m2[key]) {
+          return false;
+        }
+      }
+      return true;
+    };
+    return StringMapWrapper;
+  }());
+  var ListWrapper = (function() {
+    function ListWrapper() {}
+    ListWrapper.createFixedSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.createGrowableSize = function(size) {
+      return new Array(size);
+    };
+    ListWrapper.clone = function(array) {
+      return array.slice(0);
+    };
+    ListWrapper.forEachWithIndex = function(array, fn) {
+      for (var i = 0; i < array.length; i++) {
+        fn(array[i], i);
+      }
+    };
+    ListWrapper.first = function(array) {
+      if (!array)
+        return null;
+      return array[0];
+    };
+    ListWrapper.last = function(array) {
+      if (!array || array.length == 0)
+        return null;
+      return array[array.length - 1];
+    };
+    ListWrapper.indexOf = function(array, value, startIndex) {
+      if (startIndex === void 0) {
+        startIndex = 0;
+      }
+      return array.indexOf(value, startIndex);
+    };
+    ListWrapper.contains = function(list, el) {
+      return list.indexOf(el) !== -1;
+    };
+    ListWrapper.reversed = function(array) {
+      var a = ListWrapper.clone(array);
+      return a.reverse();
+    };
+    ListWrapper.concat = function(a, b) {
+      return a.concat(b);
+    };
+    ListWrapper.insert = function(list, index, value) {
+      list.splice(index, 0, value);
+    };
+    ListWrapper.removeAt = function(list, index) {
+      var res = list[index];
+      list.splice(index, 1);
+      return res;
+    };
+    ListWrapper.removeAll = function(list, items) {
+      for (var i = 0; i < items.length; ++i) {
+        var index = list.indexOf(items[i]);
+        list.splice(index, 1);
+      }
+    };
+    ListWrapper.remove = function(list, el) {
+      var index = list.indexOf(el);
+      if (index > -1) {
+        list.splice(index, 1);
+        return true;
+      }
+      return false;
+    };
+    ListWrapper.clear = function(list) {
+      list.length = 0;
+    };
+    ListWrapper.isEmpty = function(list) {
+      return list.length == 0;
+    };
+    ListWrapper.fill = function(list, value, start, end) {
+      if (start === void 0) {
+        start = 0;
+      }
+      if (end === void 0) {
+        end = null;
+      }
+      list.fill(value, start, end === null ? list.length : end);
+    };
+    ListWrapper.equals = function(a, b) {
+      if (a.length != b.length)
+        return false;
+      for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i])
+          return false;
+      }
+      return true;
+    };
+    ListWrapper.slice = function(l, from, to) {
+      if (from === void 0) {
+        from = 0;
+      }
+      if (to === void 0) {
+        to = null;
+      }
+      return l.slice(from, to === null ? undefined : to);
+    };
+    ListWrapper.splice = function(l, from, length) {
+      return l.splice(from, length);
+    };
+    ListWrapper.sort = function(l, compareFn) {
+      if (isPresent(compareFn)) {
+        l.sort(compareFn);
+      } else {
+        l.sort();
+      }
+    };
+    ListWrapper.toString = function(l) {
+      return l.toString();
+    };
+    ListWrapper.toJSON = function(l) {
+      return JSON.stringify(l);
+    };
+    ListWrapper.maximum = function(list, predicate) {
+      if (list.length == 0) {
+        return null;
+      }
+      var solution = null;
+      var maxValue = -Infinity;
+      for (var index = 0; index < list.length; index++) {
+        var candidate = list[index];
+        if (isBlank(candidate)) {
+          continue;
+        }
+        var candidateValue = predicate(candidate);
+        if (candidateValue > maxValue) {
+          solution = candidate;
+          maxValue = candidateValue;
+        }
+      }
+      return solution;
+    };
+    ListWrapper.flatten = function(list) {
+      var target = [];
+      _flattenArray(list, target);
+      return target;
+    };
+    ListWrapper.addAll = function(list, source) {
+      for (var i = 0; i < source.length; i++) {
+        list.push(source[i]);
+      }
+    };
+    return ListWrapper;
+  }());
+  function _flattenArray(source, target) {
+    if (isPresent(source)) {
+      for (var i = 0; i < source.length; i++) {
+        var item = source[i];
+        if (isArray(item)) {
+          _flattenArray(item, target);
+        } else {
+          target.push(item);
+        }
+      }
+    }
+    return target;
+  }
+  function isListLikeIterable(obj) {
+    if (!isJsObject(obj))
+      return false;
+    return isArray(obj) || (!(obj instanceof Map$1) && getSymbolIterator() in obj);
+  }
+  function iterateListLike(obj, fn) {
+    if (isArray(obj)) {
+      for (var i = 0; i < obj.length; i++) {
+        fn(obj[i]);
+      }
+    } else {
+      var iterator = obj[getSymbolIterator()]();
+      var item;
+      while (!((item = iterator.next()).done)) {
+        fn(item.value);
+      }
+    }
+  }
+  var createSetFromList = (function() {
+    var test = new Set([1, 2, 3]);
+    if (test.size === 3) {
+      return function createSetFromList(lst) {
+        return new Set(lst);
+      };
+    } else {
+      return function createSetAndPopulateFromList(lst) {
+        var res = new Set(lst);
+        if (res.size !== lst.length) {
+          for (var i = 0; i < lst.length; i++) {
+            res.add(lst[i]);
+          }
+        }
+        return res;
+      };
+    }
+  })();
+  var Headers = (function() {
+    function Headers(headers) {
+      var _this = this;
+      if (headers instanceof Headers) {
+        this._headersMap = new Map$1(headers._headersMap);
+        return;
+      }
+      this._headersMap = new Map$1();
+      if (isBlank(headers)) {
+        return;
+      }
+      StringMapWrapper.forEach(headers, function(v, k) {
+        _this._headersMap.set(normalize(k), isListLikeIterable(v) ? v : [v]);
+      });
+    }
+    Headers.fromResponseHeaderString = function(headersString) {
+      var headers = new Headers();
+      headersString.split('\n').forEach(function(line) {
+        var index = line.indexOf(':');
+        if (index > 0) {
+          var key = line.substring(0, index);
+          var value = line.substring(index + 1).trim();
+          headers.set(key, value);
+        }
+      });
+      return headers;
+    };
+    Headers.prototype.append = function(name, value) {
+      name = normalize(name);
+      var mapName = this._headersMap.get(name);
+      var list = isListLikeIterable(mapName) ? mapName : [];
+      list.push(value);
+      this._headersMap.set(name, list);
+    };
+    Headers.prototype.delete = function(name) {
+      this._headersMap.delete(normalize(name));
+    };
+    Headers.prototype.forEach = function(fn) {
+      this._headersMap.forEach(fn);
+    };
+    Headers.prototype.get = function(header) {
+      return ListWrapper.first(this._headersMap.get(normalize(header)));
+    };
+    Headers.prototype.has = function(header) {
+      return this._headersMap.has(normalize(header));
+    };
+    Headers.prototype.keys = function() {
+      return MapWrapper.keys(this._headersMap);
+    };
+    Headers.prototype.set = function(header, value) {
+      var list = [];
+      if (isListLikeIterable(value)) {
+        var pushValue = value.join(',');
+        list.push(pushValue);
+      } else {
+        list.push(value);
+      }
+      this._headersMap.set(normalize(header), list);
+    };
+    Headers.prototype.values = function() {
+      return MapWrapper.values(this._headersMap);
+    };
+    Headers.prototype.toJSON = function() {
+      var serializableHeaders = {};
+      this._headersMap.forEach(function(values, name) {
+        var list = [];
+        iterateListLike(values, function(val) {
+          return list = ListWrapper.concat(list, val.split(','));
+        });
+        serializableHeaders[normalize(name)] = list;
+      });
+      return serializableHeaders;
+    };
+    Headers.prototype.getAll = function(header) {
+      var headers = this._headersMap.get(normalize(header));
+      return isListLikeIterable(headers) ? headers : [];
+    };
+    Headers.prototype.entries = function() {
+      throw new Error('"entries" method is not implemented on Headers class');
+    };
+    return Headers;
+  }());
+  function normalize(name) {
+    return name.toLowerCase();
+  }
+  var __extends$1 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var ResponseOptions = (function() {
+    function ResponseOptions(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          body = _b.body,
+          status = _b.status,
+          headers = _b.headers,
+          statusText = _b.statusText,
+          type = _b.type,
+          url = _b.url;
+      this.body = isPresent(body) ? body : null;
+      this.status = isPresent(status) ? status : null;
+      this.headers = isPresent(headers) ? headers : null;
+      this.statusText = isPresent(statusText) ? statusText : null;
+      this.type = isPresent(type) ? type : null;
+      this.url = isPresent(url) ? url : null;
+    }
+    ResponseOptions.prototype.merge = function(options) {
+      return new ResponseOptions({
+        body: isPresent(options) && isPresent(options.body) ? options.body : this.body,
+        status: isPresent(options) && isPresent(options.status) ? options.status : this.status,
+        headers: isPresent(options) && isPresent(options.headers) ? options.headers : this.headers,
+        statusText: isPresent(options) && isPresent(options.statusText) ? options.statusText : this.statusText,
+        type: isPresent(options) && isPresent(options.type) ? options.type : this.type,
+        url: isPresent(options) && isPresent(options.url) ? options.url : this.url
+      });
+    };
+    return ResponseOptions;
+  }());
+  var BaseResponseOptions = (function(_super) {
+    __extends$1(BaseResponseOptions, _super);
+    function BaseResponseOptions() {
+      _super.call(this, {
+        status: 200,
+        statusText: 'Ok',
+        type: exports.ResponseType.Default,
+        headers: new Headers()
+      });
+    }
+    BaseResponseOptions.decorators = [{type: _angular_core.Injectable}];
+    BaseResponseOptions.ctorParameters = [];
+    return BaseResponseOptions;
+  }(ResponseOptions));
+  var ConnectionBackend = (function() {
+    function ConnectionBackend() {}
+    return ConnectionBackend;
+  }());
+  var Connection = (function() {
+    function Connection() {}
+    return Connection;
+  }());
+  var XSRFStrategy = (function() {
+    function XSRFStrategy() {}
+    return XSRFStrategy;
+  }());
+  function normalizeMethodName(method) {
+    if (isString(method)) {
+      var originalMethod = method;
+      method = method.replace(/(\w)(\w*)/g, function(g0, g1, g2) {
+        return g1.toUpperCase() + g2.toLowerCase();
+      });
+      method = exports.RequestMethod[method];
+      if (typeof method !== 'number')
+        throw new Error("Invalid request method. The method \"" + originalMethod + "\" is not supported.");
+    }
+    return method;
+  }
+  var isSuccess = function(status) {
+    return (status >= 200 && status < 300);
+  };
+  function getResponseURL(xhr) {
+    if ('responseURL' in xhr) {
+      return xhr.responseURL;
+    }
+    if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+      return xhr.getResponseHeader('X-Request-URL');
+    }
+    return;
+  }
+  function stringToArrayBuffer(input) {
+    var view = new Uint16Array(input.length);
+    for (var i = 0,
+        strLen = input.length; i < strLen; i++) {
+      view[i] = input.charCodeAt(i);
+    }
+    return view.buffer;
+  }
+  function paramParser(rawParams) {
+    if (rawParams === void 0) {
+      rawParams = '';
+    }
+    var map = new Map$1();
+    if (rawParams.length > 0) {
+      var params = rawParams.split('&');
+      params.forEach(function(param) {
+        var eqIdx = param.indexOf('=');
+        var _a = eqIdx == -1 ? [param, ''] : [param.slice(0, eqIdx), param.slice(eqIdx + 1)],
+            key = _a[0],
+            val = _a[1];
+        var list = map.get(key) || [];
+        list.push(val);
+        map.set(key, list);
+      });
+    }
+    return map;
+  }
+  var QueryEncoder = (function() {
+    function QueryEncoder() {}
+    QueryEncoder.prototype.encodeKey = function(k) {
+      return standardEncoding(k);
+    };
+    QueryEncoder.prototype.encodeValue = function(v) {
+      return standardEncoding(v);
+    };
+    return QueryEncoder;
+  }());
+  function standardEncoding(v) {
+    return encodeURIComponent(v).replace(/%40/gi, '@').replace(/%3A/gi, ':').replace(/%24/gi, '$').replace(/%2C/gi, ',').replace(/%3B/gi, ';').replace(/%2B/gi, '+').replace(/%3D/gi, '=').replace(/%3F/gi, '?').replace(/%2F/gi, '/');
+  }
+  var URLSearchParams = (function() {
+    function URLSearchParams(rawParams, queryEncoder) {
+      if (rawParams === void 0) {
+        rawParams = '';
+      }
+      if (queryEncoder === void 0) {
+        queryEncoder = new QueryEncoder();
+      }
+      this.rawParams = rawParams;
+      this.queryEncoder = queryEncoder;
+      this.paramsMap = paramParser(rawParams);
+    }
+    URLSearchParams.prototype.clone = function() {
+      var clone = new URLSearchParams('', this.queryEncoder);
+      clone.appendAll(this);
+      return clone;
+    };
+    URLSearchParams.prototype.has = function(param) {
+      return this.paramsMap.has(param);
+    };
+    URLSearchParams.prototype.get = function(param) {
+      var storedParam = this.paramsMap.get(param);
+      if (isListLikeIterable(storedParam)) {
+        return ListWrapper.first(storedParam);
+      } else {
+        return null;
+      }
+    };
+    URLSearchParams.prototype.getAll = function(param) {
+      var mapParam = this.paramsMap.get(param);
+      return isPresent(mapParam) ? mapParam : [];
+    };
+    URLSearchParams.prototype.set = function(param, val) {
+      var mapParam = this.paramsMap.get(param);
+      var list = isPresent(mapParam) ? mapParam : [];
+      ListWrapper.clear(list);
+      list.push(val);
+      this.paramsMap.set(param, list);
+    };
+    URLSearchParams.prototype.setAll = function(searchParams) {
+      var _this = this;
+      searchParams.paramsMap.forEach(function(value, param) {
+        var mapParam = _this.paramsMap.get(param);
+        var list = isPresent(mapParam) ? mapParam : [];
+        ListWrapper.clear(list);
+        list.push(value[0]);
+        _this.paramsMap.set(param, list);
+      });
+    };
+    URLSearchParams.prototype.append = function(param, val) {
+      var mapParam = this.paramsMap.get(param);
+      var list = isPresent(mapParam) ? mapParam : [];
+      list.push(val);
+      this.paramsMap.set(param, list);
+    };
+    URLSearchParams.prototype.appendAll = function(searchParams) {
+      var _this = this;
+      searchParams.paramsMap.forEach(function(value, param) {
+        var mapParam = _this.paramsMap.get(param);
+        var list = isPresent(mapParam) ? mapParam : [];
+        for (var i = 0; i < value.length; ++i) {
+          list.push(value[i]);
+        }
+        _this.paramsMap.set(param, list);
+      });
+    };
+    URLSearchParams.prototype.replaceAll = function(searchParams) {
+      var _this = this;
+      searchParams.paramsMap.forEach(function(value, param) {
+        var mapParam = _this.paramsMap.get(param);
+        var list = isPresent(mapParam) ? mapParam : [];
+        ListWrapper.clear(list);
+        for (var i = 0; i < value.length; ++i) {
+          list.push(value[i]);
+        }
+        _this.paramsMap.set(param, list);
+      });
+    };
+    URLSearchParams.prototype.toString = function() {
+      var _this = this;
+      var paramsList = [];
+      this.paramsMap.forEach(function(values, k) {
+        values.forEach(function(v) {
+          return paramsList.push(_this.queryEncoder.encodeKey(k) + '=' + _this.queryEncoder.encodeValue(v));
+        });
+      });
+      return paramsList.join('&');
+    };
+    URLSearchParams.prototype.delete = function(param) {
+      this.paramsMap.delete(param);
+    };
+    return URLSearchParams;
+  }());
+  var Body = (function() {
+    function Body() {}
+    Body.prototype.json = function() {
+      if (isString(this._body)) {
+        return Json.parse(this._body);
+      }
+      if (this._body instanceof ArrayBuffer) {
+        return Json.parse(this.text());
+      }
+      return this._body;
+    };
+    Body.prototype.text = function() {
+      if (this._body instanceof URLSearchParams) {
+        return this._body.toString();
+      }
+      if (this._body instanceof ArrayBuffer) {
+        return String.fromCharCode.apply(null, new Uint16Array(this._body));
+      }
+      if (this._body === null) {
+        return '';
+      }
+      if (isJsObject(this._body)) {
+        return Json.stringify(this._body);
+      }
+      return this._body.toString();
+    };
+    Body.prototype.arrayBuffer = function() {
+      if (this._body instanceof ArrayBuffer) {
+        return this._body;
+      }
+      return stringToArrayBuffer(this.text());
+    };
+    Body.prototype.blob = function() {
+      if (this._body instanceof Blob) {
+        return this._body;
+      }
+      if (this._body instanceof ArrayBuffer) {
+        return new Blob([this._body]);
+      }
+      throw new Error('The request body isn\'t either a blob or an array buffer');
+    };
+    return Body;
+  }());
+  var __extends$2 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var Response = (function(_super) {
+    __extends$2(Response, _super);
+    function Response(responseOptions) {
+      _super.call(this);
+      this._body = responseOptions.body;
+      this.status = responseOptions.status;
+      this.ok = (this.status >= 200 && this.status <= 299);
+      this.statusText = responseOptions.statusText;
+      this.headers = responseOptions.headers;
+      this.type = responseOptions.type;
+      this.url = responseOptions.url;
+    }
+    Response.prototype.toString = function() {
+      return "Response with status: " + this.status + " " + this.statusText + " for URL: " + this.url;
+    };
+    return Response;
+  }(Body));
+  var _nextRequestId = 0;
+  var JSONP_HOME = '__ng_jsonp__';
+  var _jsonpConnections = null;
+  function _getJsonpConnections() {
+    if (_jsonpConnections === null) {
+      _jsonpConnections = global$1[JSONP_HOME] = {};
+    }
+    return _jsonpConnections;
+  }
+  var BrowserJsonp = (function() {
+    function BrowserJsonp() {}
+    BrowserJsonp.prototype.build = function(url) {
+      var node = document.createElement('script');
+      node.src = url;
+      return node;
+    };
+    BrowserJsonp.prototype.nextRequestID = function() {
+      return "__req" + _nextRequestId++;
+    };
+    BrowserJsonp.prototype.requestCallback = function(id) {
+      return JSONP_HOME + "." + id + ".finished";
+    };
+    BrowserJsonp.prototype.exposeConnection = function(id, connection) {
+      var connections = _getJsonpConnections();
+      connections[id] = connection;
+    };
+    BrowserJsonp.prototype.removeConnection = function(id) {
+      var connections = _getJsonpConnections();
+      connections[id] = null;
+    };
+    BrowserJsonp.prototype.send = function(node) {
+      document.body.appendChild((node));
+    };
+    BrowserJsonp.prototype.cleanup = function(node) {
+      if (node.parentNode) {
+        node.parentNode.removeChild((node));
+      }
+    };
+    BrowserJsonp.decorators = [{type: _angular_core.Injectable}];
+    BrowserJsonp.ctorParameters = [];
+    return BrowserJsonp;
+  }());
+  var __extends = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var JSONP_ERR_NO_CALLBACK = 'JSONP injected script did not invoke callback.';
+  var JSONP_ERR_WRONG_METHOD = 'JSONP requests must use GET request method.';
+  var JSONPConnection = (function() {
+    function JSONPConnection() {}
+    return JSONPConnection;
+  }());
+  var JSONPConnection_ = (function(_super) {
+    __extends(JSONPConnection_, _super);
+    function JSONPConnection_(req, _dom, baseResponseOptions) {
+      var _this = this;
+      _super.call(this);
+      this._dom = _dom;
+      this.baseResponseOptions = baseResponseOptions;
+      this._finished = false;
+      if (req.method !== exports.RequestMethod.Get) {
+        throw new TypeError(JSONP_ERR_WRONG_METHOD);
+      }
+      this.request = req;
+      this.response = new rxjs_Observable.Observable(function(responseObserver) {
+        _this.readyState = exports.ReadyState.Loading;
+        var id = _this._id = _dom.nextRequestID();
+        _dom.exposeConnection(id, _this);
+        var callback = _dom.requestCallback(_this._id);
+        var url = req.url;
+        if (url.indexOf('=JSONP_CALLBACK&') > -1) {
+          url = StringWrapper.replace(url, '=JSONP_CALLBACK&', "=" + callback + "&");
+        } else if (url.lastIndexOf('=JSONP_CALLBACK') === url.length - '=JSONP_CALLBACK'.length) {
+          url = url.substring(0, url.length - '=JSONP_CALLBACK'.length) + ("=" + callback);
+        }
+        var script = _this._script = _dom.build(url);
+        var onLoad = function(event) {
+          if (_this.readyState === exports.ReadyState.Cancelled)
+            return;
+          _this.readyState = exports.ReadyState.Done;
+          _dom.cleanup(script);
+          if (!_this._finished) {
+            var responseOptions_1 = new ResponseOptions({
+              body: JSONP_ERR_NO_CALLBACK,
+              type: exports.ResponseType.Error,
+              url: url
+            });
+            if (isPresent(baseResponseOptions)) {
+              responseOptions_1 = baseResponseOptions.merge(responseOptions_1);
+            }
+            responseObserver.error(new Response(responseOptions_1));
+            return;
+          }
+          var responseOptions = new ResponseOptions({
+            body: _this._responseData,
+            url: url
+          });
+          if (isPresent(_this.baseResponseOptions)) {
+            responseOptions = _this.baseResponseOptions.merge(responseOptions);
+          }
+          responseObserver.next(new Response(responseOptions));
+          responseObserver.complete();
+        };
+        var onError = function(error) {
+          if (_this.readyState === exports.ReadyState.Cancelled)
+            return;
+          _this.readyState = exports.ReadyState.Done;
+          _dom.cleanup(script);
+          var responseOptions = new ResponseOptions({
+            body: error.message,
+            type: exports.ResponseType.Error
+          });
+          if (isPresent(baseResponseOptions)) {
+            responseOptions = baseResponseOptions.merge(responseOptions);
+          }
+          responseObserver.error(new Response(responseOptions));
+        };
+        script.addEventListener('load', onLoad);
+        script.addEventListener('error', onError);
+        _dom.send(script);
+        return function() {
+          _this.readyState = exports.ReadyState.Cancelled;
+          script.removeEventListener('load', onLoad);
+          script.removeEventListener('error', onError);
+          if (isPresent(script)) {
+            _this._dom.cleanup(script);
+          }
+        };
+      });
+    }
+    JSONPConnection_.prototype.finished = function(data) {
+      this._finished = true;
+      this._dom.removeConnection(this._id);
+      if (this.readyState === exports.ReadyState.Cancelled)
+        return;
+      this._responseData = data;
+    };
+    return JSONPConnection_;
+  }(JSONPConnection));
+  var JSONPBackend = (function(_super) {
+    __extends(JSONPBackend, _super);
+    function JSONPBackend() {
+      _super.apply(this, arguments);
+    }
+    return JSONPBackend;
+  }(ConnectionBackend));
+  var JSONPBackend_ = (function(_super) {
+    __extends(JSONPBackend_, _super);
+    function JSONPBackend_(_browserJSONP, _baseResponseOptions) {
+      _super.call(this);
+      this._browserJSONP = _browserJSONP;
+      this._baseResponseOptions = _baseResponseOptions;
+    }
+    JSONPBackend_.prototype.createConnection = function(request) {
+      return new JSONPConnection_(request, this._browserJSONP, this._baseResponseOptions);
+    };
+    JSONPBackend_.decorators = [{type: _angular_core.Injectable}];
+    JSONPBackend_.ctorParameters = [{type: BrowserJsonp}, {type: ResponseOptions}];
+    return JSONPBackend_;
+  }(JSONPBackend));
+  var XSSI_PREFIX = /^\)\]\}',?\n/;
+  var XHRConnection = (function() {
+    function XHRConnection(req, browserXHR, baseResponseOptions) {
+      var _this = this;
+      this.request = req;
+      this.response = new rxjs_Observable.Observable(function(responseObserver) {
+        var _xhr = browserXHR.build();
+        _xhr.open(exports.RequestMethod[req.method].toUpperCase(), req.url);
+        if (isPresent(req.withCredentials)) {
+          _xhr.withCredentials = req.withCredentials;
+        }
+        var onLoad = function() {
+          var body = isPresent(_xhr.response) ? _xhr.response : _xhr.responseText;
+          if (isString(body))
+            body = body.replace(XSSI_PREFIX, '');
+          var headers = Headers.fromResponseHeaderString(_xhr.getAllResponseHeaders());
+          var url = getResponseURL(_xhr);
+          var status = _xhr.status === 1223 ? 204 : _xhr.status;
+          if (status === 0) {
+            status = body ? 200 : 0;
+          }
+          var statusText = _xhr.statusText || 'OK';
+          var responseOptions = new ResponseOptions({
+            body: body,
+            status: status,
+            headers: headers,
+            statusText: statusText,
+            url: url
+          });
+          if (isPresent(baseResponseOptions)) {
+            responseOptions = baseResponseOptions.merge(responseOptions);
+          }
+          var response = new Response(responseOptions);
+          response.ok = isSuccess(status);
+          if (response.ok) {
+            responseObserver.next(response);
+            responseObserver.complete();
+            return;
+          }
+          responseObserver.error(response);
+        };
+        var onError = function(err) {
+          var responseOptions = new ResponseOptions({
+            body: err,
+            type: exports.ResponseType.Error,
+            status: _xhr.status,
+            statusText: _xhr.statusText
+          });
+          if (isPresent(baseResponseOptions)) {
+            responseOptions = baseResponseOptions.merge(responseOptions);
+          }
+          responseObserver.error(new Response(responseOptions));
+        };
+        _this.setDetectedContentType(req, _xhr);
+        if (isPresent(req.headers)) {
+          req.headers.forEach(function(values, name) {
+            return _xhr.setRequestHeader(name, values.join(','));
+          });
+        }
+        if (isPresent(req.responseType) && isPresent(_xhr.responseType)) {
+          switch (req.responseType) {
+            case exports.ResponseContentType.ArrayBuffer:
+              _xhr.responseType = 'arraybuffer';
+              break;
+            case exports.ResponseContentType.Json:
+              _xhr.responseType = 'json';
+              break;
+            case exports.ResponseContentType.Text:
+              _xhr.responseType = 'text';
+              break;
+            case exports.ResponseContentType.Blob:
+              _xhr.responseType = 'blob';
+              break;
+            default:
+              throw new Error('The selected responseType is not supported');
+          }
+        }
+        _xhr.addEventListener('load', onLoad);
+        _xhr.addEventListener('error', onError);
+        _xhr.send(_this.request.getBody());
+        return function() {
+          _xhr.removeEventListener('load', onLoad);
+          _xhr.removeEventListener('error', onError);
+          _xhr.abort();
+        };
+      });
+    }
+    XHRConnection.prototype.setDetectedContentType = function(req, _xhr) {
+      if (isPresent(req.headers) && isPresent(req.headers.get('Content-Type'))) {
+        return;
+      }
+      switch (req.contentType) {
+        case ContentType.NONE:
+          break;
+        case ContentType.JSON:
+          _xhr.setRequestHeader('content-type', 'application/json');
+          break;
+        case ContentType.FORM:
+          _xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+          break;
+        case ContentType.TEXT:
+          _xhr.setRequestHeader('content-type', 'text/plain');
+          break;
+        case ContentType.BLOB:
+          var blob = req.blob();
+          if (blob.type) {
+            _xhr.setRequestHeader('content-type', blob.type);
+          }
+          break;
+      }
+    };
+    return XHRConnection;
+  }());
+  var CookieXSRFStrategy = (function() {
+    function CookieXSRFStrategy(_cookieName, _headerName) {
+      if (_cookieName === void 0) {
+        _cookieName = 'XSRF-TOKEN';
+      }
+      if (_headerName === void 0) {
+        _headerName = 'X-XSRF-TOKEN';
+      }
+      this._cookieName = _cookieName;
+      this._headerName = _headerName;
+    }
+    CookieXSRFStrategy.prototype.configureRequest = function(req) {
+      var xsrfToken = _angular_platformBrowser.__platform_browser_private__.getDOM().getCookie(this._cookieName);
+      if (xsrfToken && !req.headers.has(this._headerName)) {
+        req.headers.set(this._headerName, xsrfToken);
+      }
+    };
+    return CookieXSRFStrategy;
+  }());
+  var XHRBackend = (function() {
+    function XHRBackend(_browserXHR, _baseResponseOptions, _xsrfStrategy) {
+      this._browserXHR = _browserXHR;
+      this._baseResponseOptions = _baseResponseOptions;
+      this._xsrfStrategy = _xsrfStrategy;
+    }
+    XHRBackend.prototype.createConnection = function(request) {
+      this._xsrfStrategy.configureRequest(request);
+      return new XHRConnection(request, this._browserXHR, this._baseResponseOptions);
+    };
+    XHRBackend.decorators = [{type: _angular_core.Injectable}];
+    XHRBackend.ctorParameters = [{type: BrowserXhr}, {type: ResponseOptions}, {type: XSRFStrategy}];
+    return XHRBackend;
+  }());
+  var __extends$3 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var RequestOptions = (function() {
+    function RequestOptions(_a) {
+      var _b = _a === void 0 ? {} : _a,
+          method = _b.method,
+          headers = _b.headers,
+          body = _b.body,
+          url = _b.url,
+          search = _b.search,
+          withCredentials = _b.withCredentials,
+          responseType = _b.responseType;
+      this.method = isPresent(method) ? normalizeMethodName(method) : null;
+      this.headers = isPresent(headers) ? headers : null;
+      this.body = isPresent(body) ? body : null;
+      this.url = isPresent(url) ? url : null;
+      this.search = isPresent(search) ? (isString(search) ? new URLSearchParams((search)) : (search)) : null;
+      this.withCredentials = isPresent(withCredentials) ? withCredentials : null;
+      this.responseType = isPresent(responseType) ? responseType : null;
+    }
+    RequestOptions.prototype.merge = function(options) {
+      return new RequestOptions({
+        method: isPresent(options) && isPresent(options.method) ? options.method : this.method,
+        headers: isPresent(options) && isPresent(options.headers) ? options.headers : this.headers,
+        body: isPresent(options) && isPresent(options.body) ? options.body : this.body,
+        url: isPresent(options) && isPresent(options.url) ? options.url : this.url,
+        search: isPresent(options) && isPresent(options.search) ? (isString(options.search) ? new URLSearchParams((options.search)) : (options.search).clone()) : this.search,
+        withCredentials: isPresent(options) && isPresent(options.withCredentials) ? options.withCredentials : this.withCredentials,
+        responseType: isPresent(options) && isPresent(options.responseType) ? options.responseType : this.responseType
+      });
+    };
+    return RequestOptions;
+  }());
+  var BaseRequestOptions = (function(_super) {
+    __extends$3(BaseRequestOptions, _super);
+    function BaseRequestOptions() {
+      _super.call(this, {
+        method: exports.RequestMethod.Get,
+        headers: new Headers()
+      });
+    }
+    BaseRequestOptions.decorators = [{type: _angular_core.Injectable}];
+    BaseRequestOptions.ctorParameters = [];
+    return BaseRequestOptions;
+  }(RequestOptions));
+  var __extends$5 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  var Request = (function(_super) {
+    __extends$5(Request, _super);
+    function Request(requestOptions) {
+      _super.call(this);
+      var url = requestOptions.url;
+      this.url = requestOptions.url;
+      if (isPresent(requestOptions.search)) {
+        var search = requestOptions.search.toString();
+        if (search.length > 0) {
+          var prefix = '?';
+          if (StringWrapper.contains(this.url, '?')) {
+            prefix = (this.url[this.url.length - 1] == '&') ? '' : '&';
+          }
+          this.url = url + prefix + search;
+        }
+      }
+      this._body = requestOptions.body;
+      this.method = normalizeMethodName(requestOptions.method);
+      this.headers = new Headers(requestOptions.headers);
+      this.contentType = this.detectContentType();
+      this.withCredentials = requestOptions.withCredentials;
+      this.responseType = requestOptions.responseType;
+    }
+    Request.prototype.detectContentType = function() {
+      switch (this.headers.get('content-type')) {
+        case 'application/json':
+          return ContentType.JSON;
+        case 'application/x-www-form-urlencoded':
+          return ContentType.FORM;
+        case 'multipart/form-data':
+          return ContentType.FORM_DATA;
+        case 'text/plain':
+        case 'text/html':
+          return ContentType.TEXT;
+        case 'application/octet-stream':
+          return ContentType.BLOB;
+        default:
+          return this.detectContentTypeFromBody();
+      }
+    };
+    Request.prototype.detectContentTypeFromBody = function() {
+      if (this._body == null) {
+        return ContentType.NONE;
+      } else if (this._body instanceof URLSearchParams) {
+        return ContentType.FORM;
+      } else if (this._body instanceof FormData) {
+        return ContentType.FORM_DATA;
+      } else if (this._body instanceof Blob$1) {
+        return ContentType.BLOB;
+      } else if (this._body instanceof ArrayBuffer$1) {
+        return ContentType.ARRAY_BUFFER;
+      } else if (this._body && typeof this._body == 'object') {
+        return ContentType.JSON;
+      } else {
+        return ContentType.TEXT;
+      }
+    };
+    Request.prototype.getBody = function() {
+      switch (this.contentType) {
+        case ContentType.JSON:
+          return this.text();
+        case ContentType.FORM:
+          return this.text();
+        case ContentType.FORM_DATA:
+          return this._body;
+        case ContentType.TEXT:
+          return this.text();
+        case ContentType.BLOB:
+          return this.blob();
+        case ContentType.ARRAY_BUFFER:
+          return this.arrayBuffer();
+        default:
+          return null;
+      }
+    };
+    return Request;
+  }(Body));
+  var noop$1 = function() {};
+  var w = typeof window == 'object' ? window : noop$1;
+  var FormData = w['FormData'] || noop$1;
+  var Blob$1 = w['Blob'] || noop$1;
+  var ArrayBuffer$1 = w['ArrayBuffer'] || noop$1;
+  var __extends$4 = (this && this.__extends) || function(d, b) {
+    for (var p in b)
+      if (b.hasOwnProperty(p))
+        d[p] = b[p];
+    function __() {
+      this.constructor = d;
+    }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+  function httpRequest(backend, request) {
+    return backend.createConnection(request).response;
+  }
+  function mergeOptions(defaultOpts, providedOpts, method, url) {
+    var newOptions = defaultOpts;
+    if (isPresent(providedOpts)) {
+      return newOptions.merge(new RequestOptions({
+        method: providedOpts.method || method,
+        url: providedOpts.url || url,
+        search: providedOpts.search,
+        headers: providedOpts.headers,
+        body: providedOpts.body,
+        withCredentials: providedOpts.withCredentials,
+        responseType: providedOpts.responseType
+      }));
+    }
+    if (isPresent(method)) {
+      return newOptions.merge(new RequestOptions({
+        method: method,
+        url: url
+      }));
+    } else {
+      return newOptions.merge(new RequestOptions({url: url}));
+    }
+  }
+  var Http = (function() {
+    function Http(_backend, _defaultOptions) {
+      this._backend = _backend;
+      this._defaultOptions = _defaultOptions;
+    }
+    Http.prototype.request = function(url, options) {
+      var responseObservable;
+      if (isString(url)) {
+        responseObservable = httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url)));
+      } else if (url instanceof Request) {
+        responseObservable = httpRequest(this._backend, url);
+      } else {
+        throw new Error('First argument must be a url string or Request instance.');
+      }
+      return responseObservable;
+    };
+    Http.prototype.get = function(url, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url)));
+    };
+    Http.prototype.post = function(url, body, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Post, url)));
+    };
+    Http.prototype.put = function(url, body, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Put, url)));
+    };
+    Http.prototype.delete = function(url, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Delete, url)));
+    };
+    Http.prototype.patch = function(url, body, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions.merge(new RequestOptions({body: body})), options, exports.RequestMethod.Patch, url)));
+    };
+    Http.prototype.head = function(url, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Head, url)));
+    };
+    Http.prototype.options = function(url, options) {
+      return httpRequest(this._backend, new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Options, url)));
+    };
+    Http.decorators = [{type: _angular_core.Injectable}];
+    Http.ctorParameters = [{type: ConnectionBackend}, {type: RequestOptions}];
+    return Http;
+  }());
+  var Jsonp = (function(_super) {
+    __extends$4(Jsonp, _super);
+    function Jsonp(backend, defaultOptions) {
+      _super.call(this, backend, defaultOptions);
+    }
+    Jsonp.prototype.request = function(url, options) {
+      var responseObservable;
+      if (isString(url)) {
+        url = new Request(mergeOptions(this._defaultOptions, options, exports.RequestMethod.Get, url));
+      }
+      if (url instanceof Request) {
+        if (url.method !== exports.RequestMethod.Get) {
+          throw new Error('JSONP requests must use GET request method.');
+        }
+        responseObservable = httpRequest(this._backend, url);
+      } else {
+        throw new Error('First argument must be a url string or Request instance.');
+      }
+      return responseObservable;
+    };
+    Jsonp.decorators = [{type: _angular_core.Injectable}];
+    Jsonp.ctorParameters = [{type: ConnectionBackend}, {type: RequestOptions}];
+    return Jsonp;
+  }(Http));
+  function _createDefaultCookieXSRFStrategy() {
+    return new CookieXSRFStrategy();
+  }
+  function httpFactory(xhrBackend, requestOptions) {
+    return new Http(xhrBackend, requestOptions);
+  }
+  function jsonpFactory(jsonpBackend, requestOptions) {
+    return new Jsonp(jsonpBackend, requestOptions);
+  }
+  var HttpModule = (function() {
+    function HttpModule() {}
+    HttpModule.decorators = [{
+      type: _angular_core.NgModule,
+      args: [{providers: [{
+          provide: Http,
+          useFactory: httpFactory,
+          deps: [XHRBackend, RequestOptions]
+        }, BrowserXhr, {
+          provide: RequestOptions,
+          useClass: BaseRequestOptions
+        }, {
+          provide: ResponseOptions,
+          useClass: BaseResponseOptions
+        }, XHRBackend, {
+          provide: XSRFStrategy,
+          useFactory: _createDefaultCookieXSRFStrategy
+        }]}]
+    }];
+    HttpModule.ctorParameters = [];
+    return HttpModule;
+  }());
+  var JsonpModule = (function() {
+    function JsonpModule() {}
+    JsonpModule.decorators = [{
+      type: _angular_core.NgModule,
+      args: [{providers: [{
+          provide: Jsonp,
+          useFactory: jsonpFactory,
+          deps: [JSONPBackend, RequestOptions]
+        }, BrowserJsonp, {
+          provide: RequestOptions,
+          useClass: BaseRequestOptions
+        }, {
+          provide: ResponseOptions,
+          useClass: BaseResponseOptions
+        }, {
+          provide: JSONPBackend,
+          useClass: JSONPBackend_
+        }]}]
+    }];
+    JsonpModule.ctorParameters = [];
+    return JsonpModule;
+  }());
+  exports.BrowserXhr = BrowserXhr;
+  exports.JSONPBackend = JSONPBackend;
+  exports.JSONPConnection = JSONPConnection;
+  exports.CookieXSRFStrategy = CookieXSRFStrategy;
+  exports.XHRBackend = XHRBackend;
+  exports.XHRConnection = XHRConnection;
+  exports.BaseRequestOptions = BaseRequestOptions;
+  exports.RequestOptions = RequestOptions;
+  exports.BaseResponseOptions = BaseResponseOptions;
+  exports.ResponseOptions = ResponseOptions;
+  exports.Headers = Headers;
+  exports.Http = Http;
+  exports.Jsonp = Jsonp;
+  exports.HttpModule = HttpModule;
+  exports.JsonpModule = JsonpModule;
+  exports.Connection = Connection;
+  exports.ConnectionBackend = ConnectionBackend;
+  exports.XSRFStrategy = XSRFStrategy;
+  exports.Request = Request;
+  exports.Response = Response;
+  exports.QueryEncoder = QueryEncoder;
+  exports.URLSearchParams = URLSearchParams;
+}));
+
+})();
+$__System.registerDynamic('52', ['2b', '32'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -37912,929 +42836,201 @@ $__System.registerDynamic('4a', ['25', '2c', '4b'], true, function ($__require, 
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var root_1 = $__require('25');
-    var Observable_1 = $__require('2c');
-    var iterator_1 = $__require('4b');
+    var root_1 = $__require('2b');
+    var Observable_1 = $__require('32');
     /**
      * We need this JSDoc comment for affecting ESDoc.
      * @extends {Ignored}
      * @hide true
      */
-    var IteratorObservable = function (_super) {
-        __extends(IteratorObservable, _super);
-        function IteratorObservable(iterator, scheduler) {
+    var PromiseObservable = function (_super) {
+        __extends(PromiseObservable, _super);
+        function PromiseObservable(promise, scheduler) {
             _super.call(this);
-            this.scheduler = scheduler;
-            if (iterator == null) {
-                throw new Error('iterator cannot be null.');
-            }
-            this.iterator = getIterator(iterator);
-        }
-        IteratorObservable.create = function (iterator, scheduler) {
-            return new IteratorObservable(iterator, scheduler);
-        };
-        IteratorObservable.dispatch = function (state) {
-            var index = state.index,
-                hasError = state.hasError,
-                iterator = state.iterator,
-                subscriber = state.subscriber;
-            if (hasError) {
-                subscriber.error(state.error);
-                return;
-            }
-            var result = iterator.next();
-            if (result.done) {
-                subscriber.complete();
-                return;
-            }
-            subscriber.next(result.value);
-            state.index = index + 1;
-            if (subscriber.closed) {
-                return;
-            }
-            this.schedule(state);
-        };
-        IteratorObservable.prototype._subscribe = function (subscriber) {
-            var index = 0;
-            var _a = this,
-                iterator = _a.iterator,
-                scheduler = _a.scheduler;
-            if (scheduler) {
-                return scheduler.schedule(IteratorObservable.dispatch, 0, {
-                    index: index, iterator: iterator, subscriber: subscriber
-                });
-            } else {
-                do {
-                    var result = iterator.next();
-                    if (result.done) {
-                        subscriber.complete();
-                        break;
-                    } else {
-                        subscriber.next(result.value);
-                    }
-                    if (subscriber.closed) {
-                        break;
-                    }
-                } while (true);
-            }
-        };
-        return IteratorObservable;
-    }(Observable_1.Observable);
-    exports.IteratorObservable = IteratorObservable;
-    var StringIterator = function () {
-        function StringIterator(str, idx, len) {
-            if (idx === void 0) {
-                idx = 0;
-            }
-            if (len === void 0) {
-                len = str.length;
-            }
-            this.str = str;
-            this.idx = idx;
-            this.len = len;
-        }
-        StringIterator.prototype[iterator_1.$$iterator] = function () {
-            return this;
-        };
-        StringIterator.prototype.next = function () {
-            return this.idx < this.len ? {
-                done: false,
-                value: this.str.charAt(this.idx++)
-            } : {
-                done: true,
-                value: undefined
-            };
-        };
-        return StringIterator;
-    }();
-    var ArrayIterator = function () {
-        function ArrayIterator(arr, idx, len) {
-            if (idx === void 0) {
-                idx = 0;
-            }
-            if (len === void 0) {
-                len = toLength(arr);
-            }
-            this.arr = arr;
-            this.idx = idx;
-            this.len = len;
-        }
-        ArrayIterator.prototype[iterator_1.$$iterator] = function () {
-            return this;
-        };
-        ArrayIterator.prototype.next = function () {
-            return this.idx < this.len ? {
-                done: false,
-                value: this.arr[this.idx++]
-            } : {
-                done: true,
-                value: undefined
-            };
-        };
-        return ArrayIterator;
-    }();
-    function getIterator(obj) {
-        var i = obj[iterator_1.$$iterator];
-        if (!i && typeof obj === 'string') {
-            return new StringIterator(obj);
-        }
-        if (!i && obj.length !== undefined) {
-            return new ArrayIterator(obj);
-        }
-        if (!i) {
-            throw new TypeError('object is not iterable');
-        }
-        return obj[iterator_1.$$iterator]();
-    }
-    var maxSafeInteger = Math.pow(2, 53) - 1;
-    function toLength(o) {
-        var len = +o.length;
-        if (isNaN(len)) {
-            return 0;
-        }
-        if (len === 0 || !numberIsFinite(len)) {
-            return len;
-        }
-        len = sign(len) * Math.floor(Math.abs(len));
-        if (len <= 0) {
-            return 0;
-        }
-        if (len > maxSafeInteger) {
-            return maxSafeInteger;
-        }
-        return len;
-    }
-    function numberIsFinite(value) {
-        return typeof value === 'number' && root_1.root.isFinite(value);
-    }
-    function sign(value) {
-        var valueAsNumber = +value;
-        if (valueAsNumber === 0) {
-            return valueAsNumber;
-        }
-        if (isNaN(valueAsNumber)) {
-            return valueAsNumber;
-        }
-        return valueAsNumber < 0 ? -1 : 1;
-    }
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('4c', ['2c', '4d', '4e'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Observable_1 = $__require('2c');
-    var ScalarObservable_1 = $__require('4d');
-    var EmptyObservable_1 = $__require('4e');
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var ArrayLikeObservable = function (_super) {
-        __extends(ArrayLikeObservable, _super);
-        function ArrayLikeObservable(arrayLike, scheduler) {
-            _super.call(this);
-            this.arrayLike = arrayLike;
-            this.scheduler = scheduler;
-            if (!scheduler && arrayLike.length === 1) {
-                this._isScalar = true;
-                this.value = arrayLike[0];
-            }
-        }
-        ArrayLikeObservable.create = function (arrayLike, scheduler) {
-            var length = arrayLike.length;
-            if (length === 0) {
-                return new EmptyObservable_1.EmptyObservable();
-            } else if (length === 1) {
-                return new ScalarObservable_1.ScalarObservable(arrayLike[0], scheduler);
-            } else {
-                return new ArrayLikeObservable(arrayLike, scheduler);
-            }
-        };
-        ArrayLikeObservable.dispatch = function (state) {
-            var arrayLike = state.arrayLike,
-                index = state.index,
-                length = state.length,
-                subscriber = state.subscriber;
-            if (subscriber.closed) {
-                return;
-            }
-            if (index >= length) {
-                subscriber.complete();
-                return;
-            }
-            subscriber.next(arrayLike[index]);
-            state.index = index + 1;
-            this.schedule(state);
-        };
-        ArrayLikeObservable.prototype._subscribe = function (subscriber) {
-            var index = 0;
-            var _a = this,
-                arrayLike = _a.arrayLike,
-                scheduler = _a.scheduler;
-            var length = arrayLike.length;
-            if (scheduler) {
-                return scheduler.schedule(ArrayLikeObservable.dispatch, 0, {
-                    arrayLike: arrayLike, index: index, length: length, subscriber: subscriber
-                });
-            } else {
-                for (var i = 0; i < length && !subscriber.closed; i++) {
-                    subscriber.next(arrayLike[i]);
-                }
-                subscriber.complete();
-            }
-        };
-        return ArrayLikeObservable;
-    }(Observable_1.Observable);
-    exports.ArrayLikeObservable = ArrayLikeObservable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('4f', ['2c'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var Observable_1 = $__require('2c');
-    /**
-     * Represents a push-based event or value that an {@link Observable} can emit.
-     * This class is particularly useful for operators that manage notifications,
-     * like {@link materialize}, {@link dematerialize}, {@link observeOn}, and
-     * others. Besides wrapping the actual delivered value, it also annotates it
-     * with metadata of, for instance, what type of push message it is (`next`,
-     * `error`, or `complete`).
-     *
-     * @see {@link materialize}
-     * @see {@link dematerialize}
-     * @see {@link observeOn}
-     *
-     * @class Notification<T>
-     */
-    var Notification = function () {
-        function Notification(kind, value, exception) {
-            this.kind = kind;
-            this.value = value;
-            this.exception = exception;
-            this.hasValue = kind === 'N';
-        }
-        /**
-         * Delivers to the given `observer` the value wrapped by this Notification.
-         * @param {Observer} observer
-         * @return
-         */
-        Notification.prototype.observe = function (observer) {
-            switch (this.kind) {
-                case 'N':
-                    return observer.next && observer.next(this.value);
-                case 'E':
-                    return observer.error && observer.error(this.exception);
-                case 'C':
-                    return observer.complete && observer.complete();
-            }
-        };
-        /**
-         * Given some {@link Observer} callbacks, deliver the value represented by the
-         * current Notification to the correctly corresponding callback.
-         * @param {function(value: T): void} next An Observer `next` callback.
-         * @param {function(err: any): void} [error] An Observer `error` callback.
-         * @param {function(): void} [complete] An Observer `complete` callback.
-         * @return {any}
-         */
-        Notification.prototype.do = function (next, error, complete) {
-            var kind = this.kind;
-            switch (kind) {
-                case 'N':
-                    return next && next(this.value);
-                case 'E':
-                    return error && error(this.exception);
-                case 'C':
-                    return complete && complete();
-            }
-        };
-        /**
-         * Takes an Observer or its individual callback functions, and calls `observe`
-         * or `do` methods accordingly.
-         * @param {Observer|function(value: T): void} nextOrObserver An Observer or
-         * the `next` callback.
-         * @param {function(err: any): void} [error] An Observer `error` callback.
-         * @param {function(): void} [complete] An Observer `complete` callback.
-         * @return {any}
-         */
-        Notification.prototype.accept = function (nextOrObserver, error, complete) {
-            if (nextOrObserver && typeof nextOrObserver.next === 'function') {
-                return this.observe(nextOrObserver);
-            } else {
-                return this.do(nextOrObserver, error, complete);
-            }
-        };
-        /**
-         * Returns a simple Observable that just delivers the notification represented
-         * by this Notification instance.
-         * @return {any}
-         */
-        Notification.prototype.toObservable = function () {
-            var kind = this.kind;
-            switch (kind) {
-                case 'N':
-                    return Observable_1.Observable.of(this.value);
-                case 'E':
-                    return Observable_1.Observable.throw(this.exception);
-                case 'C':
-                    return Observable_1.Observable.empty();
-            }
-            throw new Error('unexpected notification kind value');
-        };
-        /**
-         * A shortcut to create a Notification instance of the type `next` from a
-         * given value.
-         * @param {T} value The `next` value.
-         * @return {Notification<T>} The "next" Notification representing the
-         * argument.
-         */
-        Notification.createNext = function (value) {
-            if (typeof value !== 'undefined') {
-                return new Notification('N', value);
-            }
-            return this.undefinedValueNotification;
-        };
-        /**
-         * A shortcut to create a Notification instance of the type `error` from a
-         * given error.
-         * @param {any} [err] The `error` exception.
-         * @return {Notification<T>} The "error" Notification representing the
-         * argument.
-         */
-        Notification.createError = function (err) {
-            return new Notification('E', undefined, err);
-        };
-        /**
-         * A shortcut to create a Notification instance of the type `complete`.
-         * @return {Notification<any>} The valueless "complete" Notification.
-         */
-        Notification.createComplete = function () {
-            return this.completeNotification;
-        };
-        Notification.completeNotification = new Notification('C');
-        Notification.undefinedValueNotification = new Notification('N', undefined);
-        return Notification;
-    }();
-    exports.Notification = Notification;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('50', ['2a', '4f'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscriber_1 = $__require('2a');
-    var Notification_1 = $__require('4f');
-    /**
-     * @see {@link Notification}
-     *
-     * @param scheduler
-     * @param delay
-     * @return {Observable<R>|WebSocketSubject<T>|Observable<T>}
-     * @method observeOn
-     * @owner Observable
-     */
-    function observeOn(scheduler, delay) {
-        if (delay === void 0) {
-            delay = 0;
-        }
-        return this.lift(new ObserveOnOperator(scheduler, delay));
-    }
-    exports.observeOn = observeOn;
-    var ObserveOnOperator = function () {
-        function ObserveOnOperator(scheduler, delay) {
-            if (delay === void 0) {
-                delay = 0;
-            }
-            this.scheduler = scheduler;
-            this.delay = delay;
-        }
-        ObserveOnOperator.prototype.call = function (subscriber, source) {
-            return source._subscribe(new ObserveOnSubscriber(subscriber, this.scheduler, this.delay));
-        };
-        return ObserveOnOperator;
-    }();
-    exports.ObserveOnOperator = ObserveOnOperator;
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var ObserveOnSubscriber = function (_super) {
-        __extends(ObserveOnSubscriber, _super);
-        function ObserveOnSubscriber(destination, scheduler, delay) {
-            if (delay === void 0) {
-                delay = 0;
-            }
-            _super.call(this, destination);
-            this.scheduler = scheduler;
-            this.delay = delay;
-        }
-        ObserveOnSubscriber.dispatch = function (arg) {
-            var notification = arg.notification,
-                destination = arg.destination;
-            notification.observe(destination);
-        };
-        ObserveOnSubscriber.prototype.scheduleMessage = function (notification) {
-            this.add(this.scheduler.schedule(ObserveOnSubscriber.dispatch, this.delay, new ObserveOnMessage(notification, this.destination)));
-        };
-        ObserveOnSubscriber.prototype._next = function (value) {
-            this.scheduleMessage(Notification_1.Notification.createNext(value));
-        };
-        ObserveOnSubscriber.prototype._error = function (err) {
-            this.scheduleMessage(Notification_1.Notification.createError(err));
-        };
-        ObserveOnSubscriber.prototype._complete = function () {
-            this.scheduleMessage(Notification_1.Notification.createComplete());
-        };
-        return ObserveOnSubscriber;
-    }(Subscriber_1.Subscriber);
-    exports.ObserveOnSubscriber = ObserveOnSubscriber;
-    var ObserveOnMessage = function () {
-        function ObserveOnMessage(notification, destination) {
-            this.notification = notification;
-            this.destination = destination;
-        }
-        return ObserveOnMessage;
-    }();
-    exports.ObserveOnMessage = ObserveOnMessage;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('51', ['52', '53', '54', '4a', '55', '4c', '4b', '2c', '50', '56'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var isArray_1 = $__require('52');
-    var isPromise_1 = $__require('53');
-    var PromiseObservable_1 = $__require('54');
-    var IteratorObservable_1 = $__require('4a');
-    var ArrayObservable_1 = $__require('55');
-    var ArrayLikeObservable_1 = $__require('4c');
-    var iterator_1 = $__require('4b');
-    var Observable_1 = $__require('2c');
-    var observeOn_1 = $__require('50');
-    var observable_1 = $__require('56');
-    var isArrayLike = function (x) {
-        return x && typeof x.length === 'number';
-    };
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var FromObservable = function (_super) {
-        __extends(FromObservable, _super);
-        function FromObservable(ish, scheduler) {
-            _super.call(this, null);
-            this.ish = ish;
+            this.promise = promise;
             this.scheduler = scheduler;
         }
         /**
-         * Creates an Observable from an Array, an array-like object, a Promise, an
-         * iterable object, or an Observable-like object.
+         * Converts a Promise to an Observable.
          *
-         * <span class="informal">Converts almost anything to an Observable.</span>
+         * <span class="informal">Returns an Observable that just emits the Promise's
+         * resolved value, then completes.</span>
          *
-         * <img src="./img/from.png" width="100%">
+         * Converts an ES2015 Promise or a Promises/A+ spec compliant Promise to an
+         * Observable. If the Promise resolves with a value, the output Observable
+         * emits that resolved value as a `next`, and then completes. If the Promise
+         * is rejected, then the output Observable emits the corresponding Error.
          *
-         * Convert various other objects and data types into Observables. `from`
-         * converts a Promise or an array-like or an
-         * [iterable](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#iterable)
-         * object into an Observable that emits the items in that promise or array or
-         * iterable. A String, in this context, is treated as an array of characters.
-         * Observable-like objects (contains a function named with the ES2015 Symbol
-         * for Observable) can also be converted through this operator.
+         * @example <caption>Convert the Promise returned by Fetch to an Observable</caption>
+         * var result = Rx.Observable.fromPromise(fetch('http://myserver.com/'));
+         * result.subscribe(x => console.log(x), e => console.error(e));
          *
-         * @example <caption>Converts an array to an Observable</caption>
-         * var array = [10, 20, 30];
-         * var result = Rx.Observable.from(array);
-         * result.subscribe(x => console.log(x));
+         * @see {@link bindCallback}
+         * @see {@link from}
          *
-         * @example <caption>Convert an infinite iterable (from a generator) to an Observable</caption>
-         * function* generateDoubles(seed) {
-         *   var i = seed;
-         *   while (true) {
-         *     yield i;
-         *     i = 2 * i; // double it
-         *   }
-         * }
-         *
-         * var iterator = generateDoubles(3);
-         * var result = Rx.Observable.from(iterator).take(10);
-         * result.subscribe(x => console.log(x));
-         *
-         * @see {@link create}
-         * @see {@link fromEvent}
-         * @see {@link fromEventPattern}
-         * @see {@link fromPromise}
-         *
-         * @param {ObservableInput<T>} ish A subscribable object, a Promise, an
-         * Observable-like, an Array, an iterable or an array-like object to be
-         * converted.
-         * @param {Scheduler} [scheduler] The scheduler on which to schedule the
-         * emissions of values.
-         * @return {Observable<T>} The Observable whose values are originally from the
-         * input object that was converted.
+         * @param {Promise<T>} promise The promise to be converted.
+         * @param {Scheduler} [scheduler] An optional Scheduler to use for scheduling
+         * the delivery of the resolved value (or the rejection).
+         * @return {Observable<T>} An Observable which wraps the Promise.
          * @static true
-         * @name from
+         * @name fromPromise
          * @owner Observable
          */
-        FromObservable.create = function (ish, scheduler) {
-            if (ish != null) {
-                if (typeof ish[observable_1.$$observable] === 'function') {
-                    if (ish instanceof Observable_1.Observable && !scheduler) {
-                        return ish;
-                    }
-                    return new FromObservable(ish, scheduler);
-                } else if (isArray_1.isArray(ish)) {
-                    return new ArrayObservable_1.ArrayObservable(ish, scheduler);
-                } else if (isPromise_1.isPromise(ish)) {
-                    return new PromiseObservable_1.PromiseObservable(ish, scheduler);
-                } else if (typeof ish[iterator_1.$$iterator] === 'function' || typeof ish === 'string') {
-                    return new IteratorObservable_1.IteratorObservable(ish, scheduler);
-                } else if (isArrayLike(ish)) {
-                    return new ArrayLikeObservable_1.ArrayLikeObservable(ish, scheduler);
-                }
-            }
-            throw new TypeError((ish !== null && typeof ish || ish) + ' is not observable');
+        PromiseObservable.create = function (promise, scheduler) {
+            return new PromiseObservable(promise, scheduler);
         };
-        FromObservable.prototype._subscribe = function (subscriber) {
-            var ish = this.ish;
+        PromiseObservable.prototype._subscribe = function (subscriber) {
+            var _this = this;
+            var promise = this.promise;
             var scheduler = this.scheduler;
             if (scheduler == null) {
-                return ish[observable_1.$$observable]().subscribe(subscriber);
+                if (this._isScalar) {
+                    if (!subscriber.closed) {
+                        subscriber.next(this.value);
+                        subscriber.complete();
+                    }
+                } else {
+                    promise.then(function (value) {
+                        _this.value = value;
+                        _this._isScalar = true;
+                        if (!subscriber.closed) {
+                            subscriber.next(value);
+                            subscriber.complete();
+                        }
+                    }, function (err) {
+                        if (!subscriber.closed) {
+                            subscriber.error(err);
+                        }
+                    }).then(null, function (err) {
+                        // escape the promise trap, throw unhandled errors
+                        root_1.root.setTimeout(function () {
+                            throw err;
+                        });
+                    });
+                }
             } else {
-                return ish[observable_1.$$observable]().subscribe(new observeOn_1.ObserveOnSubscriber(subscriber, scheduler, 0));
+                if (this._isScalar) {
+                    if (!subscriber.closed) {
+                        return scheduler.schedule(dispatchNext, 0, { value: this.value, subscriber: subscriber });
+                    }
+                } else {
+                    promise.then(function (value) {
+                        _this.value = value;
+                        _this._isScalar = true;
+                        if (!subscriber.closed) {
+                            subscriber.add(scheduler.schedule(dispatchNext, 0, { value: value, subscriber: subscriber }));
+                        }
+                    }, function (err) {
+                        if (!subscriber.closed) {
+                            subscriber.add(scheduler.schedule(dispatchError, 0, { err: err, subscriber: subscriber }));
+                        }
+                    }).then(null, function (err) {
+                        // escape the promise trap, throw unhandled errors
+                        root_1.root.setTimeout(function () {
+                            throw err;
+                        });
+                    });
+                }
             }
         };
-        return FromObservable;
+        return PromiseObservable;
     }(Observable_1.Observable);
-    exports.FromObservable = FromObservable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("57", ["51"], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var FromObservable_1 = $__require("51");
-  exports.from = FromObservable_1.FromObservable.create;
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("4d", ["2c"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Observable_1 = $__require("2c");
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var ScalarObservable = function (_super) {
-        __extends(ScalarObservable, _super);
-        function ScalarObservable(value, scheduler) {
-            _super.call(this);
-            this.value = value;
-            this.scheduler = scheduler;
-            this._isScalar = true;
-            if (scheduler) {
-                this._isScalar = false;
-            }
-        }
-        ScalarObservable.create = function (value, scheduler) {
-            return new ScalarObservable(value, scheduler);
-        };
-        ScalarObservable.dispatch = function (state) {
-            var done = state.done,
-                value = state.value,
-                subscriber = state.subscriber;
-            if (done) {
-                subscriber.complete();
-                return;
-            }
+    exports.PromiseObservable = PromiseObservable;
+    function dispatchNext(arg) {
+        var value = arg.value,
+            subscriber = arg.subscriber;
+        if (!subscriber.closed) {
             subscriber.next(value);
-            if (subscriber.closed) {
-                return;
-            }
-            state.done = true;
-            this.schedule(state);
-        };
-        ScalarObservable.prototype._subscribe = function (subscriber) {
-            var value = this.value;
-            var scheduler = this.scheduler;
-            if (scheduler) {
-                return scheduler.schedule(ScalarObservable.dispatch, 0, {
-                    done: false, value: value, subscriber: subscriber
-                });
-            } else {
-                subscriber.next(value);
-                if (!subscriber.closed) {
-                    subscriber.complete();
-                }
-            }
-        };
-        return ScalarObservable;
-    }(Observable_1.Observable);
-    exports.ScalarObservable = ScalarObservable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("4e", ["2c"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Observable_1 = $__require("2c");
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var EmptyObservable = function (_super) {
-        __extends(EmptyObservable, _super);
-        function EmptyObservable(scheduler) {
-            _super.call(this);
-            this.scheduler = scheduler;
-        }
-        /**
-         * Creates an Observable that emits no items to the Observer and immediately
-         * emits a complete notification.
-         *
-         * <span class="informal">Just emits 'complete', and nothing else.
-         * </span>
-         *
-         * <img src="./img/empty.png" width="100%">
-         *
-         * This static operator is useful for creating a simple Observable that only
-         * emits the complete notification. It can be used for composing with other
-         * Observables, such as in a {@link mergeMap}.
-         *
-         * @example <caption>Emit the number 7, then complete.</caption>
-         * var result = Rx.Observable.empty().startWith(7);
-         * result.subscribe(x => console.log(x));
-         *
-         * @example <caption>Map and flatten only odd numbers to the sequence 'a', 'b', 'c'</caption>
-         * var interval = Rx.Observable.interval(1000);
-         * var result = interval.mergeMap(x =>
-         *   x % 2 === 1 ? Rx.Observable.of('a', 'b', 'c') : Rx.Observable.empty()
-         * );
-         * result.subscribe(x => console.log(x));
-         *
-         * @see {@link create}
-         * @see {@link never}
-         * @see {@link of}
-         * @see {@link throw}
-         *
-         * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
-         * the emission of the complete notification.
-         * @return {Observable} An "empty" Observable: emits only the complete
-         * notification.
-         * @static true
-         * @name empty
-         * @owner Observable
-         */
-        EmptyObservable.create = function (scheduler) {
-            return new EmptyObservable(scheduler);
-        };
-        EmptyObservable.dispatch = function (arg) {
-            var subscriber = arg.subscriber;
             subscriber.complete();
-        };
-        EmptyObservable.prototype._subscribe = function (subscriber) {
-            var scheduler = this.scheduler;
-            if (scheduler) {
-                return scheduler.schedule(EmptyObservable.dispatch, 0, { subscriber: subscriber });
-            } else {
-                subscriber.complete();
-            }
-        };
-        return EmptyObservable;
-    }(Observable_1.Observable);
-    exports.EmptyObservable = EmptyObservable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("58", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isScheduler(value) {
-        return value && typeof value.schedule === 'function';
+        }
     }
-    exports.isScheduler = isScheduler;
+    function dispatchError(arg) {
+        var err = arg.err,
+            subscriber = arg.subscriber;
+        if (!subscriber.closed) {
+            subscriber.error(err);
+        }
+    }
     
 
     return module.exports;
 });
-$__System.registerDynamic('55', ['2c', '4d', '4e', '58'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Observable_1 = $__require('2c');
-    var ScalarObservable_1 = $__require('4d');
-    var EmptyObservable_1 = $__require('4e');
-    var isScheduler_1 = $__require('58');
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var ArrayObservable = function (_super) {
-        __extends(ArrayObservable, _super);
-        function ArrayObservable(array, scheduler) {
-            _super.call(this);
-            this.array = array;
-            this.scheduler = scheduler;
-            if (!scheduler && array.length === 1) {
-                this._isScalar = true;
-                this.value = array[0];
-            }
-        }
-        ArrayObservable.create = function (array, scheduler) {
-            return new ArrayObservable(array, scheduler);
-        };
-        /**
-         * Creates an Observable that emits some values you specify as arguments,
-         * immediately one after the other, and then emits a complete notification.
-         *
-         * <span class="informal">Emits the arguments you provide, then completes.
-         * </span>
-         *
-         * <img src="./img/of.png" width="100%">
-         *
-         * This static operator is useful for creating a simple Observable that only
-         * emits the arguments given, and the complete notification thereafter. It can
-         * be used for composing with other Observables, such as with {@link concat}.
-         * By default, it uses a `null` Scheduler, which means the `next`
-         * notifications are sent synchronously, although with a different Scheduler
-         * it is possible to determine when those notifications will be delivered.
-         *
-         * @example <caption>Emit 10, 20, 30, then 'a', 'b', 'c', then start ticking every second.</caption>
-         * var numbers = Rx.Observable.of(10, 20, 30);
-         * var letters = Rx.Observable.of('a', 'b', 'c');
-         * var interval = Rx.Observable.interval(1000);
-         * var result = numbers.concat(letters).concat(interval);
-         * result.subscribe(x => console.log(x));
-         *
-         * @see {@link create}
-         * @see {@link empty}
-         * @see {@link never}
-         * @see {@link throw}
-         *
-         * @param {...T} values Arguments that represent `next` values to be emitted.
-         * @param {Scheduler} [scheduler] A {@link Scheduler} to use for scheduling
-         * the emissions of the `next` notifications.
-         * @return {Observable<T>} An Observable that emits each given input value.
-         * @static true
-         * @name of
-         * @owner Observable
-         */
-        ArrayObservable.of = function () {
-            var array = [];
-            for (var _i = 0; _i < arguments.length; _i++) {
-                array[_i - 0] = arguments[_i];
-            }
-            var scheduler = array[array.length - 1];
-            if (isScheduler_1.isScheduler(scheduler)) {
-                array.pop();
-            } else {
-                scheduler = null;
-            }
-            var len = array.length;
-            if (len > 1) {
-                return new ArrayObservable(array, scheduler);
-            } else if (len === 1) {
-                return new ScalarObservable_1.ScalarObservable(array[0], scheduler);
-            } else {
-                return new EmptyObservable_1.EmptyObservable(scheduler);
-            }
-        };
-        ArrayObservable.dispatch = function (state) {
-            var array = state.array,
-                index = state.index,
-                count = state.count,
-                subscriber = state.subscriber;
-            if (index >= count) {
-                subscriber.complete();
-                return;
-            }
-            subscriber.next(array[index]);
-            if (subscriber.closed) {
-                return;
-            }
-            state.index = index + 1;
-            this.schedule(state);
-        };
-        ArrayObservable.prototype._subscribe = function (subscriber) {
-            var index = 0;
-            var array = this.array;
-            var count = array.length;
-            var scheduler = this.scheduler;
-            if (scheduler) {
-                return scheduler.schedule(ArrayObservable.dispatch, 0, {
-                    array: array, index: index, count: count, subscriber: subscriber
-                });
-            } else {
-                for (var i = 0; i < count && !subscriber.closed; i++) {
-                    subscriber.next(array[i]);
-                }
-                subscriber.complete();
-            }
-        };
-        return ArrayObservable;
-    }(Observable_1.Observable);
-    exports.ArrayObservable = ArrayObservable;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("59", ["55"], true, function ($__require, exports, module) {
+$__System.registerDynamic("47", ["52"], true, function ($__require, exports, module) {
   "use strict";
 
   var define,
       global = this || self,
       GLOBAL = global;
-  var ArrayObservable_1 = $__require("55");
-  exports.of = ArrayObservable_1.ArrayObservable.of;
+  var PromiseObservable_1 = $__require("52");
+  exports.fromPromise = PromiseObservable_1.PromiseObservable.create;
   
 
   return module.exports;
 });
-$__System.registerDynamic("5a", ["2a"], true, function ($__require, exports, module) {
+$__System.registerDynamic('6a', ['32', '47'], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var Observable_1 = $__require('32');
+  var fromPromise_1 = $__require('47');
+  Observable_1.Observable.fromPromise = fromPromise_1.fromPromise;
+  
+
+  return module.exports;
+});
+$__System.registerDynamic('51', [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isPromise(value) {
+        return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
+    }
+    exports.isPromise = isPromise;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('49', ['2b'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('2b');
+    var Symbol = root_1.root.Symbol;
+    if (typeof Symbol === 'function') {
+        if (Symbol.iterator) {
+            exports.$$iterator = Symbol.iterator;
+        } else if (typeof Symbol.for === 'function') {
+            exports.$$iterator = Symbol.for('iterator');
+        }
+    } else {
+        if (root_1.root.Set && typeof new root_1.root.Set()['@@iterator'] === 'function') {
+            // Bug for mozilla version
+            exports.$$iterator = '@@iterator';
+        } else if (root_1.root.Map) {
+            // es6-shim specific logic
+            var keys = Object.getOwnPropertyNames(root_1.root.Map.prototype);
+            for (var i = 0; i < keys.length; ++i) {
+                var key = keys[i];
+                if (key !== 'entries' && key !== 'size' && root_1.root.Map.prototype[key] === root_1.root.Map.prototype['entries']) {
+                    exports.$$iterator = key;
+                    break;
+                }
+            }
+        } else {
+            exports.$$iterator = '@@iterator';
+        }
+    }
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("6b", ["30"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -38847,71 +43043,159 @@ $__System.registerDynamic("5a", ["2a"], true, function ($__require, exports, mod
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscriber_1 = $__require("2a");
-    /**
-     * Returns an Observable that emits whether or not every item of the source satisfies the condition specified.
-     * @param {function} predicate a function for determining if an item meets a specified condition.
-     * @param {any} [thisArg] optional object to use for `this` in the callback
-     * @return {Observable} an Observable of booleans that determines if all items of the source Observable meet the condition specified.
-     * @method every
-     * @owner Observable
-     */
-    function every(predicate, thisArg) {
-        return this.lift(new EveryOperator(predicate, thisArg, this));
-    }
-    exports.every = every;
-    var EveryOperator = function () {
-        function EveryOperator(predicate, thisArg, source) {
-            this.predicate = predicate;
-            this.thisArg = thisArg;
-            this.source = source;
-        }
-        EveryOperator.prototype.call = function (observer, source) {
-            return source._subscribe(new EverySubscriber(observer, this.predicate, this.thisArg, this.source));
-        };
-        return EveryOperator;
-    }();
+    var Subscriber_1 = $__require("30");
     /**
      * We need this JSDoc comment for affecting ESDoc.
      * @ignore
      * @extends {Ignored}
      */
-    var EverySubscriber = function (_super) {
-        __extends(EverySubscriber, _super);
-        function EverySubscriber(destination, predicate, thisArg, source) {
-            _super.call(this, destination);
-            this.predicate = predicate;
-            this.thisArg = thisArg;
-            this.source = source;
+    var InnerSubscriber = function (_super) {
+        __extends(InnerSubscriber, _super);
+        function InnerSubscriber(parent, outerValue, outerIndex) {
+            _super.call(this);
+            this.parent = parent;
+            this.outerValue = outerValue;
+            this.outerIndex = outerIndex;
             this.index = 0;
-            this.thisArg = thisArg || this;
         }
-        EverySubscriber.prototype.notifyComplete = function (everyValueMatch) {
-            this.destination.next(everyValueMatch);
+        InnerSubscriber.prototype._next = function (value) {
+            this.parent.notifyNext(this.outerValue, value, this.outerIndex, this.index++, this);
+        };
+        InnerSubscriber.prototype._error = function (error) {
+            this.parent.notifyError(error, this);
+            this.unsubscribe();
+        };
+        InnerSubscriber.prototype._complete = function () {
+            this.parent.notifyComplete(this);
+            this.unsubscribe();
+        };
+        return InnerSubscriber;
+    }(Subscriber_1.Subscriber);
+    exports.InnerSubscriber = InnerSubscriber;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('5c', ['2b', '50', '51', '32', '49', '6b', '54'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('2b');
+    var isArray_1 = $__require('50');
+    var isPromise_1 = $__require('51');
+    var Observable_1 = $__require('32');
+    var iterator_1 = $__require('49');
+    var InnerSubscriber_1 = $__require('6b');
+    var observable_1 = $__require('54');
+    function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
+        var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
+        if (destination.closed) {
+            return null;
+        }
+        if (result instanceof Observable_1.Observable) {
+            if (result._isScalar) {
+                destination.next(result.value);
+                destination.complete();
+                return null;
+            } else {
+                return result.subscribe(destination);
+            }
+        }
+        if (isArray_1.isArray(result)) {
+            for (var i = 0, len = result.length; i < len && !destination.closed; i++) {
+                destination.next(result[i]);
+            }
+            if (!destination.closed) {
+                destination.complete();
+            }
+        } else if (isPromise_1.isPromise(result)) {
+            result.then(function (value) {
+                if (!destination.closed) {
+                    destination.next(value);
+                    destination.complete();
+                }
+            }, function (err) {
+                return destination.error(err);
+            }).then(null, function (err) {
+                // Escaping the Promise trap: globally throw unhandled errors
+                root_1.root.setTimeout(function () {
+                    throw err;
+                });
+            });
+            return destination;
+        } else if (typeof result[iterator_1.$$iterator] === 'function') {
+            var iterator = result[iterator_1.$$iterator]();
+            do {
+                var item = iterator.next();
+                if (item.done) {
+                    destination.complete();
+                    break;
+                }
+                destination.next(item.value);
+                if (destination.closed) {
+                    break;
+                }
+            } while (true);
+        } else if (typeof result[observable_1.$$observable] === 'function') {
+            var obs = result[observable_1.$$observable]();
+            if (typeof obs.subscribe !== 'function') {
+                destination.error(new Error('invalid observable'));
+            } else {
+                return obs.subscribe(new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex));
+            }
+        } else {
+            destination.error(new TypeError('unknown type returned'));
+        }
+        return null;
+    }
+    exports.subscribeToResult = subscribeToResult;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("5b", ["30"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    var Subscriber_1 = $__require("30");
+    /**
+     * We need this JSDoc comment for affecting ESDoc.
+     * @ignore
+     * @extends {Ignored}
+     */
+    var OuterSubscriber = function (_super) {
+        __extends(OuterSubscriber, _super);
+        function OuterSubscriber() {
+            _super.apply(this, arguments);
+        }
+        OuterSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
+            this.destination.next(innerValue);
+        };
+        OuterSubscriber.prototype.notifyError = function (error, innerSub) {
+            this.destination.error(error);
+        };
+        OuterSubscriber.prototype.notifyComplete = function (innerSub) {
             this.destination.complete();
         };
-        EverySubscriber.prototype._next = function (value) {
-            var result = false;
-            try {
-                result = this.predicate.call(this.thisArg, value, this.index++, this.source);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            if (!result) {
-                this.notifyComplete(false);
-            }
-        };
-        EverySubscriber.prototype._complete = function () {
-            this.notifyComplete(true);
-        };
-        return EverySubscriber;
+        return OuterSubscriber;
     }(Subscriber_1.Subscriber);
+    exports.OuterSubscriber = OuterSubscriber;
     
 
     return module.exports;
 });
-$__System.registerDynamic('49', ['2a'], true, function ($__require, exports, module) {
+$__System.registerDynamic('64', ['5c', '5b'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -38924,104 +43208,8 @@ $__System.registerDynamic('49', ['2a'], true, function ($__require, exports, mod
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscriber_1 = $__require('2a');
-    /**
-     * Applies a given `project` function to each value emitted by the source
-     * Observable, and emits the resulting values as an Observable.
-     *
-     * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
-     * it passes each source value through a transformation function to get
-     * corresponding output values.</span>
-     *
-     * <img src="./img/map.png" width="100%">
-     *
-     * Similar to the well known `Array.prototype.map` function, this operator
-     * applies a projection to each value and emits that projection in the output
-     * Observable.
-     *
-     * @example <caption>Map every every click to the clientX position of that click</caption>
-     * var clicks = Rx.Observable.fromEvent(document, 'click');
-     * var positions = clicks.map(ev => ev.clientX);
-     * positions.subscribe(x => console.log(x));
-     *
-     * @see {@link mapTo}
-     * @see {@link pluck}
-     *
-     * @param {function(value: T, index: number): R} project The function to apply
-     * to each `value` emitted by the source Observable. The `index` parameter is
-     * the number `i` for the i-th emission that has happened since the
-     * subscription, starting from the number `0`.
-     * @param {any} [thisArg] An optional argument to define what `this` is in the
-     * `project` function.
-     * @return {Observable<R>} An Observable that emits the values from the source
-     * Observable transformed by the given `project` function.
-     * @method map
-     * @owner Observable
-     */
-    function map(project, thisArg) {
-        if (typeof project !== 'function') {
-            throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
-        }
-        return this.lift(new MapOperator(project, thisArg));
-    }
-    exports.map = map;
-    var MapOperator = function () {
-        function MapOperator(project, thisArg) {
-            this.project = project;
-            this.thisArg = thisArg;
-        }
-        MapOperator.prototype.call = function (subscriber, source) {
-            return source._subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
-        };
-        return MapOperator;
-    }();
-    exports.MapOperator = MapOperator;
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var MapSubscriber = function (_super) {
-        __extends(MapSubscriber, _super);
-        function MapSubscriber(destination, project, thisArg) {
-            _super.call(this, destination);
-            this.project = project;
-            this.count = 0;
-            this.thisArg = thisArg || this;
-        }
-        // NOTE: This looks unoptimized, but it's actually purposefully NOT
-        // using try/catch optimizations.
-        MapSubscriber.prototype._next = function (value) {
-            var result;
-            try {
-                result = this.project.call(this.thisArg, value, this.count++);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            this.destination.next(result);
-        };
-        return MapSubscriber;
-    }(Subscriber_1.Subscriber);
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('47', ['5b', '5c'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var subscribeToResult_1 = $__require('5b');
-    var OuterSubscriber_1 = $__require('5c');
+    var subscribeToResult_1 = $__require('5c');
+    var OuterSubscriber_1 = $__require('5b');
     /**
      * Projects each source value to an Observable which is merged in the output
      * Observable.
@@ -39179,7 +43367,21 @@ $__System.registerDynamic('47', ['5b', '5c'], true, function ($__require, export
 
     return module.exports;
 });
-$__System.registerDynamic('5d', ['2a'], true, function ($__require, exports, module) {
+$__System.registerDynamic('6c', ['32', '64'], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var Observable_1 = $__require('32');
+  var mergeMap_1 = $__require('64');
+  Observable_1.Observable.prototype.mergeMap = mergeMap_1.mergeMap;
+  Observable_1.Observable.prototype.flatMap = mergeMap_1.mergeMap;
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("12", ["3", "7", "32", "6a", "6c"], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -39192,1048 +43394,307 @@ $__System.registerDynamic('5d', ['2a'], true, function ($__require, exports, mod
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var Subscriber_1 = $__require('2a');
-    /**
-     * Applies an accumulator function over the source Observable, and returns the
-     * accumulated result when the source completes, given an optional seed value.
-     *
-     * <span class="informal">Combines together all values emitted on the source,
-     * using an accumulator function that knows how to join a new source value into
-     * the accumulation from the past.</span>
-     *
-     * <img src="./img/reduce.png" width="100%">
-     *
-     * Like
-     * [Array.prototype.reduce()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce),
-     * `reduce` applies an `accumulator` function against an accumulation and each
-     * value of the source Observable (from the past) to reduce it to a single
-     * value, emitted on the output Observable. Note that `reduce` will only emit
-     * one value, only when the source Observable completes. It is equivalent to
-     * applying operator {@link scan} followed by operator {@link last}.
-     *
-     * Returns an Observable that applies a specified `accumulator` function to each
-     * item emitted by the source Observable. If a `seed` value is specified, then
-     * that value will be used as the initial value for the accumulator. If no seed
-     * value is specified, the first item of the source is used as the seed.
-     *
-     * @example <caption>Count the number of click events that happened in 5 seconds</caption>
-     * var clicksInFiveSeconds = Rx.Observable.fromEvent(document, 'click')
-     *   .takeUntil(Rx.Observable.interval(5000));
-     * var ones = clicksInFiveSeconds.mapTo(1);
-     * var seed = 0;
-     * var count = ones.reduce((acc, one) => acc + one, seed);
-     * count.subscribe(x => console.log(x));
-     *
-     * @see {@link count}
-     * @see {@link expand}
-     * @see {@link mergeScan}
-     * @see {@link scan}
-     *
-     * @param {function(acc: R, value: T): R} accumulator The accumulator function
-     * called on each source value.
-     * @param {R} [seed] The initial accumulation value.
-     * @return {Observable<R>} An observable of the accumulated values.
-     * @return {Observable<R>} An Observable that emits a single value that is the
-     * result of accumulating the values emitted by the source Observable.
-     * @method reduce
-     * @owner Observable
-     */
-    function reduce(accumulator, seed) {
-        return this.lift(new ReduceOperator(accumulator, seed));
-    }
-    exports.reduce = reduce;
-    var ReduceOperator = function () {
-        function ReduceOperator(accumulator, seed) {
-            this.accumulator = accumulator;
-            this.seed = seed;
-        }
-        ReduceOperator.prototype.call = function (subscriber, source) {
-            return source._subscribe(new ReduceSubscriber(subscriber, this.accumulator, this.seed));
-        };
-        return ReduceOperator;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1 = $__require("3");
+    var http_1 = $__require("7");
+    var Observable_1 = $__require("32");
+    $__require("6a");
+    $__require("6c");
+    var AuthConfigConsts = function () {
+        function AuthConfigConsts() {}
+        AuthConfigConsts.DEFAULT_TOKEN_NAME = 'id_token';
+        AuthConfigConsts.DEFAULT_HEADER_NAME = 'Authorization';
+        AuthConfigConsts.HEADER_PREFIX_BEARER = 'Bearer ';
+        return AuthConfigConsts;
     }();
-    exports.ReduceOperator = ReduceOperator;
+    exports.AuthConfigConsts = AuthConfigConsts;
+    var AuthConfigDefaults = {
+        headerName: AuthConfigConsts.DEFAULT_HEADER_NAME,
+        headerPrefix: null,
+        tokenName: AuthConfigConsts.DEFAULT_TOKEN_NAME,
+        tokenGetter: function () {
+            return localStorage.getItem(AuthConfigDefaults.tokenName);
+        },
+        noJwtError: false,
+        globalHeaders: [],
+        noTokenScheme: false
+    };
     /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
+     * Sets up the authentication configuration.
      */
-    var ReduceSubscriber = function (_super) {
-        __extends(ReduceSubscriber, _super);
-        function ReduceSubscriber(destination, accumulator, seed) {
-            _super.call(this, destination);
-            this.accumulator = accumulator;
-            this.hasValue = false;
-            this.acc = seed;
-            this.accumulator = accumulator;
-            this.hasSeed = typeof seed !== 'undefined';
-        }
-        ReduceSubscriber.prototype._next = function (value) {
-            if (this.hasValue || (this.hasValue = this.hasSeed)) {
-                this._tryReduce(value);
+    var AuthConfig = function () {
+        function AuthConfig(config) {
+            config = config || {};
+            this._config = objectAssign({}, AuthConfigDefaults, config);
+            if (this._config.headerPrefix) {
+                this._config.headerPrefix += ' ';
+            } else if (this._config.noTokenScheme) {
+                this._config.headerPrefix = '';
             } else {
-                this.acc = value;
-                this.hasValue = true;
+                this._config.headerPrefix = AuthConfigConsts.HEADER_PREFIX_BEARER;
             }
-        };
-        ReduceSubscriber.prototype._tryReduce = function (value) {
-            var result;
-            try {
-                result = this.accumulator(this.acc, value);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            this.acc = result;
-        };
-        ReduceSubscriber.prototype._complete = function () {
-            if (this.hasValue || this.hasSeed) {
-                this.destination.next(this.acc);
-            }
-            this.destination.complete();
-        };
-        return ReduceSubscriber;
-    }(Subscriber_1.Subscriber);
-    exports.ReduceSubscriber = ReduceSubscriber;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('5e', ['5c', '5b'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
         }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var OuterSubscriber_1 = $__require('5c');
-    var subscribeToResult_1 = $__require('5b');
-    /**
-     * Catches errors on the observable to be handled by returning a new observable or throwing an error.
-     * @param {function} selector a function that takes as arguments `err`, which is the error, and `caught`, which
-     *  is the source observable, in case you'd like to "retry" that observable by returning it again. Whatever observable
-     *  is returned by the `selector` will be used to continue the observable chain.
-     * @return {Observable} an observable that originates from either the source or the observable returned by the
-     *  catch `selector` function.
-     * @method catch
-     * @owner Observable
-     */
-    function _catch(selector) {
-        var operator = new CatchOperator(selector);
-        var caught = this.lift(operator);
-        return operator.caught = caught;
-    }
-    exports._catch = _catch;
-    var CatchOperator = function () {
-        function CatchOperator(selector) {
-            this.selector = selector;
-        }
-        CatchOperator.prototype.call = function (subscriber, source) {
-            return source._subscribe(new CatchSubscriber(subscriber, this.selector, this.caught));
+        AuthConfig.prototype.getConfig = function () {
+            return this._config;
         };
-        return CatchOperator;
+        return AuthConfig;
     }();
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var CatchSubscriber = function (_super) {
-        __extends(CatchSubscriber, _super);
-        function CatchSubscriber(destination, selector, caught) {
-            _super.call(this, destination);
-            this.selector = selector;
-            this.caught = caught;
-        }
-        // NOTE: overriding `error` instead of `_error` because we don't want
-        // to have this flag this subscriber as `isStopped`.
-        CatchSubscriber.prototype.error = function (err) {
-            if (!this.isStopped) {
-                var result = void 0;
-                try {
-                    result = this.selector(err, this.caught);
-                } catch (err) {
-                    this.destination.error(err);
-                    return;
-                }
-                this.unsubscribe();
-                this.destination.remove(this);
-                subscribeToResult_1.subscribeToResult(this, result);
-            }
-        };
-        return CatchSubscriber;
-    }(OuterSubscriber_1.OuterSubscriber);
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("5c", ["2a"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscriber_1 = $__require("2a");
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var OuterSubscriber = function (_super) {
-        __extends(OuterSubscriber, _super);
-        function OuterSubscriber() {
+    exports.AuthConfig = AuthConfig;
+    var AuthHttpError = function (_super) {
+        __extends(AuthHttpError, _super);
+        function AuthHttpError() {
             _super.apply(this, arguments);
         }
-        OuterSubscriber.prototype.notifyNext = function (outerValue, innerValue, outerIndex, innerIndex, innerSub) {
-            this.destination.next(innerValue);
-        };
-        OuterSubscriber.prototype.notifyError = function (error, innerSub) {
-            this.destination.error(error);
-        };
-        OuterSubscriber.prototype.notifyComplete = function (innerSub) {
-            this.destination.complete();
-        };
-        return OuterSubscriber;
-    }(Subscriber_1.Subscriber);
-    exports.OuterSubscriber = OuterSubscriber;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('53', [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isPromise(value) {
-        return value && typeof value.subscribe !== 'function' && typeof value.then === 'function';
-    }
-    exports.isPromise = isPromise;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('4b', ['25'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('25');
-    var Symbol = root_1.root.Symbol;
-    if (typeof Symbol === 'function') {
-        if (Symbol.iterator) {
-            exports.$$iterator = Symbol.iterator;
-        } else if (typeof Symbol.for === 'function') {
-            exports.$$iterator = Symbol.for('iterator');
-        }
-    } else {
-        if (root_1.root.Set && typeof new root_1.root.Set()['@@iterator'] === 'function') {
-            // Bug for mozilla version
-            exports.$$iterator = '@@iterator';
-        } else if (root_1.root.Map) {
-            // es6-shim specific logic
-            var keys = Object.getOwnPropertyNames(root_1.root.Map.prototype);
-            for (var i = 0; i < keys.length; ++i) {
-                var key = keys[i];
-                if (key !== 'entries' && key !== 'size' && root_1.root.Map.prototype[key] === root_1.root.Map.prototype['entries']) {
-                    exports.$$iterator = key;
-                    break;
-                }
-            }
-        } else {
-            exports.$$iterator = '@@iterator';
-        }
-    }
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("5f", ["2a"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscriber_1 = $__require("2a");
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var InnerSubscriber = function (_super) {
-        __extends(InnerSubscriber, _super);
-        function InnerSubscriber(parent, outerValue, outerIndex) {
-            _super.call(this);
-            this.parent = parent;
-            this.outerValue = outerValue;
-            this.outerIndex = outerIndex;
-            this.index = 0;
-        }
-        InnerSubscriber.prototype._next = function (value) {
-            this.parent.notifyNext(this.outerValue, value, this.outerIndex, this.index++, this);
-        };
-        InnerSubscriber.prototype._error = function (error) {
-            this.parent.notifyError(error, this);
-            this.unsubscribe();
-        };
-        InnerSubscriber.prototype._complete = function () {
-            this.parent.notifyComplete(this);
-            this.unsubscribe();
-        };
-        return InnerSubscriber;
-    }(Subscriber_1.Subscriber);
-    exports.InnerSubscriber = InnerSubscriber;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('5b', ['25', '52', '53', '2c', '4b', '5f', '56'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('25');
-    var isArray_1 = $__require('52');
-    var isPromise_1 = $__require('53');
-    var Observable_1 = $__require('2c');
-    var iterator_1 = $__require('4b');
-    var InnerSubscriber_1 = $__require('5f');
-    var observable_1 = $__require('56');
-    function subscribeToResult(outerSubscriber, result, outerValue, outerIndex) {
-        var destination = new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex);
-        if (destination.closed) {
-            return null;
-        }
-        if (result instanceof Observable_1.Observable) {
-            if (result._isScalar) {
-                destination.next(result.value);
-                destination.complete();
-                return null;
-            } else {
-                return result.subscribe(destination);
-            }
-        }
-        if (isArray_1.isArray(result)) {
-            for (var i = 0, len = result.length; i < len && !destination.closed; i++) {
-                destination.next(result[i]);
-            }
-            if (!destination.closed) {
-                destination.complete();
-            }
-        } else if (isPromise_1.isPromise(result)) {
-            result.then(function (value) {
-                if (!destination.closed) {
-                    destination.next(value);
-                    destination.complete();
-                }
-            }, function (err) {
-                return destination.error(err);
-            }).then(null, function (err) {
-                // Escaping the Promise trap: globally throw unhandled errors
-                root_1.root.setTimeout(function () {
-                    throw err;
-                });
-            });
-            return destination;
-        } else if (typeof result[iterator_1.$$iterator] === 'function') {
-            var iterator = result[iterator_1.$$iterator]();
-            do {
-                var item = iterator.next();
-                if (item.done) {
-                    destination.complete();
-                    break;
-                }
-                destination.next(item.value);
-                if (destination.closed) {
-                    break;
-                }
-            } while (true);
-        } else if (typeof result[observable_1.$$observable] === 'function') {
-            var obs = result[observable_1.$$observable]();
-            if (typeof obs.subscribe !== 'function') {
-                destination.error(new Error('invalid observable'));
-            } else {
-                return obs.subscribe(new InnerSubscriber_1.InnerSubscriber(outerSubscriber, outerValue, outerIndex));
-            }
-        } else {
-            destination.error(new TypeError('unknown type returned'));
-        }
-        return null;
-    }
-    exports.subscribeToResult = subscribeToResult;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('60', ['5c', '5b'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var OuterSubscriber_1 = $__require('5c');
-    var subscribeToResult_1 = $__require('5b');
-    /**
-     * Converts a higher-order Observable into a first-order Observable which
-     * concurrently delivers all values that are emitted on the inner Observables.
-     *
-     * <span class="informal">Flattens an Observable-of-Observables.</span>
-     *
-     * <img src="./img/mergeAll.png" width="100%">
-     *
-     * `mergeAll` subscribes to an Observable that emits Observables, also known as
-     * a higher-order Observable. Each time it observes one of these emitted inner
-     * Observables, it subscribes to that and delivers all the values from the
-     * inner Observable on the output Observable. The output Observable only
-     * completes once all inner Observables have completed. Any error delivered by
-     * a inner Observable will be immediately emitted on the output Observable.
-     *
-     * @example <caption>Spawn a new interval Observable for each click event, and blend their outputs as one Observable</caption>
-     * var clicks = Rx.Observable.fromEvent(document, 'click');
-     * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000));
-     * var firstOrder = higherOrder.mergeAll();
-     * firstOrder.subscribe(x => console.log(x));
-     *
-     * @example <caption>Count from 0 to 9 every second for each click, but only allow 2 concurrent timers</caption>
-     * var clicks = Rx.Observable.fromEvent(document, 'click');
-     * var higherOrder = clicks.map((ev) => Rx.Observable.interval(1000).take(10));
-     * var firstOrder = higherOrder.mergeAll(2);
-     * firstOrder.subscribe(x => console.log(x));
-     *
-     * @see {@link combineAll}
-     * @see {@link concatAll}
-     * @see {@link exhaust}
-     * @see {@link merge}
-     * @see {@link mergeMap}
-     * @see {@link mergeMapTo}
-     * @see {@link mergeScan}
-     * @see {@link switch}
-     * @see {@link zipAll}
-     *
-     * @param {number} [concurrent=Number.POSITIVE_INFINITY] Maximum number of inner
-     * Observables being subscribed to concurrently.
-     * @return {Observable} An Observable that emits values coming from all the
-     * inner Observables emitted by the source Observable.
-     * @method mergeAll
-     * @owner Observable
-     */
-    function mergeAll(concurrent) {
-        if (concurrent === void 0) {
-            concurrent = Number.POSITIVE_INFINITY;
-        }
-        return this.lift(new MergeAllOperator(concurrent));
-    }
-    exports.mergeAll = mergeAll;
-    var MergeAllOperator = function () {
-        function MergeAllOperator(concurrent) {
-            this.concurrent = concurrent;
-        }
-        MergeAllOperator.prototype.call = function (observer, source) {
-            return source._subscribe(new MergeAllSubscriber(observer, this.concurrent));
-        };
-        return MergeAllOperator;
-    }();
-    exports.MergeAllOperator = MergeAllOperator;
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var MergeAllSubscriber = function (_super) {
-        __extends(MergeAllSubscriber, _super);
-        function MergeAllSubscriber(destination, concurrent) {
-            _super.call(this, destination);
-            this.concurrent = concurrent;
-            this.hasCompleted = false;
-            this.buffer = [];
-            this.active = 0;
-        }
-        MergeAllSubscriber.prototype._next = function (observable) {
-            if (this.active < this.concurrent) {
-                this.active++;
-                this.add(subscribeToResult_1.subscribeToResult(this, observable));
-            } else {
-                this.buffer.push(observable);
-            }
-        };
-        MergeAllSubscriber.prototype._complete = function () {
-            this.hasCompleted = true;
-            if (this.active === 0 && this.buffer.length === 0) {
-                this.destination.complete();
-            }
-        };
-        MergeAllSubscriber.prototype.notifyComplete = function (innerSub) {
-            var buffer = this.buffer;
-            this.remove(innerSub);
-            this.active--;
-            if (buffer.length > 0) {
-                this._next(buffer.shift());
-            } else if (this.active === 0 && this.hasCompleted) {
-                this.destination.complete();
-            }
-        };
-        return MergeAllSubscriber;
-    }(OuterSubscriber_1.OuterSubscriber);
-    exports.MergeAllSubscriber = MergeAllSubscriber;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("61", ["60"], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var mergeAll_1 = $__require("60");
-  /**
-   * Converts a higher-order Observable into a first-order Observable by
-   * concatenating the inner Observables in order.
-   *
-   * <span class="informal">Flattens an Observable-of-Observables by putting one
-   * inner Observable after the other.</span>
-   *
-   * <img src="./img/concatAll.png" width="100%">
-   *
-   * Joins every Observable emitted by the source (a higher-order Observable), in
-   * a serial fashion. It subscribes to each inner Observable only after the
-   * previous inner Observable has completed, and merges all of their values into
-   * the returned observable.
-   *
-   * __Warning:__ If the source Observable emits Observables quickly and
-   * endlessly, and the inner Observables it emits generally complete slower than
-   * the source emits, you can run into memory issues as the incoming Observables
-   * collect in an unbounded buffer.
-   *
-   * Note: `concatAll` is equivalent to `mergeAll` with concurrency parameter set
-   * to `1`.
-   *
-   * @example <caption>For each click event, tick every second from 0 to 3, with no concurrency</caption>
-   * var clicks = Rx.Observable.fromEvent(document, 'click');
-   * var higherOrder = clicks.map(ev => Rx.Observable.interval(1000).take(4));
-   * var firstOrder = higherOrder.concatAll();
-   * firstOrder.subscribe(x => console.log(x));
-   *
-   * @see {@link combineAll}
-   * @see {@link concat}
-   * @see {@link concatMap}
-   * @see {@link concatMapTo}
-   * @see {@link exhaust}
-   * @see {@link mergeAll}
-   * @see {@link switch}
-   * @see {@link zipAll}
-   *
-   * @return {Observable} An Observable emitting values from all the inner
-   * Observables concatenated.
-   * @method concatAll
-   * @owner Observable
-   */
-  function concatAll() {
-    return this.lift(new mergeAll_1.MergeAllOperator(1));
-  }
-  exports.concatAll = concatAll;
-  
-
-  return module.exports;
-});
-$__System.registerDynamic('62', ['2a', '63'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscriber_1 = $__require('2a');
-    var EmptyError_1 = $__require('63');
-    /**
-     * Emits only the first value (or the first value that meets some condition)
-     * emitted by the source Observable.
-     *
-     * <span class="informal">Emits only the first value. Or emits only the first
-     * value that passes some test.</span>
-     *
-     * <img src="./img/first.png" width="100%">
-     *
-     * If called with no arguments, `first` emits the first value of the source
-     * Observable, then completes. If called with a `predicate` function, `first`
-     * emits the first value of the source that matches the specified condition. It
-     * may also take a `resultSelector` function to produce the output value from
-     * the input value, and a `defaultValue` to emit in case the source completes
-     * before it is able to emit a valid value. Throws an error if `defaultValue`
-     * was not provided and a matching element is not found.
-     *
-     * @example <caption>Emit only the first click that happens on the DOM</caption>
-     * var clicks = Rx.Observable.fromEvent(document, 'click');
-     * var result = clicks.first();
-     * result.subscribe(x => console.log(x));
-     *
-     * @example <caption>Emits the first click that happens on a DIV</caption>
-     * var clicks = Rx.Observable.fromEvent(document, 'click');
-     * var result = clicks.first(ev => ev.target.tagName === 'DIV');
-     * result.subscribe(x => console.log(x));
-     *
-     * @see {@link filter}
-     * @see {@link find}
-     * @see {@link take}
-     *
-     * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
-     * callback if the Observable completes before any `next` notification was sent.
-     *
-     * @param {function(value: T, index: number, source: Observable<T>): boolean} [predicate]
-     * An optional function called with each item to test for condition matching.
-     * @param {function(value: T, index: number): R} [resultSelector] A function to
-     * produce the value on the output Observable based on the values
-     * and the indices of the source Observable. The arguments passed to this
-     * function are:
-     * - `value`: the value that was emitted on the source.
-     * - `index`: the "index" of the value from the source.
-     * @param {R} [defaultValue] The default value emitted in case no valid value
-     * was found on the source.
-     * @return {Observable<T|R>} an Observable of the first item that matches the
-     * condition.
-     * @method first
-     * @owner Observable
-     */
-    function first(predicate, resultSelector, defaultValue) {
-        return this.lift(new FirstOperator(predicate, resultSelector, defaultValue, this));
-    }
-    exports.first = first;
-    var FirstOperator = function () {
-        function FirstOperator(predicate, resultSelector, defaultValue, source) {
-            this.predicate = predicate;
-            this.resultSelector = resultSelector;
-            this.defaultValue = defaultValue;
-            this.source = source;
-        }
-        FirstOperator.prototype.call = function (observer, source) {
-            return source._subscribe(new FirstSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
-        };
-        return FirstOperator;
-    }();
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
-     */
-    var FirstSubscriber = function (_super) {
-        __extends(FirstSubscriber, _super);
-        function FirstSubscriber(destination, predicate, resultSelector, defaultValue, source) {
-            _super.call(this, destination);
-            this.predicate = predicate;
-            this.resultSelector = resultSelector;
-            this.defaultValue = defaultValue;
-            this.source = source;
-            this.index = 0;
-            this.hasCompleted = false;
-        }
-        FirstSubscriber.prototype._next = function (value) {
-            var index = this.index++;
-            if (this.predicate) {
-                this._tryPredicate(value, index);
-            } else {
-                this._emit(value, index);
-            }
-        };
-        FirstSubscriber.prototype._tryPredicate = function (value, index) {
-            var result;
-            try {
-                result = this.predicate(value, index, this.source);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            if (result) {
-                this._emit(value, index);
-            }
-        };
-        FirstSubscriber.prototype._emit = function (value, index) {
-            if (this.resultSelector) {
-                this._tryResultSelector(value, index);
-                return;
-            }
-            this._emitFinal(value);
-        };
-        FirstSubscriber.prototype._tryResultSelector = function (value, index) {
-            var result;
-            try {
-                result = this.resultSelector(value, index);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            this._emitFinal(result);
-        };
-        FirstSubscriber.prototype._emitFinal = function (value) {
-            var destination = this.destination;
-            destination.next(value);
-            destination.complete();
-            this.hasCompleted = true;
-        };
-        FirstSubscriber.prototype._complete = function () {
-            var destination = this.destination;
-            if (!this.hasCompleted && typeof this.defaultValue !== 'undefined') {
-                destination.next(this.defaultValue);
-                destination.complete();
-            } else if (!this.hasCompleted) {
-                destination.error(new EmptyError_1.EmptyError());
-            }
-        };
-        return FirstSubscriber;
-    }(Subscriber_1.Subscriber);
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('54', ['25', '2c'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var root_1 = $__require('25');
-    var Observable_1 = $__require('2c');
-    /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @extends {Ignored}
-     * @hide true
-     */
-    var PromiseObservable = function (_super) {
-        __extends(PromiseObservable, _super);
-        function PromiseObservable(promise, scheduler) {
-            _super.call(this);
-            this.promise = promise;
-            this.scheduler = scheduler;
-        }
-        /**
-         * Converts a Promise to an Observable.
-         *
-         * <span class="informal">Returns an Observable that just emits the Promise's
-         * resolved value, then completes.</span>
-         *
-         * Converts an ES2015 Promise or a Promises/A+ spec compliant Promise to an
-         * Observable. If the Promise resolves with a value, the output Observable
-         * emits that resolved value as a `next`, and then completes. If the Promise
-         * is rejected, then the output Observable emits the corresponding Error.
-         *
-         * @example <caption>Convert the Promise returned by Fetch to an Observable</caption>
-         * var result = Rx.Observable.fromPromise(fetch('http://myserver.com/'));
-         * result.subscribe(x => console.log(x), e => console.error(e));
-         *
-         * @see {@link bindCallback}
-         * @see {@link from}
-         *
-         * @param {Promise<T>} promise The promise to be converted.
-         * @param {Scheduler} [scheduler] An optional Scheduler to use for scheduling
-         * the delivery of the resolved value (or the rejection).
-         * @return {Observable<T>} An Observable which wraps the Promise.
-         * @static true
-         * @name fromPromise
-         * @owner Observable
-         */
-        PromiseObservable.create = function (promise, scheduler) {
-            return new PromiseObservable(promise, scheduler);
-        };
-        PromiseObservable.prototype._subscribe = function (subscriber) {
-            var _this = this;
-            var promise = this.promise;
-            var scheduler = this.scheduler;
-            if (scheduler == null) {
-                if (this._isScalar) {
-                    if (!subscriber.closed) {
-                        subscriber.next(this.value);
-                        subscriber.complete();
-                    }
-                } else {
-                    promise.then(function (value) {
-                        _this.value = value;
-                        _this._isScalar = true;
-                        if (!subscriber.closed) {
-                            subscriber.next(value);
-                            subscriber.complete();
-                        }
-                    }, function (err) {
-                        if (!subscriber.closed) {
-                            subscriber.error(err);
-                        }
-                    }).then(null, function (err) {
-                        // escape the promise trap, throw unhandled errors
-                        root_1.root.setTimeout(function () {
-                            throw err;
-                        });
-                    });
-                }
-            } else {
-                if (this._isScalar) {
-                    if (!subscriber.closed) {
-                        return scheduler.schedule(dispatchNext, 0, { value: this.value, subscriber: subscriber });
-                    }
-                } else {
-                    promise.then(function (value) {
-                        _this.value = value;
-                        _this._isScalar = true;
-                        if (!subscriber.closed) {
-                            subscriber.add(scheduler.schedule(dispatchNext, 0, { value: value, subscriber: subscriber }));
-                        }
-                    }, function (err) {
-                        if (!subscriber.closed) {
-                            subscriber.add(scheduler.schedule(dispatchError, 0, { err: err, subscriber: subscriber }));
-                        }
-                    }).then(null, function (err) {
-                        // escape the promise trap, throw unhandled errors
-                        root_1.root.setTimeout(function () {
-                            throw err;
-                        });
-                    });
-                }
-            }
-        };
-        return PromiseObservable;
-    }(Observable_1.Observable);
-    exports.PromiseObservable = PromiseObservable;
-    function dispatchNext(arg) {
-        var value = arg.value,
-            subscriber = arg.subscriber;
-        if (!subscriber.closed) {
-            subscriber.next(value);
-            subscriber.complete();
-        }
-    }
-    function dispatchError(arg) {
-        var err = arg.err,
-            subscriber = arg.subscriber;
-        if (!subscriber.closed) {
-            subscriber.error(err);
-        }
-    }
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("41", ["54"], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  var PromiseObservable_1 = $__require("54");
-  exports.fromPromise = PromiseObservable_1.PromiseObservable.create;
-  
-
-  return module.exports;
-});
-$__System.registerDynamic('63', [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    /**
-     * An error thrown when an Observable or a sequence was queried but has no
-     * elements.
-     *
-     * @see {@link first}
-     * @see {@link last}
-     * @see {@link single}
-     *
-     * @class EmptyError
-     */
-    var EmptyError = function (_super) {
-        __extends(EmptyError, _super);
-        function EmptyError() {
-            var err = _super.call(this, 'no elements in sequence');
-            this.name = err.name = 'EmptyError';
-            this.stack = err.stack;
-            this.message = err.message;
-        }
-        return EmptyError;
+        return AuthHttpError;
     }(Error);
-    exports.EmptyError = EmptyError;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('64', ['2a', '63'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscriber_1 = $__require('2a');
-    var EmptyError_1 = $__require('63');
+    exports.AuthHttpError = AuthHttpError;
     /**
-     * Returns an Observable that emits only the last item emitted by the source Observable.
-     * It optionally takes a predicate function as a parameter, in which case, rather than emitting
-     * the last item from the source Observable, the resulting Observable will emit the last item
-     * from the source Observable that satisfies the predicate.
-     *
-     * <img src="./img/last.png" width="100%">
-     *
-     * @throws {EmptyError} Delivers an EmptyError to the Observer's `error`
-     * callback if the Observable completes before any `next` notification was sent.
-     * @param {function} predicate - the condition any source emitted item has to satisfy.
-     * @return {Observable} an Observable that emits only the last item satisfying the given condition
-     * from the source, or an NoSuchElementException if no such items are emitted.
-     * @throws - Throws if no items that match the predicate are emitted by the source Observable.
-     * @method last
-     * @owner Observable
+     * Allows for explicit authenticated HTTP requests.
      */
-    function last(predicate, resultSelector, defaultValue) {
-        return this.lift(new LastOperator(predicate, resultSelector, defaultValue, this));
-    }
-    exports.last = last;
-    var LastOperator = function () {
-        function LastOperator(predicate, resultSelector, defaultValue, source) {
-            this.predicate = predicate;
-            this.resultSelector = resultSelector;
-            this.defaultValue = defaultValue;
-            this.source = source;
+    var AuthHttp = function () {
+        function AuthHttp(options, http, defOpts) {
+            var _this = this;
+            this.http = http;
+            this.defOpts = defOpts;
+            this.config = options.getConfig();
+            this.tokenStream = new Observable_1.Observable(function (obs) {
+                obs.next(_this.config.tokenGetter());
+            });
         }
-        LastOperator.prototype.call = function (observer, source) {
-            return source._subscribe(new LastSubscriber(observer, this.predicate, this.resultSelector, this.defaultValue, this.source));
+        AuthHttp.prototype.mergeOptions = function (providedOpts, defaultOpts) {
+            var newOptions = defaultOpts || new http_1.RequestOptions();
+            if (this.config.globalHeaders) {
+                this.setGlobalHeaders(this.config.globalHeaders, providedOpts);
+            }
+            newOptions = newOptions.merge(new http_1.RequestOptions(providedOpts));
+            return newOptions;
         };
-        return LastOperator;
+        AuthHttp.prototype.requestHelper = function (requestArgs, additionalOptions) {
+            var options = new http_1.RequestOptions(requestArgs);
+            if (additionalOptions) {
+                options = options.merge(additionalOptions);
+            }
+            return this.request(new http_1.Request(this.mergeOptions(options, this.defOpts)));
+        };
+        AuthHttp.prototype.requestWithToken = function (req, token) {
+            if (!tokenNotExpired(undefined, token)) {
+                if (!this.config.noJwtError) {
+                    return new Observable_1.Observable(function (obs) {
+                        obs.error(new AuthHttpError('No JWT present or has expired'));
+                    });
+                }
+            } else {
+                req.headers.set(this.config.headerName, this.config.headerPrefix + token);
+            }
+            return this.http.request(req);
+        };
+        AuthHttp.prototype.setGlobalHeaders = function (headers, request) {
+            if (!request.headers) {
+                request.headers = new http_1.Headers();
+            }
+            headers.forEach(function (header) {
+                var key = Object.keys(header)[0];
+                var headerValue = header[key];
+                request.headers.set(key, headerValue);
+            });
+        };
+        AuthHttp.prototype.request = function (url, options) {
+            var _this = this;
+            if (typeof url === 'string') {
+                return this.get(url, options); // Recursion: transform url from String to Request
+            }
+            // else if ( ! url instanceof Request ) {
+            //   throw new Error('First argument must be a url string or Request instance.');
+            // }
+            // from this point url is always an instance of Request;
+            var req = url;
+            var token = this.config.tokenGetter();
+            if (token instanceof Promise) {
+                return Observable_1.Observable.fromPromise(token).mergeMap(function (jwtToken) {
+                    return _this.requestWithToken(req, jwtToken);
+                });
+            } else {
+                return this.requestWithToken(req, token);
+            }
+        };
+        AuthHttp.prototype.get = function (url, options) {
+            return this.requestHelper({ body: '', method: http_1.RequestMethod.Get, url: url }, options);
+        };
+        AuthHttp.prototype.post = function (url, body, options) {
+            return this.requestHelper({ body: body, method: http_1.RequestMethod.Post, url: url }, options);
+        };
+        AuthHttp.prototype.put = function (url, body, options) {
+            return this.requestHelper({ body: body, method: http_1.RequestMethod.Put, url: url }, options);
+        };
+        AuthHttp.prototype.delete = function (url, options) {
+            return this.requestHelper({ body: '', method: http_1.RequestMethod.Delete, url: url }, options);
+        };
+        AuthHttp.prototype.patch = function (url, body, options) {
+            return this.requestHelper({ body: body, method: http_1.RequestMethod.Patch, url: url }, options);
+        };
+        AuthHttp.prototype.head = function (url, options) {
+            return this.requestHelper({ body: '', method: http_1.RequestMethod.Head, url: url }, options);
+        };
+        AuthHttp.prototype.options = function (url, options) {
+            return this.requestHelper({ body: '', method: http_1.RequestMethod.Options, url: url }, options);
+        };
+        AuthHttp = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [AuthConfig, http_1.Http, http_1.RequestOptions])], AuthHttp);
+        return AuthHttp;
     }();
+    exports.AuthHttp = AuthHttp;
     /**
-     * We need this JSDoc comment for affecting ESDoc.
-     * @ignore
-     * @extends {Ignored}
+     * Helper class to decode and find JWT expiration.
      */
-    var LastSubscriber = function (_super) {
-        __extends(LastSubscriber, _super);
-        function LastSubscriber(destination, predicate, resultSelector, defaultValue, source) {
-            _super.call(this, destination);
-            this.predicate = predicate;
-            this.resultSelector = resultSelector;
-            this.defaultValue = defaultValue;
-            this.source = source;
-            this.hasValue = false;
-            this.index = 0;
-            if (typeof defaultValue !== 'undefined') {
-                this.lastValue = defaultValue;
-                this.hasValue = true;
+    var JwtHelper = function () {
+        function JwtHelper() {}
+        JwtHelper.prototype.urlBase64Decode = function (str) {
+            var output = str.replace(/-/g, '+').replace(/_/g, '/');
+            switch (output.length % 4) {
+                case 0:
+                    {
+                        break;
+                    }
+                case 2:
+                    {
+                        output += '==';
+                        break;
+                    }
+                case 3:
+                    {
+                        output += '=';
+                        break;
+                    }
+                default:
+                    {
+                        throw 'Illegal base64url string!';
+                    }
+            }
+            return this.b64DecodeUnicode(output);
+        };
+        // https://developer.mozilla.org/en/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_Unicode_Problem
+        JwtHelper.prototype.b64DecodeUnicode = function (str) {
+            return decodeURIComponent(Array.prototype.map.call(atob(str), function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        };
+        JwtHelper.prototype.decodeToken = function (token) {
+            var parts = token.split('.');
+            if (parts.length !== 3) {
+                throw new Error('JWT must have 3 parts');
+            }
+            var decoded = this.urlBase64Decode(parts[1]);
+            if (!decoded) {
+                throw new Error('Cannot decode the token');
+            }
+            return JSON.parse(decoded);
+        };
+        JwtHelper.prototype.getTokenExpirationDate = function (token) {
+            var decoded;
+            decoded = this.decodeToken(token);
+            if (!decoded.hasOwnProperty('exp')) {
+                return null;
+            }
+            var date = new Date(0); // The 0 here is the key, which sets the date to the epoch
+            date.setUTCSeconds(decoded.exp);
+            return date;
+        };
+        JwtHelper.prototype.isTokenExpired = function (token, offsetSeconds) {
+            var date = this.getTokenExpirationDate(token);
+            offsetSeconds = offsetSeconds || 0;
+            if (date == null) {
+                return false;
+            }
+            // Token expired?
+            return !(date.valueOf() > new Date().valueOf() + offsetSeconds * 1000);
+        };
+        return JwtHelper;
+    }();
+    exports.JwtHelper = JwtHelper;
+    /**
+     * Checks for presence of token and that token hasn't expired.
+     * For use with the @CanActivate router decorator and NgIf
+     */
+    function tokenNotExpired(tokenName, jwt) {
+        if (tokenName === void 0) {
+            tokenName = AuthConfigConsts.DEFAULT_TOKEN_NAME;
+        }
+        var token = jwt || localStorage.getItem(tokenName);
+        var jwtHelper = new JwtHelper();
+        return token != null && !jwtHelper.isTokenExpired(token);
+    }
+    exports.tokenNotExpired = tokenNotExpired;
+    exports.AUTH_PROVIDERS = [{
+        provide: AuthHttp,
+        deps: [http_1.Http, http_1.RequestOptions],
+        useFactory: function (http, options) {
+            return new AuthHttp(new AuthConfig(), http, options);
+        }
+    }];
+    function provideAuth(config) {
+        return [{
+            provide: AuthHttp,
+            deps: [http_1.Http, http_1.RequestOptions],
+            useFactory: function (http, options) {
+                return new AuthHttp(new AuthConfig(config), http, options);
+            }
+        }];
+    }
+    exports.provideAuth = provideAuth;
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+    var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+    function toObject(val) {
+        if (val === null || val === undefined) {
+            throw new TypeError('Object.assign cannot be called with null or undefined');
+        }
+        return Object(val);
+    }
+    function objectAssign(target) {
+        var source = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            source[_i - 1] = arguments[_i];
+        }
+        var from;
+        var to = toObject(target);
+        var symbols;
+        for (var s = 1; s < arguments.length; s++) {
+            from = Object(arguments[s]);
+            for (var key in from) {
+                if (hasOwnProperty.call(from, key)) {
+                    to[key] = from[key];
+                }
+            }
+            if (Object.getOwnPropertySymbols) {
+                symbols = Object.getOwnPropertySymbols(from);
+                for (var i = 0; i < symbols.length; i++) {
+                    if (propIsEnumerable.call(from, symbols[i])) {
+                        to[symbols[i]] = from[symbols[i]];
+                    }
+                }
             }
         }
-        LastSubscriber.prototype._next = function (value) {
-            var index = this.index++;
-            if (this.predicate) {
-                this._tryPredicate(value, index);
-            } else {
-                if (this.resultSelector) {
-                    this._tryResultSelector(value, index);
-                    return;
-                }
-                this.lastValue = value;
-                this.hasValue = true;
-            }
-        };
-        LastSubscriber.prototype._tryPredicate = function (value, index) {
-            var result;
-            try {
-                result = this.predicate(value, index, this.source);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            if (result) {
-                if (this.resultSelector) {
-                    this._tryResultSelector(value, index);
-                    return;
-                }
-                this.lastValue = value;
-                this.hasValue = true;
-            }
-        };
-        LastSubscriber.prototype._tryResultSelector = function (value, index) {
-            var result;
-            try {
-                result = this.resultSelector(value, index);
-            } catch (err) {
-                this.destination.error(err);
-                return;
-            }
-            this.lastValue = result;
-            this.hasValue = true;
-        };
-        LastSubscriber.prototype._complete = function () {
-            var destination = this.destination;
-            if (this.hasValue) {
-                destination.next(this.lastValue);
-                destination.complete();
-            } else {
-                destination.error(new EmptyError_1.EmptyError());
-            }
-        };
-        return LastSubscriber;
-    }(Subscriber_1.Subscriber);
+        return to;
+    }
     
 
     return module.exports;
 });
-$__System.registerDynamic('65', ['2a', '66'], true, function ($__require, exports, module) {
+$__System.registerDynamic('6d', ['30', '69'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
         global = this || self,
         GLOBAL = global;
-    var Subscriber_1 = $__require('2a');
-    var rxSubscriber_1 = $__require('66');
+    var Subscriber_1 = $__require('30');
+    var rxSubscriber_1 = $__require('69');
     function toSubscriber(nextOrObserver, error, complete) {
         if (nextOrObserver) {
             if (nextOrObserver instanceof Subscriber_1.Subscriber) {
@@ -40253,13 +43714,13 @@ $__System.registerDynamic('65', ['2a', '66'], true, function ($__require, export
 
     return module.exports;
 });
-$__System.registerDynamic('56', ['25'], true, function ($__require, exports, module) {
+$__System.registerDynamic('54', ['2b'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
         global = this || self,
         GLOBAL = global;
-    var root_1 = $__require('25');
+    var root_1 = $__require('2b');
     function getSymbolObservable(context) {
         var $$observable;
         var Symbol = context.Symbol;
@@ -40281,15 +43742,15 @@ $__System.registerDynamic('56', ['25'], true, function ($__require, exports, mod
 
     return module.exports;
 });
-$__System.registerDynamic('2c', ['25', '65', '56'], true, function ($__require, exports, module) {
+$__System.registerDynamic('32', ['2b', '6d', '54'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
         global = this || self,
         GLOBAL = global;
-    var root_1 = $__require('25');
-    var toSubscriber_1 = $__require('65');
-    var observable_1 = $__require('56');
+    var root_1 = $__require('2b');
+    var toSubscriber_1 = $__require('6d');
+    var observable_1 = $__require('54');
     /**
      * A representation of any set of values over any amount of time. This the most basic building block
      * of RxJS.
@@ -40425,7 +43886,282 @@ $__System.registerDynamic('2c', ['25', '65', '56'], true, function ($__require, 
 
     return module.exports;
 });
-$__System.registerDynamic("67", [], true, function ($__require, exports, module) {
+$__System.registerDynamic("50", [], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  exports.isArray = Array.isArray || function (x) {
+    return x && typeof x.length === 'number';
+  };
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("6e", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isObject(x) {
+        return x != null && typeof x === 'object';
+    }
+    exports.isObject = isObject;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("6f", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    function isFunction(x) {
+        return typeof x === 'function';
+    }
+    exports.isFunction = isFunction;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("34", ["35"], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var errorObject_1 = $__require("35");
+    var tryCatchTarget;
+    function tryCatcher() {
+        try {
+            return tryCatchTarget.apply(this, arguments);
+        } catch (e) {
+            errorObject_1.errorObject.e = e;
+            return errorObject_1.errorObject;
+        }
+    }
+    function tryCatch(fn) {
+        tryCatchTarget = fn;
+        return tryCatcher;
+    }
+    exports.tryCatch = tryCatch;
+    ;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("35", [], true, function ($__require, exports, module) {
+  "use strict";
+  // typeof any so that it we don't have to cast when comparing a result to the error object
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  exports.errorObject = { e: {} };
+  
+
+  return module.exports;
+});
+$__System.registerDynamic("70", [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var __extends = this && this.__extends || function (d, b) {
+        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+        function __() {
+            this.constructor = d;
+        }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+    /**
+     * An error thrown when one or more errors have occurred during the
+     * `unsubscribe` of a {@link Subscription}.
+     */
+    var UnsubscriptionError = function (_super) {
+        __extends(UnsubscriptionError, _super);
+        function UnsubscriptionError(errors) {
+            _super.call(this);
+            this.errors = errors;
+            var err = Error.call(this, errors ? errors.length + " errors occurred during unsubscription:\n  " + errors.map(function (err, i) {
+                return i + 1 + ") " + err.toString();
+            }).join('\n  ') : '');
+            this.name = err.name = 'UnsubscriptionError';
+            this.stack = err.stack;
+            this.message = err.message;
+        }
+        return UnsubscriptionError;
+    }(Error);
+    exports.UnsubscriptionError = UnsubscriptionError;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('29', ['50', '6e', '6f', '34', '35', '70'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var isArray_1 = $__require('50');
+    var isObject_1 = $__require('6e');
+    var isFunction_1 = $__require('6f');
+    var tryCatch_1 = $__require('34');
+    var errorObject_1 = $__require('35');
+    var UnsubscriptionError_1 = $__require('70');
+    /**
+     * Represents a disposable resource, such as the execution of an Observable. A
+     * Subscription has one important method, `unsubscribe`, that takes no argument
+     * and just disposes the resource held by the subscription.
+     *
+     * Additionally, subscriptions may be grouped together through the `add()`
+     * method, which will attach a child Subscription to the current Subscription.
+     * When a Subscription is unsubscribed, all its children (and its grandchildren)
+     * will be unsubscribed as well.
+     *
+     * @class Subscription
+     */
+    var Subscription = function () {
+        /**
+         * @param {function(): void} [unsubscribe] A function describing how to
+         * perform the disposal of resources when the `unsubscribe` method is called.
+         */
+        function Subscription(unsubscribe) {
+            /**
+             * A flag to indicate whether this Subscription has already been unsubscribed.
+             * @type {boolean}
+             */
+            this.closed = false;
+            if (unsubscribe) {
+                this._unsubscribe = unsubscribe;
+            }
+        }
+        /**
+         * Disposes the resources held by the subscription. May, for instance, cancel
+         * an ongoing Observable execution or cancel any other type of work that
+         * started when the Subscription was created.
+         * @return {void}
+         */
+        Subscription.prototype.unsubscribe = function () {
+            var hasErrors = false;
+            var errors;
+            if (this.closed) {
+                return;
+            }
+            this.closed = true;
+            var _a = this,
+                _unsubscribe = _a._unsubscribe,
+                _subscriptions = _a._subscriptions;
+            this._subscriptions = null;
+            if (isFunction_1.isFunction(_unsubscribe)) {
+                var trial = tryCatch_1.tryCatch(_unsubscribe).call(this);
+                if (trial === errorObject_1.errorObject) {
+                    hasErrors = true;
+                    (errors = errors || []).push(errorObject_1.errorObject.e);
+                }
+            }
+            if (isArray_1.isArray(_subscriptions)) {
+                var index = -1;
+                var len = _subscriptions.length;
+                while (++index < len) {
+                    var sub = _subscriptions[index];
+                    if (isObject_1.isObject(sub)) {
+                        var trial = tryCatch_1.tryCatch(sub.unsubscribe).call(sub);
+                        if (trial === errorObject_1.errorObject) {
+                            hasErrors = true;
+                            errors = errors || [];
+                            var err = errorObject_1.errorObject.e;
+                            if (err instanceof UnsubscriptionError_1.UnsubscriptionError) {
+                                errors = errors.concat(err.errors);
+                            } else {
+                                errors.push(err);
+                            }
+                        }
+                    }
+                }
+            }
+            if (hasErrors) {
+                throw new UnsubscriptionError_1.UnsubscriptionError(errors);
+            }
+        };
+        /**
+         * Adds a tear down to be called during the unsubscribe() of this
+         * Subscription.
+         *
+         * If the tear down being added is a subscription that is already
+         * unsubscribed, is the same reference `add` is being called on, or is
+         * `Subscription.EMPTY`, it will not be added.
+         *
+         * If this subscription is already in an `closed` state, the passed
+         * tear down logic will be executed immediately.
+         *
+         * @param {TeardownLogic} teardown The additional logic to execute on
+         * teardown.
+         * @return {Subscription} Returns the Subscription used or created to be
+         * added to the inner subscriptions list. This Subscription can be used with
+         * `remove()` to remove the passed teardown logic from the inner subscriptions
+         * list.
+         */
+        Subscription.prototype.add = function (teardown) {
+            if (!teardown || teardown === Subscription.EMPTY) {
+                return Subscription.EMPTY;
+            }
+            if (teardown === this) {
+                return this;
+            }
+            var sub = teardown;
+            switch (typeof teardown) {
+                case 'function':
+                    sub = new Subscription(teardown);
+                case 'object':
+                    if (sub.closed || typeof sub.unsubscribe !== 'function') {
+                        break;
+                    } else if (this.closed) {
+                        sub.unsubscribe();
+                    } else {
+                        (this._subscriptions || (this._subscriptions = [])).push(sub);
+                    }
+                    break;
+                default:
+                    throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
+            }
+            return sub;
+        };
+        /**
+         * Removes a Subscription from the internal list of subscriptions that will
+         * unsubscribe during the unsubscribe process of this Subscription.
+         * @param {Subscription} subscription The subscription to remove.
+         * @return {void}
+         */
+        Subscription.prototype.remove = function (subscription) {
+            // HACK: This might be redundant because of the logic in `add()`
+            if (subscription == null || subscription === this || subscription === Subscription.EMPTY) {
+                return;
+            }
+            var subscriptions = this._subscriptions;
+            if (subscriptions) {
+                var subscriptionIndex = subscriptions.indexOf(subscription);
+                if (subscriptionIndex !== -1) {
+                    subscriptions.splice(subscriptionIndex, 1);
+                }
+            }
+        };
+        Subscription.EMPTY = function (empty) {
+            empty.closed = true;
+            return empty;
+        }(new Subscription());
+        return Subscription;
+    }();
+    exports.Subscription = Subscription;
+    
+
+    return module.exports;
+});
+$__System.registerDynamic("71", [], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -40443,7 +44179,43 @@ $__System.registerDynamic("67", [], true, function ($__require, exports, module)
 
     return module.exports;
 });
-$__System.registerDynamic('2a', ['68', '23', '67', '66'], true, function ($__require, exports, module) {
+$__System.registerDynamic('2b', [], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var objectTypes = {
+        'boolean': false,
+        'function': true,
+        'object': true,
+        'number': false,
+        'string': false,
+        'undefined': false
+    };
+    exports.root = objectTypes[typeof self] && self || objectTypes[typeof window] && window;
+    var freeGlobal = objectTypes[typeof global] && global;
+    if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
+        exports.root = freeGlobal;
+    }
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('69', ['2b'], true, function ($__require, exports, module) {
+    "use strict";
+
+    var define,
+        global = this || self,
+        GLOBAL = global;
+    var root_1 = $__require('2b');
+    var Symbol = root_1.root.Symbol;
+    exports.$$rxSubscriber = typeof Symbol === 'function' && typeof Symbol.for === 'function' ? Symbol.for('rxSubscriber') : '@@rxSubscriber';
+    
+
+    return module.exports;
+});
+$__System.registerDynamic('30', ['6f', '29', '71', '69'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -40456,10 +44228,10 @@ $__System.registerDynamic('2a', ['68', '23', '67', '66'], true, function ($__req
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    var isFunction_1 = $__require('68');
-    var Subscription_1 = $__require('23');
-    var Observer_1 = $__require('67');
-    var rxSubscriber_1 = $__require('66');
+    var isFunction_1 = $__require('6f');
+    var Subscription_1 = $__require('29');
+    var Observer_1 = $__require('71');
+    var rxSubscriber_1 = $__require('69');
     /**
      * Implements the {@link Observer} interface and extends the
      * {@link Subscription} class. While the {@link Observer} is the public API for
@@ -40694,86 +44466,7 @@ $__System.registerDynamic('2a', ['68', '23', '67', '66'], true, function ($__req
 
     return module.exports;
 });
-$__System.registerDynamic("52", [], true, function ($__require, exports, module) {
-  "use strict";
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  exports.isArray = Array.isArray || function (x) {
-    return x && typeof x.length === 'number';
-  };
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("69", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isObject(x) {
-        return x != null && typeof x === 'object';
-    }
-    exports.isObject = isObject;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("68", [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    function isFunction(x) {
-        return typeof x === 'function';
-    }
-    exports.isFunction = isFunction;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("2e", ["2f"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var errorObject_1 = $__require("2f");
-    var tryCatchTarget;
-    function tryCatcher() {
-        try {
-            return tryCatchTarget.apply(this, arguments);
-        } catch (e) {
-            errorObject_1.errorObject.e = e;
-            return errorObject_1.errorObject;
-        }
-    }
-    function tryCatch(fn) {
-        tryCatchTarget = fn;
-        return tryCatcher;
-    }
-    exports.tryCatch = tryCatch;
-    ;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("2f", [], true, function ($__require, exports, module) {
-  "use strict";
-  // typeof any so that it we don't have to cast when comparing a result to the error object
-
-  var define,
-      global = this || self,
-      GLOBAL = global;
-  exports.errorObject = { e: {} };
-  
-
-  return module.exports;
-});
-$__System.registerDynamic("6a", [], true, function ($__require, exports, module) {
+$__System.registerDynamic('63', ['30'], true, function ($__require, exports, module) {
     "use strict";
 
     var define,
@@ -40786,3480 +44479,103 @@ $__System.registerDynamic("6a", [], true, function ($__require, exports, module)
         }
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
+    var Subscriber_1 = $__require('30');
     /**
-     * An error thrown when one or more errors have occurred during the
-     * `unsubscribe` of a {@link Subscription}.
-     */
-    var UnsubscriptionError = function (_super) {
-        __extends(UnsubscriptionError, _super);
-        function UnsubscriptionError(errors) {
-            _super.call(this);
-            this.errors = errors;
-            var err = Error.call(this, errors ? errors.length + " errors occurred during unsubscription:\n  " + errors.map(function (err, i) {
-                return i + 1 + ") " + err.toString();
-            }).join('\n  ') : '');
-            this.name = err.name = 'UnsubscriptionError';
-            this.stack = err.stack;
-            this.message = err.message;
-        }
-        return UnsubscriptionError;
-    }(Error);
-    exports.UnsubscriptionError = UnsubscriptionError;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('23', ['52', '69', '68', '2e', '2f', '6a'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var isArray_1 = $__require('52');
-    var isObject_1 = $__require('69');
-    var isFunction_1 = $__require('68');
-    var tryCatch_1 = $__require('2e');
-    var errorObject_1 = $__require('2f');
-    var UnsubscriptionError_1 = $__require('6a');
-    /**
-     * Represents a disposable resource, such as the execution of an Observable. A
-     * Subscription has one important method, `unsubscribe`, that takes no argument
-     * and just disposes the resource held by the subscription.
+     * Applies a given `project` function to each value emitted by the source
+     * Observable, and emits the resulting values as an Observable.
      *
-     * Additionally, subscriptions may be grouped together through the `add()`
-     * method, which will attach a child Subscription to the current Subscription.
-     * When a Subscription is unsubscribed, all its children (and its grandchildren)
-     * will be unsubscribed as well.
+     * <span class="informal">Like [Array.prototype.map()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map),
+     * it passes each source value through a transformation function to get
+     * corresponding output values.</span>
      *
-     * @class Subscription
+     * <img src="./img/map.png" width="100%">
+     *
+     * Similar to the well known `Array.prototype.map` function, this operator
+     * applies a projection to each value and emits that projection in the output
+     * Observable.
+     *
+     * @example <caption>Map every every click to the clientX position of that click</caption>
+     * var clicks = Rx.Observable.fromEvent(document, 'click');
+     * var positions = clicks.map(ev => ev.clientX);
+     * positions.subscribe(x => console.log(x));
+     *
+     * @see {@link mapTo}
+     * @see {@link pluck}
+     *
+     * @param {function(value: T, index: number): R} project The function to apply
+     * to each `value` emitted by the source Observable. The `index` parameter is
+     * the number `i` for the i-th emission that has happened since the
+     * subscription, starting from the number `0`.
+     * @param {any} [thisArg] An optional argument to define what `this` is in the
+     * `project` function.
+     * @return {Observable<R>} An Observable that emits the values from the source
+     * Observable transformed by the given `project` function.
+     * @method map
+     * @owner Observable
      */
-    var Subscription = function () {
-        /**
-         * @param {function(): void} [unsubscribe] A function describing how to
-         * perform the disposal of resources when the `unsubscribe` method is called.
-         */
-        function Subscription(unsubscribe) {
-            /**
-             * A flag to indicate whether this Subscription has already been unsubscribed.
-             * @type {boolean}
-             */
-            this.closed = false;
-            if (unsubscribe) {
-                this._unsubscribe = unsubscribe;
-            }
+    function map(project, thisArg) {
+        if (typeof project !== 'function') {
+            throw new TypeError('argument is not a function. Are you looking for `mapTo()`?');
         }
-        /**
-         * Disposes the resources held by the subscription. May, for instance, cancel
-         * an ongoing Observable execution or cancel any other type of work that
-         * started when the Subscription was created.
-         * @return {void}
-         */
-        Subscription.prototype.unsubscribe = function () {
-            var hasErrors = false;
-            var errors;
-            if (this.closed) {
-                return;
-            }
-            this.closed = true;
-            var _a = this,
-                _unsubscribe = _a._unsubscribe,
-                _subscriptions = _a._subscriptions;
-            this._subscriptions = null;
-            if (isFunction_1.isFunction(_unsubscribe)) {
-                var trial = tryCatch_1.tryCatch(_unsubscribe).call(this);
-                if (trial === errorObject_1.errorObject) {
-                    hasErrors = true;
-                    (errors = errors || []).push(errorObject_1.errorObject.e);
-                }
-            }
-            if (isArray_1.isArray(_subscriptions)) {
-                var index = -1;
-                var len = _subscriptions.length;
-                while (++index < len) {
-                    var sub = _subscriptions[index];
-                    if (isObject_1.isObject(sub)) {
-                        var trial = tryCatch_1.tryCatch(sub.unsubscribe).call(sub);
-                        if (trial === errorObject_1.errorObject) {
-                            hasErrors = true;
-                            errors = errors || [];
-                            var err = errorObject_1.errorObject.e;
-                            if (err instanceof UnsubscriptionError_1.UnsubscriptionError) {
-                                errors = errors.concat(err.errors);
-                            } else {
-                                errors.push(err);
-                            }
-                        }
-                    }
-                }
-            }
-            if (hasErrors) {
-                throw new UnsubscriptionError_1.UnsubscriptionError(errors);
-            }
+        return this.lift(new MapOperator(project, thisArg));
+    }
+    exports.map = map;
+    var MapOperator = function () {
+        function MapOperator(project, thisArg) {
+            this.project = project;
+            this.thisArg = thisArg;
+        }
+        MapOperator.prototype.call = function (subscriber, source) {
+            return source._subscribe(new MapSubscriber(subscriber, this.project, this.thisArg));
         };
-        /**
-         * Adds a tear down to be called during the unsubscribe() of this
-         * Subscription.
-         *
-         * If the tear down being added is a subscription that is already
-         * unsubscribed, is the same reference `add` is being called on, or is
-         * `Subscription.EMPTY`, it will not be added.
-         *
-         * If this subscription is already in an `closed` state, the passed
-         * tear down logic will be executed immediately.
-         *
-         * @param {TeardownLogic} teardown The additional logic to execute on
-         * teardown.
-         * @return {Subscription} Returns the Subscription used or created to be
-         * added to the inner subscriptions list. This Subscription can be used with
-         * `remove()` to remove the passed teardown logic from the inner subscriptions
-         * list.
-         */
-        Subscription.prototype.add = function (teardown) {
-            if (!teardown || teardown === Subscription.EMPTY) {
-                return Subscription.EMPTY;
-            }
-            if (teardown === this) {
-                return this;
-            }
-            var sub = teardown;
-            switch (typeof teardown) {
-                case 'function':
-                    sub = new Subscription(teardown);
-                case 'object':
-                    if (sub.closed || typeof sub.unsubscribe !== 'function') {
-                        break;
-                    } else if (this.closed) {
-                        sub.unsubscribe();
-                    } else {
-                        (this._subscriptions || (this._subscriptions = [])).push(sub);
-                    }
-                    break;
-                default:
-                    throw new Error('unrecognized teardown ' + teardown + ' added to Subscription.');
-            }
-            return sub;
-        };
-        /**
-         * Removes a Subscription from the internal list of subscriptions that will
-         * unsubscribe during the unsubscribe process of this Subscription.
-         * @param {Subscription} subscription The subscription to remove.
-         * @return {void}
-         */
-        Subscription.prototype.remove = function (subscription) {
-            // HACK: This might be redundant because of the logic in `add()`
-            if (subscription == null || subscription === this || subscription === Subscription.EMPTY) {
-                return;
-            }
-            var subscriptions = this._subscriptions;
-            if (subscriptions) {
-                var subscriptionIndex = subscriptions.indexOf(subscription);
-                if (subscriptionIndex !== -1) {
-                    subscriptions.splice(subscriptionIndex, 1);
-                }
-            }
-        };
-        Subscription.EMPTY = function (empty) {
-            empty.closed = true;
-            return empty;
-        }(new Subscription());
-        return Subscription;
+        return MapOperator;
     }();
-    exports.Subscription = Subscription;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic("6b", ["23"], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subscription_1 = $__require("23");
+    exports.MapOperator = MapOperator;
     /**
      * We need this JSDoc comment for affecting ESDoc.
      * @ignore
      * @extends {Ignored}
      */
-    var SubjectSubscription = function (_super) {
-        __extends(SubjectSubscription, _super);
-        function SubjectSubscription(subject, subscriber) {
-            _super.call(this);
-            this.subject = subject;
-            this.subscriber = subscriber;
-            this.closed = false;
-        }
-        SubjectSubscription.prototype.unsubscribe = function () {
-            if (this.closed) {
-                return;
-            }
-            this.closed = true;
-            var subject = this.subject;
-            var observers = subject.observers;
-            this.subject = null;
-            if (!observers || observers.length === 0 || subject.isStopped || subject.closed) {
-                return;
-            }
-            var subscriberIndex = observers.indexOf(this.subscriber);
-            if (subscriberIndex !== -1) {
-                observers.splice(subscriberIndex, 1);
-            }
-        };
-        return SubjectSubscription;
-    }(Subscription_1.Subscription);
-    exports.SubjectSubscription = SubjectSubscription;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('25', [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var objectTypes = {
-        'boolean': false,
-        'function': true,
-        'object': true,
-        'number': false,
-        'string': false,
-        'undefined': false
-    };
-    exports.root = objectTypes[typeof self] && self || objectTypes[typeof window] && window;
-    var freeGlobal = objectTypes[typeof global] && global;
-    if (freeGlobal && (freeGlobal.global === freeGlobal || freeGlobal.window === freeGlobal)) {
-        exports.root = freeGlobal;
-    }
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('66', ['25'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var root_1 = $__require('25');
-    var Symbol = root_1.root.Symbol;
-    exports.$$rxSubscriber = typeof Symbol === 'function' && typeof Symbol.for === 'function' ? Symbol.for('rxSubscriber') : '@@rxSubscriber';
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('40', ['2c', '2a', '23', '6c', '6b', '66'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Observable_1 = $__require('2c');
-    var Subscriber_1 = $__require('2a');
-    var Subscription_1 = $__require('23');
-    var ObjectUnsubscribedError_1 = $__require('6c');
-    var SubjectSubscription_1 = $__require('6b');
-    var rxSubscriber_1 = $__require('66');
-    /**
-     * @class SubjectSubscriber<T>
-     */
-    var SubjectSubscriber = function (_super) {
-        __extends(SubjectSubscriber, _super);
-        function SubjectSubscriber(destination) {
+    var MapSubscriber = function (_super) {
+        __extends(MapSubscriber, _super);
+        function MapSubscriber(destination, project, thisArg) {
             _super.call(this, destination);
-            this.destination = destination;
+            this.project = project;
+            this.count = 0;
+            this.thisArg = thisArg || this;
         }
-        return SubjectSubscriber;
-    }(Subscriber_1.Subscriber);
-    exports.SubjectSubscriber = SubjectSubscriber;
-    /**
-     * @class Subject<T>
-     */
-    var Subject = function (_super) {
-        __extends(Subject, _super);
-        function Subject() {
-            _super.call(this);
-            this.observers = [];
-            this.closed = false;
-            this.isStopped = false;
-            this.hasError = false;
-            this.thrownError = null;
-        }
-        Subject.prototype[rxSubscriber_1.$$rxSubscriber] = function () {
-            return new SubjectSubscriber(this);
-        };
-        Subject.prototype.lift = function (operator) {
-            var subject = new AnonymousSubject(this, this);
-            subject.operator = operator;
-            return subject;
-        };
-        Subject.prototype.next = function (value) {
-            if (this.closed) {
-                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
-            }
-            if (!this.isStopped) {
-                var observers = this.observers;
-                var len = observers.length;
-                var copy = observers.slice();
-                for (var i = 0; i < len; i++) {
-                    copy[i].next(value);
-                }
-            }
-        };
-        Subject.prototype.error = function (err) {
-            if (this.closed) {
-                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
-            }
-            this.hasError = true;
-            this.thrownError = err;
-            this.isStopped = true;
-            var observers = this.observers;
-            var len = observers.length;
-            var copy = observers.slice();
-            for (var i = 0; i < len; i++) {
-                copy[i].error(err);
-            }
-            this.observers.length = 0;
-        };
-        Subject.prototype.complete = function () {
-            if (this.closed) {
-                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
-            }
-            this.isStopped = true;
-            var observers = this.observers;
-            var len = observers.length;
-            var copy = observers.slice();
-            for (var i = 0; i < len; i++) {
-                copy[i].complete();
-            }
-            this.observers.length = 0;
-        };
-        Subject.prototype.unsubscribe = function () {
-            this.isStopped = true;
-            this.closed = true;
-            this.observers = null;
-        };
-        Subject.prototype._subscribe = function (subscriber) {
-            if (this.closed) {
-                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
-            } else if (this.hasError) {
-                subscriber.error(this.thrownError);
-                return Subscription_1.Subscription.EMPTY;
-            } else if (this.isStopped) {
-                subscriber.complete();
-                return Subscription_1.Subscription.EMPTY;
-            } else {
-                this.observers.push(subscriber);
-                return new SubjectSubscription_1.SubjectSubscription(this, subscriber);
-            }
-        };
-        Subject.prototype.asObservable = function () {
-            var observable = new Observable_1.Observable();
-            observable.source = this;
-            return observable;
-        };
-        Subject.create = function (destination, source) {
-            return new AnonymousSubject(destination, source);
-        };
-        return Subject;
-    }(Observable_1.Observable);
-    exports.Subject = Subject;
-    /**
-     * @class AnonymousSubject<T>
-     */
-    var AnonymousSubject = function (_super) {
-        __extends(AnonymousSubject, _super);
-        function AnonymousSubject(destination, source) {
-            _super.call(this);
-            this.destination = destination;
-            this.source = source;
-        }
-        AnonymousSubject.prototype.next = function (value) {
-            var destination = this.destination;
-            if (destination && destination.next) {
-                destination.next(value);
-            }
-        };
-        AnonymousSubject.prototype.error = function (err) {
-            var destination = this.destination;
-            if (destination && destination.error) {
-                this.destination.error(err);
-            }
-        };
-        AnonymousSubject.prototype.complete = function () {
-            var destination = this.destination;
-            if (destination && destination.complete) {
-                this.destination.complete();
-            }
-        };
-        AnonymousSubject.prototype._subscribe = function (subscriber) {
-            var source = this.source;
-            if (source) {
-                return this.source.subscribe(subscriber);
-            } else {
-                return Subscription_1.Subscription.EMPTY;
-            }
-        };
-        return AnonymousSubject;
-    }(Subject);
-    exports.AnonymousSubject = AnonymousSubject;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('6c', [], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    /**
-     * An error thrown when an action is invalid because the object has been
-     * unsubscribed.
-     *
-     * @see {@link Subject}
-     * @see {@link BehaviorSubject}
-     *
-     * @class ObjectUnsubscribedError
-     */
-    var ObjectUnsubscribedError = function (_super) {
-        __extends(ObjectUnsubscribedError, _super);
-        function ObjectUnsubscribedError() {
-            var err = _super.call(this, 'object unsubscribed');
-            this.name = err.name = 'ObjectUnsubscribedError';
-            this.stack = err.stack;
-            this.message = err.message;
-        }
-        return ObjectUnsubscribedError;
-    }(Error);
-    exports.ObjectUnsubscribedError = ObjectUnsubscribedError;
-    
-
-    return module.exports;
-});
-$__System.registerDynamic('6d', ['40', '6c'], true, function ($__require, exports, module) {
-    "use strict";
-
-    var define,
-        global = this || self,
-        GLOBAL = global;
-    var __extends = this && this.__extends || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() {
-            this.constructor = d;
-        }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var Subject_1 = $__require('40');
-    var ObjectUnsubscribedError_1 = $__require('6c');
-    /**
-     * @class BehaviorSubject<T>
-     */
-    var BehaviorSubject = function (_super) {
-        __extends(BehaviorSubject, _super);
-        function BehaviorSubject(_value) {
-            _super.call(this);
-            this._value = _value;
-        }
-        Object.defineProperty(BehaviorSubject.prototype, "value", {
-            get: function () {
-                return this.getValue();
-            },
-            enumerable: true,
-            configurable: true
-        });
-        BehaviorSubject.prototype._subscribe = function (subscriber) {
-            var subscription = _super.prototype._subscribe.call(this, subscriber);
-            if (subscription && !subscription.closed) {
-                subscriber.next(this._value);
-            }
-            return subscription;
-        };
-        BehaviorSubject.prototype.getValue = function () {
-            if (this.hasError) {
-                throw this.thrownError;
-            } else if (this.closed) {
-                throw new ObjectUnsubscribedError_1.ObjectUnsubscribedError();
-            } else {
-                return this._value;
-            }
-        };
-        BehaviorSubject.prototype.next = function (value) {
-            _super.prototype.next.call(this, this._value = value);
-        };
-        return BehaviorSubject;
-    }(Subject_1.Subject);
-    exports.BehaviorSubject = BehaviorSubject;
-    
-
-    return module.exports;
-});
-(function() {
-var define = $__System.amdDefine;
-(function(global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@angular/common'), require('@angular/core'), require('rxjs/Subject'), require('rxjs/observable/from'), require('rxjs/observable/of'), require('rxjs/operator/every'), require('rxjs/operator/map'), require('rxjs/operator/mergeAll'), require('rxjs/operator/mergeMap'), require('rxjs/operator/reduce'), require('rxjs/Observable'), require('rxjs/operator/catch'), require('rxjs/operator/concatAll'), require('rxjs/operator/first'), require('rxjs/util/EmptyError'), require('rxjs/observable/fromPromise'), require('rxjs/operator/last'), require('rxjs/BehaviorSubject')) : typeof define === 'function' && define.amd ? define("b", ["exports", "13", "3", "40", "57", "59", "5a", "49", "60", "47", "5d", "2c", "5e", "61", "62", "63", "41", "64", "6d"], factory) : (factory((global.ng = global.ng || {}, global.ng.router = global.ng.router || {}), global.ng.common, global.ng.core, global.Rx, global.Rx.Observable, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx.Observable.prototype, global.Rx, global.Rx.Observable, global.Rx.Observable.prototype, global.Rx));
-}(this, function(exports, _angular_common, _angular_core, rxjs_Subject, rxjs_observable_from, rxjs_observable_of, rxjs_operator_every, rxjs_operator_map, rxjs_operator_mergeAll, rxjs_operator_mergeMap, rxjs_operator_reduce, rxjs_Observable, rxjs_operator_catch, rxjs_operator_concatAll, rxjs_operator_first, rxjs_util_EmptyError, rxjs_observable_fromPromise, l, rxjs_BehaviorSubject) {
-  'use strict';
-  var __extends = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var PRIMARY_OUTLET = 'primary';
-  var NavigationCancelingError = (function(_super) {
-    __extends(NavigationCancelingError, _super);
-    function NavigationCancelingError(message) {
-      _super.call(this, message);
-      this.message = message;
-      this.stack = (new Error(message)).stack;
-    }
-    NavigationCancelingError.prototype.toString = function() {
-      return this.message;
-    };
-    return NavigationCancelingError;
-  }(Error));
-  function shallowEqualArrays(a, b) {
-    if (a.length !== b.length)
-      return false;
-    for (var i = 0; i < a.length; ++i) {
-      if (!shallowEqual(a[i], b[i]))
-        return false;
-    }
-    return true;
-  }
-  function shallowEqual(a, b) {
-    var k1 = Object.keys(a);
-    var k2 = Object.keys(b);
-    if (k1.length != k2.length) {
-      return false;
-    }
-    var key;
-    for (var i = 0; i < k1.length; i++) {
-      key = k1[i];
-      if (a[key] !== b[key]) {
-        return false;
-      }
-    }
-    return true;
-  }
-  function flatten(a) {
-    var target = [];
-    for (var i = 0; i < a.length; ++i) {
-      for (var j = 0; j < a[i].length; ++j) {
-        target.push(a[i][j]);
-      }
-    }
-    return target;
-  }
-  function last(a) {
-    return a.length > 0 ? a[a.length - 1] : null;
-  }
-  function merge(m1, m2) {
-    var m = {};
-    for (var attr in m1) {
-      if (m1.hasOwnProperty(attr)) {
-        m[attr] = m1[attr];
-      }
-    }
-    for (var attr in m2) {
-      if (m2.hasOwnProperty(attr)) {
-        m[attr] = m2[attr];
-      }
-    }
-    return m;
-  }
-  function forEach(map, callback) {
-    for (var prop in map) {
-      if (map.hasOwnProperty(prop)) {
-        callback(map[prop], prop);
-      }
-    }
-  }
-  function waitForMap(obj, fn) {
-    var waitFor = [];
-    var res = {};
-    forEach(obj, function(a, k) {
-      if (k === PRIMARY_OUTLET) {
-        waitFor.push(rxjs_operator_map.map.call(fn(k, a), function(_) {
-          res[k] = _;
-          return _;
-        }));
-      }
-    });
-    forEach(obj, function(a, k) {
-      if (k !== PRIMARY_OUTLET) {
-        waitFor.push(rxjs_operator_map.map.call(fn(k, a), function(_) {
-          res[k] = _;
-          return _;
-        }));
-      }
-    });
-    if (waitFor.length > 0) {
-      var concatted$ = rxjs_operator_concatAll.concatAll.call(rxjs_observable_of.of.apply(void 0, waitFor));
-      var last$ = l.last.call(concatted$);
-      return rxjs_operator_map.map.call(last$, function() {
-        return res;
-      });
-    } else {
-      return rxjs_observable_of.of(res);
-    }
-  }
-  function andObservables(observables) {
-    var merged$ = rxjs_operator_mergeAll.mergeAll.call(observables);
-    return rxjs_operator_every.every.call(merged$, function(result) {
-      return result === true;
-    });
-  }
-  function wrapIntoObservable(value) {
-    if (value instanceof rxjs_Observable.Observable) {
-      return value;
-    } else if (value instanceof Promise) {
-      return rxjs_observable_fromPromise.fromPromise(value);
-    } else {
-      return rxjs_observable_of.of(value);
-    }
-  }
-  var ROUTES = new _angular_core.OpaqueToken('ROUTES');
-  var LoadedRouterConfig = (function() {
-    function LoadedRouterConfig(routes, injector, factoryResolver) {
-      this.routes = routes;
-      this.injector = injector;
-      this.factoryResolver = factoryResolver;
-    }
-    return LoadedRouterConfig;
-  }());
-  var RouterConfigLoader = (function() {
-    function RouterConfigLoader(loader, compiler) {
-      this.loader = loader;
-      this.compiler = compiler;
-    }
-    RouterConfigLoader.prototype.load = function(parentInjector, loadChildren) {
-      return rxjs_operator_map.map.call(this.loadModuleFactory(loadChildren), function(r) {
-        var ref = r.create(parentInjector);
-        return new LoadedRouterConfig(flatten(ref.injector.get(ROUTES)), ref.injector, ref.componentFactoryResolver);
-      });
-    };
-    RouterConfigLoader.prototype.loadModuleFactory = function(loadChildren) {
-      var _this = this;
-      if (typeof loadChildren === 'string') {
-        return rxjs_observable_fromPromise.fromPromise(this.loader.load(loadChildren));
-      } else {
-        var offlineMode_1 = this.compiler instanceof _angular_core.Compiler;
-        return rxjs_operator_mergeMap.mergeMap.call(wrapIntoObservable(loadChildren()), function(t) {
-          return offlineMode_1 ? rxjs_observable_of.of(t) : rxjs_observable_fromPromise.fromPromise(_this.compiler.compileModuleAsync(t));
-        });
-      }
-    };
-    return RouterConfigLoader;
-  }());
-  function createEmptyUrlTree() {
-    return new UrlTree(new UrlSegmentGroup([], {}), {}, null);
-  }
-  function containsTree(container, containee, exact) {
-    if (exact) {
-      return equalSegmentGroups(container.root, containee.root);
-    } else {
-      return containsSegmentGroup(container.root, containee.root);
-    }
-  }
-  function equalSegmentGroups(container, containee) {
-    if (!equalPath(container.segments, containee.segments))
-      return false;
-    if (container.numberOfChildren !== containee.numberOfChildren)
-      return false;
-    for (var c in containee.children) {
-      if (!container.children[c])
-        return false;
-      if (!equalSegmentGroups(container.children[c], containee.children[c]))
-        return false;
-    }
-    return true;
-  }
-  function containsSegmentGroup(container, containee) {
-    return containsSegmentGroupHelper(container, containee, containee.segments);
-  }
-  function containsSegmentGroupHelper(container, containee, containeePaths) {
-    if (container.segments.length > containeePaths.length) {
-      var current = container.segments.slice(0, containeePaths.length);
-      if (!equalPath(current, containeePaths))
-        return false;
-      if (containee.hasChildren())
-        return false;
-      return true;
-    } else if (container.segments.length === containeePaths.length) {
-      if (!equalPath(container.segments, containeePaths))
-        return false;
-      for (var c in containee.children) {
-        if (!container.children[c])
-          return false;
-        if (!containsSegmentGroup(container.children[c], containee.children[c]))
-          return false;
-      }
-      return true;
-    } else {
-      var current = containeePaths.slice(0, container.segments.length);
-      var next = containeePaths.slice(container.segments.length);
-      if (!equalPath(container.segments, current))
-        return false;
-      if (!container.children[PRIMARY_OUTLET])
-        return false;
-      return containsSegmentGroupHelper(container.children[PRIMARY_OUTLET], containee, next);
-    }
-  }
-  var UrlTree = (function() {
-    function UrlTree(root, queryParams, fragment) {
-      this.root = root;
-      this.queryParams = queryParams;
-      this.fragment = fragment;
-    }
-    UrlTree.prototype.toString = function() {
-      return new DefaultUrlSerializer().serialize(this);
-    };
-    return UrlTree;
-  }());
-  var UrlSegmentGroup = (function() {
-    function UrlSegmentGroup(segments, children) {
-      var _this = this;
-      this.segments = segments;
-      this.children = children;
-      this.parent = null;
-      forEach(children, function(v, k) {
-        return v.parent = _this;
-      });
-    }
-    UrlSegmentGroup.prototype.hasChildren = function() {
-      return this.numberOfChildren > 0;
-    };
-    Object.defineProperty(UrlSegmentGroup.prototype, "numberOfChildren", {
-      get: function() {
-        return Object.keys(this.children).length;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    UrlSegmentGroup.prototype.toString = function() {
-      return serializePaths(this);
-    };
-    return UrlSegmentGroup;
-  }());
-  var UrlSegment = (function() {
-    function UrlSegment(path, parameters) {
-      this.path = path;
-      this.parameters = parameters;
-    }
-    UrlSegment.prototype.toString = function() {
-      return serializePath(this);
-    };
-    return UrlSegment;
-  }());
-  function equalPath(a, b) {
-    if (a.length !== b.length)
-      return false;
-    for (var i = 0; i < a.length; ++i) {
-      if (a[i].path !== b[i].path)
-        return false;
-    }
-    return true;
-  }
-  function mapChildrenIntoArray(segment, fn) {
-    var res = [];
-    forEach(segment.children, function(child, childOutlet) {
-      if (childOutlet === PRIMARY_OUTLET) {
-        res = res.concat(fn(child, childOutlet));
-      }
-    });
-    forEach(segment.children, function(child, childOutlet) {
-      if (childOutlet !== PRIMARY_OUTLET) {
-        res = res.concat(fn(child, childOutlet));
-      }
-    });
-    return res;
-  }
-  var UrlSerializer = (function() {
-    function UrlSerializer() {}
-    return UrlSerializer;
-  }());
-  var DefaultUrlSerializer = (function() {
-    function DefaultUrlSerializer() {}
-    DefaultUrlSerializer.prototype.parse = function(url) {
-      var p = new UrlParser(url);
-      return new UrlTree(p.parseRootSegment(), p.parseQueryParams(), p.parseFragment());
-    };
-    DefaultUrlSerializer.prototype.serialize = function(tree) {
-      var segment = "/" + serializeSegment(tree.root, true);
-      var query = serializeQueryParams(tree.queryParams);
-      var fragment = tree.fragment !== null && tree.fragment !== undefined ? "#" + encodeURI(tree.fragment) : '';
-      return "" + segment + query + fragment;
-    };
-    return DefaultUrlSerializer;
-  }());
-  function serializePaths(segment) {
-    return segment.segments.map(function(p) {
-      return serializePath(p);
-    }).join('/');
-  }
-  function serializeSegment(segment, root) {
-    if (segment.hasChildren() && root) {
-      var primary = segment.children[PRIMARY_OUTLET] ? serializeSegment(segment.children[PRIMARY_OUTLET], false) : '';
-      var children_1 = [];
-      forEach(segment.children, function(v, k) {
-        if (k !== PRIMARY_OUTLET) {
-          children_1.push(k + ":" + serializeSegment(v, false));
-        }
-      });
-      if (children_1.length > 0) {
-        return primary + "(" + children_1.join('//') + ")";
-      } else {
-        return "" + primary;
-      }
-    } else if (segment.hasChildren() && !root) {
-      var children = mapChildrenIntoArray(segment, function(v, k) {
-        if (k === PRIMARY_OUTLET) {
-          return [serializeSegment(segment.children[PRIMARY_OUTLET], false)];
-        } else {
-          return [(k + ":" + serializeSegment(v, false))];
-        }
-      });
-      return serializePaths(segment) + "/(" + children.join('//') + ")";
-    } else {
-      return serializePaths(segment);
-    }
-  }
-  function encode(s) {
-    return encodeURIComponent(s);
-  }
-  function decode(s) {
-    return decodeURIComponent(s);
-  }
-  function serializePath(path) {
-    return "" + encode(path.path) + serializeParams(path.parameters);
-  }
-  function serializeParams(params) {
-    return pairs(params).map(function(p) {
-      return (";" + encode(p.first) + "=" + encode(p.second));
-    }).join('');
-  }
-  function serializeQueryParams(params) {
-    var strs = pairs(params).map(function(p) {
-      return (encode(p.first) + "=" + encode(p.second));
-    });
-    return strs.length > 0 ? "?" + strs.join("&") : '';
-  }
-  var Pair = (function() {
-    function Pair(first, second) {
-      this.first = first;
-      this.second = second;
-    }
-    return Pair;
-  }());
-  function pairs(obj) {
-    var res = [];
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        res.push(new Pair(prop, obj[prop]));
-      }
-    }
-    return res;
-  }
-  var SEGMENT_RE = /^[^\/\(\)\?;=&#]+/;
-  function matchSegments(str) {
-    SEGMENT_RE.lastIndex = 0;
-    var match = str.match(SEGMENT_RE);
-    return match ? match[0] : '';
-  }
-  var QUERY_PARAM_RE = /^[^=\?&#]+/;
-  function matchQueryParams(str) {
-    QUERY_PARAM_RE.lastIndex = 0;
-    var match = str.match(SEGMENT_RE);
-    return match ? match[0] : '';
-  }
-  var QUERY_PARAM_VALUE_RE = /^[^\?&#]+/;
-  function matchUrlQueryParamValue(str) {
-    QUERY_PARAM_VALUE_RE.lastIndex = 0;
-    var match = str.match(QUERY_PARAM_VALUE_RE);
-    return match ? match[0] : '';
-  }
-  var UrlParser = (function() {
-    function UrlParser(url) {
-      this.url = url;
-      this.remaining = url;
-    }
-    UrlParser.prototype.peekStartsWith = function(str) {
-      return this.remaining.startsWith(str);
-    };
-    UrlParser.prototype.capture = function(str) {
-      if (!this.remaining.startsWith(str)) {
-        throw new Error("Expected \"" + str + "\".");
-      }
-      this.remaining = this.remaining.substring(str.length);
-    };
-    UrlParser.prototype.parseRootSegment = function() {
-      if (this.remaining.startsWith('/')) {
-        this.capture('/');
-      }
-      if (this.remaining === '' || this.remaining.startsWith('?') || this.remaining.startsWith('#')) {
-        return new UrlSegmentGroup([], {});
-      } else {
-        return new UrlSegmentGroup([], this.parseChildren());
-      }
-    };
-    UrlParser.prototype.parseChildren = function() {
-      if (this.remaining.length == 0) {
-        return {};
-      }
-      if (this.peekStartsWith('/')) {
-        this.capture('/');
-      }
-      var paths = [];
-      if (!this.peekStartsWith('(')) {
-        paths.push(this.parseSegments());
-      }
-      while (this.peekStartsWith('/') && !this.peekStartsWith('//') && !this.peekStartsWith('/(')) {
-        this.capture('/');
-        paths.push(this.parseSegments());
-      }
-      var children = {};
-      if (this.peekStartsWith('/(')) {
-        this.capture('/');
-        children = this.parseParens(true);
-      }
-      var res = {};
-      if (this.peekStartsWith('(')) {
-        res = this.parseParens(false);
-      }
-      if (paths.length > 0 || Object.keys(children).length > 0) {
-        res[PRIMARY_OUTLET] = new UrlSegmentGroup(paths, children);
-      }
-      return res;
-    };
-    UrlParser.prototype.parseSegments = function() {
-      var path = matchSegments(this.remaining);
-      if (path === '' && this.peekStartsWith(';')) {
-        throw new Error("Empty path url segment cannot have parameters: '" + this.remaining + "'.");
-      }
-      this.capture(path);
-      var matrixParams = {};
-      if (this.peekStartsWith(';')) {
-        matrixParams = this.parseMatrixParams();
-      }
-      return new UrlSegment(decode(path), matrixParams);
-    };
-    UrlParser.prototype.parseQueryParams = function() {
-      var params = {};
-      if (this.peekStartsWith('?')) {
-        this.capture('?');
-        this.parseQueryParam(params);
-        while (this.remaining.length > 0 && this.peekStartsWith('&')) {
-          this.capture('&');
-          this.parseQueryParam(params);
-        }
-      }
-      return params;
-    };
-    UrlParser.prototype.parseFragment = function() {
-      if (this.peekStartsWith('#')) {
-        return decodeURI(this.remaining.substring(1));
-      } else {
-        return null;
-      }
-    };
-    UrlParser.prototype.parseMatrixParams = function() {
-      var params = {};
-      while (this.remaining.length > 0 && this.peekStartsWith(';')) {
-        this.capture(';');
-        this.parseParam(params);
-      }
-      return params;
-    };
-    UrlParser.prototype.parseParam = function(params) {
-      var key = matchSegments(this.remaining);
-      if (!key) {
-        return;
-      }
-      this.capture(key);
-      var value = '';
-      if (this.peekStartsWith('=')) {
-        this.capture('=');
-        var valueMatch = matchSegments(this.remaining);
-        if (valueMatch) {
-          value = valueMatch;
-          this.capture(value);
-        }
-      }
-      params[decode(key)] = decode(value);
-    };
-    UrlParser.prototype.parseQueryParam = function(params) {
-      var key = matchQueryParams(this.remaining);
-      if (!key) {
-        return;
-      }
-      this.capture(key);
-      var value = '';
-      if (this.peekStartsWith('=')) {
-        this.capture('=');
-        var valueMatch = matchUrlQueryParamValue(this.remaining);
-        if (valueMatch) {
-          value = valueMatch;
-          this.capture(value);
-        }
-      }
-      params[decode(key)] = decode(value);
-    };
-    UrlParser.prototype.parseParens = function(allowPrimary) {
-      var segments = {};
-      this.capture('(');
-      while (!this.peekStartsWith(')') && this.remaining.length > 0) {
-        var path = matchSegments(this.remaining);
-        var next = this.remaining[path.length];
-        if (next !== '/' && next !== ')' && next !== ';') {
-          throw new Error("Cannot parse url '" + this.url + "'");
-        }
-        var outletName = void 0;
-        if (path.indexOf(':') > -1) {
-          outletName = path.substr(0, path.indexOf(':'));
-          this.capture(outletName);
-          this.capture(':');
-        } else if (allowPrimary) {
-          outletName = PRIMARY_OUTLET;
-        }
-        var children = this.parseChildren();
-        segments[outletName] = Object.keys(children).length === 1 ? children[PRIMARY_OUTLET] : new UrlSegmentGroup([], children);
-        if (this.peekStartsWith('//')) {
-          this.capture('//');
-        }
-      }
-      this.capture(')');
-      return segments;
-    };
-    return UrlParser;
-  }());
-  var NoMatch = (function() {
-    function NoMatch(segmentGroup) {
-      if (segmentGroup === void 0) {
-        segmentGroup = null;
-      }
-      this.segmentGroup = segmentGroup;
-    }
-    return NoMatch;
-  }());
-  var AbsoluteRedirect = (function() {
-    function AbsoluteRedirect(segments) {
-      this.segments = segments;
-    }
-    return AbsoluteRedirect;
-  }());
-  function noMatch(segmentGroup) {
-    return new rxjs_Observable.Observable(function(obs) {
-      return obs.error(new NoMatch(segmentGroup));
-    });
-  }
-  function absoluteRedirect(segments) {
-    return new rxjs_Observable.Observable(function(obs) {
-      return obs.error(new AbsoluteRedirect(segments));
-    });
-  }
-  function canLoadFails(route) {
-    return new rxjs_Observable.Observable(function(obs) {
-      return obs.error(new NavigationCancelingError("Cannot load children because the guard of the route \"path: '" + route.path + "'\" returned false"));
-    });
-  }
-  function applyRedirects(injector, configLoader, urlTree, config) {
-    return new ApplyRedirects(injector, configLoader, urlTree, config).apply();
-  }
-  var ApplyRedirects = (function() {
-    function ApplyRedirects(injector, configLoader, urlTree, config) {
-      this.injector = injector;
-      this.configLoader = configLoader;
-      this.urlTree = urlTree;
-      this.config = config;
-      this.allowRedirects = true;
-    }
-    ApplyRedirects.prototype.apply = function() {
-      var _this = this;
-      var expanded$ = this.expandSegmentGroup(this.injector, this.config, this.urlTree.root, PRIMARY_OUTLET);
-      var urlTrees$ = rxjs_operator_map.map.call(expanded$, function(rootSegmentGroup) {
-        return _this.createUrlTree(rootSegmentGroup);
-      });
-      return rxjs_operator_catch._catch.call(urlTrees$, function(e) {
-        if (e instanceof AbsoluteRedirect) {
-          _this.allowRedirects = false;
-          var group = new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = new UrlSegmentGroup(e.segments, {}), _a));
-          return _this.match(group);
-        } else if (e instanceof NoMatch) {
-          throw _this.noMatchError(e);
-        } else {
-          throw e;
-        }
-        var _a;
-      });
-    };
-    ApplyRedirects.prototype.match = function(segmentGroup) {
-      var _this = this;
-      var expanded$ = this.expandSegmentGroup(this.injector, this.config, segmentGroup, PRIMARY_OUTLET);
-      var mapped$ = rxjs_operator_map.map.call(expanded$, function(rootSegmentGroup) {
-        return _this.createUrlTree(rootSegmentGroup);
-      });
-      return rxjs_operator_catch._catch.call(mapped$, function(e) {
-        if (e instanceof NoMatch) {
-          throw _this.noMatchError(e);
-        } else {
-          throw e;
-        }
-      });
-    };
-    ApplyRedirects.prototype.noMatchError = function(e) {
-      return new Error("Cannot match any routes: '" + e.segmentGroup + "'");
-    };
-    ApplyRedirects.prototype.createUrlTree = function(rootCandidate) {
-      var root = rootCandidate.segments.length > 0 ? new UrlSegmentGroup([], (_a = {}, _a[PRIMARY_OUTLET] = rootCandidate, _a)) : rootCandidate;
-      return new UrlTree(root, this.urlTree.queryParams, this.urlTree.fragment);
-      var _a;
-    };
-    ApplyRedirects.prototype.expandSegmentGroup = function(injector, routes, segmentGroup, outlet) {
-      if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-        return rxjs_operator_map.map.call(this.expandChildren(injector, routes, segmentGroup), function(children) {
-          return new UrlSegmentGroup([], children);
-        });
-      } else {
-        return this.expandSegment(injector, segmentGroup, routes, segmentGroup.segments, outlet, true);
-      }
-    };
-    ApplyRedirects.prototype.expandChildren = function(injector, routes, segmentGroup) {
-      var _this = this;
-      return waitForMap(segmentGroup.children, function(childOutlet, child) {
-        return _this.expandSegmentGroup(injector, routes, child, childOutlet);
-      });
-    };
-    ApplyRedirects.prototype.expandSegment = function(injector, segmentGroup, routes, segments, outlet, allowRedirects) {
-      var _this = this;
-      var routes$ = rxjs_observable_of.of.apply(void 0, routes);
-      var processedRoutes$ = rxjs_operator_map.map.call(routes$, function(r) {
-        var expanded$ = _this.expandSegmentAgainstRoute(injector, segmentGroup, routes, r, segments, outlet, allowRedirects);
-        return rxjs_operator_catch._catch.call(expanded$, function(e) {
-          if (e instanceof NoMatch)
-            return rxjs_observable_of.of(null);
-          else
-            throw e;
-        });
-      });
-      var concattedProcessedRoutes$ = rxjs_operator_concatAll.concatAll.call(processedRoutes$);
-      var first$ = rxjs_operator_first.first.call(concattedProcessedRoutes$, function(s) {
-        return !!s;
-      });
-      return rxjs_operator_catch._catch.call(first$, function(e, _) {
-        if (e instanceof rxjs_util_EmptyError.EmptyError) {
-          throw new NoMatch(segmentGroup);
-        } else {
-          throw e;
-        }
-      });
-    };
-    ApplyRedirects.prototype.expandSegmentAgainstRoute = function(injector, segmentGroup, routes, route, paths, outlet, allowRedirects) {
-      if (getOutlet$1(route) !== outlet)
-        return noMatch(segmentGroup);
-      if (route.redirectTo !== undefined && !(allowRedirects && this.allowRedirects))
-        return noMatch(segmentGroup);
-      if (route.redirectTo === undefined) {
-        return this.matchSegmentAgainstRoute(injector, segmentGroup, route, paths);
-      } else {
-        return this.expandSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, paths, outlet);
-      }
-    };
-    ApplyRedirects.prototype.expandSegmentAgainstRouteUsingRedirect = function(injector, segmentGroup, routes, route, segments, outlet) {
-      if (route.path === '**') {
-        return this.expandWildCardWithParamsAgainstRouteUsingRedirect(route);
-      } else {
-        return this.expandRegularSegmentAgainstRouteUsingRedirect(injector, segmentGroup, routes, route, segments, outlet);
-      }
-    };
-    ApplyRedirects.prototype.expandWildCardWithParamsAgainstRouteUsingRedirect = function(route) {
-      var newSegments = applyRedirectCommands([], route.redirectTo, {});
-      if (route.redirectTo.startsWith('/')) {
-        return absoluteRedirect(newSegments);
-      } else {
-        return rxjs_observable_of.of(new UrlSegmentGroup(newSegments, {}));
-      }
-    };
-    ApplyRedirects.prototype.expandRegularSegmentAgainstRouteUsingRedirect = function(injector, segmentGroup, routes, route, segments, outlet) {
-      var _a = match(segmentGroup, route, segments),
-          matched = _a.matched,
-          consumedSegments = _a.consumedSegments,
-          lastChild = _a.lastChild,
-          positionalParamSegments = _a.positionalParamSegments;
-      if (!matched)
-        return noMatch(segmentGroup);
-      var newSegments = applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments);
-      if (route.redirectTo.startsWith('/')) {
-        return absoluteRedirect(newSegments);
-      } else {
-        return this.expandSegment(injector, segmentGroup, routes, newSegments.concat(segments.slice(lastChild)), outlet, false);
-      }
-    };
-    ApplyRedirects.prototype.matchSegmentAgainstRoute = function(injector, rawSegmentGroup, route, segments) {
-      var _this = this;
-      if (route.path === '**') {
-        return rxjs_observable_of.of(new UrlSegmentGroup(segments, {}));
-      } else {
-        var _a = match(rawSegmentGroup, route, segments),
-            matched = _a.matched,
-            consumedSegments_1 = _a.consumedSegments,
-            lastChild = _a.lastChild;
-        if (!matched)
-          return noMatch(rawSegmentGroup);
-        var rawSlicedSegments_1 = segments.slice(lastChild);
-        var childConfig$ = this.getChildConfig(injector, route);
-        return rxjs_operator_mergeMap.mergeMap.call(childConfig$, function(routerConfig) {
-          var childInjector = routerConfig.injector;
-          var childConfig = routerConfig.routes;
-          var _a = split(rawSegmentGroup, consumedSegments_1, rawSlicedSegments_1, childConfig),
-              segmentGroup = _a.segmentGroup,
-              slicedSegments = _a.slicedSegments;
-          if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-            var expanded$ = _this.expandChildren(childInjector, childConfig, segmentGroup);
-            return rxjs_operator_map.map.call(expanded$, function(children) {
-              return new UrlSegmentGroup(consumedSegments_1, children);
-            });
-          } else if (childConfig.length === 0 && slicedSegments.length === 0) {
-            return rxjs_observable_of.of(new UrlSegmentGroup(consumedSegments_1, {}));
-          } else {
-            var expanded$ = _this.expandSegment(childInjector, segmentGroup, childConfig, slicedSegments, PRIMARY_OUTLET, true);
-            return rxjs_operator_map.map.call(expanded$, function(cs) {
-              return new UrlSegmentGroup(consumedSegments_1.concat(cs.segments), cs.children);
-            });
-          }
-        });
-      }
-    };
-    ApplyRedirects.prototype.getChildConfig = function(injector, route) {
-      var _this = this;
-      if (route.children) {
-        return rxjs_observable_of.of(new LoadedRouterConfig(route.children, injector, null));
-      } else if (route.loadChildren) {
-        return rxjs_operator_mergeMap.mergeMap.call(runGuards(injector, route), function(shouldLoad) {
-          if (shouldLoad) {
-            if (route._loadedConfig) {
-              return rxjs_observable_of.of(route._loadedConfig);
-            } else {
-              return rxjs_operator_map.map.call(_this.configLoader.load(injector, route.loadChildren), function(r) {
-                route._loadedConfig = r;
-                return r;
-              });
-            }
-          } else {
-            return canLoadFails(route);
-          }
-        });
-      } else {
-        return rxjs_observable_of.of(new LoadedRouterConfig([], injector, null));
-      }
-    };
-    return ApplyRedirects;
-  }());
-  function runGuards(injector, route) {
-    var canLoad = route.canLoad;
-    if (!canLoad || canLoad.length === 0)
-      return rxjs_observable_of.of(true);
-    var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canLoad), function(c) {
-      var guard = injector.get(c);
-      if (guard.canLoad) {
-        return wrapIntoObservable(guard.canLoad(route));
-      } else {
-        return wrapIntoObservable(guard(route));
-      }
-    });
-    return andObservables(obs);
-  }
-  function match(segmentGroup, route, segments) {
-    var noMatch = {
-      matched: false,
-      consumedSegments: [],
-      lastChild: 0,
-      positionalParamSegments: {}
-    };
-    if (route.path === '') {
-      if ((route.pathMatch === 'full') && (segmentGroup.hasChildren() || segments.length > 0)) {
-        return {
-          matched: false,
-          consumedSegments: [],
-          lastChild: 0,
-          positionalParamSegments: {}
-        };
-      } else {
-        return {
-          matched: true,
-          consumedSegments: [],
-          lastChild: 0,
-          positionalParamSegments: {}
-        };
-      }
-    }
-    var path = route.path;
-    var parts = path.split('/');
-    var positionalParamSegments = {};
-    var consumedSegments = [];
-    var currentIndex = 0;
-    for (var i = 0; i < parts.length; ++i) {
-      if (currentIndex >= segments.length)
-        return noMatch;
-      var current = segments[currentIndex];
-      var p = parts[i];
-      var isPosParam = p.startsWith(':');
-      if (!isPosParam && p !== current.path)
-        return noMatch;
-      if (isPosParam) {
-        positionalParamSegments[p.substring(1)] = current;
-      }
-      consumedSegments.push(current);
-      currentIndex++;
-    }
-    if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
-      return {
-        matched: false,
-        consumedSegments: [],
-        lastChild: 0,
-        positionalParamSegments: {}
-      };
-    }
-    return {
-      matched: true,
-      consumedSegments: consumedSegments,
-      lastChild: currentIndex,
-      positionalParamSegments: positionalParamSegments
-    };
-  }
-  function applyRedirectCommands(segments, redirectTo, posParams) {
-    var r = redirectTo.startsWith('/') ? redirectTo.substring(1) : redirectTo;
-    if (r === '') {
-      return [];
-    } else {
-      return createSegments(redirectTo, r.split('/'), segments, posParams);
-    }
-  }
-  function createSegments(redirectTo, parts, segments, posParams) {
-    return parts.map(function(p) {
-      return p.startsWith(':') ? findPosParam(p, posParams, redirectTo) : findOrCreateSegment(p, segments);
-    });
-  }
-  function findPosParam(part, posParams, redirectTo) {
-    var paramName = part.substring(1);
-    var pos = posParams[paramName];
-    if (!pos)
-      throw new Error("Cannot redirect to '" + redirectTo + "'. Cannot find '" + part + "'.");
-    return pos;
-  }
-  function findOrCreateSegment(part, segments) {
-    var idx = 0;
-    for (var _i = 0,
-        segments_1 = segments; _i < segments_1.length; _i++) {
-      var s = segments_1[_i];
-      if (s.path === part) {
-        segments.splice(idx);
-        return s;
-      }
-      idx++;
-    }
-    return new UrlSegment(part, {});
-  }
-  function split(segmentGroup, consumedSegments, slicedSegments, config) {
-    if (slicedSegments.length > 0 && containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-      var s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptySegments(config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
-      return {
-        segmentGroup: mergeTrivialChildren(s),
-        slicedSegments: []
-      };
-    } else if (slicedSegments.length === 0 && containsEmptyPathRedirects(segmentGroup, slicedSegments, config)) {
-      var s = new UrlSegmentGroup(segmentGroup.segments, addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
-      return {
-        segmentGroup: mergeTrivialChildren(s),
-        slicedSegments: slicedSegments
-      };
-    } else {
-      return {
-        segmentGroup: segmentGroup,
-        slicedSegments: slicedSegments
-      };
-    }
-  }
-  function mergeTrivialChildren(s) {
-    if (s.numberOfChildren === 1 && s.children[PRIMARY_OUTLET]) {
-      var c = s.children[PRIMARY_OUTLET];
-      return new UrlSegmentGroup(s.segments.concat(c.segments), c.children);
-    } else {
-      return s;
-    }
-  }
-  function addEmptySegmentsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-    var res = {};
-    for (var _i = 0,
-        routes_1 = routes; _i < routes_1.length; _i++) {
-      var r = routes_1[_i];
-      if (emptyPathRedirect(segmentGroup, slicedSegments, r) && !children[getOutlet$1(r)]) {
-        res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
-      }
-    }
-    return merge(children, res);
-  }
-  function createChildrenForEmptySegments(routes, primarySegmentGroup) {
-    var res = {};
-    res[PRIMARY_OUTLET] = primarySegmentGroup;
-    for (var _i = 0,
-        routes_2 = routes; _i < routes_2.length; _i++) {
-      var r = routes_2[_i];
-      if (r.path === '' && getOutlet$1(r) !== PRIMARY_OUTLET) {
-        res[getOutlet$1(r)] = new UrlSegmentGroup([], {});
-      }
-    }
-    return res;
-  }
-  function containsEmptyPathRedirectsWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function(r) {
-      return emptyPathRedirect(segmentGroup, slicedSegments, r) && getOutlet$1(r) !== PRIMARY_OUTLET;
-    }).length > 0;
-  }
-  function containsEmptyPathRedirects(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function(r) {
-      return emptyPathRedirect(segmentGroup, slicedSegments, r);
-    }).length > 0;
-  }
-  function emptyPathRedirect(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
-      return false;
-    return r.path === '' && r.redirectTo !== undefined;
-  }
-  function getOutlet$1(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
-  }
-  function validateConfig(config) {
-    config.forEach(validateNode);
-  }
-  function validateNode(route) {
-    if (Array.isArray(route)) {
-      throw new Error("Invalid route configuration: Array cannot be specified");
-    }
-    if (!!route.redirectTo && !!route.children) {
-      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and children cannot be used together");
-    }
-    if (!!route.redirectTo && !!route.loadChildren) {
-      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and loadChildren cannot be used together");
-    }
-    if (!!route.children && !!route.loadChildren) {
-      throw new Error("Invalid configuration of route '" + route.path + "': children and loadChildren cannot be used together");
-    }
-    if (!!route.redirectTo && !!route.component) {
-      throw new Error("Invalid configuration of route '" + route.path + "': redirectTo and component cannot be used together");
-    }
-    if (route.redirectTo === undefined && !route.component && !route.children && !route.loadChildren) {
-      throw new Error("Invalid configuration of route '" + route.path + "': one of the following must be provided (component or redirectTo or children or loadChildren)");
-    }
-    if (route.path === undefined) {
-      throw new Error("Invalid route configuration: routes must have path specified");
-    }
-    if (route.path.startsWith('/')) {
-      throw new Error("Invalid route configuration of route '" + route.path + "': path cannot start with a slash");
-    }
-    if (route.path === '' && route.redirectTo !== undefined && route.pathMatch === undefined) {
-      var exp = "The default value of 'pathMatch' is 'prefix', but often the intent is to use 'full'.";
-      throw new Error("Invalid route configuration of route '{path: \"" + route.path + "\", redirectTo: \"" + route.redirectTo + "\"}': please provide 'pathMatch'. " + exp);
-    }
-    if (route.pathMatch !== undefined && route.pathMatch !== 'full' && route.pathMatch !== 'prefix') {
-      throw new Error("Invalid configuration of route '" + route.path + "': pathMatch can only be set to 'prefix' or 'full'");
-    }
-  }
-  var Tree = (function() {
-    function Tree(root) {
-      this._root = root;
-    }
-    Object.defineProperty(Tree.prototype, "root", {
-      get: function() {
-        return this._root.value;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Tree.prototype.parent = function(t) {
-      var p = this.pathFromRoot(t);
-      return p.length > 1 ? p[p.length - 2] : null;
-    };
-    Tree.prototype.children = function(t) {
-      var n = findNode(t, this._root);
-      return n ? n.children.map(function(t) {
-        return t.value;
-      }) : [];
-    };
-    Tree.prototype.firstChild = function(t) {
-      var n = findNode(t, this._root);
-      return n && n.children.length > 0 ? n.children[0].value : null;
-    };
-    Tree.prototype.siblings = function(t) {
-      var p = findPath(t, this._root, []);
-      if (p.length < 2)
-        return [];
-      var c = p[p.length - 2].children.map(function(c) {
-        return c.value;
-      });
-      return c.filter(function(cc) {
-        return cc !== t;
-      });
-    };
-    Tree.prototype.pathFromRoot = function(t) {
-      return findPath(t, this._root, []).map(function(s) {
-        return s.value;
-      });
-    };
-    return Tree;
-  }());
-  function findNode(expected, c) {
-    if (expected === c.value)
-      return c;
-    for (var _i = 0,
-        _a = c.children; _i < _a.length; _i++) {
-      var cc = _a[_i];
-      var r = findNode(expected, cc);
-      if (r)
-        return r;
-    }
-    return null;
-  }
-  function findPath(expected, c, collected) {
-    collected.push(c);
-    if (expected === c.value)
-      return collected;
-    for (var _i = 0,
-        _a = c.children; _i < _a.length; _i++) {
-      var cc = _a[_i];
-      var cloned = collected.slice(0);
-      var r = findPath(expected, cc, cloned);
-      if (r.length > 0)
-        return r;
-    }
-    return [];
-  }
-  var TreeNode = (function() {
-    function TreeNode(value, children) {
-      this.value = value;
-      this.children = children;
-    }
-    TreeNode.prototype.toString = function() {
-      return "TreeNode(" + this.value + ")";
-    };
-    return TreeNode;
-  }());
-  var __extends$1 = (this && this.__extends) || function(d, b) {
-    for (var p in b)
-      if (b.hasOwnProperty(p))
-        d[p] = b[p];
-    function __() {
-      this.constructor = d;
-    }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-  };
-  var RouterState = (function(_super) {
-    __extends$1(RouterState, _super);
-    function RouterState(root, snapshot) {
-      _super.call(this, root);
-      this.snapshot = snapshot;
-      setRouterStateSnapshot(this, root);
-    }
-    RouterState.prototype.toString = function() {
-      return this.snapshot.toString();
-    };
-    return RouterState;
-  }(Tree));
-  function createEmptyState(urlTree, rootComponent) {
-    var snapshot = createEmptyStateSnapshot(urlTree, rootComponent);
-    var emptyUrl = new rxjs_BehaviorSubject.BehaviorSubject([new UrlSegment('', {})]);
-    var emptyParams = new rxjs_BehaviorSubject.BehaviorSubject({});
-    var emptyData = new rxjs_BehaviorSubject.BehaviorSubject({});
-    var emptyQueryParams = new rxjs_BehaviorSubject.BehaviorSubject({});
-    var fragment = new rxjs_BehaviorSubject.BehaviorSubject('');
-    var activated = new ActivatedRoute(emptyUrl, emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, snapshot.root);
-    activated.snapshot = snapshot.root;
-    return new RouterState(new TreeNode(activated, []), snapshot);
-  }
-  function createEmptyStateSnapshot(urlTree, rootComponent) {
-    var emptyParams = {};
-    var emptyData = {};
-    var emptyQueryParams = {};
-    var fragment = '';
-    var activated = new ActivatedRouteSnapshot([], emptyParams, emptyQueryParams, fragment, emptyData, PRIMARY_OUTLET, rootComponent, null, urlTree.root, -1, InheritedResolve.empty);
-    return new RouterStateSnapshot('', new TreeNode(activated, []));
-  }
-  var ActivatedRoute = (function() {
-    function ActivatedRoute(url, params, queryParams, fragment, data, outlet, component, futureSnapshot) {
-      this.url = url;
-      this.params = params;
-      this.queryParams = queryParams;
-      this.fragment = fragment;
-      this.data = data;
-      this.outlet = outlet;
-      this.component = component;
-      this._futureSnapshot = futureSnapshot;
-    }
-    Object.defineProperty(ActivatedRoute.prototype, "routeConfig", {
-      get: function() {
-        return this._futureSnapshot.routeConfig;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "root", {
-      get: function() {
-        return this._routerState.root;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "parent", {
-      get: function() {
-        return this._routerState.parent(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "firstChild", {
-      get: function() {
-        return this._routerState.firstChild(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "children", {
-      get: function() {
-        return this._routerState.children(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRoute.prototype, "pathFromRoot", {
-      get: function() {
-        return this._routerState.pathFromRoot(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ActivatedRoute.prototype.toString = function() {
-      return this.snapshot ? this.snapshot.toString() : "Future(" + this._futureSnapshot + ")";
-    };
-    return ActivatedRoute;
-  }());
-  var InheritedResolve = (function() {
-    function InheritedResolve(parent, current) {
-      this.parent = parent;
-      this.current = current;
-      this.resolvedData = {};
-    }
-    Object.defineProperty(InheritedResolve.prototype, "flattenedResolvedData", {
-      get: function() {
-        return this.parent ? merge(this.parent.flattenedResolvedData, this.resolvedData) : this.resolvedData;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(InheritedResolve, "empty", {
-      get: function() {
-        return new InheritedResolve(null, {});
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return InheritedResolve;
-  }());
-  var ActivatedRouteSnapshot = (function() {
-    function ActivatedRouteSnapshot(url, params, queryParams, fragment, data, outlet, component, routeConfig, urlSegment, lastPathIndex, resolve) {
-      this.url = url;
-      this.params = params;
-      this.queryParams = queryParams;
-      this.fragment = fragment;
-      this.data = data;
-      this.outlet = outlet;
-      this.component = component;
-      this._routeConfig = routeConfig;
-      this._urlSegment = urlSegment;
-      this._lastPathIndex = lastPathIndex;
-      this._resolve = resolve;
-    }
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "routeConfig", {
-      get: function() {
-        return this._routeConfig;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "root", {
-      get: function() {
-        return this._routerState.root;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "parent", {
-      get: function() {
-        return this._routerState.parent(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "firstChild", {
-      get: function() {
-        return this._routerState.firstChild(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "children", {
-      get: function() {
-        return this._routerState.children(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(ActivatedRouteSnapshot.prototype, "pathFromRoot", {
-      get: function() {
-        return this._routerState.pathFromRoot(this);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    ActivatedRouteSnapshot.prototype.toString = function() {
-      var url = this.url.map(function(s) {
-        return s.toString();
-      }).join('/');
-      var matched = this._routeConfig ? this._routeConfig.path : '';
-      return "Route(url:'" + url + "', path:'" + matched + "')";
-    };
-    return ActivatedRouteSnapshot;
-  }());
-  var RouterStateSnapshot = (function(_super) {
-    __extends$1(RouterStateSnapshot, _super);
-    function RouterStateSnapshot(url, root) {
-      _super.call(this, root);
-      this.url = url;
-      setRouterStateSnapshot(this, root);
-    }
-    RouterStateSnapshot.prototype.toString = function() {
-      return serializeNode(this._root);
-    };
-    return RouterStateSnapshot;
-  }(Tree));
-  function setRouterStateSnapshot(state, node) {
-    node.value._routerState = state;
-    node.children.forEach(function(c) {
-      return setRouterStateSnapshot(state, c);
-    });
-  }
-  function serializeNode(node) {
-    var c = node.children.length > 0 ? " { " + node.children.map(serializeNode).join(", ") + " } " : '';
-    return "" + node.value + c;
-  }
-  function advanceActivatedRoute(route) {
-    if (route.snapshot) {
-      if (!shallowEqual(route.snapshot.queryParams, route._futureSnapshot.queryParams)) {
-        route.queryParams.next(route._futureSnapshot.queryParams);
-      }
-      if (route.snapshot.fragment !== route._futureSnapshot.fragment) {
-        route.fragment.next(route._futureSnapshot.fragment);
-      }
-      if (!shallowEqual(route.snapshot.params, route._futureSnapshot.params)) {
-        route.params.next(route._futureSnapshot.params);
-        route.data.next(route._futureSnapshot.data);
-      }
-      if (!shallowEqualArrays(route.snapshot.url, route._futureSnapshot.url)) {
-        route.url.next(route._futureSnapshot.url);
-      }
-      route.snapshot = route._futureSnapshot;
-    } else {
-      route.snapshot = route._futureSnapshot;
-      route.data.next(route._futureSnapshot.data);
-    }
-  }
-  function createRouterState(curr, prevState) {
-    var root = createNode(curr._root, prevState ? prevState._root : undefined);
-    return new RouterState(root, curr);
-  }
-  function createNode(curr, prevState) {
-    if (prevState && equalRouteSnapshots(prevState.value.snapshot, curr.value)) {
-      var value = prevState.value;
-      value._futureSnapshot = curr.value;
-      var children = createOrReuseChildren(curr, prevState);
-      return new TreeNode(value, children);
-    } else {
-      var value = createActivatedRoute(curr.value);
-      var children = curr.children.map(function(c) {
-        return createNode(c);
-      });
-      return new TreeNode(value, children);
-    }
-  }
-  function createOrReuseChildren(curr, prevState) {
-    return curr.children.map(function(child) {
-      for (var _i = 0,
-          _a = prevState.children; _i < _a.length; _i++) {
-        var p = _a[_i];
-        if (equalRouteSnapshots(p.value.snapshot, child.value)) {
-          return createNode(child, p);
-        }
-      }
-      return createNode(child);
-    });
-  }
-  function createActivatedRoute(c) {
-    return new ActivatedRoute(new rxjs_BehaviorSubject.BehaviorSubject(c.url), new rxjs_BehaviorSubject.BehaviorSubject(c.params), new rxjs_BehaviorSubject.BehaviorSubject(c.queryParams), new rxjs_BehaviorSubject.BehaviorSubject(c.fragment), new rxjs_BehaviorSubject.BehaviorSubject(c.data), c.outlet, c.component, c);
-  }
-  function equalRouteSnapshots(a, b) {
-    return a._routeConfig === b._routeConfig;
-  }
-  function createUrlTree(route, urlTree, commands, queryParams, fragment) {
-    if (commands.length === 0) {
-      return tree(urlTree.root, urlTree.root, urlTree, queryParams, fragment);
-    }
-    var normalizedCommands = normalizeCommands(commands);
-    validateCommands(normalizedCommands);
-    if (navigateToRoot(normalizedCommands)) {
-      return tree(urlTree.root, new UrlSegmentGroup([], {}), urlTree, queryParams, fragment);
-    }
-    var startingPosition = findStartingPosition(normalizedCommands, urlTree, route);
-    var segmentGroup = startingPosition.processChildren ? updateSegmentGroupChildren(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands) : updateSegmentGroup(startingPosition.segmentGroup, startingPosition.index, normalizedCommands.commands);
-    return tree(startingPosition.segmentGroup, segmentGroup, urlTree, queryParams, fragment);
-  }
-  function validateCommands(n) {
-    if (n.isAbsolute && n.commands.length > 0 && isMatrixParams(n.commands[0])) {
-      throw new Error('Root segment cannot have matrix parameters');
-    }
-    var c = n.commands.filter(function(c) {
-      return typeof c === 'object' && c.outlets !== undefined;
-    });
-    if (c.length > 0 && c[0] !== n.commands[n.commands.length - 1]) {
-      throw new Error('{outlets:{}} has to be the last command');
-    }
-  }
-  function isMatrixParams(command) {
-    return typeof command === 'object' && command.outlets === undefined && command.segmentPath === undefined;
-  }
-  function tree(oldSegmentGroup, newSegmentGroup, urlTree, queryParams, fragment) {
-    if (urlTree.root === oldSegmentGroup) {
-      return new UrlTree(newSegmentGroup, stringify(queryParams), fragment);
-    } else {
-      return new UrlTree(replaceSegment(urlTree.root, oldSegmentGroup, newSegmentGroup), stringify(queryParams), fragment);
-    }
-  }
-  function replaceSegment(current, oldSegment, newSegment) {
-    var children = {};
-    forEach(current.children, function(c, outletName) {
-      if (c === oldSegment) {
-        children[outletName] = newSegment;
-      } else {
-        children[outletName] = replaceSegment(c, oldSegment, newSegment);
-      }
-    });
-    return new UrlSegmentGroup(current.segments, children);
-  }
-  function navigateToRoot(normalizedChange) {
-    return normalizedChange.isAbsolute && normalizedChange.commands.length === 1 && normalizedChange.commands[0] == '/';
-  }
-  var NormalizedNavigationCommands = (function() {
-    function NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, commands) {
-      this.isAbsolute = isAbsolute;
-      this.numberOfDoubleDots = numberOfDoubleDots;
-      this.commands = commands;
-    }
-    return NormalizedNavigationCommands;
-  }());
-  function normalizeCommands(commands) {
-    if ((typeof commands[0] === 'string') && commands.length === 1 && commands[0] == '/') {
-      return new NormalizedNavigationCommands(true, 0, commands);
-    }
-    var numberOfDoubleDots = 0;
-    var isAbsolute = false;
-    var res = [];
-    var _loop_1 = function(i) {
-      var c = commands[i];
-      if (typeof c === 'object' && c.outlets !== undefined) {
-        var r_1 = {};
-        forEach(c.outlets, function(commands, name) {
-          if (typeof commands === 'string') {
-            r_1[name] = commands.split('/');
-          } else {
-            r_1[name] = commands;
-          }
-        });
-        res.push({outlets: r_1});
-        return "continue";
-      }
-      if (typeof c === 'object' && c.segmentPath !== undefined) {
-        res.push(c.segmentPath);
-        return "continue";
-      }
-      if (!(typeof c === 'string')) {
-        res.push(c);
-        return "continue";
-      }
-      if (i === 0) {
-        var parts = c.split('/');
-        for (var j = 0; j < parts.length; ++j) {
-          var cc = parts[j];
-          if (j == 0 && cc == '.') {} else if (j == 0 && cc == '') {
-            isAbsolute = true;
-          } else if (cc == '..') {
-            numberOfDoubleDots++;
-          } else if (cc != '') {
-            res.push(cc);
-          }
-        }
-      } else {
-        res.push(c);
-      }
-    };
-    for (var i = 0; i < commands.length; ++i) {
-      _loop_1(i);
-    }
-    return new NormalizedNavigationCommands(isAbsolute, numberOfDoubleDots, res);
-  }
-  var Position = (function() {
-    function Position(segmentGroup, processChildren, index) {
-      this.segmentGroup = segmentGroup;
-      this.processChildren = processChildren;
-      this.index = index;
-    }
-    return Position;
-  }());
-  function findStartingPosition(normalizedChange, urlTree, route) {
-    if (normalizedChange.isAbsolute) {
-      return new Position(urlTree.root, true, 0);
-    } else if (route.snapshot._lastPathIndex === -1) {
-      return new Position(route.snapshot._urlSegment, true, 0);
-    } else {
-      var modifier = isMatrixParams(normalizedChange.commands[0]) ? 0 : 1;
-      var index = route.snapshot._lastPathIndex + modifier;
-      return createPositionApplyingDoubleDots(route.snapshot._urlSegment, index, normalizedChange.numberOfDoubleDots);
-    }
-  }
-  function createPositionApplyingDoubleDots(group, index, numberOfDoubleDots) {
-    var g = group;
-    var ci = index;
-    var dd = numberOfDoubleDots;
-    while (dd > ci) {
-      dd -= ci;
-      g = g.parent;
-      if (!g) {
-        throw new Error('Invalid number of \'../\'');
-      }
-      ci = g.segments.length;
-    }
-    return new Position(g, false, ci - dd);
-  }
-  function getPath(command) {
-    return "" + command;
-  }
-  function getOutlets(commands) {
-    if (!(typeof commands[0] === 'object'))
-      return (_a = {}, _a[PRIMARY_OUTLET] = commands, _a);
-    if (commands[0].outlets === undefined)
-      return (_b = {}, _b[PRIMARY_OUTLET] = commands, _b);
-    return commands[0].outlets;
-    var _a,
-        _b;
-  }
-  function updateSegmentGroup(segmentGroup, startIndex, commands) {
-    if (!segmentGroup) {
-      segmentGroup = new UrlSegmentGroup([], {});
-    }
-    if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-      return updateSegmentGroupChildren(segmentGroup, startIndex, commands);
-    }
-    var m = prefixedWith(segmentGroup, startIndex, commands);
-    var slicedCommands = commands.slice(m.lastIndex);
-    if (m.match && slicedCommands.length === 0) {
-      return new UrlSegmentGroup(segmentGroup.segments, {});
-    } else if (m.match && !segmentGroup.hasChildren()) {
-      return createNewSegmentGroup(segmentGroup, startIndex, commands);
-    } else if (m.match) {
-      return updateSegmentGroupChildren(segmentGroup, 0, slicedCommands);
-    } else {
-      return createNewSegmentGroup(segmentGroup, startIndex, commands);
-    }
-  }
-  function updateSegmentGroupChildren(segmentGroup, startIndex, commands) {
-    if (commands.length === 0) {
-      return new UrlSegmentGroup(segmentGroup.segments, {});
-    } else {
-      var outlets_1 = getOutlets(commands);
-      var children_1 = {};
-      forEach(outlets_1, function(commands, outlet) {
-        if (commands !== null) {
-          children_1[outlet] = updateSegmentGroup(segmentGroup.children[outlet], startIndex, commands);
-        }
-      });
-      forEach(segmentGroup.children, function(child, childOutlet) {
-        if (outlets_1[childOutlet] === undefined) {
-          children_1[childOutlet] = child;
-        }
-      });
-      return new UrlSegmentGroup(segmentGroup.segments, children_1);
-    }
-  }
-  function prefixedWith(segmentGroup, startIndex, commands) {
-    var currentCommandIndex = 0;
-    var currentPathIndex = startIndex;
-    var noMatch = {
-      match: false,
-      lastIndex: 0
-    };
-    while (currentPathIndex < segmentGroup.segments.length) {
-      if (currentCommandIndex >= commands.length)
-        return noMatch;
-      var path = segmentGroup.segments[currentPathIndex];
-      var curr = getPath(commands[currentCommandIndex]);
-      var next = currentCommandIndex < commands.length - 1 ? commands[currentCommandIndex + 1] : null;
-      if (curr && next && (typeof next === 'object') && next.outlets === undefined) {
-        if (!compare(curr, next, path))
-          return noMatch;
-        currentCommandIndex += 2;
-      } else {
-        if (!compare(curr, {}, path))
-          return noMatch;
-        currentCommandIndex++;
-      }
-      currentPathIndex++;
-    }
-    return {
-      match: true,
-      lastIndex: currentCommandIndex
-    };
-  }
-  function createNewSegmentGroup(segmentGroup, startIndex, commands) {
-    var paths = segmentGroup.segments.slice(0, startIndex);
-    var i = 0;
-    while (i < commands.length) {
-      if (typeof commands[i] === 'object' && commands[i].outlets !== undefined) {
-        var children = createNewSegmentChldren(commands[i].outlets);
-        return new UrlSegmentGroup(paths, children);
-      }
-      if (i === 0 && isMatrixParams(commands[0])) {
-        var p = segmentGroup.segments[startIndex];
-        paths.push(new UrlSegment(p.path, commands[0]));
-        i++;
-        continue;
-      }
-      var curr = getPath(commands[i]);
-      var next = (i < commands.length - 1) ? commands[i + 1] : null;
-      if (curr && next && isMatrixParams(next)) {
-        paths.push(new UrlSegment(curr, stringify(next)));
-        i += 2;
-      } else {
-        paths.push(new UrlSegment(curr, {}));
-        i++;
-      }
-    }
-    return new UrlSegmentGroup(paths, {});
-  }
-  function createNewSegmentChldren(outlets) {
-    var children = {};
-    forEach(outlets, function(commands, outlet) {
-      if (commands !== null) {
-        children[outlet] = createNewSegmentGroup(new UrlSegmentGroup([], {}), 0, commands);
-      }
-    });
-    return children;
-  }
-  function stringify(params) {
-    var res = {};
-    forEach(params, function(v, k) {
-      return res[k] = "" + v;
-    });
-    return res;
-  }
-  function compare(path, params, segment) {
-    return path == segment.path && shallowEqual(params, segment.parameters);
-  }
-  var NoMatch$1 = (function() {
-    function NoMatch() {}
-    return NoMatch;
-  }());
-  var InheritedFromParent = (function() {
-    function InheritedFromParent(parent, snapshot, params, data, resolve) {
-      this.parent = parent;
-      this.snapshot = snapshot;
-      this.params = params;
-      this.data = data;
-      this.resolve = resolve;
-    }
-    Object.defineProperty(InheritedFromParent.prototype, "allParams", {
-      get: function() {
-        return this.parent ? merge(this.parent.allParams, this.params) : this.params;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(InheritedFromParent.prototype, "allData", {
-      get: function() {
-        return this.parent ? merge(this.parent.allData, this.data) : this.data;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    InheritedFromParent.empty = function(snapshot) {
-      return new InheritedFromParent(null, snapshot, {}, {}, new InheritedResolve(null, {}));
-    };
-    return InheritedFromParent;
-  }());
-  function recognize(rootComponentType, config, urlTree, url) {
-    return new Recognizer(rootComponentType, config, urlTree, url).recognize();
-  }
-  var Recognizer = (function() {
-    function Recognizer(rootComponentType, config, urlTree, url) {
-      this.rootComponentType = rootComponentType;
-      this.config = config;
-      this.urlTree = urlTree;
-      this.url = url;
-    }
-    Recognizer.prototype.recognize = function() {
-      try {
-        var rootSegmentGroup = split$1(this.urlTree.root, [], [], this.config).segmentGroup;
-        var children = this.processSegmentGroup(this.config, rootSegmentGroup, InheritedFromParent.empty(null), PRIMARY_OUTLET);
-        var root = new ActivatedRouteSnapshot([], Object.freeze({}), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, {}, PRIMARY_OUTLET, this.rootComponentType, null, this.urlTree.root, -1, InheritedResolve.empty);
-        var rootNode = new TreeNode(root, children);
-        return rxjs_observable_of.of(new RouterStateSnapshot(this.url, rootNode));
-      } catch (e) {
-        return new rxjs_Observable.Observable(function(obs) {
-          return obs.error(e);
-        });
-      }
-    };
-    Recognizer.prototype.processSegmentGroup = function(config, segmentGroup, inherited, outlet) {
-      if (segmentGroup.segments.length === 0 && segmentGroup.hasChildren()) {
-        return this.processChildren(config, segmentGroup, inherited);
-      } else {
-        return this.processSegment(config, segmentGroup, 0, segmentGroup.segments, inherited, outlet);
-      }
-    };
-    Recognizer.prototype.processChildren = function(config, segmentGroup, inherited) {
-      var _this = this;
-      var children = mapChildrenIntoArray(segmentGroup, function(child, childOutlet) {
-        return _this.processSegmentGroup(config, child, inherited, childOutlet);
-      });
-      checkOutletNameUniqueness(children);
-      sortActivatedRouteSnapshots(children);
-      return children;
-    };
-    Recognizer.prototype.processSegment = function(config, segmentGroup, pathIndex, segments, inherited, outlet) {
-      for (var _i = 0,
-          config_1 = config; _i < config_1.length; _i++) {
-        var r = config_1[_i];
-        try {
-          return this.processSegmentAgainstRoute(r, segmentGroup, pathIndex, segments, inherited, outlet);
-        } catch (e) {
-          if (!(e instanceof NoMatch$1))
-            throw e;
-        }
-      }
-      throw new NoMatch$1();
-    };
-    Recognizer.prototype.processSegmentAgainstRoute = function(route, rawSegment, pathIndex, segments, inherited, outlet) {
-      if (route.redirectTo)
-        throw new NoMatch$1();
-      if ((route.outlet ? route.outlet : PRIMARY_OUTLET) !== outlet)
-        throw new NoMatch$1();
-      var newInheritedResolve = new InheritedResolve(inherited.resolve, getResolve(route));
-      if (route.path === '**') {
-        var params = segments.length > 0 ? last(segments).parameters : {};
-        var snapshot_1 = new ActivatedRouteSnapshot(segments, Object.freeze(merge(inherited.allParams, params)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + segments.length, newInheritedResolve);
-        return [new TreeNode(snapshot_1, [])];
-      }
-      var _a = match$1(rawSegment, route, segments, inherited.snapshot),
-          consumedSegments = _a.consumedSegments,
-          parameters = _a.parameters,
-          lastChild = _a.lastChild;
-      var rawSlicedSegments = segments.slice(lastChild);
-      var childConfig = getChildConfig(route);
-      var _b = split$1(rawSegment, consumedSegments, rawSlicedSegments, childConfig),
-          segmentGroup = _b.segmentGroup,
-          slicedSegments = _b.slicedSegments;
-      var snapshot = new ActivatedRouteSnapshot(consumedSegments, Object.freeze(merge(inherited.allParams, parameters)), Object.freeze(this.urlTree.queryParams), this.urlTree.fragment, merge(inherited.allData, getData(route)), outlet, route.component, route, getSourceSegmentGroup(rawSegment), getPathIndexShift(rawSegment) + consumedSegments.length, newInheritedResolve);
-      var newInherited = route.component ? InheritedFromParent.empty(snapshot) : new InheritedFromParent(inherited, snapshot, parameters, getData(route), newInheritedResolve);
-      if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
-        var children = this.processChildren(childConfig, segmentGroup, newInherited);
-        return [new TreeNode(snapshot, children)];
-      } else if (childConfig.length === 0 && slicedSegments.length === 0) {
-        return [new TreeNode(snapshot, [])];
-      } else {
-        var children = this.processSegment(childConfig, segmentGroup, pathIndex + lastChild, slicedSegments, newInherited, PRIMARY_OUTLET);
-        return [new TreeNode(snapshot, children)];
-      }
-    };
-    return Recognizer;
-  }());
-  function sortActivatedRouteSnapshots(nodes) {
-    nodes.sort(function(a, b) {
-      if (a.value.outlet === PRIMARY_OUTLET)
-        return -1;
-      if (b.value.outlet === PRIMARY_OUTLET)
-        return 1;
-      return a.value.outlet.localeCompare(b.value.outlet);
-    });
-  }
-  function getChildConfig(route) {
-    if (route.children) {
-      return route.children;
-    } else if (route.loadChildren) {
-      return route._loadedConfig.routes;
-    } else {
-      return [];
-    }
-  }
-  function match$1(segmentGroup, route, segments, parent) {
-    if (route.path === '') {
-      if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || segments.length > 0)) {
-        throw new NoMatch$1();
-      } else {
-        var params = parent ? parent.params : {};
-        return {
-          consumedSegments: [],
-          lastChild: 0,
-          parameters: params
-        };
-      }
-    }
-    var path = route.path;
-    var parts = path.split('/');
-    var posParameters = {};
-    var consumedSegments = [];
-    var currentIndex = 0;
-    for (var i = 0; i < parts.length; ++i) {
-      if (currentIndex >= segments.length)
-        throw new NoMatch$1();
-      var current = segments[currentIndex];
-      var p = parts[i];
-      var isPosParam = p.startsWith(':');
-      if (!isPosParam && p !== current.path)
-        throw new NoMatch$1();
-      if (isPosParam) {
-        posParameters[p.substring(1)] = current.path;
-      }
-      consumedSegments.push(current);
-      currentIndex++;
-    }
-    if (route.pathMatch === 'full' && (segmentGroup.hasChildren() || currentIndex < segments.length)) {
-      throw new NoMatch$1();
-    }
-    var parameters = merge(posParameters, consumedSegments[consumedSegments.length - 1].parameters);
-    return {
-      consumedSegments: consumedSegments,
-      lastChild: currentIndex,
-      parameters: parameters
-    };
-  }
-  function checkOutletNameUniqueness(nodes) {
-    var names = {};
-    nodes.forEach(function(n) {
-      var routeWithSameOutletName = names[n.value.outlet];
-      if (routeWithSameOutletName) {
-        var p = routeWithSameOutletName.url.map(function(s) {
-          return s.toString();
-        }).join('/');
-        var c = n.value.url.map(function(s) {
-          return s.toString();
-        }).join('/');
-        throw new Error("Two segments cannot have the same outlet name: '" + p + "' and '" + c + "'.");
-      }
-      names[n.value.outlet] = n.value;
-    });
-  }
-  function getSourceSegmentGroup(segmentGroup) {
-    var s = segmentGroup;
-    while (s._sourceSegment) {
-      s = s._sourceSegment;
-    }
-    return s;
-  }
-  function getPathIndexShift(segmentGroup) {
-    var s = segmentGroup;
-    var res = (s._segmentIndexShift ? s._segmentIndexShift : 0);
-    while (s._sourceSegment) {
-      s = s._sourceSegment;
-      res += (s._segmentIndexShift ? s._segmentIndexShift : 0);
-    }
-    return res - 1;
-  }
-  function split$1(segmentGroup, consumedSegments, slicedSegments, config) {
-    if (slicedSegments.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config)) {
-      var s = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(segmentGroup, consumedSegments, config, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
-      s._sourceSegment = segmentGroup;
-      s._segmentIndexShift = consumedSegments.length;
-      return {
-        segmentGroup: s,
-        slicedSegments: []
-      };
-    } else if (slicedSegments.length === 0 && containsEmptyPathMatches(segmentGroup, slicedSegments, config)) {
-      var s = new UrlSegmentGroup(segmentGroup.segments, addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, config, segmentGroup.children));
-      s._sourceSegment = segmentGroup;
-      s._segmentIndexShift = consumedSegments.length;
-      return {
-        segmentGroup: s,
-        slicedSegments: slicedSegments
-      };
-    } else {
-      var s = new UrlSegmentGroup(segmentGroup.segments, segmentGroup.children);
-      s._sourceSegment = segmentGroup;
-      s._segmentIndexShift = consumedSegments.length;
-      return {
-        segmentGroup: s,
-        slicedSegments: slicedSegments
-      };
-    }
-  }
-  function addEmptyPathsToChildrenIfNeeded(segmentGroup, slicedSegments, routes, children) {
-    var res = {};
-    for (var _i = 0,
-        routes_1 = routes; _i < routes_1.length; _i++) {
-      var r = routes_1[_i];
-      if (emptyPathMatch(segmentGroup, slicedSegments, r) && !children[getOutlet$2(r)]) {
-        var s = new UrlSegmentGroup([], {});
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = segmentGroup.segments.length;
-        res[getOutlet$2(r)] = s;
-      }
-    }
-    return merge(children, res);
-  }
-  function createChildrenForEmptyPaths(segmentGroup, consumedSegments, routes, primarySegment) {
-    var res = {};
-    res[PRIMARY_OUTLET] = primarySegment;
-    primarySegment._sourceSegment = segmentGroup;
-    primarySegment._segmentIndexShift = consumedSegments.length;
-    for (var _i = 0,
-        routes_2 = routes; _i < routes_2.length; _i++) {
-      var r = routes_2[_i];
-      if (r.path === '' && getOutlet$2(r) !== PRIMARY_OUTLET) {
-        var s = new UrlSegmentGroup([], {});
-        s._sourceSegment = segmentGroup;
-        s._segmentIndexShift = consumedSegments.length;
-        res[getOutlet$2(r)] = s;
-      }
-    }
-    return res;
-  }
-  function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function(r) {
-      return emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet$2(r) !== PRIMARY_OUTLET;
-    }).length > 0;
-  }
-  function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
-    return routes.filter(function(r) {
-      return emptyPathMatch(segmentGroup, slicedSegments, r);
-    }).length > 0;
-  }
-  function emptyPathMatch(segmentGroup, slicedSegments, r) {
-    if ((segmentGroup.hasChildren() || slicedSegments.length > 0) && r.pathMatch === 'full')
-      return false;
-    return r.path === '' && r.redirectTo === undefined;
-  }
-  function getOutlet$2(route) {
-    return route.outlet ? route.outlet : PRIMARY_OUTLET;
-  }
-  function getData(route) {
-    return route.data ? route.data : {};
-  }
-  function getResolve(route) {
-    return route.resolve ? route.resolve : {};
-  }
-  var RouterOutletMap = (function() {
-    function RouterOutletMap() {
-      this._outlets = {};
-    }
-    RouterOutletMap.prototype.registerOutlet = function(name, outlet) {
-      this._outlets[name] = outlet;
-    };
-    RouterOutletMap.prototype.removeOutlet = function(name) {
-      this._outlets[name] = undefined;
-    };
-    return RouterOutletMap;
-  }());
-  var NavigationStart = (function() {
-    function NavigationStart(id, url) {
-      this.id = id;
-      this.url = url;
-    }
-    NavigationStart.prototype.toString = function() {
-      return "NavigationStart(id: " + this.id + ", url: '" + this.url + "')";
-    };
-    return NavigationStart;
-  }());
-  var NavigationEnd = (function() {
-    function NavigationEnd(id, url, urlAfterRedirects) {
-      this.id = id;
-      this.url = url;
-      this.urlAfterRedirects = urlAfterRedirects;
-    }
-    NavigationEnd.prototype.toString = function() {
-      return "NavigationEnd(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "')";
-    };
-    return NavigationEnd;
-  }());
-  var NavigationCancel = (function() {
-    function NavigationCancel(id, url, reason) {
-      this.id = id;
-      this.url = url;
-      this.reason = reason;
-    }
-    NavigationCancel.prototype.toString = function() {
-      return "NavigationCancel(id: " + this.id + ", url: '" + this.url + "')";
-    };
-    return NavigationCancel;
-  }());
-  var NavigationError = (function() {
-    function NavigationError(id, url, error) {
-      this.id = id;
-      this.url = url;
-      this.error = error;
-    }
-    NavigationError.prototype.toString = function() {
-      return "NavigationError(id: " + this.id + ", url: '" + this.url + "', error: " + this.error + ")";
-    };
-    return NavigationError;
-  }());
-  var RoutesRecognized = (function() {
-    function RoutesRecognized(id, url, urlAfterRedirects, state) {
-      this.id = id;
-      this.url = url;
-      this.urlAfterRedirects = urlAfterRedirects;
-      this.state = state;
-    }
-    RoutesRecognized.prototype.toString = function() {
-      return "RoutesRecognized(id: " + this.id + ", url: '" + this.url + "', urlAfterRedirects: '" + this.urlAfterRedirects + "', state: " + this.state + ")";
-    };
-    return RoutesRecognized;
-  }());
-  function defaultErrorHandler(error) {
-    throw error;
-  }
-  var Router = (function() {
-    function Router(rootComponentType, urlSerializer, outletMap, location, injector, loader, compiler, config) {
-      this.rootComponentType = rootComponentType;
-      this.urlSerializer = urlSerializer;
-      this.outletMap = outletMap;
-      this.location = location;
-      this.injector = injector;
-      this.config = config;
-      this.navigationId = 0;
-      this.errorHandler = defaultErrorHandler;
-      this.navigated = false;
-      this.resetConfig(config);
-      this.routerEvents = new rxjs_Subject.Subject();
-      this.currentUrlTree = createEmptyUrlTree();
-      this.configLoader = new RouterConfigLoader(loader, compiler);
-      this.currentRouterState = createEmptyState(this.currentUrlTree, this.rootComponentType);
-    }
-    Router.prototype.initialNavigation = function() {
-      this.setUpLocationChangeListener();
-      this.navigateByUrl(this.location.path(true), {replaceUrl: true});
-    };
-    Router.prototype.setUpLocationChangeListener = function() {
-      var _this = this;
-      this.locationSubscription = this.location.subscribe(Zone.current.wrap(function(change) {
-        var tree = _this.urlSerializer.parse(change['url']);
-        return _this.currentUrlTree.toString() !== tree.toString() ? _this.scheduleNavigation(tree, {
-          skipLocationChange: change['pop'],
-          replaceUrl: true
-        }) : null;
-      }));
-    };
-    Object.defineProperty(Router.prototype, "routerState", {
-      get: function() {
-        return this.currentRouterState;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(Router.prototype, "url", {
-      get: function() {
-        return this.serializeUrl(this.currentUrlTree);
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(Router.prototype, "events", {
-      get: function() {
-        return this.routerEvents;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Router.prototype.resetConfig = function(config) {
-      validateConfig(config);
-      this.config = config;
-    };
-    Router.prototype.ngOnDestroy = function() {
-      this.dispose();
-    };
-    Router.prototype.dispose = function() {
-      this.locationSubscription.unsubscribe();
-    };
-    Router.prototype.createUrlTree = function(commands, _a) {
-      var _b = _a === void 0 ? {} : _a,
-          relativeTo = _b.relativeTo,
-          queryParams = _b.queryParams,
-          fragment = _b.fragment,
-          preserveQueryParams = _b.preserveQueryParams,
-          preserveFragment = _b.preserveFragment;
-      var a = relativeTo ? relativeTo : this.routerState.root;
-      var q = preserveQueryParams ? this.currentUrlTree.queryParams : queryParams;
-      var f = preserveFragment ? this.currentUrlTree.fragment : fragment;
-      return createUrlTree(a, this.currentUrlTree, commands, q, f);
-    };
-    Router.prototype.navigateByUrl = function(url, extras) {
-      if (extras === void 0) {
-        extras = {skipLocationChange: false};
-      }
-      if (url instanceof UrlTree) {
-        return this.scheduleNavigation(url, extras);
-      } else {
-        var urlTree = this.urlSerializer.parse(url);
-        return this.scheduleNavigation(urlTree, extras);
-      }
-    };
-    Router.prototype.navigate = function(commands, extras) {
-      if (extras === void 0) {
-        extras = {skipLocationChange: false};
-      }
-      return this.scheduleNavigation(this.createUrlTree(commands, extras), extras);
-    };
-    Router.prototype.serializeUrl = function(url) {
-      return this.urlSerializer.serialize(url);
-    };
-    Router.prototype.parseUrl = function(url) {
-      return this.urlSerializer.parse(url);
-    };
-    Router.prototype.isActive = function(url, exact) {
-      if (url instanceof UrlTree) {
-        return containsTree(this.currentUrlTree, url, exact);
-      } else {
-        var urlTree = this.urlSerializer.parse(url);
-        return containsTree(this.currentUrlTree, urlTree, exact);
-      }
-    };
-    Router.prototype.scheduleNavigation = function(url, extras) {
-      var _this = this;
-      var id = ++this.navigationId;
-      this.routerEvents.next(new NavigationStart(id, this.serializeUrl(url)));
-      return Promise.resolve().then(function(_) {
-        return _this.runNavigate(url, extras.skipLocationChange, extras.replaceUrl, id);
-      });
-    };
-    Router.prototype.runNavigate = function(url, shouldPreventPushState, shouldReplaceUrl, id) {
-      var _this = this;
-      if (id !== this.navigationId) {
-        this.location.go(this.urlSerializer.serialize(this.currentUrlTree));
-        this.routerEvents.next(new NavigationCancel(id, this.serializeUrl(url), "Navigation ID " + id + " is not equal to the current navigation id " + this.navigationId));
-        return Promise.resolve(false);
-      }
-      return new Promise(function(resolvePromise, rejectPromise) {
-        var state;
-        var navigationIsSuccessful;
-        var preActivation;
-        var appliedUrl;
-        var storedState = _this.currentRouterState;
-        var storedUrl = _this.currentUrlTree;
-        var redirectsApplied$ = applyRedirects(_this.injector, _this.configLoader, url, _this.config);
-        var snapshot$ = rxjs_operator_mergeMap.mergeMap.call(redirectsApplied$, function(u) {
-          appliedUrl = u;
-          return recognize(_this.rootComponentType, _this.config, appliedUrl, _this.serializeUrl(appliedUrl));
-        });
-        var emitRecognzied$ = rxjs_operator_map.map.call(snapshot$, function(newRouterStateSnapshot) {
-          _this.routerEvents.next(new RoutesRecognized(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl), newRouterStateSnapshot));
-          return newRouterStateSnapshot;
-        });
-        var routerState$ = rxjs_operator_map.map.call(emitRecognzied$, function(routerStateSnapshot) {
-          return createRouterState(routerStateSnapshot, _this.currentRouterState);
-        });
-        var preactivation$ = rxjs_operator_map.map.call(routerState$, function(newState) {
-          state = newState;
-          preActivation = new PreActivation(state.snapshot, _this.currentRouterState.snapshot, _this.injector);
-          preActivation.traverse(_this.outletMap);
-        });
-        var preactivation2$ = rxjs_operator_mergeMap.mergeMap.call(preactivation$, function() {
-          return preActivation.checkGuards();
-        });
-        var resolveData$ = rxjs_operator_mergeMap.mergeMap.call(preactivation2$, function(shouldActivate) {
-          if (shouldActivate) {
-            return rxjs_operator_map.map.call(preActivation.resolveData(), function() {
-              return shouldActivate;
-            });
-          } else {
-            return rxjs_observable_of.of(shouldActivate);
-          }
-        });
-        resolveData$.forEach(function(shouldActivate) {
-          if (!shouldActivate || id !== _this.navigationId) {
-            navigationIsSuccessful = false;
-            return;
-          }
-          _this.currentUrlTree = appliedUrl;
-          _this.currentRouterState = state;
-          if (!shouldPreventPushState) {
-            var path = _this.urlSerializer.serialize(appliedUrl);
-            if (_this.location.isCurrentPathEqualTo(path) || shouldReplaceUrl) {
-              _this.location.replaceState(path);
-            } else {
-              _this.location.go(path);
-            }
-          }
-          new ActivateRoutes(state, storedState).activate(_this.outletMap);
-          navigationIsSuccessful = true;
-        }).then(function() {
-          _this.navigated = true;
-          if (navigationIsSuccessful) {
-            _this.routerEvents.next(new NavigationEnd(id, _this.serializeUrl(url), _this.serializeUrl(appliedUrl)));
-            resolvePromise(true);
-          } else {
-            _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), ''));
-            resolvePromise(false);
-          }
-        }, function(e) {
-          if (e instanceof NavigationCancelingError) {
-            _this.navigated = true;
-            _this.routerEvents.next(new NavigationCancel(id, _this.serializeUrl(url), e.message));
-            resolvePromise(false);
-          } else {
-            _this.routerEvents.next(new NavigationError(id, _this.serializeUrl(url), e));
+        // NOTE: This looks unoptimized, but it's actually purposefully NOT
+        // using try/catch optimizations.
+        MapSubscriber.prototype._next = function (value) {
+            var result;
             try {
-              resolvePromise(_this.errorHandler(e));
-            } catch (ee) {
-              rejectPromise(ee);
+                result = this.project.call(this.thisArg, value, this.count++);
+            } catch (err) {
+                this.destination.error(err);
+                return;
             }
-          }
-          if (id === _this.navigationId) {
-            _this.currentRouterState = storedState;
-            _this.currentUrlTree = storedUrl;
-            _this.location.replaceState(_this.serializeUrl(storedUrl));
-          }
-        });
-      });
-    };
-    return Router;
-  }());
-  var CanActivate = (function() {
-    function CanActivate(path) {
-      this.path = path;
-    }
-    Object.defineProperty(CanActivate.prototype, "route", {
-      get: function() {
-        return this.path[this.path.length - 1];
-      },
-      enumerable: true,
-      configurable: true
-    });
-    return CanActivate;
-  }());
-  var CanDeactivate = (function() {
-    function CanDeactivate(component, route) {
-      this.component = component;
-      this.route = route;
-    }
-    return CanDeactivate;
-  }());
-  var PreActivation = (function() {
-    function PreActivation(future, curr, injector) {
-      this.future = future;
-      this.curr = curr;
-      this.injector = injector;
-      this.checks = [];
-    }
-    PreActivation.prototype.traverse = function(parentOutletMap) {
-      var futureRoot = this.future._root;
-      var currRoot = this.curr ? this.curr._root : null;
-      this.traverseChildRoutes(futureRoot, currRoot, parentOutletMap, [futureRoot.value]);
-    };
-    PreActivation.prototype.checkGuards = function() {
-      var _this = this;
-      if (this.checks.length === 0)
-        return rxjs_observable_of.of(true);
-      var checks$ = rxjs_observable_from.from(this.checks);
-      var runningChecks$ = rxjs_operator_map.map.call(checks$, function(s) {
-        if (s instanceof CanActivate) {
-          return andObservables(rxjs_observable_from.from([_this.runCanActivateChild(s.path), _this.runCanActivate(s.route)]));
-        } else if (s instanceof CanDeactivate) {
-          var s2 = s;
-          return _this.runCanDeactivate(s2.component, s2.route);
-        } else {
-          throw new Error('Cannot be reached');
-        }
-      });
-      var mergedChecks$ = rxjs_operator_mergeAll.mergeAll.call(runningChecks$);
-      return rxjs_operator_every.every.call(mergedChecks$, function(result) {
-        return result === true;
-      });
-    };
-    PreActivation.prototype.resolveData = function() {
-      var _this = this;
-      if (this.checks.length === 0)
-        return rxjs_observable_of.of(null);
-      var checks$ = rxjs_observable_from.from(this.checks);
-      var runningChecks$ = rxjs_operator_mergeMap.mergeMap.call(checks$, function(s) {
-        if (s instanceof CanActivate) {
-          return _this.runResolve(s.route);
-        } else {
-          return rxjs_observable_of.of(null);
-        }
-      });
-      return rxjs_operator_reduce.reduce.call(runningChecks$, function(_, __) {
-        return _;
-      });
-    };
-    PreActivation.prototype.traverseChildRoutes = function(futureNode, currNode, outletMap, futurePath) {
-      var _this = this;
-      var prevChildren = nodeChildrenAsMap(currNode);
-      futureNode.children.forEach(function(c) {
-        _this.traverseRoutes(c, prevChildren[c.value.outlet], outletMap, futurePath.concat([c.value]));
-        delete prevChildren[c.value.outlet];
-      });
-      forEach(prevChildren, function(v, k) {
-        return _this.deactivateOutletAndItChildren(v, outletMap._outlets[k]);
-      });
-    };
-    PreActivation.prototype.traverseRoutes = function(futureNode, currNode, parentOutletMap, futurePath) {
-      var future = futureNode.value;
-      var curr = currNode ? currNode.value : null;
-      var outlet = parentOutletMap ? parentOutletMap._outlets[futureNode.value.outlet] : null;
-      if (curr && future._routeConfig === curr._routeConfig) {
-        if (!shallowEqual(future.params, curr.params)) {
-          this.checks.push(new CanDeactivate(outlet.component, curr), new CanActivate(futurePath));
-        } else {
-          future.data = curr.data;
-        }
-        if (future.component) {
-          this.traverseChildRoutes(futureNode, currNode, outlet ? outlet.outletMap : null, futurePath);
-        } else {
-          this.traverseChildRoutes(futureNode, currNode, parentOutletMap, futurePath);
-        }
-      } else {
-        if (curr) {
-          if (curr.component) {
-            this.deactivateOutletAndItChildren(curr, outlet);
-          } else {
-            this.deactivateOutletMap(parentOutletMap);
-          }
-        }
-        this.checks.push(new CanActivate(futurePath));
-        if (future.component) {
-          this.traverseChildRoutes(futureNode, null, outlet ? outlet.outletMap : null, futurePath);
-        } else {
-          this.traverseChildRoutes(futureNode, null, parentOutletMap, futurePath);
-        }
-      }
-    };
-    PreActivation.prototype.deactivateOutletAndItChildren = function(route, outlet) {
-      if (outlet && outlet.isActivated) {
-        this.deactivateOutletMap(outlet.outletMap);
-        this.checks.push(new CanDeactivate(outlet.component, route));
-      }
-    };
-    PreActivation.prototype.deactivateOutletMap = function(outletMap) {
-      var _this = this;
-      forEach(outletMap._outlets, function(v) {
-        if (v.isActivated) {
-          _this.deactivateOutletAndItChildren(v.activatedRoute.snapshot, v);
-        }
-      });
-    };
-    PreActivation.prototype.runCanActivate = function(future) {
-      var _this = this;
-      var canActivate = future._routeConfig ? future._routeConfig.canActivate : null;
-      if (!canActivate || canActivate.length === 0)
-        return rxjs_observable_of.of(true);
-      var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(canActivate), function(c) {
-        var guard = _this.getToken(c, future);
-        if (guard.canActivate) {
-          return wrapIntoObservable(guard.canActivate(future, _this.future));
-        } else {
-          return wrapIntoObservable(guard(future, _this.future));
-        }
-      });
-      return andObservables(obs);
-    };
-    PreActivation.prototype.runCanActivateChild = function(path) {
-      var _this = this;
-      var future = path[path.length - 1];
-      var canActivateChildGuards = path.slice(0, path.length - 1).reverse().map(function(p) {
-        return _this.extractCanActivateChild(p);
-      }).filter(function(_) {
-        return _ !== null;
-      });
-      return andObservables(rxjs_operator_map.map.call(rxjs_observable_from.from(canActivateChildGuards), function(d) {
-        var obs = rxjs_operator_map.map.call(rxjs_observable_from.from(d.guards), function(c) {
-          var guard = _this.getToken(c, c.node);
-          if (guard.canActivateChild) {
-            return wrapIntoObservable(guard.canActivateChild(future, _this.future));
-          } else {
-            return wrapIntoObservable(guard(future, _this.future));
-          }
-        });
-        return andObservables(obs);
-      }));
-    };
-    PreActivation.prototype.extractCanActivateChild = function(p) {
-      var canActivateChild = p._routeConfig ? p._routeConfig.canActivateChild : null;
-      if (!canActivateChild || canActivateChild.length === 0)
-        return null;
-      return {
-        node: p,
-        guards: canActivateChild
-      };
-    };
-    PreActivation.prototype.runCanDeactivate = function(component, curr) {
-      var _this = this;
-      var canDeactivate = curr && curr._routeConfig ? curr._routeConfig.canDeactivate : null;
-      if (!canDeactivate || canDeactivate.length === 0)
-        return rxjs_observable_of.of(true);
-      var canDeactivate$ = rxjs_operator_map.map.call(rxjs_observable_from.from(canDeactivate), function(c) {
-        var guard = _this.getToken(c, curr);
-        if (guard.canDeactivate) {
-          return wrapIntoObservable(guard.canDeactivate(component, curr, _this.curr));
-        } else {
-          return wrapIntoObservable(guard(component, curr, _this.curr));
-        }
-      });
-      var merged$ = rxjs_operator_mergeAll.mergeAll.call(canDeactivate$);
-      return rxjs_operator_every.every.call(merged$, function(result) {
-        return result === true;
-      });
-    };
-    PreActivation.prototype.runResolve = function(future) {
-      var resolve = future._resolve;
-      return rxjs_operator_map.map.call(this.resolveNode(resolve.current, future), function(resolvedData) {
-        resolve.resolvedData = resolvedData;
-        future.data = merge(future.data, resolve.flattenedResolvedData);
-        return null;
-      });
-    };
-    PreActivation.prototype.resolveNode = function(resolve, future) {
-      var _this = this;
-      return waitForMap(resolve, function(k, v) {
-        var resolver = _this.getToken(v, future);
-        return resolver.resolve ? wrapIntoObservable(resolver.resolve(future, _this.future)) : wrapIntoObservable(resolver(future, _this.future));
-      });
-    };
-    PreActivation.prototype.getToken = function(token, snapshot) {
-      var config = closestLoadedConfig(snapshot);
-      var injector = config ? config.injector : this.injector;
-      return injector.get(token);
-    };
-    return PreActivation;
-  }());
-  var ActivateRoutes = (function() {
-    function ActivateRoutes(futureState, currState) {
-      this.futureState = futureState;
-      this.currState = currState;
-    }
-    ActivateRoutes.prototype.activate = function(parentOutletMap) {
-      var futureRoot = this.futureState._root;
-      var currRoot = this.currState ? this.currState._root : null;
-      advanceActivatedRoute(this.futureState.root);
-      this.activateChildRoutes(futureRoot, currRoot, parentOutletMap);
-    };
-    ActivateRoutes.prototype.activateChildRoutes = function(futureNode, currNode, outletMap) {
-      var _this = this;
-      var prevChildren = nodeChildrenAsMap(currNode);
-      futureNode.children.forEach(function(c) {
-        _this.activateRoutes(c, prevChildren[c.value.outlet], outletMap);
-        delete prevChildren[c.value.outlet];
-      });
-      forEach(prevChildren, function(v, k) {
-        return _this.deactivateOutletAndItChildren(outletMap._outlets[k]);
-      });
-    };
-    ActivateRoutes.prototype.activateRoutes = function(futureNode, currNode, parentOutletMap) {
-      var future = futureNode.value;
-      var curr = currNode ? currNode.value : null;
-      if (future === curr) {
-        advanceActivatedRoute(future);
-        if (future.component) {
-          var outlet = getOutlet(parentOutletMap, futureNode.value);
-          this.activateChildRoutes(futureNode, currNode, outlet.outletMap);
-        } else {
-          this.activateChildRoutes(futureNode, currNode, parentOutletMap);
-        }
-      } else {
-        if (curr) {
-          if (curr.component) {
-            var outlet = getOutlet(parentOutletMap, futureNode.value);
-            this.deactivateOutletAndItChildren(outlet);
-          } else {
-            this.deactivateOutletMap(parentOutletMap);
-          }
-        }
-        if (future.component) {
-          advanceActivatedRoute(future);
-          var outlet = getOutlet(parentOutletMap, futureNode.value);
-          var outletMap = new RouterOutletMap();
-          this.placeComponentIntoOutlet(outletMap, future, outlet);
-          this.activateChildRoutes(futureNode, null, outletMap);
-        } else {
-          advanceActivatedRoute(future);
-          this.activateChildRoutes(futureNode, null, parentOutletMap);
-        }
-      }
-    };
-    ActivateRoutes.prototype.placeComponentIntoOutlet = function(outletMap, future, outlet) {
-      var resolved = [{
-        provide: ActivatedRoute,
-        useValue: future
-      }, {
-        provide: RouterOutletMap,
-        useValue: outletMap
-      }];
-      var config = parentLoadedConfig(future.snapshot);
-      var loadedFactoryResolver = null;
-      var loadedInjector = null;
-      if (config) {
-        loadedFactoryResolver = config.factoryResolver;
-        loadedInjector = config.injector;
-        resolved.push({
-          provide: _angular_core.ComponentFactoryResolver,
-          useValue: loadedFactoryResolver
-        });
-      }
-      outlet.activate(future, loadedFactoryResolver, loadedInjector, _angular_core.ReflectiveInjector.resolve(resolved), outletMap);
-    };
-    ActivateRoutes.prototype.deactivateOutletAndItChildren = function(outlet) {
-      if (outlet && outlet.isActivated) {
-        this.deactivateOutletMap(outlet.outletMap);
-        outlet.deactivate();
-      }
-    };
-    ActivateRoutes.prototype.deactivateOutletMap = function(outletMap) {
-      var _this = this;
-      forEach(outletMap._outlets, function(v) {
-        return _this.deactivateOutletAndItChildren(v);
-      });
-    };
-    return ActivateRoutes;
-  }());
-  function parentLoadedConfig(snapshot) {
-    var s = snapshot.parent;
-    while (s) {
-      var c = s._routeConfig;
-      if (c && c._loadedConfig)
-        return c._loadedConfig;
-      if (c && c.component)
-        return null;
-      s = s.parent;
-    }
-    return null;
-  }
-  function closestLoadedConfig(snapshot) {
-    if (!snapshot)
-      return null;
-    var s = snapshot.parent;
-    while (s) {
-      var c = s._routeConfig;
-      if (c && c._loadedConfig)
-        return c._loadedConfig;
-      s = s.parent;
-    }
-    return null;
-  }
-  function nodeChildrenAsMap(node) {
-    return node ? node.children.reduce(function(m, c) {
-      m[c.value.outlet] = c;
-      return m;
-    }, {}) : {};
-  }
-  function getOutlet(outletMap, route) {
-    var outlet = outletMap._outlets[route.outlet];
-    if (!outlet) {
-      var componentName = route.component.name;
-      if (route.outlet === PRIMARY_OUTLET) {
-        throw new Error("Cannot find primary outlet to load '" + componentName + "'");
-      } else {
-        throw new Error("Cannot find the outlet " + route.outlet + " to load '" + componentName + "'");
-      }
-    }
-    return outlet;
-  }
-  var RouterLink = (function() {
-    function RouterLink(router, route, locationStrategy) {
-      this.router = router;
-      this.route = route;
-      this.locationStrategy = locationStrategy;
-      this.commands = [];
-    }
-    Object.defineProperty(RouterLink.prototype, "routerLink", {
-      set: function(data) {
-        if (Array.isArray(data)) {
-          this.commands = data;
-        } else {
-          this.commands = [data];
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterLink.prototype.onClick = function(button, ctrlKey, metaKey) {
-      if (button !== 0 || ctrlKey || metaKey) {
-        return true;
-      }
-      this.router.navigateByUrl(this.urlTree);
-      return false;
-    };
-    Object.defineProperty(RouterLink.prototype, "urlTree", {
-      get: function() {
-        return this.router.createUrlTree(this.commands, {
-          relativeTo: this.route,
-          queryParams: this.queryParams,
-          fragment: this.fragment,
-          preserveQueryParams: toBool(this.preserveQueryParams),
-          preserveFragment: toBool(this.preserveFragment)
-        });
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterLink.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: ':not(a)[routerLink]'}]
-    }];
-    RouterLink.ctorParameters = [{type: Router}, {type: ActivatedRoute}, {type: _angular_common.LocationStrategy}];
-    RouterLink.propDecorators = {
-      'queryParams': [{type: _angular_core.Input}],
-      'fragment': [{type: _angular_core.Input}],
-      'preserveQueryParams': [{type: _angular_core.Input}],
-      'preserveFragment': [{type: _angular_core.Input}],
-      'routerLink': [{type: _angular_core.Input}],
-      'onClick': [{
-        type: _angular_core.HostListener,
-        args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey']]
-      }]
-    };
-    return RouterLink;
-  }());
-  var RouterLinkWithHref = (function() {
-    function RouterLinkWithHref(router, route, locationStrategy) {
-      var _this = this;
-      this.router = router;
-      this.route = route;
-      this.locationStrategy = locationStrategy;
-      this.commands = [];
-      this.subscription = router.events.subscribe(function(s) {
-        if (s instanceof NavigationEnd) {
-          _this.updateTargetUrlAndHref();
-        }
-      });
-    }
-    Object.defineProperty(RouterLinkWithHref.prototype, "routerLink", {
-      set: function(data) {
-        if (Array.isArray(data)) {
-          this.commands = data;
-        } else {
-          this.commands = [data];
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterLinkWithHref.prototype.ngOnChanges = function(changes) {
-      this.updateTargetUrlAndHref();
-    };
-    RouterLinkWithHref.prototype.ngOnDestroy = function() {
-      this.subscription.unsubscribe();
-    };
-    RouterLinkWithHref.prototype.onClick = function(button, ctrlKey, metaKey) {
-      if (button !== 0 || ctrlKey || metaKey) {
-        return true;
-      }
-      if (typeof this.target === 'string' && this.target != '_self') {
-        return true;
-      }
-      this.router.navigateByUrl(this.urlTree);
-      return false;
-    };
-    RouterLinkWithHref.prototype.updateTargetUrlAndHref = function() {
-      this.href = this.locationStrategy.prepareExternalUrl(this.router.serializeUrl(this.urlTree));
-    };
-    Object.defineProperty(RouterLinkWithHref.prototype, "urlTree", {
-      get: function() {
-        return this.router.createUrlTree(this.commands, {
-          relativeTo: this.route,
-          queryParams: this.queryParams,
-          fragment: this.fragment,
-          preserveQueryParams: toBool(this.preserveQueryParams),
-          preserveFragment: toBool(this.preserveFragment)
-        });
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterLinkWithHref.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: 'a[routerLink]'}]
-    }];
-    RouterLinkWithHref.ctorParameters = [{type: Router}, {type: ActivatedRoute}, {type: _angular_common.LocationStrategy}];
-    RouterLinkWithHref.propDecorators = {
-      'target': [{type: _angular_core.Input}],
-      'queryParams': [{type: _angular_core.Input}],
-      'fragment': [{type: _angular_core.Input}],
-      'routerLinkOptions': [{type: _angular_core.Input}],
-      'preserveQueryParams': [{type: _angular_core.Input}],
-      'preserveFragment': [{type: _angular_core.Input}],
-      'href': [{type: _angular_core.HostBinding}],
-      'routerLink': [{type: _angular_core.Input}],
-      'onClick': [{
-        type: _angular_core.HostListener,
-        args: ['click', ['$event.button', '$event.ctrlKey', '$event.metaKey']]
-      }]
-    };
-    return RouterLinkWithHref;
-  }());
-  function toBool(s) {
-    if (s === '')
-      return true;
-    return !!s;
-  }
-  var RouterLinkActive = (function() {
-    function RouterLinkActive(router, element, renderer) {
-      var _this = this;
-      this.router = router;
-      this.element = element;
-      this.renderer = renderer;
-      this.classes = [];
-      this.routerLinkActiveOptions = {exact: false};
-      this.subscription = router.events.subscribe(function(s) {
-        if (s instanceof NavigationEnd) {
-          _this.update();
-        }
-      });
-    }
-    RouterLinkActive.prototype.ngAfterContentInit = function() {
-      var _this = this;
-      this.links.changes.subscribe(function(s) {
-        return _this.update();
-      });
-      this.linksWithHrefs.changes.subscribe(function(s) {
-        return _this.update();
-      });
-      this.update();
-    };
-    Object.defineProperty(RouterLinkActive.prototype, "routerLinkActive", {
-      set: function(data) {
-        if (Array.isArray(data)) {
-          this.classes = data;
-        } else {
-          this.classes = data.split(' ');
-        }
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterLinkActive.prototype.ngOnChanges = function(changes) {
-      this.update();
-    };
-    RouterLinkActive.prototype.ngOnDestroy = function() {
-      this.subscription.unsubscribe();
-    };
-    RouterLinkActive.prototype.update = function() {
-      var _this = this;
-      if (!this.links || !this.linksWithHrefs || !this.router.navigated)
-        return;
-      var isActiveLinks = this.reduceList(this.links);
-      var isActiveLinksWithHrefs = this.reduceList(this.linksWithHrefs);
-      this.classes.forEach(function(c) {
-        return _this.renderer.setElementClass(_this.element.nativeElement, c, isActiveLinks || isActiveLinksWithHrefs);
-      });
-    };
-    RouterLinkActive.prototype.reduceList = function(q) {
-      var _this = this;
-      return q.reduce(function(res, link) {
-        return res || _this.router.isActive(link.urlTree, _this.routerLinkActiveOptions.exact);
-      }, false);
-    };
-    RouterLinkActive.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: '[routerLinkActive]'}]
-    }];
-    RouterLinkActive.ctorParameters = [{type: Router}, {type: _angular_core.ElementRef}, {type: _angular_core.Renderer}];
-    RouterLinkActive.propDecorators = {
-      'links': [{
-        type: _angular_core.ContentChildren,
-        args: [RouterLink, {descendants: true}]
-      }],
-      'linksWithHrefs': [{
-        type: _angular_core.ContentChildren,
-        args: [RouterLinkWithHref, {descendants: true}]
-      }],
-      'routerLinkActiveOptions': [{type: _angular_core.Input}],
-      'routerLinkActive': [{type: _angular_core.Input}]
-    };
-    return RouterLinkActive;
-  }());
-  var RouterOutlet = (function() {
-    function RouterOutlet(parentOutletMap, location, resolver, name) {
-      this.parentOutletMap = parentOutletMap;
-      this.location = location;
-      this.resolver = resolver;
-      this.name = name;
-      this.activateEvents = new _angular_core.EventEmitter();
-      this.deactivateEvents = new _angular_core.EventEmitter();
-      parentOutletMap.registerOutlet(name ? name : PRIMARY_OUTLET, this);
-    }
-    RouterOutlet.prototype.ngOnDestroy = function() {
-      this.parentOutletMap.removeOutlet(this.name ? this.name : PRIMARY_OUTLET);
-    };
-    Object.defineProperty(RouterOutlet.prototype, "isActivated", {
-      get: function() {
-        return !!this.activated;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "component", {
-      get: function() {
-        if (!this.activated)
-          throw new Error('Outlet is not activated');
-        return this.activated.instance;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    Object.defineProperty(RouterOutlet.prototype, "activatedRoute", {
-      get: function() {
-        if (!this.activated)
-          throw new Error('Outlet is not activated');
-        return this._activatedRoute;
-      },
-      enumerable: true,
-      configurable: true
-    });
-    RouterOutlet.prototype.deactivate = function() {
-      if (this.activated) {
-        var c = this.component;
-        this.activated.destroy();
-        this.activated = null;
-        this.deactivateEvents.emit(c);
-      }
-    };
-    RouterOutlet.prototype.activate = function(activatedRoute, loadedResolver, loadedInjector, providers, outletMap) {
-      this.outletMap = outletMap;
-      this._activatedRoute = activatedRoute;
-      var snapshot = activatedRoute._futureSnapshot;
-      var component = snapshot._routeConfig.component;
-      var factory;
-      if (loadedResolver) {
-        factory = loadedResolver.resolveComponentFactory(component);
-      } else {
-        factory = this.resolver.resolveComponentFactory(component);
-      }
-      var injector = loadedInjector ? loadedInjector : this.location.parentInjector;
-      var inj = _angular_core.ReflectiveInjector.fromResolvedProviders(providers, injector);
-      this.activated = this.location.createComponent(factory, this.location.length, inj, []);
-      this.activated.changeDetectorRef.detectChanges();
-      this.activateEvents.emit(this.activated.instance);
-    };
-    RouterOutlet.decorators = [{
-      type: _angular_core.Directive,
-      args: [{selector: 'router-outlet'}]
-    }];
-    RouterOutlet.ctorParameters = [{type: RouterOutletMap}, {type: _angular_core.ViewContainerRef}, {type: _angular_core.ComponentFactoryResolver}, {
-      type: undefined,
-      decorators: [{
-        type: _angular_core.Attribute,
-        args: ['name']
-      }]
-    }];
-    RouterOutlet.propDecorators = {
-      'activateEvents': [{
-        type: _angular_core.Output,
-        args: ['activate']
-      }],
-      'deactivateEvents': [{
-        type: _angular_core.Output,
-        args: ['deactivate']
-      }]
-    };
-    return RouterOutlet;
-  }());
-  var ROUTER_DIRECTIVES = [RouterOutlet, RouterLink, RouterLinkWithHref, RouterLinkActive];
-  var ROUTER_CONFIGURATION = new _angular_core.OpaqueToken('ROUTER_CONFIGURATION');
-  var ROUTER_FORROOT_GUARD = new _angular_core.OpaqueToken('ROUTER_FORROOT_GUARD');
-  var ROUTER_PROVIDERS = [_angular_common.Location, {
-    provide: UrlSerializer,
-    useClass: DefaultUrlSerializer
-  }, {
-    provide: Router,
-    useFactory: setupRouter,
-    deps: [_angular_core.ApplicationRef, UrlSerializer, RouterOutletMap, _angular_common.Location, _angular_core.Injector, _angular_core.NgModuleFactoryLoader, _angular_core.Compiler, ROUTES, ROUTER_CONFIGURATION]
-  }, RouterOutletMap, {
-    provide: ActivatedRoute,
-    useFactory: rootRoute,
-    deps: [Router]
-  }, {
-    provide: _angular_core.NgModuleFactoryLoader,
-    useClass: _angular_core.SystemJsNgModuleLoader
-  }, {
-    provide: ROUTER_CONFIGURATION,
-    useValue: {enableTracing: false}
-  }];
-  var RouterModule = (function() {
-    function RouterModule(guard) {}
-    RouterModule.forRoot = function(routes, config) {
-      return {
-        ngModule: RouterModule,
-        providers: [ROUTER_PROVIDERS, provideRoutes(routes), {
-          provide: ROUTER_FORROOT_GUARD,
-          useFactory: provideForRootGuard,
-          deps: [[Router, new _angular_core.Optional(), new _angular_core.SkipSelf()]]
-        }, {
-          provide: ROUTER_CONFIGURATION,
-          useValue: config ? config : {}
-        }, {
-          provide: _angular_common.LocationStrategy,
-          useFactory: provideLocationStrategy,
-          deps: [_angular_common.PlatformLocation, [new _angular_core.Inject(_angular_common.APP_BASE_HREF), new _angular_core.Optional()], ROUTER_CONFIGURATION]
-        }, provideRouterInitializer()]
-      };
-    };
-    RouterModule.forChild = function(routes) {
-      return {
-        ngModule: RouterModule,
-        providers: [provideRoutes(routes)]
-      };
-    };
-    RouterModule.decorators = [{
-      type: _angular_core.NgModule,
-      args: [{
-        declarations: ROUTER_DIRECTIVES,
-        exports: ROUTER_DIRECTIVES
-      }]
-    }];
-    RouterModule.ctorParameters = [{
-      type: undefined,
-      decorators: [{type: _angular_core.Optional}, {
-        type: _angular_core.Inject,
-        args: [ROUTER_FORROOT_GUARD]
-      }]
-    }];
-    return RouterModule;
-  }());
-  function provideLocationStrategy(platformLocationStrategy, baseHref, options) {
-    if (options === void 0) {
-      options = {};
-    }
-    return options.useHash ? new _angular_common.HashLocationStrategy(platformLocationStrategy, baseHref) : new _angular_common.PathLocationStrategy(platformLocationStrategy, baseHref);
-  }
-  function provideForRootGuard(router) {
-    if (router) {
-      throw new Error("RouterModule.forRoot() called twice. Lazy loaded modules should use RouterModule.forChild() instead.");
-    }
-    return 'guarded';
-  }
-  function provideRoutes(routes) {
-    return [{
-      provide: _angular_core.ANALYZE_FOR_ENTRY_COMPONENTS,
-      multi: true,
-      useValue: routes
-    }, {
-      provide: ROUTES,
-      multi: true,
-      useValue: routes
-    }];
-  }
-  function setupRouter(ref, urlSerializer, outletMap, location, injector, loader, compiler, config, opts) {
-    if (opts === void 0) {
-      opts = {};
-    }
-    if (ref.componentTypes.length == 0) {
-      throw new Error('Bootstrap at least one component before injecting Router.');
-    }
-    var componentType = ref.componentTypes[0];
-    var r = new Router(componentType, urlSerializer, outletMap, location, injector, loader, compiler, flatten(config));
-    if (opts.errorHandler) {
-      r.errorHandler = opts.errorHandler;
-    }
-    if (opts.enableTracing) {
-      r.events.subscribe(function(e) {
-        console.group("Router Event: " + e.constructor.name);
-        console.log(e.toString());
-        console.log(e);
-        console.groupEnd();
-      });
-    }
-    return r;
-  }
-  function rootRoute(router) {
-    return router.routerState.root;
-  }
-  function initialRouterNavigation(router, opts) {
-    return function() {
-      if (opts.initialNavigation === false) {
-        router.setUpLocationChangeListener();
-      } else {
-        router.initialNavigation();
-      }
-    };
-  }
-  function provideRouterInitializer() {
-    return {
-      provide: _angular_core.APP_BOOTSTRAP_LISTENER,
-      multi: true,
-      useFactory: initialRouterNavigation,
-      deps: [Router, ROUTER_CONFIGURATION]
-    };
-  }
-  var __router_private__ = {
-    ROUTER_PROVIDERS: ROUTER_PROVIDERS,
-    ROUTES: ROUTES,
-    flatten: flatten
-  };
-  exports.RouterLink = RouterLink;
-  exports.RouterLinkWithHref = RouterLinkWithHref;
-  exports.RouterLinkActive = RouterLinkActive;
-  exports.RouterOutlet = RouterOutlet;
-  exports.NavigationCancel = NavigationCancel;
-  exports.NavigationEnd = NavigationEnd;
-  exports.NavigationError = NavigationError;
-  exports.NavigationStart = NavigationStart;
-  exports.Router = Router;
-  exports.RoutesRecognized = RoutesRecognized;
-  exports.RouterModule = RouterModule;
-  exports.provideRoutes = provideRoutes;
-  exports.RouterOutletMap = RouterOutletMap;
-  exports.ActivatedRoute = ActivatedRoute;
-  exports.ActivatedRouteSnapshot = ActivatedRouteSnapshot;
-  exports.RouterState = RouterState;
-  exports.RouterStateSnapshot = RouterStateSnapshot;
-  exports.PRIMARY_OUTLET = PRIMARY_OUTLET;
-  exports.DefaultUrlSerializer = DefaultUrlSerializer;
-  exports.UrlSegment = UrlSegment;
-  exports.UrlSerializer = UrlSerializer;
-  exports.UrlTree = UrlTree;
-  exports.__router_private__ = __router_private__;
-}));
+            this.destination.next(result);
+        };
+        return MapSubscriber;
+    }(Subscriber_1.Subscriber);
+    
 
-})();
-$__System.register('6e', ['3', '43', 'b'], function (exports_1, context_1) {
+    return module.exports;
+});
+$__System.registerDynamic('a', ['32', '63'], true, function ($__require, exports, module) {
+  "use strict";
+
+  var define,
+      global = this || self,
+      GLOBAL = global;
+  var Observable_1 = $__require('32');
+  var map_1 = $__require('63');
+  Observable_1.Observable.prototype.map = map_1.map;
+  
+
+  return module.exports;
+});
+$__System.register("72", ["3", "12", "a"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -44273,75 +44589,30 @@ $__System.register('6e', ['3', '43', 'b'], function (exports_1, context_1) {
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, respuestaEncuesta_service_1, router_1;
-    var MateriasComponent;
+    var core_1, angular2_jwt_1;
+    var ApiService;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
-        }, function (respuestaEncuesta_service_1_1) {
-            respuestaEncuesta_service_1 = respuestaEncuesta_service_1_1;
-        }, function (router_1_1) {
-            router_1 = router_1_1;
-        }],
+        }, function (angular2_jwt_1_1) {
+            angular2_jwt_1 = angular2_jwt_1_1;
+        }, function (_1) {}],
         execute: function () {
-            MateriasComponent = function () {
-                function MateriasComponent(respuestaEncuestaService, route) {
-                    var _this = this;
-                    var token = route.snapshot.queryParams['token'];
-                    this.encuestaFinalizada = false;
-                    this.enlace = document.URL;
-                    this.respuestaEncuestaService = respuestaEncuestaService;
-                    this.respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(function (respuestaEncuesta) {
-                        if (respuestaEncuesta) {
-                            _this.respuestaEncuesta = respuestaEncuesta;
-                            _this.materias = respuestaEncuesta.encuesta.materias;
-                        }
-                    }, function (error) {
-                        console.log(error);
-                    });
+            ApiService = class ApiService {
+                constructor(authHttp) {
+                    this.authHttp = authHttp;
                 }
-                MateriasComponent.prototype.esLaOpcionElegida = function (materia, opcion) {
-                    var respuestaMateria = this.respuestaEncuesta.respuestasMateria.filter(function (materiaOpcion) {
-                        return materiaOpcion.opcion._id == opcion._id && materiaOpcion.materia._id == materia._id;
-                    })[0];
-                    if (respuestaMateria) return true;else return false;
-                };
-                MateriasComponent.prototype.seleccionarOpcionDeMateria = function (idMateria, idOpcion) {
-                    var materia = this.respuestaEncuesta.encuesta.materias.filter(function (materia) {
-                        return materia._id == idMateria;
-                    })[0];
-                    var opcion = materia.opciones.filter(function (opcion) {
-                        return opcion._id == idOpcion;
-                    })[0];
-                    this.respuestaEncuesta.respuestasMateria = this.respuestaEncuesta.respuestasMateria.filter(function (opcionSeleccionada) {
-                        return opcionSeleccionada.materia._id !== idMateria;
-                    });
-                    if (opcion) this.respuestaEncuesta.respuestasMateria.push({ materia: materia, opcion: opcion });
-                };
-                MateriasComponent.prototype.guardar = function () {
-                    var _this = this;
-                    if (!this.respuestaEncuesta) return;
-                    this.respuestaEncuestaService.actualizarRespuestas(this.respuestaEncuesta._id, this.respuestaEncuesta.respuestasMateria).subscribe(function (data) {
-                        console.log(data);
-                        _this.encuestaFinalizada = true;
-                    }, function (error) {
-                        console.log(error);
-                    });
-                    ;
-                };
-                MateriasComponent = __decorate([core_1.Component({
-                    selector: 'materias',
-                    templateUrl: 'client/components/respuestaEncuesta/materias.component.html',
-                    providers: [respuestaEncuesta_service_1.RespuestaEncuestaService]
-                }), __metadata('design:paramtypes', [respuestaEncuesta_service_1.RespuestaEncuestaService, router_1.ActivatedRoute])], MateriasComponent);
-                return MateriasComponent;
-            }();
-            exports_1("MateriasComponent", MateriasComponent);
+                get(url) {
+                    return this.authHttp.get(url).map(response => response.json());
+                }
+            };
+            ApiService = __decorate([core_1.Injectable(), __metadata('design:paramtypes', [angular2_jwt_1.AuthHttp])], ApiService);
+            exports_1("ApiService", ApiService);
         }
     };
 });
 
-$__System.register("6f", ["3", "7", "8", "13", "42", "44", "14", "6e"], function (exports_1, context_1) {
+$__System.register("17", ["3", "15", "72"], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -44355,8 +44626,52 @@ $__System.register("6f", ["3", "7", "8", "13", "42", "44", "14", "6e"], function
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, ng_semantic_1, common_1, respuestaEncuesta_component_1, respuestaEncuesta_routing_1, shared_module_1, materias_component_1;
-    var RespuestaEncuestaModule;
+    var core_1, common_1, api_service_1;
+    var SharedModule;
+    return {
+        setters: [function (core_1_1) {
+            core_1 = core_1_1;
+        }, function (common_1_1) {
+            common_1 = common_1_1;
+        }, function (api_service_1_1) {
+            api_service_1 = api_service_1_1;
+        }],
+        execute: function () {
+            let SharedModule_1 = class SharedModule {
+                static forRoot() {
+                    return {
+                        ngModule: SharedModule_1,
+                        providers: [api_service_1.ApiService]
+                    };
+                }
+            };
+            let SharedModule = SharedModule_1;
+            SharedModule = SharedModule_1 = __decorate([core_1.NgModule({
+                imports: [common_1.CommonModule],
+                declarations: [],
+                exports: []
+            }), __metadata('design:paramtypes', [])], SharedModule);
+            exports_1("SharedModule", SharedModule);
+        }
+    };
+});
+
+$__System.register("73", ["3", "7", "9", "15", "65", "66", "67", "17"], function (exports_1, context_1) {
+    "use strict";
+
+    var __moduleName = context_1 && context_1.id;
+    var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+        var c = arguments.length,
+            r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+            d;
+        if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+        return c > 3 && r && Object.defineProperty(target, key, r), r;
+    };
+    var __metadata = this && this.__metadata || function (k, v) {
+        if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+    };
+    var core_1, http_1, ng_semantic_1, common_1, estadisticasEncuesta_component_1, listadoEncuesta_component_1, encuesta_routing_1, shared_module_1;
+    var EncuestaModule;
     return {
         setters: [function (core_1_1) {
             core_1 = core_1_1;
@@ -44366,32 +44681,29 @@ $__System.register("6f", ["3", "7", "8", "13", "42", "44", "14", "6e"], function
             ng_semantic_1 = ng_semantic_1_1;
         }, function (common_1_1) {
             common_1 = common_1_1;
-        }, function (respuestaEncuesta_component_1_1) {
-            respuestaEncuesta_component_1 = respuestaEncuesta_component_1_1;
-        }, function (respuestaEncuesta_routing_1_1) {
-            respuestaEncuesta_routing_1 = respuestaEncuesta_routing_1_1;
+        }, function (estadisticasEncuesta_component_1_1) {
+            estadisticasEncuesta_component_1 = estadisticasEncuesta_component_1_1;
+        }, function (listadoEncuesta_component_1_1) {
+            listadoEncuesta_component_1 = listadoEncuesta_component_1_1;
+        }, function (encuesta_routing_1_1) {
+            encuesta_routing_1 = encuesta_routing_1_1;
         }, function (shared_module_1_1) {
             shared_module_1 = shared_module_1_1;
-        }, function (materias_component_1_1) {
-            materias_component_1 = materias_component_1_1;
         }],
         execute: function () {
-            RespuestaEncuestaModule = function () {
-                function RespuestaEncuestaModule() {}
-                RespuestaEncuestaModule = __decorate([core_1.NgModule({
-                    imports: [common_1.CommonModule, http_1.HttpModule, respuestaEncuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule],
-                    declarations: [respuestaEncuesta_component_1.RespuestaEncuestaComponent, materias_component_1.MateriasComponent],
-                    bootstrap: [respuestaEncuesta_component_1.RespuestaEncuestaComponent],
-                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-                }), __metadata('design:paramtypes', [])], RespuestaEncuestaModule);
-                return RespuestaEncuestaModule;
-            }();
-            exports_1("RespuestaEncuestaModule", RespuestaEncuestaModule);
+            EncuestaModule = class EncuestaModule {};
+            EncuestaModule = __decorate([core_1.NgModule({
+                imports: [common_1.CommonModule, http_1.HttpModule, encuesta_routing_1.routing, shared_module_1.SharedModule.forRoot(), ng_semantic_1.NgSemanticModule],
+                declarations: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
+                bootstrap: [listadoEncuesta_component_1.ListadoEncuestaComponent, estadisticasEncuesta_component_1.EstadisticasEncuestaComponent],
+                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+            }), __metadata('design:paramtypes', [])], EncuestaModule);
+            exports_1("EncuestaModule", EncuestaModule);
         }
     };
 });
 
-$__System.register('70', ['3', '5', '48', '7', '8', '6', 'a', 'c', '12', '6f'], function (exports_1, context_1) {
+$__System.register('74', ['3', '5', '12', '7', '9', '16', '6', 'c', '14', '1b', '73'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
@@ -44405,7 +44717,7 @@ $__System.register('70', ['3', '5', '48', '7', '8', '6', 'a', 'c', '12', '6f'], 
     var __metadata = this && this.__metadata || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, platform_browser_1, angular2_jwt_1, http_1, ng_semantic_1, app_component_1, routes_1, titulo_component_1, home_module_1, respuestaEncuesta_module_1;
+    var core_1, platform_browser_1, angular2_jwt_1, http_1, ng_semantic_1, forms_1, app_component_1, routes_1, respuestaEncuesta_module_1, login_module_1, encuesta_module_1;
     var AppModule;
     return {
         setters: [function (core_1_1) {
@@ -44418,39 +44730,38 @@ $__System.register('70', ['3', '5', '48', '7', '8', '6', 'a', 'c', '12', '6f'], 
             http_1 = http_1_1;
         }, function (ng_semantic_1_1) {
             ng_semantic_1 = ng_semantic_1_1;
+        }, function (forms_1_1) {
+            forms_1 = forms_1_1;
         }, function (app_component_1_1) {
             app_component_1 = app_component_1_1;
         }, function (routes_1_1) {
             routes_1 = routes_1_1;
-        }, function (titulo_component_1_1) {
-            titulo_component_1 = titulo_component_1_1;
-        }, function (home_module_1_1) {
-            home_module_1 = home_module_1_1;
         }, function (respuestaEncuesta_module_1_1) {
             respuestaEncuesta_module_1 = respuestaEncuesta_module_1_1;
+        }, function (login_module_1_1) {
+            login_module_1 = login_module_1_1;
+        }, function (encuesta_module_1_1) {
+            encuesta_module_1 = encuesta_module_1_1;
         }],
         execute: function () {
-            AppModule = function () {
-                function AppModule() {}
-                AppModule = __decorate([core_1.NgModule({
-                    imports: [platform_browser_1.BrowserModule, http_1.HttpModule, ng_semantic_1.NgSemanticModule, home_module_1.HomeModule, respuestaEncuesta_module_1.RespuestaEncuestaModule, routes_1.routing],
-                    providers: [angular2_jwt_1.provideAuth({
-                        globalHeaders: [{ "Content-type": "application/json" }],
-                        newJwtError: true,
-                        noTokenScheme: true
-                    })],
-                    declarations: [titulo_component_1.TituloComponent, app_component_1.AppComponent],
-                    bootstrap: [app_component_1.AppComponent],
-                    schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
-                }), __metadata('design:paramtypes', [])], AppModule);
-                return AppModule;
-            }();
+            AppModule = class AppModule {};
+            AppModule = __decorate([core_1.NgModule({
+                imports: [platform_browser_1.BrowserModule, http_1.HttpModule, ng_semantic_1.NgSemanticModule, respuestaEncuesta_module_1.RespuestaEncuestaModule, login_module_1.LoginModule, routes_1.routing, encuesta_module_1.EncuestaModule, forms_1.FormsModule],
+                providers: [angular2_jwt_1.provideAuth({
+                    globalHeaders: [{ "Content-type": "application/json" }],
+                    newJwtError: true,
+                    noTokenScheme: true
+                })],
+                declarations: [app_component_1.AppComponent],
+                bootstrap: [app_component_1.AppComponent],
+                schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA]
+            }), __metadata('design:paramtypes', [])], AppModule);
             exports_1("AppModule", AppModule);
         }
     };
 });
 
-$__System.register('1', ['3', '4', '70'], function (exports_1, context_1) {
+$__System.register('1', ['3', '4', '74'], function (exports_1, context_1) {
     "use strict";
 
     var __moduleName = context_1 && context_1.id;
