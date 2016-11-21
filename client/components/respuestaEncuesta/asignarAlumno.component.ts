@@ -96,12 +96,12 @@ export class AsignarAlumnoComponent {
             });
     }
 
-    mostrarMas(){
+    mostrarMas() {
         this.cantidadASaltear = this.cantidadASaltear + 10;
         this.respuestaEncuestaService.buscarAlumnoPor(this.nombreYApellido, this.dni, this.idEncuesta, this.cantidadASaltear).subscribe(
             (respuestasEcuesta) => {
-                for(var i =0; i < respuestasEcuesta.length; i++)
-                    this.alumnos.push(respuestasEcuesta[i]);                         
+                for (var i = 0; i < respuestasEcuesta.length; i++)
+                    this.alumnos.push(respuestasEcuesta[i]);
             }, (error: Error) => {
                 console.log(error);
             });

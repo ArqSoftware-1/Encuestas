@@ -68,7 +68,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
         google.charts.load('current', {
             'packages': ['corechart', 'gauge']
         });
-        setTimeout(() => this.drawGraph(this.pie_ChartData), 500);
+        setTimeout(() => this.drawGraph(this.pie_ChartData), 1000);
     }
 
     drawGraph(pie_ChartData) {
