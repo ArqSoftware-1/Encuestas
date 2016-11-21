@@ -3,7 +3,6 @@ import { HttpModule } from "@angular/http";
 import { NgSemanticModule } from "ng-semantic";
 import { CommonModule } from "@angular/common";
 import { FormsModule }   from '@angular/forms';
-import { PaginationDirective } from 'angular2-bootstrap-pagination';
 
 import { RespuestaEncuestaComponent } from "../../components/respuestaEncuesta/respuestaEncuesta.component";
 import { routing } from "../../routes/respuestaEncuesta/respuestaEncuesta.routing";
@@ -21,7 +20,7 @@ import { AsignarAlumnoComponent } from '../../components/respuestaEncuesta/asign
         FormsModule
     ],
     declarations: [
-        PaginationDirective, RespuestaEncuestaComponent, MateriasComponent, AsignarAlumnoComponent
+        RespuestaEncuestaComponent, MateriasComponent, AsignarAlumnoComponent
     ],
     bootstrap: [
         RespuestaEncuestaComponent

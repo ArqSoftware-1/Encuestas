@@ -43,7 +43,7 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
     ModeloRespuestaEncuesta.find({
             'encuesta.anho': request.param('anho'),
             'encuesta.semestre': request.param('semestre')
-        }).limit(+request.param('maximoPorPagina')).exec()
+        }).limit(10).exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
         })
@@ -81,8 +81,7 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
     var alumno = request.param('nombreYApellido');
     var dni = request.param('dni');
     var idEncuesta = request.param('idEncuesta');
-    var paginaActual = +request.param('paginaActual');
-    var maximoPorPagina = +request.param('maximoPorPagina');
+    var cantidadASaltear = +request.param('cantidadASaltear');
     ModeloRespuestaEncuesta.find({
             'encuesta._id': idEncuesta
         })
@@ -92,8 +91,8 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         .find({
             DNIAlumno: new RegExp(dni, 'i')
         })
-        .limit(maximoPorPagina)
-        .skip((paginaActual - 1) * maximoPorPagina)
+        .skip(cantidadASaltear)
+        .limit(10)
         .exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);

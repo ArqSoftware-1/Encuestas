@@ -43,15 +43,15 @@ export class RespuestaEncuestaService {
             .map((response: Response) => response.json())
     }
 
-    obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre, maximoPorPagina) {
+    obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre) {
         return this.authHttp
-            .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre + '&maximoPorPagina=' + maximoPorPagina)
+            .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)
             .map((response: Response) => response.json())
     }
 
-    buscarAlumnoPor(nombreYApellido, dni, idEncuesta, paginaActual, maximoPorPagina) {
+    buscarAlumnoPor(nombreYApellido, dni, idEncuesta, cantidadASaltear) {
         return this.authHttp
-            .get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&paginaActual=' + paginaActual + '&maximoPorPagina=' + maximoPorPagina)
+            .get('/api/respuestas/encuesta/buscarPor?nombreYApellido=' + nombreYApellido + '&dni=' + dni + '&idEncuesta=' + idEncuesta + '&cantidadASaltear=' + cantidadASaltear)
             .map((response: Response) => response.json())
     }
 

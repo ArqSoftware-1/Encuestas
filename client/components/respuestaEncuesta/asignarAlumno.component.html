@@ -22,9 +22,7 @@
 		<button class="btn btn-success" style="margin-top: 25px" type="button" (click)="asignarAlumno()">Asignar</button>
 	</div>
 </div>
-
 <br>
-
 <div class="row">
 	<div class="col-md-3">
 		<input type="search" class="form-control" placeholder="ingrese nombre y apellido..." [(ngModel)]="nombreYApellido">
@@ -56,13 +54,15 @@
 	</tbody>
 </table>
 </div>
-<ng-pagination id="paginados" [(totalItems)]="totalItems" [(ngModel)]="paginaActual" [maxSize]="maximoPorPagina" [boundaryLinks]="true" (pageChanged)="buscar()"></ng-pagination>
-
-<div id="paginado"></div>
 
 <div class="row">
 	<div class="col-md-12">
-	<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
+		<button onclick="setTimeout(function (){$(window).scrollTop($('#fin').offset().top)}, 50);" type="button" class="btn btn-primary" (click)="mostrarMas()">Mostrar más</button>
 	</div>
 </div>
 
+<div class="row" id="fin">
+	<div class="col-md-12">
+		<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
+	</div>
+</div>
