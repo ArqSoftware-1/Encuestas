@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ValueProvider, ElementRef, ViewChild } from '@angular/core';
 
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 import { RespuestaEncuestaService } from "../../service/respuestaEncuesta/respuestaEncuesta.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+const WINDOW_PROVIDER: ValueProvider = {
+    provide: Window,
+    useValue: window
+};
+
 @Component({
   selector: 'asignar-usuario',
   templateUrl: 'client/components/respuestaEncuesta/asignarAlumno.component.html',
-  providers: [EncuestaService, RespuestaEncuestaService],
+  providers: [EncuestaService, RespuestaEncuestaService, WINDOW_PROVIDER],
 })
 
 export class AsignarAlumnoComponent {
@@ -27,11 +32,13 @@ export class AsignarAlumnoComponent {
     dni = "";
     idEncuesta;
     cantidadASaltear = 0;
+    window: Window;
+    @ViewChild('someVar') someVar:ElementRef;
 
-    constructor(encuestaService: EncuestaService, route: ActivatedRoute, respuestaEncuestaService: RespuestaEncuestaService) {
+    constructor(encuestaService: EncuestaService, route: ActivatedRoute, respuestaEncuestaService: RespuestaEncuestaService, window: Window) {
         this.idEncuesta = route.snapshot.params['idEncuesta'];
         this.respuestaEncuestaService = respuestaEncuestaService;
-
+        this.window = window;
         encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
             (encuesta) => {
                 this.encuesta = encuesta;
@@ -102,6 +109,7 @@ export class AsignarAlumnoComponent {
             (respuestasEcuesta) => {
                 for (var i = 0; i < respuestasEcuesta.length; i++)
                     this.alumnos.push(respuestasEcuesta[i]);
+                setTimeout(() => this.window.scrollTo(0,  this.alumnos.length * 100), 10);
             }, (error: Error) => {
                 console.log(error);
             });

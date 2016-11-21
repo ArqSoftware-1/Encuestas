@@ -57,11 +57,11 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<button onclick="setTimeout(function (){$(window).scrollTop($('#fin').offset().top)}, 50);" type="button" class="btn btn-primary" (click)="mostrarMas()">Mostrar más</button>
+		<button type="button" class="btn btn-primary" (click)="mostrarMas()">Mostrar más</button>
 	</div>
 </div>
 
-<div class="row" id="fin">
+<div class="row" #someVar>
 	<div class="col-md-12">
 		<button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
 	</div>
