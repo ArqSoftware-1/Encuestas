@@ -1,5 +1,6 @@
 import { Component,Directive,ElementRef,Input,OnInit } from '@angular/core';
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
+import { OpcionService } from "../../service/opcion/opcion.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 declare var google:any;
@@ -8,7 +9,7 @@ declare var googleLoaded:any;
 @Component({
   selector: 'estadisticas-encuesta',
   templateUrl: 'client/components/encuesta/estadisticasEncuesta.component.html',
-  providers: [EncuestaService],
+  providers: [EncuestaService, OpcionService],
 })
 
 export class EstadisticasEncuestaComponent implements OnInit {
@@ -20,12 +21,13 @@ export class EstadisticasEncuestaComponent implements OnInit {
     completaronAlgunaOpcion;
     total;
     cantidad;
+    opciones;
 
     public pie_ChartData: (string | number)[][] = [
         ['Condición', 'Cantidad']
     ];
 
-    constructor(encuestaService: EncuestaService, route: ActivatedRoute) {
+    constructor(encuestaService: EncuestaService, opcionService: OpcionService, route: ActivatedRoute) {
         var id = route.snapshot.params['id'];
         encuestaService.obtenerEstadisticas(id).subscribe(
             (estadistica) => {
@@ -50,6 +52,12 @@ export class EstadisticasEncuestaComponent implements OnInit {
             }, (error: Error) => {
                 console.log(error);
             });
+        opcionService.obtenerTodasLasOpciones().subscribe(
+            (opciones) => {
+                this.opciones = opciones;
+            }, (error: Error) => {
+                console.log(error);
+            });       
     }
 
     cantidadPara(materia, opcion) {
@@ -62,6 +70,16 @@ export class EstadisticasEncuestaComponent implements OnInit {
             return estadistica.count;
         }
         return 0;
+    }
+
+    mostrarCantidadConLimite(materia, opcion){
+        //{{cantidadPara(materia, opcion)}} {{opcion.limite > 0 ? '/ ' + opcion.limite : ''}}
+        var opc = materia.opciones.filter(o => o._id == opcion._id);
+
+        if(opc.length > 0)
+            return this.cantidadPara(materia, opcion) + (opcion.limite > 0 ? '/ ' + opcion.limite : '');
+        else
+            return '-';
     }
 
     ngOnInit() {

@@ -14,7 +14,7 @@
     <p><b>A continuación las opciones elegidas por materia:</b></p>
   </div>
 </div>
-<div class="row">
+<!--<div class="row">
   <div class="col-md-3" *ngFor="let materia of materias">
     <div class="panel panel-{{materia.tieneOpcionConLimiteSuperado ? 'danger' : 'default'}} box-hover">
       <div class="panel-heading">{{materia.nombre}}</div>
@@ -27,6 +27,22 @@
       </div>
     </div>
   </div>
+</div>-->
+<div class="table-responsive">
+<table class="table">
+  <thead>
+    <tr>
+      <th>Opciones</th>
+      <th *ngFor="let materia of materias">{{materia.nombre}}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr  *ngFor="let opcion of opciones">
+      <td>{{opcion.descripcion}}</td>
+      <td *ngFor="let materia of materias" class="{{cantidadPara(materia, opcion) >= opcion.limite ? 'danger' : 'default'}}">{{mostrarCantidadConLimite(materia, opcion)}}</td>
+    </tr>
+  </tbody>
+</table>
 </div>
 <div class="row">
   <div class="col-md-12">

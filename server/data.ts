@@ -80,9 +80,22 @@ materia2.save();
 materia3.save();
 materia4.save();
 
+var materiasParaEncuesta = [materia1, materia2, materia3, materia4];
+
+for(var i = 0; i < 50; i++){
+    var materia = new ModeloMateria({
+        opciones: [opcion1, opcion7, opcion4, opcion5, opcion6],
+        nombre: "Materia " + i,
+        idOpcionPorDefecto: opcion4._id
+    });
+
+    materia.save();
+    materiasParaEncuesta.push(materia);
+}
+
 // Encuestas
 var encuesta = new ModeloEncuesta({
-    materias: [materia1, materia2, materia3, materia4],
+    materias: materiasParaEncuesta,
     anho: 2016,
     semestre: 2,
     carrera: 'Licenciatura en informática',
