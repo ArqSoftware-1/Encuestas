@@ -57,21 +57,25 @@ opcion6.save();
 var materia1 = new ModeloMateria({
     opciones: [opcion1, opcion2, opcion4, opcion5, opcion6],
     nombre: "Introducción a la programación",
+    abreviatura: "Intr",
     idOpcionPorDefecto: opcion4._id
 });
 var materia2 = new ModeloMateria({
     opciones: [opcion1, opcion4, opcion5, opcion6],
     nombre: "Organización de las computadores",
+    abreviatura: "Orga",
     idOpcionPorDefecto: opcion4._id
 });
 var materia3 = new ModeloMateria({
     opciones: [opcion1, opcion4, opcion5, opcion6],
     nombre: "Matemática 1",
+    abreviatura: "Mate1",
     idOpcionPorDefecto: opcion4._id
 });
 var materia4 = new ModeloMateria({
     opciones: [opcion1, opcion7, opcion4, opcion5, opcion6],
     nombre: "Programación funcional",
+    abreviatura: "pf",
     idOpcionPorDefecto: opcion4._id
 });
 
@@ -86,6 +90,7 @@ for(var i = 0; i < 50; i++){
     var materia = new ModeloMateria({
         opciones: [opcion1, opcion7, opcion4, opcion5, opcion6],
         nombre: "Materia " + i,
+        abreviatura: "Mat" + i,
         idOpcionPorDefecto: opcion4._id
     });
 

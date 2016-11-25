@@ -29,29 +29,30 @@
   </div>
 </div>-->
 <div class="table-responsive">
-<table class="table">
-  <thead>
-    <tr>
-      <th>Opciones</th>
-      <th *ngFor="let materia of materias">{{materia.nombre}}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr  *ngFor="let opcion of opciones">
-      <td>{{opcion.descripcion}}</td>
-      <td *ngFor="let materia of materias" class="{{cantidadPara(materia, opcion) >= opcion.limite ? 'danger' : 'default'}}">{{mostrarCantidadConLimite(materia, opcion)}}</td>
-    </tr>
-  </tbody>
-</table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th style="min-width: 250px">Opciones</th>
+        <th style="min-width: 70px" *ngFor="let materia of materias">{{materia.abreviatura}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let opcion of opciones">
+        <td>{{opcion.descripcion}}</td>
+        <td *ngFor="let materia of materias" class="{{cantidadPara(materia, opcion) >= opcion.limite ? 'danger' : 'default'}}">{{mostrarCantidadConLimite(materia, opcion)}}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
   </div>
 </div>
+
 <style>
     .col-md-3{
         padding-right: 0px !important;
     }
 </style>
-
