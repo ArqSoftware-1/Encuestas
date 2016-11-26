@@ -1,0 +1,37 @@
+<h2>Crear Director</h2>
+<div class="row">
+	<div class="form-group col-md-3">
+		<label>Email<span style="color:red"> *</span></label>
+    	<input class="form-control" placeholder="ingrese email..." type="text" [(ngModel)]="email">
+	</div>
+	<div class="form-group col-md-3">
+		<label>Password<span style="color:red"> *</span></label>
+    	<input class="form-control" placeholder="ingrese password..." [(ngModel)]="pass">
+	</div>
+	<div class="form-group col-md-3">
+		<button class="btn btn-success" style="margin-top: 25px" type="button" (click)="crearDirector()">Crear</button>
+	</div>
+</div>
+
+<div class="table-responsive">
+<table class="table">
+	<thead>
+	  <tr>
+	    <th>Email</th>
+	    <th>Acciones</th>
+	  </tr>
+	</thead>
+	<tbody>
+	  <tr  *ngFor="let director of directores">
+	  	<td>{{director.email}}</td>
+	  	<td><a title="Eliminar" (click)="eliminarDirector(director._id)"><span class="glyphicon glyphicon-remove"></span></a></td>
+	  </tr>
+	</tbody>
+</table>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
+  </div>
+</div>

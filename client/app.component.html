@@ -12,7 +12,8 @@
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-              <li *ngIf="isLogged" class="active"><a href="/#/encuestas/listado">Home</a></li>
+              <li id="encuestaListado" *ngIf="isLogged" class="active activar" onclick="agregarClass(this);"><a href="/#/encuestas/listado">Home</a></li>
+              <li id="directorCrear" *ngIf="isLogged" class="activar" onclick="agregarClass(this);"><a href="/#/director/crear">Director</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li *ngIf="!isLogged"><a href="/#/login">Login</a></li>
@@ -25,5 +26,4 @@
 
 <div class="container">    
     <router-outlet></router-outlet>
-      
 </div>

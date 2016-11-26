@@ -10,6 +10,7 @@ import { routing } from "./routes";
 import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEncuesta.module";
 import { LoginModule } from "./modules/autenticacion/login.module";
 import { EncuestaModule } from "./modules/encuesta/encuesta.module";
+import { DirectorModule } from "./modules/director/director.module";
 
 @NgModule({
     imports: [
@@ -20,6 +21,7 @@ import { EncuestaModule } from "./modules/encuesta/encuesta.module";
         LoginModule,
         routing,
         EncuestaModule,
+        DirectorModule,
         FormsModule
     ],
     providers: [

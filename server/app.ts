@@ -14,6 +14,7 @@ import { rutaRespuestasEncuesta } from "./routes/respuestasEncuesta";
 import { rutaRespuestasEncuestaPublica } from "./routes/respuestasEncuestaPublica";
 import { rutaMaterias } from "./routes/materias";
 import { rutaOpciones } from "./routes/opciones";
+import { rutaDirector } from "./routes/director";
 
 const app: express.Application = express();
 app.disable("x-powered-by");
@@ -27,6 +28,7 @@ app.use(urlencoded({
 }));
 
 // api routes
+app.use("/api/director", rutaDirector);
 app.use("/api/opciones", rutaOpciones);
 app.use("/api/materias", rutaMaterias);
 app.use("/api/encuestas", rutaEncuestas);

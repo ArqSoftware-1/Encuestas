@@ -39,4 +39,14 @@
         <!-- Modo Produccion
         <script src="assets/js/bundle.min.js"></script> -->
     </body>
+
+    <script>
+      function agregarClass(obj){
+        
+        $(".activar").each(function (index, elem){
+            $(elem).removeClass("active");
+        })
+        obj.className = obj.className + " active";
+      }
+    </script>
 </html>

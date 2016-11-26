@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 
+declare var $:JQueryStatic;
 
 @Component({
   selector: 'encuestas',
@@ -18,6 +19,9 @@ export class ListadoEncuestaComponent {
             }, (error: Error) => {
                 console.log(error);
             });
+
+        $("#directorCrear").removeClass("active");
+        $("#encuestaListado").addClass("active");
     }
 
     formatearFecha(fecha){
