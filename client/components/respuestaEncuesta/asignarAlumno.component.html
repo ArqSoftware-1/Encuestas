@@ -23,9 +23,12 @@
 	</div>
 </div>
 <div class="row">
-	<div class="form-group col-md-12">
+	<div class="form-group col-md-6">
 		<label>Importar CSV de alumnos (en orden: Nombre y apellido, DNI y email)</label>
     	<input type="file" (change)="changeListener($event)" accept=".csv">
+	</div>
+	<div class="form-group col-md-6" *ngIf="mostrarLoading">
+		<img style="width: 60px" src="assets/img/loading-img.gif" />
 	</div>
 </div>
 <br>

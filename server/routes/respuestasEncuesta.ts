@@ -144,7 +144,7 @@ rutaRespuestasEncuesta.post("/asignar-alumnos", function(request: Request, respo
     var guardarRespuestasEncuesta = function(callback, index) {
         if (index < alumnos.length) {
             var alumno = alumnos[index];
-            if (esAlumnoValido(alumno)) {
+            if (esRespuestaEncuestaValida(alumno)) {
                 ModeloRespuestaEncuesta.findOne({
                     DNIAlumno: alumno.DNIAlumno,
                     'encuesta._id': alumno.encuesta._id
@@ -168,7 +168,6 @@ rutaRespuestasEncuesta.post("/asignar-alumnos", function(request: Request, respo
                 guardarRespuestasEncuesta(callback, index + 1);
             }
         } else {
-            console.log('final');
             callback();
         }
     }
@@ -182,11 +181,10 @@ rutaRespuestasEncuesta.post("/asignar-alumnos", function(request: Request, respo
 
 });
 
-function esAlumnoValido(alumno) {
-    if (alumno.nombreYApellidoAlumno.length == 0 || alumno.DNIAlumno.length == 0 || alumno.emailAlumno.length == 0) {
+function esRespuestaEncuestaValida(respuestaEncuesta) {
+    if (respuestaEncuesta.nombreYApellidoAlumno.length < 3 || respuestaEncuesta.DNIAlumno.length < 3 || respuestaEncuesta.emailAlumno.length < 3) {
         return false;
     }
-
     return true;
 }
 
