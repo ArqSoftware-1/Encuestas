@@ -22,6 +22,12 @@
 		<button class="btn btn-success" style="margin-top: 25px" type="button" (click)="asignarAlumno()">Asignar</button>
 	</div>
 </div>
+<div class="row">
+	<div class="form-group col-md-12">
+		<label>Importar CSV de alumnos (en orden: Nombre y apellido, DNI y email)</label>
+    	<input type="file" (change)="changeListener($event)" accept=".csv">
+	</div>
+</div>
 <br>
 <div class="row">
 	<div class="col-md-3">

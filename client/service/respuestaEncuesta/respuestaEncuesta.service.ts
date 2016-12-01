@@ -37,6 +37,17 @@ export class RespuestaEncuestaService {
             })).map((response: Response) => response.json())
     }
 
+    asignarAlumnosAEncuesta(alumnos) {
+        return this.authHttp
+            .post('/api/respuestas/encuesta/asignar-alumnos', JSON.stringify({
+                alumnos: alumnos
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
+
     obtenerRespuestasEncuesta() {
         return this.authHttp
             .get('/api/respuestas/encuesta/listado')

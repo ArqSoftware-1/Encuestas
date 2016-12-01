@@ -22,9 +22,10 @@ app.disable("x-powered-by");
 app.use(favicon(join(__dirname, "../public", "favicon.ico")));
 app.use(express.static(join(__dirname, '../public')));
 
-app.use(json());
+app.use(json({limit: '50mb'}));
 app.use(urlencoded({
-    extended: true
+    extended: true,
+    limit: '50mb'
 }));
 
 // api routes

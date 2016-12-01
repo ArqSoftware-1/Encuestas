@@ -54,22 +54,31 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
 });
 
 rutaRespuestasEncuesta.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
-    ModeloRespuestaEncuesta.find().exec()
-        .then(respuestasEncuesta => {
-            var respuestaEncuesta = new ModeloRespuestaEncuesta({
-                respuestasMateria: [],
-                encuesta: request.body.encuesta,
-                DNIAlumno: request.body.alumno.DNIAlumno,
-                emailAlumno: request.body.alumno.emailAlumno,
-                nombreYApellidoAlumno: request.body.alumno.nombreYApellidoAlumno
-            })
-            respuestaEncuesta.save();
-            if (!respuestaEncuesta.token) {
-                respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
+    ModeloRespuestaEncuesta.findOne({
+            DNIAlumno: request.body.alumno.DNIAlumno,
+            'encuesta._id': request.body.encuesta._id
+        }).exec()
+        .then(respuestaEncuestaGuardada => {
+            if (respuestaEncuestaGuardada) {
+                response.json({
+                    error: 'El DNI ingresado ya existe'
+                });
+            } else {
+                var respuestaEncuesta = new ModeloRespuestaEncuesta({
+                    respuestasMateria: [],
+                    encuesta: request.body.encuesta,
+                    DNIAlumno: request.body.alumno.DNIAlumno,
+                    emailAlumno: request.body.alumno.emailAlumno,
+                    nombreYApellidoAlumno: request.body.alumno.nombreYApellidoAlumno
+                })
+                respuestaEncuesta.save();
+                if (!respuestaEncuesta.token) {
+                    respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
+                }
+                respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
+                respuestaEncuesta.save();
+                response.json(respuestaEncuesta);
             }
-            respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
-            respuestaEncuesta.save();
-            response.json(respuestaEncuesta);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al asignar una respuesta: ' + error);
@@ -127,11 +136,60 @@ rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response
         });
 });
 
+rutaRespuestasEncuesta.post("/asignar-alumnos", function(request: Request, response: Response, next: NextFunction) {
+    var alumnos = request.body.alumnos;
+    var alumnosNoAgregados = [];
+    var alumnosAgregados = [];
+
+    var guardarRespuestasEncuesta = function(callback, index) {
+        if (index < alumnos.length) {
+            var alumno = alumnos[index];
+            if (esAlumnoValido(alumno)) {
+                ModeloRespuestaEncuesta.findOne({
+                    DNIAlumno: alumno.DNIAlumno,
+                    'encuesta._id': alumno.encuesta._id
+                }).exec().then(respuestaEncuestaGuardada => {
+                    if (respuestaEncuestaGuardada) {
+                        alumno.error = "El alumno con el DNI indicado ya fue asignado a la encuesta.";
+                        alumnosNoAgregados.push(alumno);
+                    } else {
+                        alumnosAgregados.push(alumno);
+                        var respuestaEncuesta = new ModeloRespuestaEncuesta(alumno);
+                        respuestaEncuesta.save();
+                        respuestaEncuesta.token = respuestaEncuesta._id + randomBytes(16).toString("hex");
+                        respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
+                        respuestaEncuesta.save();
+                    }
+                    guardarRespuestasEncuesta(callback, index + 1);
+                })
+            } else {
+                alumno.error = "Campos inválidos, controle que no estén vacios y sean válidos.";
+                alumnosNoAgregados.push(alumno);
+                guardarRespuestasEncuesta(callback, index + 1);
+            }
+        } else {
+            console.log('final');
+            callback();
+        }
+    }
+
+    guardarRespuestasEncuesta(() => {
+        response.json({
+            agregados: alumnosAgregados,
+            noAgregados: alumnosNoAgregados
+        });
+    }, 0);
+
+});
+
+function esAlumnoValido(alumno) {
+    if (alumno.nombreYApellidoAlumno.length == 0 || alumno.DNIAlumno.length == 0 || alumno.emailAlumno.length == 0) {
+        return false;
+    }
+
+    return true;
+}
+
 export {
     rutaRespuestasEncuesta
 }
-
-
-
-
-
