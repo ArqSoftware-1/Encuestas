@@ -38,7 +38,10 @@ export class DirectorComponent {
 	}
 
 	crear(){
-		this.directorService.crearDirector(this.email, this.pass).subscribe(
+		if(this.email.length == 0 || this.pass.length == 0){
+			alert("Todos los campos son obligatorios.");
+		}else{
+			this.directorService.crearDirector(this.email, this.pass).subscribe(
             (director) => {
                 alert("El director fue creado con exito.");
                 this.directores.push(director);
@@ -46,6 +49,7 @@ export class DirectorComponent {
             	alert("No se pudo crear el director.");
                 console.log(error);
             });
+		}
 	}
 
 	eliminarDirector(id){alert(id);
