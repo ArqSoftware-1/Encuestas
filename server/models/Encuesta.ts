@@ -6,7 +6,8 @@ class Encuesta {
     anho: Number;
     semestre: Number;
     carrera: String;
-    fechaLimite: Date
+    fechaLimite: Date;
+    estaActiva: Boolean;
 }
 
 var EsquemaEncuesta = new Schema({
@@ -30,6 +31,10 @@ var EsquemaEncuesta = new Schema({
     fechaLimite: {
         type: Date
     },
+    estaActiva: {
+        required: true,
+        type: Boolean
+    }
 });
 
 interface DocumentoEncuesta extends Encuesta, Document {};

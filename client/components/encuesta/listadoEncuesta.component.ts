@@ -10,9 +10,11 @@ declare var $:JQueryStatic;
 })
 
 export class ListadoEncuestaComponent {
-    encuestas;
+    encuestas = [];
+    encuestaService;
 
     constructor(encuestaService: EncuestaService) {
+        this.encuestaService = encuestaService;
         encuestaService.obtenerTodasLasEncuestas().subscribe(
             (encuestas) => {
                 this.encuestas = encuestas;
@@ -36,5 +38,23 @@ export class ListadoEncuestaComponent {
         return '0' + numero;
       }
       return numero;
+    }
+
+    activar(idEncuesta, index){
+      this.encuestaService.activar(idEncuesta).subscribe(
+            (encuesta) => {
+                this.encuestas[index] = encuesta;
+            }, (error: Error) => {
+                console.log(error);
+            });
+    }
+
+    desactivar(idEncuesta, index){
+      this.encuestaService.desactivar(idEncuesta).subscribe(
+            (encuesta) => {
+                this.encuestas[index] = encuesta;
+            }, (error: Error) => {
+                console.log(error);
+            });
     }
 }

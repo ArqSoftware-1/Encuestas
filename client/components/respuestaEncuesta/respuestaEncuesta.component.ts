@@ -11,6 +11,7 @@ export class RespuestaEncuestaComponent {
     error: string;
     response: {};
     titulo: String;
+    estaActivaEncuesta;
 
     constructor(respuestaEncuestaService: RespuestaEncuestaService, route: ActivatedRoute) {
         var token = route.snapshot.params['token'];
@@ -18,10 +19,15 @@ export class RespuestaEncuestaComponent {
             this.titulo = 'No exite la encuesta seleccionada.';
             return;
         }
+
         respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
             (respuestaEncuesta) => {
-                if (respuestaEncuesta) {
-                    this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
+                if (respuestaEncuesta) {alert(respuestaEncuesta.encuesta.estaActiva);
+                    this.estaActivaEncuesta = respuestaEncuesta.encuesta.estaActiva;
+                    if(this.estaActivaEncuesta)
+                        this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
+                    else
+                        this.titulo = 'La encuesta ha finalizado.'
                 } else {
                     this.titulo = 'No exite la encuesta seleccionada.';
                 }

@@ -48,6 +48,32 @@ rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
         });
 });
 
+rutaEncuestas.put("/activar", (request: Request, response: Response) => {
+    ModeloEncuesta.findById(request.body.id).exec()
+        .then(encuesta => {
+            encuesta.estaActiva = true;
+            encuesta.save();
+            response.json(encuesta);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
+            response.status(400).json(error);
+        });
+});
+
+rutaEncuestas.put("/desactivar", (request: Request, response: Response) => {
+    ModeloEncuesta.findById(request.body.id).exec()
+        .then(encuesta => {
+            encuesta.estaActiva = false;
+            encuesta.save();
+            response.json(encuesta);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
+            response.status(400).json(error);
+        });
+});
+
 rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
     ModeloRespuestaEncuesta.aggregate({
             $unwind: '$respuestasMateria'

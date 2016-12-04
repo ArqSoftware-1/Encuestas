@@ -52,7 +52,7 @@ export class DirectorComponent {
 		}
 	}
 
-	eliminarDirector(id){alert(id);
+	eliminarDirector(id){
 		this.directorService.eliminarDirector(id).subscribe(
             (director) => {
             	this.directores = this.directores.filter( director => director._id != id);
