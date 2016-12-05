@@ -24,7 +24,7 @@
 	<tbody>
 	  <tr  *ngFor="let director of directores">
 	  	<td>{{director.email}}</td>
-	  	<td><a *ngIf="puedeEliminar(director.email)" title="Eliminar" (click)="eliminarDirector(director._id, director.email)"><span class="glyphicon glyphicon-remove"></span></a></td>
+	  	<td><a style="cursor: pointer; cursor: hand;" *ngIf="puedeEliminar(director.email)" title="Eliminar" (click)="eliminarDirector(director._id, director.email)"><span class="glyphicon glyphicon-remove"></span></a></td>
 	  </tr>
 	</tbody>
 </table>
