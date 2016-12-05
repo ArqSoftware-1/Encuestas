@@ -23,7 +23,10 @@ export class DirectorComponent {
 		directorService.obtenerDirectores().subscribe(
 			(directores) => {
 				this.directores = directores;
-			});
+			}, (error: Error) => {
+                console.log(error);
+                this.chequearSesion()
+            });
 	}
 
 	crearDirector(){
@@ -62,4 +65,10 @@ export class DirectorComponent {
                 console.log(error);
             });
 	}
+
+    chequearSesion(){
+        localStorage.removeItem("id_token");
+        location.href = '/#/login';
+        location.reload();
+    }
 }

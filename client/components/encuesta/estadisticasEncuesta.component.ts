@@ -37,6 +37,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
                 this.titulo = 'Estadísticas de inscripción ' + estadistica.encuesta.anho + ' del semestre ' + estadistica.encuesta.semestre + ' - ' + estadistica.encuesta.carrera;
             }, (error: Error) => {
                 console.log(error);
+                this.chequearSesion();
             });
         encuestaService.completaron(id).subscribe(
             (res) => {
@@ -51,12 +52,14 @@ export class EstadisticasEncuestaComponent implements OnInit {
                 //this.pie_ChartData.push(['Completaron alguna opción', parseInt(res.completaronAlgunaOpcion)]);
             }, (error: Error) => {
                 console.log(error);
+                this.chequearSesion();
             });
         opcionService.obtenerTodasLasOpciones().subscribe(
             (opciones) => {
                 this.opciones = opciones;
             }, (error: Error) => {
                 console.log(error);
+                this.chequearSesion();
             });       
     }
 
@@ -106,6 +109,12 @@ export class EstadisticasEncuestaComponent implements OnInit {
             chart.draw(data, options);
         }
 
+    }
+
+    chequearSesion(){
+        localStorage.removeItem("id_token");
+        location.href = '/#/login';
+        location.reload();
     }
 
 }

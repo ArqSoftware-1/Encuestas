@@ -50,6 +50,7 @@ export class AsignarAlumnoComponent {
                     });
             }, (error: Error) => {
                 console.log(error);
+                this.chequearSesion();
             });
     }
 
@@ -171,5 +172,11 @@ export class AsignarAlumnoComponent {
         }
 
         myReader.readAsText(file, 'ISO-8859-1');
+    }
+
+    chequearSesion(){
+        localStorage.removeItem("id_token");
+        location.href = '/#/login';
+        location.reload();
     }
 }

@@ -20,6 +20,7 @@ export class ListadoEncuestaComponent {
                 this.encuestas = encuestas;
             }, (error: Error) => {
                 console.log(error);
+                this.chequearSesion()
             });
 
         $("#directorCrear").removeClass("active");
@@ -46,6 +47,7 @@ export class ListadoEncuestaComponent {
                 this.encuestas[index] = encuesta;
             }, (error: Error) => {
                 console.log(error);
+                alert("Error al activar una encuesta");
             });
     }
 
@@ -55,6 +57,13 @@ export class ListadoEncuestaComponent {
                 this.encuestas[index] = encuesta;
             }, (error: Error) => {
                 console.log(error);
+                alert("Error al desactivar una encuesta");
             });
+    }
+
+    chequearSesion(){
+        localStorage.removeItem("id_token");
+        location.href = '/#/login';
+        location.reload();
     }
 }
