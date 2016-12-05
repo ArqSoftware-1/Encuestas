@@ -28,6 +28,7 @@ export class LoginService {
 
     logOut() {
         localStorage.removeItem("id_token");
+        localStorage.removeItem("email");
         this.isLoggedInSubject.next(this.checkIsLoggedIn());
     }
 

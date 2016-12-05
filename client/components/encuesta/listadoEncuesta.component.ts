@@ -22,7 +22,6 @@ export class ListadoEncuestaComponent {
                 console.log(error);
                 this.chequearSesion()
             });
-
         $("#directorCrear").removeClass("active");
         $("#encuestaListado").addClass("active");
     }

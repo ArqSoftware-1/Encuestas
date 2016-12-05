@@ -55,7 +55,16 @@ export class DirectorComponent {
 		}
 	}
 
-	eliminarDirector(id){
+	eliminarDirector(id, email){
+		if(this.puedeEliminar(email)){
+			this.eliminar(id);
+		}else{
+			alert("No puede eliminar al director logueado.")
+		}
+		
+	}
+
+	eliminar(id){
 		this.directorService.eliminarDirector(id).subscribe(
             (director) => {
             	this.directores = this.directores.filter( director => director._id != id);
@@ -70,5 +79,9 @@ export class DirectorComponent {
         localStorage.removeItem("id_token");
         location.href = '/#/login';
         location.reload();
+    }
+
+    puedeEliminar(email){
+    	return email != localStorage.getItem("email");
     }
 }

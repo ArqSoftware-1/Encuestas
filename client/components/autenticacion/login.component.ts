@@ -31,6 +31,7 @@ export class LoginComponent {
             password: this.user.password,
             email: this.user.email
         }, (res: Response) => {
+            localStorage.setItem("email", this.user.email);
             location.reload();
         });
     }

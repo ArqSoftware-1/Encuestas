@@ -22,7 +22,7 @@ export class RespuestaEncuestaComponent {
 
         respuestaEncuestaService.obtenerRespuestaEncuesta(token).subscribe(
             (respuestaEncuesta) => {
-                if (respuestaEncuesta) {alert(respuestaEncuesta.encuesta.estaActiva);
+                if (respuestaEncuesta) {
                     this.estaActivaEncuesta = respuestaEncuesta.encuesta.estaActiva;
                     if(this.estaActivaEncuesta)
                         this.titulo = 'Encuesta de inscripción ' + respuestaEncuesta.encuesta.anho + ' del semestre ' + respuestaEncuesta.encuesta.semestre + ' - ' + respuestaEncuesta.encuesta.carrera;
