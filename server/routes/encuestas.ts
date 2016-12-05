@@ -49,29 +49,42 @@ rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
 });
 
 rutaEncuestas.put("/activar", (request: Request, response: Response) => {
-    ModeloEncuesta.findById(request.body.id).exec()
-        .then(encuesta => {
-            encuesta.estaActiva = true;
-            encuesta.save();
+    ModeloEncuesta.findByIdAndUpdate(request.body.id, {
+        estaActiva: true
+    }, (err, encuesta) => {
+        encuesta.estaActiva = true;
+        ModeloRespuestaEncuesta.update({
+            'encuesta._id': request.body.id
+        }, {
+            $set: {
+                "encuesta.estaActiva": true
+            }
+        }, {
+            "multi": true
+        }, (err, respuestaEncuesta) => {
             response.json(encuesta);
-        })
-        .catch(error => {
-            winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(400).json(error);
         });
+    });
+
 });
 
 rutaEncuestas.put("/desactivar", (request: Request, response: Response) => {
-    ModeloEncuesta.findById(request.body.id).exec()
-        .then(encuesta => {
-            encuesta.estaActiva = false;
-            encuesta.save();
+    ModeloEncuesta.findByIdAndUpdate(request.body.id, {
+        estaActiva: false
+    }, (err, encuesta) => {
+        encuesta.estaActiva = false;
+        ModeloRespuestaEncuesta.update({
+            'encuesta._id': request.body.id
+        }, {
+            $set: {
+                "encuesta.estaActiva": false
+            }
+        }, {
+            "multi": true
+        }, (err, respuestaEncuesta) => {
             response.json(encuesta);
-        })
-        .catch(error => {
-            winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(400).json(error);
         });
+    });
 });
 
 rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
