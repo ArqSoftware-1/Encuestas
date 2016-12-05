@@ -47,7 +47,7 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
                             "user": director.email,
                             permissions: []
                         }, secret, {
-                            expiresIn: "1m" /* 1d */
+                            expiresIn: "8h"
                         });
                         response.json({
                             "jwt": token
