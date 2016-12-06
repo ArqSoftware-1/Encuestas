@@ -39,11 +39,6 @@ var opcion6 = new ModeloOpcion({
     descripcion: NombresOpcionDefecto.descripciones.no_voy_a_cursar,
     tipo: NombresOpcionDefecto.tipos.no_voy_a_cursar
 });
-var opcion7 = new ModeloOpcion({
-    descripcion: "Voy a cursar en c3",
-    limite: 2,
-    tipo: NombresOpcionDefecto.tipos.comision
-});
 
 opcion1.save();
 opcion2.save();
@@ -51,7 +46,6 @@ opcion3.save();
 opcion4.save();
 opcion5.save();
 opcion6.save();
-
 
 // Materias
 var materia1 = new ModeloMateria({
@@ -73,7 +67,7 @@ var materia3 = new ModeloMateria({
     idOpcionPorDefecto: opcion4._id
 });
 var materia4 = new ModeloMateria({
-    opciones: [opcion1, opcion7, opcion4, opcion5, opcion6],
+    opciones: [opcion1, opcion3, opcion4, opcion5, opcion6],
     nombre: "Programación funcional",
     abreviatura: "pf",
     idOpcionPorDefecto: opcion4._id
@@ -88,7 +82,7 @@ var materiasParaEncuesta = [materia1, materia2, materia3, materia4];
 
 for(var i = 0; i < 50; i++){
     var materia = new ModeloMateria({
-        opciones: [opcion1, opcion7, opcion4, opcion5, opcion6],
+        opciones: [opcion1, opcion3, opcion4, opcion5, opcion6],
         nombre: "Materia " + i,
         abreviatura: "Mat" + i,
         idOpcionPorDefecto: opcion4._id
