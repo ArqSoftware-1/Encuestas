@@ -11,6 +11,7 @@ import { RespuestaEncuestaModule } from "./modules/respuestaEncuesta/respuestaEn
 import { LoginModule } from "./modules/autenticacion/login.module";
 import { EncuestaModule } from "./modules/encuesta/encuesta.module";
 import { DirectorModule } from "./modules/director/director.module";
+import { ListadoMateriaModule } from "./modules/listadoMateria/listadoMateria.module";
 
 @NgModule({
     imports: [
@@ -22,7 +23,8 @@ import { DirectorModule } from "./modules/director/director.module";
         routing,
         EncuestaModule,
         DirectorModule,
-        FormsModule
+        FormsModule,
+        ListadoMateriaModule
     ],
     providers: [
         provideAuth({

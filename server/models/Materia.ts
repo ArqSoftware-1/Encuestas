@@ -5,6 +5,8 @@ class Materia {
     opciones: Array < Opcion > = [];
     nombre: String;
     codigo: String;
+    descripcion: String;
+    grupo: String;
     idOpcionPorDefecto: String;
 }
 
@@ -16,6 +18,12 @@ var EsquemaMateria = new Schema({
         type: String
     },
     codigo: {
+        type: String
+    },
+    descripcion: {
+        type: String
+    },
+    grupo: {
         type: String
     },
     idOpcionPorDefecto: {

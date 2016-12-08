@@ -20,6 +20,7 @@ export class DirectorComponent {
 		this.directorService = directorService;
 		$("#directorCrear").addClass("active");
 		$("#encuestaListado").removeClass("active");
+		$("#listadoMateria").removeClass("active");
 		directorService.obtenerDirectores().subscribe(
 			(directores) => {
 				this.directores = directores;

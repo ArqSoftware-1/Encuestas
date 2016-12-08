@@ -14,10 +14,11 @@
             <ul class="nav navbar-nav">
               <li id="encuestaListado" *ngIf="isLogged" class="active activar" onclick="agregarClass(this);"><a href="/#/encuestas/listado">Home</a></li>
               <li id="directorCrear" *ngIf="isLogged" class="activar" onclick="agregarClass(this);"><a href="/#/director/crear">Director</a></li>
+              <li id="listadoMateria" *ngIf="isLogged" class="activar" onclick="agregarClass(this);"><a href="/#/materias/listado">Materias</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li *ngIf="!isLogged"><a href="/#/login">Login</a></li>
-                <li *ngIf="isLogged" (click)="logout()"><a href="#">Cerrar sesión</a></li>
+                <li *ngIf="isLogged" (click)="logout()"><a>Cerrar sesión</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->

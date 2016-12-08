@@ -24,6 +24,7 @@ export class ListadoEncuestaComponent {
             });
         $("#directorCrear").removeClass("active");
         $("#encuestaListado").addClass("active");
+        $("#listadoMateria").removeClass("active");
     }
 
     formatearFecha(fecha){
