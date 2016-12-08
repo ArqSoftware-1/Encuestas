@@ -76,11 +76,7 @@ export class EstadisticasEncuestaComponent implements OnInit {
     }
 
     mostrarCantidadConLimite(materia, opcion){
-        //{{cantidadPara(materia, opcion)}} {{opcion.limite > 0 ? '/ ' + opcion.limite : ''}}
         var opc = materia.opciones.filter(o => o._id == opcion._id);
-        console.log(materia.nombre);
-        console.log(opcion.descripcion);
-        console.log(opc.length);
         if(opc.length > 0)
             return this.cantidadPara(materia, opcion) + (opcion.limite > 0 ? '/ ' + opcion.limite : '');
         else

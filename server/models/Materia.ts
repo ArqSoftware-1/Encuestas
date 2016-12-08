@@ -4,7 +4,7 @@ import { Document, Schema, model } from 'mongoose'
 class Materia {
     opciones: Array < Opcion > = [];
     nombre: String;
-    abreviatura: String;
+    codigo: String;
     idOpcionPorDefecto: String;
 }
 
@@ -15,7 +15,7 @@ var EsquemaMateria = new Schema({
     nombre: {
         type: String
     },
-    abreviatura: {
+    codigo: {
         type: String
     },
     idOpcionPorDefecto: {
