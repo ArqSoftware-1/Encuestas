@@ -12,4 +12,21 @@ export class MateriaService {
             .get('/api/materias/listado')
             .map((response: Response) => response.json());
     }
+
+    buscarMateriaPor(nombre, codigo, cantidadASaltear) {
+        return this.authHttp
+            .get('/api/materias/buscar?nombre=' + nombre + '&codigo=' + codigo + '&skip=' + cantidadASaltear)
+            .map((response: Response) => response.json());
+    }
+
+    crearMateria(materia){
+    	return this.authHttp
+            .post('/api/materias/guardar', JSON.stringify({
+                materia: materia
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
 }

@@ -48,6 +48,54 @@ rutaMaterias.get("/detalle", (request: Request, response: Response) => {
         });
 });
 
+rutaMaterias.get("/buscar", (request: Request, response: Response) => {
+    ModeloMateria.find({
+            nombre: new RegExp(request.param('nombre'), 'i'),
+            codigo: new RegExp(request.param('codigo'), 'i')
+        })
+        .skip(+request.param('skip'))
+        .limit(10)
+        .exec()
+        .then(materias => {
+            response.json(materias);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al buscar la materia: ' + error);
+            response.status(400).json(error);
+        });
+});
+
+rutaMaterias.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
+    ModeloMateria.findOne({$or: [
+                { nombre: request.body.materia.nombre }, 
+                { codigo: request.body.materia.codigo }]
+        })
+        .exec()
+        .then(materia => {
+            if (materia) {
+                response.json({
+                    error: 'El nombre o código ingresado ya existe'
+                });
+            } else {
+                var materia = new ModeloMateria({
+                nombre: request.body.materia.nombre,
+                codigo: request.body.materia.codigo,
+                descripcion: request.body.materia.descripcion,
+                grupo: request.body.materia.grupo
+                });
+                
+                materia.save()
+                .then(director => {
+                    response.json(materia);
+                })
+                .catch(error => {
+                        winston.log('error', 'Se ha produccido un error al guardar la materia: ' + error);
+                        response.status(400).json(error);
+                    });
+            }
+        });
+});
+
 export {
     rutaMaterias
 }

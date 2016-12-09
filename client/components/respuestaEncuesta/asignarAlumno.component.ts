@@ -64,7 +64,10 @@ export class AsignarAlumnoComponent {
                     alert(respuestaEcuesta.error);
                     return;
                 }
-                this.alumnos.push(respuestaEcuesta);
+
+                if(this.alumnos.length < 10)
+                    this.alumnos.push(respuestaEcuesta);
+                
                 this.alumno.nombreYApellidoAlumno = "";
                 this.alumno.DNIAlumno = "";
                 this.alumno.emailAlumno = "";

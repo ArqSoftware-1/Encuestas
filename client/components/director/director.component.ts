@@ -49,6 +49,9 @@ export class DirectorComponent {
             (director) => {
                 alert("El director fue creado con exito.");
                 this.directores.push(director);
+
+                this.email = "";
+                this.pass = "";
             }, (error: Error) => {
             	alert("No se pudo crear el director.");
                 console.log(error);
