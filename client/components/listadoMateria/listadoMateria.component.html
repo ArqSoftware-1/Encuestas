@@ -9,22 +9,22 @@
 <div class="row">
 	<div class="form-group col-md-3">
 		<label>Nombre<span style="color:red"> *</span></label>
-    	<input class="form-control" placeholder="ingrese nombre..." type="text">
+    	<input class="form-control" placeholder="ingrese nombre..." type="text" [(ngModel)]="materia.nombre">
 	</div>
 	<div class="form-group col-md-3">
 		<label>Código<span style="color:red"> *</span></label>
-    	<input class="form-control" placeholder="ingrese código...">
+    	<input class="form-control" placeholder="ingrese código..." [(ngModel)]="materia.codigo">
 	</div>
 	<div class="form-group col-md-3">
 		<label>Grupo<span style="color:red"> *</span></label>
-    	<input class="form-control" placeholder="ingrese código...">
+    	<input class="form-control" placeholder="ingrese grupo..." [(ngModel)]="materia.grupo">
 	</div>
 </div>
 
 <div class="row">
 	<div class="form-group col-md-6">
 		<label>Descripción<span style="color:red"> *</span></label>
-    	<textarea class="form-control" rows="2" id="comment"></textarea>
+    	<textarea class="form-control" rows="2" [(ngModel)]="materia.descripcion"></textarea>
 	</div>
 	
 	<div class="form-group col-md-3">
@@ -34,20 +34,20 @@
 
 <div class="row">
 	<div class="form-group col-md-6">
-		<label>Importar CSV de materias (en orden: Nombre y código)</label>
+		<label>Importar CSV de materias (en orden: Nombre y Código)</label>
     	<input type="file" accept=".csv">
 	</div>
-	<!--<div class="form-group col-md-6" *ngIf="mostrarLoading">
+	<div class="form-group col-md-6" *ngIf="mostrarLoading">
 		<img style="width: 60px" src="assets/img/loading-img.gif" />
-	</div>-->
+	</div>
 </div>
 <br>
 <div class="row">
 	<div class="col-md-3">
-		<input type="search" class="form-control" placeholder="ingrese nombre...">
+		<input type="search" class="form-control" placeholder="ingrese nombre..." [(ngModel)]="nombre">
 	</div>
 	<div class="col-md-3">
-		<input type="search" class="form-control" placeholder="ingrese código...">
+		<input type="search" class="form-control" placeholder="ingrese código..." [(ngModel)]="codigo">
 	</div>
 	<div class="col-md-3">
 		<button class="btn btn-primary">Buscar</button>
@@ -57,17 +57,19 @@
 <table class="table">
 	<thead>
 	  <tr>
-	    <th width="50%">Nombre</th>
+	    <th>Nombre</th>
 	    <th>Código</th>
 	    <th>Descripción</th>
 	    <th>Grupo</th>
 	  </tr>
 	</thead>
 	<tbody>
-	  <!--<tr  *ngFor="let materia of materias">
+	  <tr  *ngFor="let materia of materias">
 	  	<td>{{materia.nombre}}</td>
 	  	<td>{{materia.codigo}}</td>
-	  </tr>-->
+	  	<td>{{materia.descripcion}}</td>
+	  	<td>{{materia.grupo}}</td>
+	  </tr>
 	</tbody>
 </table>
 </div>
