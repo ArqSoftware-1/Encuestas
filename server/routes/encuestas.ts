@@ -194,6 +194,28 @@ rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
         });
 });
 
+rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) => {
+    var idEncuesta = request.body.idEncuesta;
+    var idMateria = request.body.idMateria;
+    var descripcionComision = request.body.descripcionComision;
+
+    ModeloEncuesta.findById(request.body.idEncuesta, (err, encuesta) => {
+        var materia = encuesta.materias.filter((materia)=>{
+            return materia._id == idMateria
+        })[0];
+        materia.opciones.push({ descripcion: descripcionComision,
+                                limite: 3,
+                                tipo: NombresOpcionDefecto.tipos.comision
+                                });
+        console.log(materia);
+        materia.save();
+        encuesta.save();
+        response.json({});
+    });
+});
+
+                
+
 export {
     rutaEncuestas
 }

@@ -43,6 +43,19 @@ export class EncuestaService {
             })).map((response: Response) => response.json())
     }
 
+    asignarComisionAMateriaDeEncuesta(idEncuesta, idMateria, descripcionComision) {
+        return this.http
+            .put('/api/encuestas/asignar-comision', JSON.stringify({
+                idEncuesta: idEncuesta,
+                idMateria: idMateria,
+                descripcionComision: descripcionComision,
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
+
     desactivar(id) {
         return this.http
             .put('/api/encuestas/desactivar', JSON.stringify({

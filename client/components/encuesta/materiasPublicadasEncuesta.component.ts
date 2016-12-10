@@ -17,9 +17,12 @@ export class MateriasPublicadasEncuestaComponent{
     titulo;
     opciones = [];
     comisionSeleccionada = 'c1';
+    materiaSeleccionada;
+    encuestaService;
 
     constructor(encuestaService: EncuestaService, opcionService: OpcionService, route: ActivatedRoute) {
         var id = route.snapshot.params['id'];
+        this.encuestaService = encuestaService;
         encuestaService.obtenerEncuesta(id).subscribe(
             (encuesta) => {
                 console.log(encuesta);
@@ -34,6 +37,7 @@ export class MateriasPublicadasEncuestaComponent{
 
     modalAgregarComision(materia){
         this.opciones = materia.opciones;
+        this.materiaSeleccionada = materia;
         $('.modal').modal({backdrop: 'static', keyboard: false});
     }
 
@@ -57,8 +61,14 @@ export class MateriasPublicadasEncuestaComponent{
             return;
         }
 
-        var opcion = {descripcion: descripcion};
-        this.opciones.push(opcion);
+      this.encuestaService.asignarComisionAMateriaDeEncuesta(this.encuesta._id,  this.materiaSeleccionada._id, descripcion).subscribe(
+            (encuesta) => {
+                var opcion = {descripcion: descripcion};
+                this.opciones.push(opcion);
+            }, (error: Error) => {
+                console.log(error);
+                alert("Error al ingresar una comision");
+            });
     }
 
     chequearSesion(){
