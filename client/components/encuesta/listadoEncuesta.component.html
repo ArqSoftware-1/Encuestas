@@ -16,7 +16,7 @@
       <td>
         <a [routerLink]="['/encuestas/estadisticas', encuesta._id]" title="Estadisticas"><span class="glyphicon glyphicon-stats"></span></a>
         <a [routerLink]="['/asignar/alumno', encuesta._id]" title="Asignar alumno"><span class="glyphicon glyphicon-plus"></span></a>
-
+        <a [routerLink]="['/encuestas/materias-publicadas', encuesta._id]" title="Materias publicadas"><span class="glyphicon glyphicon-list-alt"></span></a>
         <a style="cursor: pointer; cursor: hand;" *ngIf="!encuesta.estaActiva" title="Activar encuesta" (click)="activar(encuesta._id, i)"><span class="glyphicon glyphicon-ok"></span></a>
         <a style="cursor: pointer; cursor: hand;" *ngIf="encuesta.estaActiva" title="Desactivar encuesta" (click)="desactivar(encuesta._id, i)"><span class="glyphicon glyphicon-remove"></span></a>
       </td>

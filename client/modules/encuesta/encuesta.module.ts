@@ -5,6 +5,7 @@ import { CommonModule } from "@angular/common";
 
 import { EstadisticasEncuestaComponent } from "../../components/encuesta/estadisticasEncuesta.component";
 import { ListadoEncuestaComponent } from "../../components/encuesta/listadoEncuesta.component";
+import { MateriasPublicadasEncuestaComponent } from "../../components/encuesta/materiasPublicadasEncuesta.component";
 import { routing } from "../../routes/encuesta/encuesta.routing";
 import { SharedModule } from "../shared/shared.module";
 
@@ -18,11 +19,13 @@ import { SharedModule } from "../shared/shared.module";
     ],
     declarations: [
         ListadoEncuestaComponent,
-        EstadisticasEncuestaComponent
+        EstadisticasEncuestaComponent,
+        MateriasPublicadasEncuestaComponent
     ],
     bootstrap: [
         ListadoEncuestaComponent,
-        EstadisticasEncuestaComponent
+        EstadisticasEncuestaComponent,
+        MateriasPublicadasEncuestaComponent
     ],
     schemas: [
         CUSTOM_ELEMENTS_SCHEMA

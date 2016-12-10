@@ -1,0 +1,85 @@
+<h2>{{titulo}}</h2>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Código</th>
+        <th>Descripción</th>
+        <th>Grupo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr  *ngFor="let materia of materias">
+        <td>{{materia.nombre}}</td>
+        <td>{{materia.codigo}}</td>
+        <td>{{materia.descripcion}}</td>
+        <td>{{materia.grupo}}</td>
+        <td><a style="cursor: pointer; cursor: hand;" (click)="modalAgregarComision(materia)" title="Agregar comisión"><span class="glyphicon glyphicon-plus"></span></a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>
+  </div>
+</div>
+<div class="modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">Comisiones</h4>
+      </div>
+      <div class="modal-body">
+        <p>Puede agregar una comisión.</p>
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-3">
+              <label>Comisión<span style="color:red"> *</span></label>
+              <select class="form-control" (change)="seleccionarOpcionDeMateria($event.target.value)" >
+                <option value="{{'c1'}}" [selected]="esLaOpcionElegida('c1')">C1</option>
+                <option value="{{'c2'}}" [selected]="esLaOpcionElegida('c2')">c2</option>
+                <option value="{{'c3'}}" [selected]="esLaOpcionElegida('c3')">c3</option>
+                <option value="{{'c4'}}" [selected]="esLaOpcionElegida('c4')">c4</option>
+                <option value="{{'c5'}}" [selected]="esLaOpcionElegida('c5')">c5</option>
+                <option value="{{'c6'}}" [selected]="esLaOpcionElegida('c6')">c6</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-success" style="margin-top: 25px" type="button" (click)="asignarComision()">Asignar</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <label>Opciones asignadas a la materia</label>
+            </div>
+            <div class="col-md-8">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Descripción</th>
+                      <!--<th>Acciones</th>-->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr  *ngFor="let opcion of opciones">
+                      <td>{{opcion.descripcion}}</td>
+                      <!--<td><a style="cursor: pointer; cursor: hand;" title="Eliminar comisión"><span class="glyphicon glyphicon-remove"></span></a></td>-->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
