@@ -74,7 +74,7 @@ export class ListadoMateriaComponent {
                     alert(materia.error);
                     return;
                 }
-                
+
             	if(this.materias.length < 10)
                 	this.materias.push(materia);
 
@@ -97,5 +97,57 @@ export class ListadoMateriaComponent {
 
         return true;    	
     }
-    
+
+
+    changeListener($event): void {
+        this.mostrarLoading = true;
+        this.readThis($event.target, this);
+    }
+
+    readThis(inputValue: any, listadoMateriaComponent: ListadoMateriaComponent): void {
+        var file: File = inputValue.files[0];
+        var myReader: FileReader = new FileReader();
+
+        myReader.onloadend = function(e) {
+
+            var lines = myReader.result.split("\n");
+            lines = lines.filter((line) => {
+                return line != "";
+            });
+
+            var result = [];
+
+            var headers = ['nombre', 'codigo', 'descripcion', 'grupo'];
+
+            for (var i = 1; i < lines.length; i++) {
+
+                var obj = {};
+                var currentline = lines[i].split(";");
+
+                for (var j = 0; j < headers.length; j++) {
+                    obj[headers[j]] = currentline[j];
+                }
+                result.push(obj);
+            }
+
+            listadoMateriaComponent.materiaService.importarMaterias(result).subscribe(
+                (respuesta) => {
+                    var mensaje = 'Resultado de importar el CSV:\n\n';
+                    if (respuesta.noAgregados.length > 0) {
+                        respuesta.noAgregados.forEach(function(materiaNoAgregada) {
+                            mensaje += 'La materia ' + materiaNoAgregada.nombre + ' cuyo código es ' + materiaNoAgregada.codigo + ' no se pudo guardar. Motivo: ' + materiaNoAgregada.error + '\n';
+                        });
+                        mensaje += '\nEl resto de las materias fueron agregadas correctamente.\n';
+                    } else {
+                        mensaje += '\nTodas las materias fueron agregadas correctamente.\n';
+                    }
+                    listadoMateriaComponent.mostrarLoading = false;
+                    alert(mensaje);
+                }, (error: Error) => {
+                    console.log(error);
+                });
+        }
+
+        myReader.readAsText(file, 'ISO-8859-1');
+    }
 }

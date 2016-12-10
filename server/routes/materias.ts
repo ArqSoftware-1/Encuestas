@@ -96,6 +96,56 @@ rutaMaterias.post("/guardar", function(request: Request, response: Response, nex
         });
 });
 
+rutaMaterias.post("/importar-materias", function(request: Request, response: Response, next: NextFunction) {
+    var materias = request.body.materias;
+    var materiasNoAgregadas = [];
+    var materiasAgregadas = [];
+
+    var guardarMaterias = function(callback, index) {
+        if (index < materias.length) {
+            var materia = materias[index];
+            if (esMateriaValida(materia)) {
+                ModeloMateria.findOne({$or: [
+                            { nombre: materia.nombre }, 
+                            { codigo: materia.codigo }]
+                    }).exec().then(materiaGuardada => {
+                    if (materiaGuardada) {
+                        materia.error = "La materia ingresada ya se encuentra en el sistema, verifique el nombre y codigo de la misma.";
+                        materiasNoAgregadas.push(materia);
+                    } else {
+                        materiasAgregadas.push(materia);
+                        var modeloMateria = new ModeloMateria(materia);
+                        modeloMateria.save();
+                    }
+                    guardarMaterias(callback, index + 1);
+                })
+            } else {
+                materia.error = "Campos inválidos, controle que no estén vacios y sean válidos.";
+                materiasNoAgregadas.push(materia);
+                guardarMaterias(callback, index + 1);
+            }
+        } else {
+            callback();
+        }
+    }
+
+    guardarMaterias(() => {
+        response.json({
+            agregados: materiasAgregadas,
+            noAgregados: materiasNoAgregadas
+        });
+    }, 0);
+
+});
+
+function esMateriaValida(materia) {
+    if (materia.nombre.length < 3 || materia.codigo.length < 3 || materia.descripcion.length < 3 || materia.grupo.length < 3) {
+        return false;
+    }
+    return true;
+}
+
+
 export {
     rutaMaterias
 }

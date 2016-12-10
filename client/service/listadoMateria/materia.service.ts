@@ -29,4 +29,15 @@ export class MateriaService {
                 })
             })).map((response: Response) => response.json())
     }
+
+    importarMaterias(materias) {
+        return this.authHttp
+            .post('/api/materias/importar-materias', JSON.stringify({
+                materias: materias
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
 }
