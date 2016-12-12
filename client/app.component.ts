@@ -29,6 +29,7 @@ export class AppComponent {
     constructor(private http: Http, route: Router, loginService: LoginService) {
         this.isLogged = !!localStorage.getItem("id_token");
         this.loginService = loginService;
+        this.route = route;
     }
 
     logout(): void {
