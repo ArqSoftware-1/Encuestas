@@ -205,14 +205,14 @@ rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) =>
     var limite = request.body.limite;
 
     ModeloEncuesta.findById(idEncuesta, (err, encuesta) => {
-        /*var materia = encuesta.materias.filter((materia)=>{
+        var materia:any = encuesta.materias.filter((materia:any)=>{
             return materia._id == idMateria
         })[0];
         materia.opciones.unshift({ descripcion: descripcionComision,
                                 limite: limite,
                                 tipo: NombresOpcionDefecto.tipos.comision
                                 });
-        materia.save();*/
+        materia.save();
         encuesta.save();
         ModeloRespuestaEncuesta.update({
             'encuesta._id': idEncuesta
