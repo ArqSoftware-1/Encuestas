@@ -2,7 +2,6 @@ import { Opcion, EsquemaOpcion } from "./Opcion";
 import { Document, Schema, model } from 'mongoose'
 
 class Materia {
-    _id: String;
     opciones: Array < Opcion > = [];
     nombre: String;
     codigo: String;
