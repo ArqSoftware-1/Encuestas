@@ -30,6 +30,7 @@ rutaDirector.get("/listado", (request: Request, response: Response) => {
     ModeloDirector.find().exec()
         .then(director => {
             response.json(director);
+            winston.log('info', 'Se han listado los directores con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores: ' + error);
@@ -41,6 +42,7 @@ rutaDirector.get("/directorPorEmail", (request: Request, response: Response) => 
     ModeloDirector.findOne({ email: request.param('email') }).exec()
         .then(director => {
             response.json(director);
+            winston.log('info', 'Se ha buscado el director ' + request.param('email') + ' con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores por email: ' + error);
@@ -52,6 +54,7 @@ rutaDirector.delete("/eliminar", (request: Request, response: Response) => {
     ModeloDirector.findByIdAndRemove(request.param('id')).exec()
         .then(director => {
             response.json(director);
+            winston.log('info', 'Se ha eliminado el director (id: ' + request.param('id') + ') con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores por email: ' + error);
@@ -73,6 +76,7 @@ rutaDirector.post("/guardar", function(request: Request, response: Response, nex
         director.save()
         .then(director => {
             response.json(director);
+            winston.log('info', 'Se ha guardado el director ' + request.body.email + ' con éxito');
         })
         .catch(error => {
                 winston.log('error', 'Se ha produccido un error al guardar un director: ' + error);

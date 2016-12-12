@@ -32,9 +32,10 @@ rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) =>
     ModeloRespuestaEncuesta.find().exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
+            winston.log('info', 'Se han listado las respuestas-encuestas con éxito');
         })
         .catch(error => {
-            winston.log('error', 'Se ha produccido un error al listar las respuestas: ' + error);
+            winston.log('error', 'Se ha producido un error al listar las respuestas: ' + error);
             response.status(400).json(error);
         });
 });
@@ -46,9 +47,10 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
         }).limit(10).exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
+            winston.log('info', 'Se han listado las respuestas-encuestas (año: ' + request.param('anho') + ', semestre: ' + request.param('semestre') + ') con éxito');
         })
         .catch(error => {
-            winston.log('error', 'Se ha produccido un error al listar las respuestas por año y semestre: ' + error);
+            winston.log('error', 'Se ha producido un error al listar las respuestas por año y semestre: ' + error);
             response.status(400).json(error);
         });
 });
@@ -78,10 +80,11 @@ rutaRespuestasEncuesta.post("/guardar", function(request: Request, response: Res
                 respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
                 respuestaEncuesta.save();
                 response.json(respuestaEncuesta);
+                winston.log('info', 'Se ha guardado la respuesta-encuesta con éxito');
             }
         })
         .catch(error => {
-            winston.log('error', 'Se ha produccido un error al asignar una respuesta: ' + error);
+            winston.log('error', 'Se ha producido un error al asignar una respuesta: ' + error);
             response.status(400).json(error);
         });
 });
@@ -105,9 +108,10 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         .exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
+            winston.log('info', 'Se ha buscado la respuesta-encuesta (alumno: ' + alumno + ', dni: ' + dni + ') con éxito');
         })
         .catch(error => {
-            winston.log('error', 'Se ha produccido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
+            winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
             response.status(400).json(error);
         });
 });
@@ -129,9 +133,10 @@ rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response
         .exec()
         .then(cantidad => {
             response.json(cantidad);
+            winston.log('info', 'Se ha contabilizado la cantidad de respuestas-encuestas (alumno: ' + alumno + ', dni: ' + dni + ') con éxito. Cantidad: ' + cantidad);
         })
         .catch(error => {
-            winston.log('error', 'Se ha produccido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
+            winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
             response.status(400).json(error);
         });
 });

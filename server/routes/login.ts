@@ -52,7 +52,7 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
                         response.json({
                             "jwt": token
                         });
-
+                        winston.log('info', 'Se ha logueado el director ' + request.body.email + ' con éxito');
                     } else {
                         response.json({
                             message: "El password ingresado es incorrecto"

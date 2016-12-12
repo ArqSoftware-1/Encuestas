@@ -28,6 +28,7 @@ rutaMaterias.get("/listado", (request: Request, response: Response) => {
     ModeloMateria.find().exec()
         .then(materias => {
             response.json(materias);
+            winston.log('info', 'Se han listado las materias con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las materias: ' + error);
@@ -41,6 +42,7 @@ rutaMaterias.get("/detalle", (request: Request, response: Response) => {
         }).exec()
         .then(materia => {
             response.json(materia);
+            winston.log('info', 'Se ha buscado la materia (id: ' + request.param('id') + ') con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una materia: ' + error);
@@ -58,6 +60,7 @@ rutaMaterias.get("/buscar", (request: Request, response: Response) => {
         .exec()
         .then(materias => {
             response.json(materias);
+            winston.log('info', 'Se ha buscado la materia (nombre: ' + request.param('nombre') + ', código: ' + request.param('codigo') + ') con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al buscar la materia: ' + error);
@@ -87,6 +90,7 @@ rutaMaterias.post("/guardar", function(request: Request, response: Response, nex
                 materia.save()
                 .then(director => {
                     response.json(materia);
+                    winston.log('info', 'Se ha guardado la materia ' + request.body.materia.nombre + ' con éxito');
                 })
                 .catch(error => {
                         winston.log('error', 'Se ha produccido un error al guardar la materia: ' + error);

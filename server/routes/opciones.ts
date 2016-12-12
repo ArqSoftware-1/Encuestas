@@ -28,6 +28,7 @@ rutaOpciones.get("/listado", (request: Request, response: Response) => {
     ModeloOpcion.find().exec()
         .then(opciones => {
             response.json(opciones);
+            winston.log('info', 'Se han listado las opciones con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las opciones: ' + error);
@@ -41,6 +42,7 @@ rutaOpciones.get("/detalle", (request: Request, response: Response) => {
         }).exec()
         .then(opcion => {
             response.json(opcion);
+            winston.log('info', 'Se ha buscado la opción (id: ' + request.param('id') + ') con éxito');
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una opcion: ' + error);
