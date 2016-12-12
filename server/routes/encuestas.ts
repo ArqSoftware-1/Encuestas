@@ -212,7 +212,6 @@ rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) =>
                                 limite: limite,
                                 tipo: NombresOpcionDefecto.tipos.comision
                                 });
-        materia.save();
         encuesta.save();
         ModeloRespuestaEncuesta.update({
             'encuesta._id': idEncuesta
