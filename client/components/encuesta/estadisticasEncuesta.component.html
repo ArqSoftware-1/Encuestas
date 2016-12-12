@@ -25,7 +25,7 @@
     <tbody>
       <tr  *ngFor="let opcion of opciones">
         <td>{{opcion.descripcion}}</td>
-        <td *ngFor="let materia of materias" class="{{cantidadPara(materia, opcion) >= opcion.limite ? 'danger' : 'default'}}" title="{{opcion.descripcion}}">{{mostrarCantidadConLimite(materia, opcion)}}</td>
+        <td *ngFor="let materia of materias" class="{{superaLimite(materia, opcion) ? 'danger' : 'default'}}" title="{{opcion.descripcion}}">{{mostrarCantidadConLimite(materia, opcion)}}</td>
       </tr>
     </tbody>
   </table>

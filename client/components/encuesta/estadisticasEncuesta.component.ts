@@ -76,6 +76,11 @@ export class EstadisticasEncuestaComponent implements OnInit {
     }
 
     mostrarCantidadConLimite(materia, opcion){
+        var opc = materia.opciones.filter((opc) =>{
+            return opc.descripcion == opcion.descripcion;
+        })[0];
+        if(!opc)
+            return '-';
         var estadistica = this.estadisticas.filter(
             (estadistica) => estadistica._id.materia == materia.nombre && estadistica._id.opcion == opcion.descripcion)[0];
         if(!estadistica){
@@ -83,8 +88,20 @@ export class EstadisticasEncuestaComponent implements OnInit {
         }else{
             estadistica = estadistica._id;
         }
-        return this.cantidadPara(materia, opcion) + (estadistica.limite > 0 ? '/ ' + estadistica.limite : '');
+        var cantidad = this.cantidadPara(materia, opcion);
+        if(cantidad == 0) return '0';
+        return cantidad + (estadistica.limite > 0 ? '/ ' + estadistica.limite : '');
 
+    }
+
+    superaLimite(materia, opcion){
+        var opc = materia.opciones.filter((opc) =>{
+            return opc.descripcion == opcion.descripcion;
+        })[0];
+        if(opc){
+            return opc.limite <= this.cantidadPara(materia, opcion);
+        }    
+        return false;
     }
 
     ngOnInit() {

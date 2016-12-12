@@ -61,6 +61,11 @@ export class MateriasPublicadasEncuestaComponent{
             return;
         }
 
+        if(!$('#limite').val() || $('#limite').val() < 1){
+            alert("El límite es obligatorio y debe ser mayor a 0.");
+            return;
+        }
+
       this.encuestaService.asignarComisionAMateriaDeEncuesta(this.encuesta._id,  this.materiaSeleccionada._id, descripcion, $('#limite').val() || 3).subscribe(
             (encuesta) => {
                 var opcion = {descripcion: descripcion};
