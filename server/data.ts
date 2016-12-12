@@ -39,10 +39,22 @@ var opcion6 = new ModeloOpcion({
     descripcion: NombresOpcionDefecto.descripciones.no_voy_a_cursar,
     tipo: NombresOpcionDefecto.tipos.no_voy_a_cursar
 });
+var opcion7 = new ModeloOpcion({
+    descripcion: "Voy a cursar en c4",
+    limite: 3,
+    tipo: NombresOpcionDefecto.tipos.comision
+});
+var opcion8 = new ModeloOpcion({
+    descripcion: "Voy a cursar en c5",
+    limite: 3,
+    tipo: NombresOpcionDefecto.tipos.comision
+});
 
 opcion1.save();
 opcion2.save();
 opcion3.save();
+opcion7.save();
+opcion8.save();
 opcion4.save();
 opcion5.save();
 opcion6.save();

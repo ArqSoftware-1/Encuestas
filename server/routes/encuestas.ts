@@ -96,14 +96,18 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
             $project: {
                 encuesta_id: '$encuesta._id',
                 opcion: '$respuestasMateria.opcion.descripcion',
-                materia: '$respuestasMateria.materia.nombre'
+                materia: '$respuestasMateria.materia.nombre',
+                opcion_id: '$respuestasMateria.opcion._id',
+                limite: '$respuestasMateria.opcion.limite'
             }
         }, {
             $group: {
                 _id: {
                     opcion: '$opcion',
                     materia: '$materia',
-                    encuesta_id: '$encuesta_id'
+                    encuesta_id: '$encuesta_id',
+                    opcion_id: '$opcion_id',
+                    limite: '$limite',
                 },
                 count: {
                     $sum: 1
@@ -198,19 +202,30 @@ rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) =>
     var idEncuesta = request.body.idEncuesta;
     var idMateria = request.body.idMateria;
     var descripcionComision = request.body.descripcionComision;
+    var limite = request.body.limite;
 
-    ModeloEncuesta.findById(request.body.idEncuesta, (err, encuesta) => {
+    ModeloEncuesta.findById(idEncuesta, (err, encuesta) => {
         var materia = encuesta.materias.filter((materia)=>{
             return materia._id == idMateria
         })[0];
-        materia.opciones.push({ descripcion: descripcionComision,
-                                limite: 3,
+        materia.opciones.unshift({ descripcion: descripcionComision,
+                                limite: limite,
                                 tipo: NombresOpcionDefecto.tipos.comision
                                 });
-        console.log(materia);
         materia.save();
         encuesta.save();
-        response.json({});
+        ModeloRespuestaEncuesta.update({
+            'encuesta._id': idEncuesta
+        }, {
+            $set: {
+                "encuesta": encuesta
+            }
+        }, {
+            "multi": true
+        }, (err, respuestaEncuesta) => {   
+            response.json({});
+        });
+
     });
 });
 

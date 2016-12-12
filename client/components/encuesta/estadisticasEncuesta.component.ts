@@ -76,11 +76,15 @@ export class EstadisticasEncuestaComponent implements OnInit {
     }
 
     mostrarCantidadConLimite(materia, opcion){
-        var opc = materia.opciones.filter(o => o._id == opcion._id);
-        if(opc.length > 0)
-            return this.cantidadPara(materia, opcion) + (opcion.limite > 0 ? '/ ' + opcion.limite : '');
-        else
-            return '-';
+        var estadistica = this.estadisticas.filter(
+            (estadistica) => estadistica._id.materia == materia.nombre && estadistica._id.opcion == opcion.descripcion)[0];
+        if(!estadistica){
+            estadistica = opcion;
+        }else{
+            estadistica = estadistica._id;
+        }
+        return this.cantidadPara(materia, opcion) + (estadistica.limite > 0 ? '/ ' + estadistica.limite : '');
+
     }
 
     ngOnInit() {

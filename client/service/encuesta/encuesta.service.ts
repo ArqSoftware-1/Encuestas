@@ -43,12 +43,13 @@ export class EncuestaService {
             })).map((response: Response) => response.json())
     }
 
-    asignarComisionAMateriaDeEncuesta(idEncuesta, idMateria, descripcionComision) {
+    asignarComisionAMateriaDeEncuesta(idEncuesta, idMateria, descripcionComision, limite) {
         return this.http
             .put('/api/encuestas/asignar-comision', JSON.stringify({
                 idEncuesta: idEncuesta,
                 idMateria: idMateria,
                 descripcionComision: descripcionComision,
+                limite: limite
             }), new RequestOptions({
                 headers: new Headers({
                     "Content-Type": "application/json"

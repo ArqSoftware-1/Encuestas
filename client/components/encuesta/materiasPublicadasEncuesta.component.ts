@@ -61,10 +61,10 @@ export class MateriasPublicadasEncuestaComponent{
             return;
         }
 
-      this.encuestaService.asignarComisionAMateriaDeEncuesta(this.encuesta._id,  this.materiaSeleccionada._id, descripcion).subscribe(
+      this.encuestaService.asignarComisionAMateriaDeEncuesta(this.encuesta._id,  this.materiaSeleccionada._id, descripcion, $('#limite').val() || 3).subscribe(
             (encuesta) => {
                 var opcion = {descripcion: descripcion};
-                this.opciones.push(opcion);
+                this.opciones.unshift(opcion);
             }, (error: Error) => {
                 console.log(error);
                 alert("Error al ingresar una comision");
