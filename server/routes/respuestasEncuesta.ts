@@ -29,7 +29,7 @@ rutaRespuestasEncuesta.use((request: Request & {
 });
 
 rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) => {
-    ModeloRespuestaEncuesta.find().exec()
+    ModeloRespuestaEncuesta.find( request.param('idEncuesta') ? {'encuesta._id': request.param('idEncuesta')} : {}).exec()
         .then(respuestasEncuesta => {
             response.json(respuestasEncuesta);
             winston.log('info', 'Se han listado las respuestas-encuestas con éxito');

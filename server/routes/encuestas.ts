@@ -253,8 +253,38 @@ rutaEncuestas.put("/asignar-materia", (request: Request, response: Response) => 
             winston.log('error', 'Se ha produccido un error al intentar asignar una materia: ' + error);
             response.status(400).json(error);
         });
+}); 
 
+rutaEncuestas.put("/quitar-materia", (request: Request, response: Response) => {
+    var idMateria = request.body.idMateria;
+    var idEncuesta = request.body.idEncuesta;
+            ModeloEncuesta.findById(idEncuesta)
+            .exec()
+            .then(encuesta => {
+                encuesta.materias = encuesta.materias.filter((mat:any)=>{
+                    return mat._id != idMateria;
+                });
+                encuesta.save();
+                ModeloRespuestaEncuesta.update({
+                    'encuesta._id': idEncuesta
+                }, {
+                    $set: {
+                        "encuesta": encuesta
+                    }
+                }, (err, respuestaEncuesta) => {
+                    response.json({});
+                });
+            })
 });                
+
+rutaEncuestas.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
+    request.body.encuesta.estaActiva = true;
+    request.body.encuesta.materias = [];
+    var encuesta = new ModeloEncuesta(request.body.encuesta);
+    encuesta.save();
+    response.json(encuesta);
+});
+
 
 export {
     rutaEncuestas

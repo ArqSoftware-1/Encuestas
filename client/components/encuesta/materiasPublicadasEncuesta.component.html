@@ -16,7 +16,8 @@
           <tr  *ngFor="let materia of materias">
             <td>{{materia.nombre}}</td>
             <td>{{materia.codigo}}</td>
-            <td><a style="cursor: pointer; cursor: hand;" (click)="modalAgregarComision(materia)" title="Agregar comisión"><span class="glyphicon glyphicon-plus"></span></a></td>
+            <td><a style="cursor: pointer; cursor: hand;" (click)="modalAgregarComision(materia)" title="Agregar comisión"><span class="glyphicon glyphicon-plus"></span></a>
+            <a style="cursor: pointer; cursor: hand;" (click)="quitarMateria(materia)" title="Quitar materia"><span class="glyphicon glyphicon-arrow-right"></span></a></td>
           </tr>
         </tbody>
       </table>

@@ -54,6 +54,12 @@ export class RespuestaEncuestaService {
             .map((response: Response) => response.json())
     }
 
+    obtenerRespuestasEncuestaPorId(idEncuesta: String) {
+        return this.authHttp
+            .get('/api/respuestas/encuesta/listado?idEncuesta=' + idEncuesta)
+            .map((response: Response) => response.json())
+    }
+
     obtenerRespuestasEncuestaPorAnhoYSemestre(anho, semestre) {
         return this.authHttp
             .get('/api/respuestas/encuesta/listadoPor?anho=' + anho + '&semestre=' + semestre)

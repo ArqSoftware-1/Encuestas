@@ -1,4 +1,29 @@
-<h2>Listado de Encuestas</h2>
+<h2>Crear encuesta</h2>
+<div class="row">
+  <div class="form-group col-md-2">
+    <label>Año<span style="color:red"> *</span></label>
+    <input class="form-control" placeholder="ingrese año..." min="2000" max="3000" type="number" id="anho">
+  </div>
+  <div class="form-group col-md-2">
+    <label>Semestre<span style="color:red"> *</span></label>
+    <select class="form-control" (change)="seleccionarSemestre($event.target.value)" >
+        <option value="{{1}}">1</option>
+        <option value="{{2}}">2</option>
+    </select>
+  </div>
+  <div class="form-group col-md-3">
+    <label>Carrera<span style="color:red"> *</span></label>
+    <input class="form-control" placeholder="ingrese carrera..." id="carrera">
+  </div>
+  <div class="form-group col-md-2">
+    <label>Fecha límite<span style="color:red"> *</span></label>
+    <input class="form-control" placeholder="dd/mm/yyyy" id="fecha-limite" readonly="readonly">
+  </div>
+  <div class="form-group col-md-2">
+    <button class="btn btn-success" style="margin-top: 25px" type="button" (click)="crearEncuesta()">Crear</button>
+  </div>
+</div>
+
 <table class="table">
   <thead >
     <tr>

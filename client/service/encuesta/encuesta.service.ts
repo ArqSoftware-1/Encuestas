@@ -79,4 +79,28 @@ export class EncuestaService {
                 })
             })).map((response: Response) => response.json())
     }
+
+     quitarMateria(idMateria, idEncuesta) {
+        return this.http
+            .put('/api/encuestas/quitar-materia', JSON.stringify({
+                idEncuesta: idEncuesta,
+                idMateria: idMateria,
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
+
+    crearEncuesta(encuesta){
+        return this.http
+            .post('/api/encuestas/guardar', JSON.stringify({
+                encuesta: encuesta
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
+
 }

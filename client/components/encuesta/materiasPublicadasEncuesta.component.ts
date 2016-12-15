@@ -32,19 +32,18 @@ export class MateriasPublicadasEncuestaComponent{
                 this.encuesta = encuesta; 
                 this.materias = encuesta.materias;
                 this.titulo = 'Materias publicadas en encuesta ' + encuesta.anho + ' del semestre ' + encuesta.semestre + ' - ' + encuesta.carrera;
+                materiaService.obtenerMaterias().subscribe(
+                    (materias) => {
+                        this.materiasAAsignar = materias;
+                        for (var i = 0; i < this.materias.length; ++i)
+                            this.materiasAAsignar = this.materiasAAsignar.filter(m => m._id != this.materias[i]._id);
+
+                    }, (error: Error) => {
+                        console.log(error);
+                    });
             }, (error: Error) => {
                 console.log(error);
                 this.chequearSesion();
-            });
-
-        materiaService.obtenerMaterias().subscribe(
-            (materias) => {
-                this.materiasAAsignar = materias;
-                for (var i = 0; i < this.materias.length; ++i)
-                    this.materiasAAsignar = this.materiasAAsignar.filter(m => m._id != this.materias[i]._id);
-
-            }, (error: Error) => {
-                console.log(error);
             });
     }
 
@@ -55,14 +54,25 @@ export class MateriasPublicadasEncuestaComponent{
             alert("La materia ya se encuentra asignada.");
         }else{
             this.encuestaService.asignarMateria(materia._id, this.encuesta._id).subscribe(
-                (materiaa) => {
-                    this.materias.push(materia);
+                (materiaResultado) => {
+                    this.materias.unshift(materia);
                     this.materiasAAsignar = this.materiasAAsignar.filter(m => m._id != materia._id);
                     alert("La materia se ha asignado con éxito.");
                 }, (error: Error) => {
                     console.log(error);
                 });
         }
+    }
+
+    quitarMateria(materia){
+        this.encuestaService.quitarMateria(materia._id, this.encuesta._id).subscribe(
+                (materiaResultado) => {
+                    this.materiasAAsignar.unshift(materia);
+                    this.materias = this.materias.filter(m => m._id != materia._id);
+                    alert("La materia fue eliminada de la encuesta correctamente.");
+                }, (error: Error) => {
+                    console.log(error);
+                });
     }
 
     modalAgregarComision(materia){

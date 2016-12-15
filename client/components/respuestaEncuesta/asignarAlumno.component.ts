@@ -42,7 +42,7 @@ export class AsignarAlumnoComponent {
         encuestaService.obtenerEncuesta(this.idEncuesta).subscribe(
             (encuesta) => {
                 this.encuesta = encuesta;
-                respuestaEncuestaService.obtenerRespuestasEncuestaPorAnhoYSemestre(encuesta.anho, encuesta.semestre).subscribe(
+                respuestaEncuestaService.obtenerRespuestasEncuestaPorId(this.idEncuesta).subscribe(
                     (respuestasEcuesta) => {
                         this.alumnos = respuestasEcuesta;
                     }, (error: Error) => {
