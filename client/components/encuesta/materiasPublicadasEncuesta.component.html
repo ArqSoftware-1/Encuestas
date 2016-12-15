@@ -1,26 +1,51 @@
 <h2>{{titulo}}</h2>
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Nombre</th>
-        <th>Código</th>
-        <th>Descripción</th>
-        <th>Grupo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr  *ngFor="let materia of materias">
-        <td>{{materia.nombre}}</td>
-        <td>{{materia.codigo}}</td>
-        <td>{{materia.descripcion}}</td>
-        <td>{{materia.grupo}}</td>
-        <td><a style="cursor: pointer; cursor: hand;" (click)="modalAgregarComision(materia)" title="Agregar comisión"><span class="glyphicon glyphicon-plus"></span></a></td>
-      </tr>
-    </tbody>
-  </table>
+
+<div class="row">
+  <div class="col-md-6">
+    <h3>Materias asignadas</h3>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let materia of materias">
+            <td>{{materia.nombre}}</td>
+            <td>{{materia.codigo}}</td>
+            <td><a style="cursor: pointer; cursor: hand;" (click)="modalAgregarComision(materia)" title="Agregar comisión"><span class="glyphicon glyphicon-plus"></span></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <h3>Materias a asignar</h3>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr  *ngFor="let materia of materiasAAsignar">
+            <td>{{materia.nombre}}</td>
+            <td>{{materia.codigo}}</td>
+            <td><a style="cursor: pointer; cursor: hand;" (click)="asignarMateria(materia)" title="Asignar a la encuesta"><span class="glyphicon glyphicon-arrow-left"></span></a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>
+
 <div class="row">
   <div class="col-md-12">
     <button type="button" class="btn btn-default navbar-btn" onclick="window.history.back();">Volver</button>

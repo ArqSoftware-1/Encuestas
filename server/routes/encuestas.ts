@@ -2,6 +2,7 @@ import { Router, Response, Request, NextFunction } from "express";
 import { ModeloEncuesta, EsquemaEncuesta} from "../models/Encuesta";
 import { ModeloRespuestaEncuesta, EsquemaRespuestaEncuesta} from "../models/RespuestaEncuesta";
 import { NombresOpcionDefecto } from "../models/Opcion";
+import { ModeloMateria } from "../models/Materia";
 import { verify } from "jsonwebtoken";
 import { secret } from "../config";
 import * as winston from "winston";
@@ -65,7 +66,6 @@ rutaEncuestas.put("/activar", (request: Request, response: Response) => {
             response.json(encuesta);
         });
     });
-
 });
 
 rutaEncuestas.put("/desactivar", (request: Request, response: Response) => {
@@ -229,7 +229,32 @@ rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) =>
     });
 });
 
-                
+rutaEncuestas.put("/asignar-materia", (request: Request, response: Response) => {
+    ModeloMateria.findById(request.body.idMateria)
+    .exec()
+    .then(materia => {
+            ModeloEncuesta.findById(request.body.idEncuesta)
+            .exec()
+            .then(encuesta => {
+                encuesta.materias.push(materia);
+                encuesta.save();
+                ModeloRespuestaEncuesta.update({
+                    'encuesta._id': request.body.idEncuesta
+                }, {
+                    $set: {
+                        "encuesta": encuesta
+                    }
+                }, (err, respuestaEncuesta) => {
+                    response.json({});
+                });
+            })
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha produccido un error al intentar asignar una materia: ' + error);
+            response.status(400).json(error);
+        });
+
+});                
 
 export {
     rutaEncuestas

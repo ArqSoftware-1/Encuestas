@@ -67,4 +67,16 @@ export class EncuestaService {
                 })
             })).map((response: Response) => response.json())
     }
+
+     asignarMateria(idMateria, idEncuesta) {
+        return this.http
+            .put('/api/encuestas/asignar-materia', JSON.stringify({
+                idEncuesta: idEncuesta,
+                idMateria: idMateria,
+            }), new RequestOptions({
+                headers: new Headers({
+                    "Content-Type": "application/json"
+                })
+            })).map((response: Response) => response.json())
+    }
 }

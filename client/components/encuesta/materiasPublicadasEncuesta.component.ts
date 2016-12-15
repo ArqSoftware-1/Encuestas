@@ -1,26 +1,29 @@
 import { Component,Directive,ElementRef,Input,OnInit } from '@angular/core';
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 import { OpcionService } from "../../service/opcion/opcion.service";
+import { MateriaService } from "../../service/listadoMateria/materia.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+declare var $:JQueryStatic;
 
 @Component({
   selector: 'materias-publicadas-encuesta',
   templateUrl: 'client/components/encuesta/materiasPublicadasEncuesta.component.html',
-  providers: [EncuestaService, OpcionService],
+  providers: [EncuestaService, OpcionService, MateriaService],
 })
 
 export class MateriasPublicadasEncuestaComponent{
 
     encuesta;
-    materias;
+    materias = [];
     titulo;
     opciones = [];
     comisionSeleccionada = 'c1';
     materiaSeleccionada;
     encuestaService;
+    materiasAAsignar = [];
 
-    constructor(encuestaService: EncuestaService, opcionService: OpcionService, route: ActivatedRoute) {
+    constructor(encuestaService: EncuestaService, opcionService: OpcionService, materiaService:MateriaService, route: ActivatedRoute) {
         var id = route.snapshot.params['id'];
         this.encuestaService = encuestaService;
         encuestaService.obtenerEncuesta(id).subscribe(
@@ -33,6 +36,33 @@ export class MateriasPublicadasEncuestaComponent{
                 console.log(error);
                 this.chequearSesion();
             });
+
+        materiaService.obtenerMaterias().subscribe(
+            (materias) => {
+                this.materiasAAsignar = materias;
+                for (var i = 0; i < this.materias.length; ++i)
+                    this.materiasAAsignar = this.materiasAAsignar.filter(m => m._id != this.materias[i]._id);
+
+            }, (error: Error) => {
+                console.log(error);
+            });
+    }
+
+    asignarMateria(materia){
+        var materiaAAsignar = this.materias.filter(m => m._id == materia._id);
+
+        if(materiaAAsignar.length > 0){
+            alert("La materia ya se encuentra asignada.");
+        }else{
+            this.encuestaService.asignarMateria(materia._id, this.encuesta._id).subscribe(
+                (materiaa) => {
+                    this.materias.push(materia);
+                    this.materiasAAsignar = this.materiasAAsignar.filter(m => m._id != materia._id);
+                    alert("La materia se ha asignado con éxito.");
+                }, (error: Error) => {
+                    console.log(error);
+                });
+        }
     }
 
     modalAgregarComision(materia){
