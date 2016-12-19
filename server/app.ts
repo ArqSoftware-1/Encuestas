@@ -83,9 +83,11 @@ winston.log('info', "Aplicación iniciada");
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
 
 mongoose.connection.once('open', () => {
-    mongoose.connection.db.dropDatabase(() => {
-        require('./data');
-    })
+    if(!process.env.MONGODB_URI){
+        mongoose.connection.db.dropDatabase(() => {
+            require('./data');
+        });
+    }
 })
 
 export {
