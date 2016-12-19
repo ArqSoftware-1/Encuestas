@@ -270,7 +270,10 @@ rutaEncuestas.put("/quitar-materia", (request: Request, response: Response) => {
                 }, {
                     $set: {
                         "encuesta": encuesta
-                    }
+                    },
+                    $pull: { 
+                        respuestasMateria: {'materia._id': { $in: [idMateria] }}
+                    },
                 }, (err, respuestaEncuesta) => {
                     response.json({});
                 });
