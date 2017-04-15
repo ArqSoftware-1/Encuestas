@@ -110,7 +110,7 @@ var encuesta = new ModeloEncuesta({
     anho: 2016,
     semestre: 2,
     carrera: 'Licenciatura en informática',
-    fechaLimite: new Date(2016, 11, 31),
+    fechaLimite: new Date(2017, 11, 31),
     estaActiva: true
 });
 encuesta.save();
@@ -120,7 +120,7 @@ var encuesta1 = new ModeloEncuesta({
     anho: 2017,
     semestre: 1,
     carrera: 'Licenciatura en informática',
-    fechaLimite: new Date(2017, 4, 18),
+    fechaLimite: new Date(2017, 6, 18),
     estaActiva: false
 });
 encuesta1.save();
