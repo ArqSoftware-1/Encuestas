@@ -80,7 +80,12 @@ winston.add(winston.transports.Loggly, {
 });
 winston.log('info', "Aplicación iniciada");
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
+if (app.get("env") === "test") {
+    mongoose.connect('mongodb://localhost/encuestas-test');
+}else{
+    mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
+}
+
 
 mongoose.connection.once('open', () => {
     if(!process.env.MONGODB_URI){
