@@ -10,7 +10,7 @@ let server = "http://localhost:3000";
 let should = chai.should();
 
 chai.use(chaiHttp);
-//Our parent block
+
 describe('Login', () => {
     it('No deberia loguearse con un email no registrado', (done) => {
         let credenciales = {

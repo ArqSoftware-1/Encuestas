@@ -12,24 +12,22 @@ let token;
 
 chai.use(chaiHttp);
 
-describe('Encuestas sin autenticacion', () => {
-    it('Deberia responder con error 403 si se solicitan todas la encuestas', (done) => {
+describe('Director sin autenticacion', () => {
+    it('Deberia responder con error 403 si se solicitan todos los directores', (done) => {
         chai.request(server)
-            .get('/api/encuestas/listado')
+            .get('/api/director/listado')
             .end((err, res) => {
                 res.should.have.status(403);
                 done();
             });
     });
 
-    it('Deberia responder con error 403 si se solicita crear una nueva encuesta', (done) => {
-        encuesta = {anho: 2018,
-                    semestre: 1,
-                    carrera: 'Licenciatura en informática',
-                    fechaLimite: '2017/09/23'};
+    it('Deberia responder con error 403 si se solicita crear un nuevo director', (done) => {
+        director = {email: 'director1@unq.edu.ar',
+                    password: 1234};
         chai.request(server)
-            .post('/api/encuestas/guardar')
-            .send({encuesta: encuesta})
+            .post('/api/director/guardar')
+            .send(director)
             .end((err, res) => {
                 res.should.have.status(403);
                 done();
@@ -37,7 +35,7 @@ describe('Encuestas sin autenticacion', () => {
     });
 });
 
-describe('Encuestas con autenticacion', () => {
+describe('Director con autenticacion', () => {
     before(function(done){
         let credenciales = {
             email: "director@unq.edu.ar",
@@ -54,40 +52,36 @@ describe('Encuestas con autenticacion', () => {
 
      });
 
-    it('Deberia devolver dos encuestas cuando se solicitan todas', (done) => {
+    it('Deberia devolver 1 director cuando se solicitan todos', (done) => {
         chai.request(server)
-            .get('/api/encuestas/listado')
+            .get('/api/director/listado')
             .set('Authorization', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('array');
-                res.body.length.should.be.eql(2);
+                res.body.length.should.be.eql(1);
                 done();
             });
     });
 
-    it('Deberia devolver la nueva encuesta cuando se crea una de forma exitosa', (done) => {
-        encuesta = {anho: 2018,
-                    semestre: 1,
-                    carrera: 'Licenciatura en informática',
-                    fechaLimite: '2017/09/23'};
+    it('Deberia devolver el director nuevo cuando se crea uno de forma exitosa', (done) => {
+        director = {email: 'director1@unq.edu.ar',
+                    password: '1234'};
         chai.request(server)
-            .post('/api/encuestas/guardar')
+            .post('/api/director/guardar')
             .set('Authorization', token)
-            .send({encuesta: encuesta})
+            .send(director)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
-                res.body.should.have.property('anho').eql(encuesta.anho);
-                res.body.should.have.property('semestre').eql(encuesta.semestre);
-                res.body.should.have.property('carrera').eql(encuesta.carrera);
+                res.body.should.have.property('email').eql(director.email);
                 done();
             });
     });
 
-    it('No deberia crear una encuesta si no se ingresan los datos', (done) => {
+    it('No deberia crear un nuevo director si no se ingresan los datos', (done) => {
         chai.request(server)
-            .post('/api/encuestas/guardar')
+            .post('/api/director/guardar')
             .set('Authorization', token)
             .end((err, res) => {
                 res.should.have.status(200);

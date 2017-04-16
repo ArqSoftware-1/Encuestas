@@ -64,6 +64,11 @@ rutaDirector.delete("/eliminar", (request: Request, response: Response) => {
 
 
 rutaDirector.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
+    if (!request.body.hasOwnProperty("password") || !request.body.hasOwnProperty("email")) {
+        response.json({
+            message: "Todos los campos son requeridos"
+        });
+    }
 
     const salt = randomBytes(128).toString("base64");
     pbkdf2(request.body.password, salt, 10000, length, digest, (err: Error, hash: Buffer) => {
