@@ -36,7 +36,7 @@ rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) =>
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al listar las respuestas: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -51,7 +51,7 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al listar las respuestas por año y semestre: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -85,7 +85,7 @@ rutaRespuestasEncuesta.post("/guardar", function(request: Request, response: Res
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al asignar una respuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -112,7 +112,7 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -137,7 +137,7 @@ rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 

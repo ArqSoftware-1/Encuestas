@@ -34,7 +34,7 @@ rutaDirector.get("/listado", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -46,7 +46,7 @@ rutaDirector.get("/directorPorEmail", (request: Request, response: Response) => 
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores por email: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -58,7 +58,7 @@ rutaDirector.delete("/eliminar", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar los directores por email: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -80,7 +80,7 @@ rutaDirector.post("/guardar", function(request: Request, response: Response, nex
         })
         .catch(error => {
                 winston.log('error', 'Se ha produccido un error al guardar un director: ' + error);
-                response.status(400).json(error);
+                response.status(500).json(error);
             });
     })
 });

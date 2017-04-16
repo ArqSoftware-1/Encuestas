@@ -32,7 +32,7 @@ rutaMaterias.get("/listado", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las materias: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -46,7 +46,7 @@ rutaMaterias.get("/detalle", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una materia: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -64,7 +64,7 @@ rutaMaterias.get("/buscar", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al buscar la materia: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -94,7 +94,7 @@ rutaMaterias.post("/guardar", function(request: Request, response: Response, nex
                 })
                 .catch(error => {
                         winston.log('error', 'Se ha produccido un error al guardar la materia: ' + error);
-                        response.status(400).json(error);
+                        response.status(500).json(error);
                     });
             }
         });

@@ -32,7 +32,7 @@ rutaOpciones.get("/listado", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las opciones: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -46,7 +46,7 @@ rutaOpciones.get("/detalle", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una opcion: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 

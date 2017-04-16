@@ -32,7 +32,7 @@ rutaRespuestasEncuestaPublica.post("/actualizar-respuestas", (request: Request, 
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al actualizar una respuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -47,7 +47,7 @@ rutaRespuestasEncuestaPublica.get("/detalle", (request: Request, response: Respo
         })
         .catch(error => {
             winston.log('error ', 'Se ha produccido un error al obtener una respuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 

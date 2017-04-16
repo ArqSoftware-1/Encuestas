@@ -34,7 +34,7 @@ rutaEncuestas.get("/listado", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las encuestas: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -45,7 +45,7 @@ rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -128,12 +128,12 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
                 })
                 .catch(error => {
                     winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta en estadisticas: ' + error);
-                    response.status(400).json(error);
+                    response.status(500).json(error);
                 });
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -176,25 +176,25 @@ rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
                                 })
                                 .catch(error => {
                                     winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta y no van a cursar: ' + error);
-                                    response.status(400).json(error);
+                                    response.status(500).json(error);
                                 });
 
                         })
                         .catch(error => {
                             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron alguna opcion: ' + error);
-                            response.status(400).json(error);
+                            response.status(500).json(error);
                         });
 
                 })
                 .catch(error => {
                     winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que deben responder una encuesta: ' + error);
-                    response.status(400).json(error);
+                    response.status(500).json(error);
                 });
 
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 });
 
@@ -251,7 +251,7 @@ rutaEncuestas.put("/asignar-materia", (request: Request, response: Response) => 
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al intentar asignar una materia: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 }); 
 

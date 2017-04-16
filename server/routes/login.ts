@@ -67,7 +67,7 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido al iniciar sesion: ' + error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         });
 
 });
