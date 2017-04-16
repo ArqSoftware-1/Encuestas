@@ -85,4 +85,15 @@ describe('Encuestas con autenticacion', () => {
             });
     });
 
+    it('No deberia crear una encuesta si no se ingresan los datos', (done) => {
+        chai.request(server)
+            .post('/api/encuestas/guardar')
+            .set('Authorization', token)
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message').eql('Todos los campos son requeridos');
+                done();
+            });
+    });
+
 });

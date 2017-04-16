@@ -281,6 +281,11 @@ rutaEncuestas.put("/quitar-materia", (request: Request, response: Response) => {
 });                
 
 rutaEncuestas.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
+    if(!request.body.encuesta){
+        response.json({
+            message: "Todos los campos son requeridos"
+        });
+    }
     request.body.encuesta.estaActiva = true;
     request.body.encuesta.materias = [];
     var encuesta = new ModeloEncuesta(request.body.encuesta);
