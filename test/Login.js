@@ -22,7 +22,6 @@ describe('Login', () => {
             .send(credenciales)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.have.property('message');
                 res.body.should.have.property('message').eql('El email ingresado es incorrecto');
                 done();
             });
@@ -38,7 +37,6 @@ describe('Login', () => {
             .send(credenciales)
             .end((err, res) => {
                 res.should.have.status(200);
-                res.body.should.have.property('message');
                 res.body.should.have.property('message').eql('El password ingresado es incorrecto');
                 done();
             });
@@ -55,6 +53,16 @@ describe('Login', () => {
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.have.property('jwt');
+                done();
+            });
+    });
+
+    it('No deberia loguearse sin email y contraseña', (done) => {
+        chai.request(server)
+            .post('/login')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message').eql('Todos los campos son requeridos');
                 done();
             });
     });

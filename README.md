@@ -12,6 +12,7 @@ https://encuestas-inscripcion.herokuapp.com
 - Bootstrap 3.3.7
 - Mongoosejs 3.2.10
 - Loggly (para guardar los logs en la nube)
+- Mocha 2.4.5 (Para testear la API)
 
 ## Configuración del entorno
 
@@ -38,4 +39,13 @@ mongod --dbpath path\to\data
 npm run develop
 
 # URL: http://localhost:3000
+```
+## Correr test
+
+```bash
+# Correr server 
+npm run develop
+
+# Correr test
+npm test
 ```
