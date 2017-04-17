@@ -42,6 +42,16 @@ describe('Login', () => {
             });
     });
 
+    it('No deberia loguearse sin email y contraseña', (done) => {
+        chai.request(server)
+            .post('/login')
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.have.property('message').eql('Todos los campos son requeridos');
+                done();
+            });
+    });
+
     it('Deberia loguearse correctamente con email y password registrado', (done) => {
         let credenciales = {
             email: "director@unq.edu.ar",
@@ -57,13 +67,4 @@ describe('Login', () => {
             });
     });
 
-    it('No deberia loguearse sin email y contraseña', (done) => {
-        chai.request(server)
-            .post('/login')
-            .end((err, res) => {
-                res.should.have.status(200);
-                res.body.should.have.property('message').eql('Todos los campos son requeridos');
-                done();
-            });
-    });
 });

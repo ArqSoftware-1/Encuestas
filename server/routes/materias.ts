@@ -27,12 +27,12 @@ rutaMaterias.use((request: Request & {
 rutaMaterias.get("/listado", (request: Request, response: Response) => {
     ModeloMateria.find().exec()
         .then(materias => {
-            response.json(materias);
             winston.log('info', 'Se han listado las materias con éxito');
+            return response.json(materias);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las materias: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -41,12 +41,12 @@ rutaMaterias.get("/detalle", (request: Request, response: Response) => {
             _id: request.param('id')
         }).exec()
         .then(materia => {
-            response.json(materia);
             winston.log('info', 'Se ha buscado la materia (id: ' + request.param('id') + ') con éxito');
+            return response.json(materia);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una materia: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -59,12 +59,12 @@ rutaMaterias.get("/buscar", (request: Request, response: Response) => {
         .limit(10)
         .exec()
         .then(materias => {
-            response.json(materias);
             winston.log('info', 'Se ha buscado la materia (nombre: ' + request.param('nombre') + ', código: ' + request.param('codigo') + ') con éxito');
+            return response.json(materias);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al buscar la materia: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -89,12 +89,12 @@ rutaMaterias.post("/guardar", function(request: Request, response: Response, nex
                 
                 materia.save()
                 .then(director => {
-                    response.json(materia);
                     winston.log('info', 'Se ha guardado la materia ' + request.body.materia.nombre + ' con éxito');
+                    return response.json(materia);
                 })
                 .catch(error => {
                         winston.log('error', 'Se ha produccido un error al guardar la materia: ' + error);
-                        response.status(500).json(error);
+                        return response.status(500).json(error);
                     });
             }
         });

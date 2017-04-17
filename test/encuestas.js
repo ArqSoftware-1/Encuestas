@@ -38,7 +38,7 @@ describe('Encuestas sin autenticacion', () => {
 });
 
 describe('Encuestas con autenticacion', () => {
-    before(function(done){
+   before(function(done){
         let credenciales = {
             email: "director@unq.edu.ar",
             password: "1234"
@@ -73,8 +73,8 @@ describe('Encuestas con autenticacion', () => {
                     fechaLimite: '2017/09/23'};
         chai.request(server)
             .post('/api/encuestas/guardar')
-            .set('Authorization', token)
             .send({encuesta: encuesta})
+            .set('Authorization', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');

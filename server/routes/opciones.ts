@@ -27,12 +27,12 @@ rutaOpciones.use((request: Request & {
 rutaOpciones.get("/listado", (request: Request, response: Response) => {
     ModeloOpcion.find().exec()
         .then(opciones => {
-            response.json(opciones);
             winston.log('info', 'Se han listado las opciones con éxito');
+            return response.json(opciones);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las opciones: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -41,12 +41,12 @@ rutaOpciones.get("/detalle", (request: Request, response: Response) => {
             _id: request.param('id')
         }).exec()
         .then(opcion => {
-            response.json(opcion);
             winston.log('info', 'Se ha buscado la opción (id: ' + request.param('id') + ') con éxito');
+            return response.json(opcion);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una opcion: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 

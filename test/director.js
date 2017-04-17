@@ -69,8 +69,8 @@ describe('Director con autenticacion', () => {
                     password: '1234'};
         chai.request(server)
             .post('/api/director/guardar')
-            .set('Authorization', token)
             .send(director)
+            .set('Authorization', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');

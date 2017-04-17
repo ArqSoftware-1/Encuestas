@@ -27,7 +27,7 @@ loginRouter.post("/signup", function(request: Request, response: Response, next:
 // login method
 loginRouter.post("/", function(request: Request, response: Response, next: NextFunction) {
     if (!request.body.hasOwnProperty("password") || !request.body.hasOwnProperty("email")) {
-        response.json({
+        return response.json({
             message: "Todos los campos son requeridos"
         });
     }
@@ -49,18 +49,18 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
                         }, secret, {
                             expiresIn: "8h"
                         });
-                        response.json({
+                        winston.log('info', 'Se ha logueado el director ' + request.body.email + ' con éxito');
+                        return response.json({
                             "jwt": token
                         });
-                        winston.log('info', 'Se ha logueado el director ' + request.body.email + ' con éxito');
                     } else {
-                        response.json({
+                        return response.json({
                             message: "El password ingresado es incorrecto"
                         });
                     }
                 });
             } else {
-                response.json({
+                return response.json({
                     message: "El email ingresado es incorrecto"
                 });
             }

@@ -31,12 +31,12 @@ rutaRespuestasEncuesta.use((request: Request & {
 rutaRespuestasEncuesta.get("/listado", (request: Request, response: Response) => {
     ModeloRespuestaEncuesta.find( request.param('idEncuesta') ? {'encuesta._id': request.param('idEncuesta')} : {}).exec()
         .then(respuestasEncuesta => {
-            response.json(respuestasEncuesta);
             winston.log('info', 'Se han listado las respuestas-encuestas con éxito');
+            return response.json(respuestasEncuesta);
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al listar las respuestas: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -46,12 +46,12 @@ rutaRespuestasEncuesta.get("/listadoPor", (request: Request, response: Response)
             'encuesta.semestre': request.param('semestre')
         }).limit(10).exec()
         .then(respuestasEncuesta => {
-            response.json(respuestasEncuesta);
             winston.log('info', 'Se han listado las respuestas-encuestas (año: ' + request.param('anho') + ', semestre: ' + request.param('semestre') + ') con éxito');
+            return response.json(respuestasEncuesta);
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al listar las respuestas por año y semestre: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -62,7 +62,7 @@ rutaRespuestasEncuesta.post("/guardar", function(request: Request, response: Res
         }).exec()
         .then(respuestaEncuestaGuardada => {
             if (respuestaEncuestaGuardada) {
-                response.json({
+                return response.json({
                     error: 'El DNI ingresado ya existe'
                 });
             } else {
@@ -79,13 +79,13 @@ rutaRespuestasEncuesta.post("/guardar", function(request: Request, response: Res
                 }
                 respuestaEncuesta.urlEncuesta = request.protocol + '://' + request.get('host') + '/#/respuesta-encuesta/' + respuestaEncuesta.token;
                 respuestaEncuesta.save();
-                response.json(respuestaEncuesta);
                 winston.log('info', 'Se ha guardado la respuesta-encuesta con éxito');
+                return response.json(respuestaEncuesta);
             }
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al asignar una respuesta: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -107,12 +107,12 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         .limit(10)
         .exec()
         .then(respuestasEncuesta => {
-            response.json(respuestasEncuesta);
             winston.log('info', 'Se ha buscado la respuesta-encuesta (alumno: ' + alumno + ', dni: ' + dni + ') con éxito');
+            return response.json(respuestasEncuesta);
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -132,12 +132,12 @@ rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response
         .count()
         .exec()
         .then(cantidad => {
-            response.json(cantidad);
             winston.log('info', 'Se ha contabilizado la cantidad de respuestas-encuestas (alumno: ' + alumno + ', dni: ' + dni + ') con éxito. Cantidad: ' + cantidad);
+            return response.json(cantidad);
         })
         .catch(error => {
             winston.log('error', 'Se ha producido un error al buscar las respuestas por nombre y apellido y dni: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 

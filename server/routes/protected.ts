@@ -23,7 +23,7 @@ protectedRouter.use((request: Request & {
 });
 
 protectedRouter.get("/", (request: Request, response: Response) => {
-    response.json({
+    return response.json({
         text: "Greetings, you have valid token.",
         title: "Protected call"
     });

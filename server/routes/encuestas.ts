@@ -30,22 +30,22 @@ rutaEncuestas.use((request: Request & {
 rutaEncuestas.get("/listado", (request: Request, response: Response) => {
     ModeloEncuesta.find().exec()
         .then(encuestas => {
-            response.json(encuestas);
+            return response.json(encuestas);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al listar las encuestas: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
 rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
     ModeloEncuesta.findById(request.param('id')).exec()
         .then(encuesta => {
-            response.json(encuesta);
+            return response.json(encuesta);
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -63,7 +63,7 @@ rutaEncuestas.put("/activar", (request: Request, response: Response) => {
         }, {
             "multi": true
         }, (err, respuestaEncuesta) => {
-            response.json(encuesta);
+            return response.json(encuesta);
         });
     });
 });
@@ -82,7 +82,7 @@ rutaEncuestas.put("/desactivar", (request: Request, response: Response) => {
         }, {
             "multi": true
         }, (err, respuestaEncuesta) => {
-            response.json(encuesta);
+            return response.json(encuesta);
         });
     });
 });
@@ -121,19 +121,19 @@ rutaEncuestas.get("/estadisticas", (request: Request, response: Response) => {
                     _id: request.param('id')
                 }).exec()
                 .then(encuesta => {
-                    response.json({
+                    return response.json({
                         estadisticas: estadísticasFiltradas,
                         encuesta: encuesta
                     });
                 })
                 .catch(error => {
                     winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta en estadisticas: ' + error);
-                    response.status(500).json(error);
+                    return response.status(500).json(error);
                 });
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener el detalle de una encuesta: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -176,25 +176,25 @@ rutaEncuestas.get("/completaron", (request: Request, response: Response) => {
                                 })
                                 .catch(error => {
                                     winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta y no van a cursar: ' + error);
-                                    response.status(500).json(error);
+                                    return response.status(500).json(error);
                                 });
 
                         })
                         .catch(error => {
                             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron alguna opcion: ' + error);
-                            response.status(500).json(error);
+                            return response.status(500).json(error);
                         });
 
                 })
                 .catch(error => {
                     winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que deben responder una encuesta: ' + error);
-                    response.status(500).json(error);
+                    return response.status(500).json(error);
                 });
 
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al obtener la cantidad de alumnos que completaron la encuesta: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 });
 
@@ -223,7 +223,7 @@ rutaEncuestas.put("/asignar-comision", (request: Request, response: Response) =>
         }, {
             "multi": true
         }, (err, respuestaEncuesta) => {   
-            response.json({});
+            return response.json({});
         });
 
     });
@@ -245,13 +245,13 @@ rutaEncuestas.put("/asignar-materia", (request: Request, response: Response) => 
                         "encuesta": encuesta
                     }
                 }, (err, respuestaEncuesta) => {
-                    response.json({});
+                    return response.json({});
                 });
             })
         })
         .catch(error => {
             winston.log('error', 'Se ha produccido un error al intentar asignar una materia: ' + error);
-            response.status(500).json(error);
+            return response.status(500).json(error);
         });
 }); 
 
@@ -275,14 +275,14 @@ rutaEncuestas.put("/quitar-materia", (request: Request, response: Response) => {
                         respuestasMateria: {'materia._id': { $in: [idMateria] }}
                     },
                 }, (err, respuestaEncuesta) => {
-                    response.json({});
+                    return response.json({});
                 });
             })
 });                
 
 rutaEncuestas.post("/guardar", function(request: Request, response: Response, next: NextFunction) {
     if(!request.body.encuesta){
-        response.json({
+        return response.json({
             message: "Todos los campos son requeridos"
         });
     }
@@ -290,7 +290,7 @@ rutaEncuestas.post("/guardar", function(request: Request, response: Response, ne
     request.body.encuesta.materias = [];
     var encuesta = new ModeloEncuesta(request.body.encuesta);
     encuesta.save();
-    response.json(encuesta);
+    return response.json(encuesta);
 });
 
 
