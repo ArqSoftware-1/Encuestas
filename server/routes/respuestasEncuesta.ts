@@ -116,6 +116,22 @@ rutaRespuestasEncuesta.get("/buscarPor", (request: Request, response: Response) 
         });
 });
 
+rutaRespuestasEncuesta.get("/buscarPorDNI", (request: Request, response: Response) => {
+    var dni = request.param('dni');
+    ModeloRespuestaEncuesta.findOne({
+            DNIAlumno: new RegExp(dni, 'i')
+        })
+        .exec()
+        .then(respuestaEncuesta => {
+            winston.log('info', 'Se ha buscado la respuesta-encuesta (dni: ' + dni + ') con éxito');
+            return response.json(respuestaEncuesta);
+        })
+        .catch(error => {
+            winston.log('error', 'Se ha producido un error al buscar las respuestas por dni: ' + error);
+            return response.status(500).json(error);
+        });
+});
+
 rutaRespuestasEncuesta.get("/cantidadPor", (request: Request, response: Response) => {
     var alumno = request.param('nombreYApellido');
     var dni = request.param('dni');
