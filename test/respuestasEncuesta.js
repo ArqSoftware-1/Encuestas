@@ -65,7 +65,6 @@ describe('RespuestasEncuesta con autenticacion', () => {
         chai.request(server)
             .get('/api/publica/respuestas/encuesta/detalle')
             .send({token: respuestaEncuesta.token})
-            .set('Authorization', token)
             .end((err, res) => {
                 res.should.have.status(200);
                 res.body.should.be.a('object');
@@ -75,6 +74,22 @@ describe('RespuestasEncuesta con autenticacion', () => {
                 res.body.should.have.property('emailAlumno').eql(respuestaEncuesta.emailAlumno);
                 res.body.should.have.property('token').eql(respuestaEncuesta.token);
                 res.body.should.have.property('completa').eql(respuestaEncuesta.completa);
+                done();
+            });
+    });
+
+    it('Deberia modificarse la respuesta de encuesta al actualizarla', (done) => {
+        // Cambiando la opcion seleccionada
+        nuevaOpcion = respuestaEncuesta.respuestasMateria[0].materia.opciones[0];
+        respuestaEncuesta.respuestasMateria[0].opcion = nuevaOpcion;
+        chai.request(server)
+            .post('/api/publica/respuestas/encuesta/actualizar-respuestas?id=' + respuestaEncuesta._id)
+            .send({respuestas: respuestaEncuesta.respuestasMateria})
+            .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+                respuestaEncuestaModificada = JSON.parse(res.text);
+                should.equal(respuestaEncuestaModificada.respuestasMateria[0].opcion.description, nuevaOpcion.description);
                 done();
             });
     });
