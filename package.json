@@ -11,7 +11,7 @@
     "typings": "typings install",
     "bundle:prod": "node tools/builder.js --prod",
     "postinstall": "typings install && tsc -p ./server",
-    "test": "set NODE_ENV=test && mocha --timeout 10000"
+    "test": "mocha --timeout 10000"
   },
   "engines": {
     "node": ">= 5.4.1"
