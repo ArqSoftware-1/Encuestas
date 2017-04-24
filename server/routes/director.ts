@@ -29,7 +29,7 @@ rutaDirector.use((request: Request & {
 rutaDirector.get("/listado", (request: Request, response: Response) => {
     ModeloDirector.find().exec()
         .then(director => {
-            winston.log('info', 'Se han listado los directores con éxito');
+            winston.log('info', 'Se han listado los directores con éxito (cantidad: ' + director.length + ')');
             return response.json(director);
         })
         .catch(error => {
