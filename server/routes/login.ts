@@ -54,12 +54,14 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
                             "jwt": token
                         });
                     } else {
+                        winston.log('info', 'Intento de login fallido con email ' + request.body.email);
                         return response.json({
                             message: "El password ingresado es incorrecto"
                         });
                     }
                 });
             } else {
+                winston.log('info', 'Intento de login fallido con email ' + request.body.email);
                 return response.json({
                     message: "El email ingresado es incorrecto"
                 });

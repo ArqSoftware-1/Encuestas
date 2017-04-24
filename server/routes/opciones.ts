@@ -27,7 +27,7 @@ rutaOpciones.use((request: Request & {
 rutaOpciones.get("/listado", (request: Request, response: Response) => {
     ModeloOpcion.find().exec()
         .then(opciones => {
-            winston.log('info', 'Se han listado las opciones con éxito');
+            winston.log('info', 'Se han listado las opciones con éxito (cantidad: ' + opciones.length + ')');
             return response.json(opciones);
         })
         .catch(error => {

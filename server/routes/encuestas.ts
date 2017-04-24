@@ -30,7 +30,7 @@ rutaEncuestas.use((request: Request & {
 rutaEncuestas.get("/listado", (request: Request, response: Response) => {
     ModeloEncuesta.find().exec()
         .then(encuestas => {
-            winston.log('error', 'Se han listado las encuestas con éxito (cantidad: ' + encuestas.length + ')');
+            winston.log('info', 'Se han listado las encuestas con éxito (cantidad: ' + encuestas.length + ')');
             return response.json(encuestas);
         })
         .catch(error => {
@@ -42,7 +42,7 @@ rutaEncuestas.get("/listado", (request: Request, response: Response) => {
 rutaEncuestas.get("/detalle", (request: Request, response: Response) => {
     ModeloEncuesta.findById(request.param('id')).exec()
         .then(encuesta => {
-            winston.log('error', 'Se ha solicitado el detalle de una encuesta con éxito (id: ' + encuesta._id + ')');
+            winston.log('info', 'Se ha solicitado el detalle de una encuesta con éxito (id: ' + encuesta._id + ')');
             return response.json(encuesta);
         })
         .catch(error => {

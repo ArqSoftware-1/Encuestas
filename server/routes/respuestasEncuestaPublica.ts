@@ -27,7 +27,7 @@ rutaRespuestasEncuestaPublica.post("/actualizar-respuestas", (request: Request, 
             });
             respuestaEncuesta.completa = respuestaEncuesta.respuestasMateria.length == respuestaEncuesta.encuesta.materias.length;
             respuestaEncuesta.save();
-            winston.log('info', 'Se ha actualizado la respuesta con éxito');
+            winston.log('info', 'Se ha actualizado la respuesta con éxito (id: '  + respuestaEncuesta._id +')');
             return response.json(respuestaEncuesta);
         })
         .catch(error => {
@@ -42,7 +42,7 @@ rutaRespuestasEncuestaPublica.get("/detalle", (request: Request, response: Respo
             'encuesta.fechaLimite': {$gte : Date.now()}
         }).exec()
         .then(respuestaEncuesta => {
-            winston.log('info', 'Se ha buscado la respuesta con éxito');
+            winston.log('info', 'Se ha buscado la respuesta con éxito (token: ' + request.param('token') + ')');
             return response.json(respuestaEncuesta);
         })
         .catch(error => {

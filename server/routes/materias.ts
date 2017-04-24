@@ -27,7 +27,7 @@ rutaMaterias.use((request: Request & {
 rutaMaterias.get("/listado", (request: Request, response: Response) => {
     ModeloMateria.find().exec()
         .then(materias => {
-            winston.log('info', 'Se han listado las materias con éxito');
+            winston.log('info', 'Se han listado las materias con éxito (cantidad: ' + materias.length + ')');
             return response.json(materias);
         })
         .catch(error => {
