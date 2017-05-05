@@ -1,14 +1,15 @@
-version: '1'
+version: '2'
 
 services:
   app:
-    image: jgdimeglio/arqsoftware-encuestas
+    build: ./
     environment:
-      MONGODB_URI: "mongodb://db/test"
-    depends_on:
-      - db
+      MONGO_URL: "mongodb://database/test"
+    links:
+      - database # link this service to the database service
     ports:
       - "3000:3000"
-
-  db:
-image: mongo
+  database: # name of the third service
+    image: mongo # specify image to build container from
+    ports:
+      - "27017:27017" # specify port forewarding
