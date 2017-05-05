@@ -1,0 +1,14 @@
+version: '1'
+
+services:
+  app:
+    image: jgdimeglio/arqsoftware-encuestas
+    environment:
+      MONGODB_URI: "mongodb://db/test"
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+
+  db:
+image: mongo
