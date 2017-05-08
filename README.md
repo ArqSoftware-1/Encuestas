@@ -54,6 +54,7 @@ npm test
 
 En primer lugar se debe clonar el proyecto desde Github.
 
+```bash
 # Luego pararse en el directorio y correr el comando
 docker-compose up
 ```
