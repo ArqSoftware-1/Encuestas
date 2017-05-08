@@ -83,7 +83,7 @@ winston.log('info', "Aplicación iniciada");
 if (app.get("env") === "test") {
     mongoose.connect('mongodb://localhost/encuestas-test');
 }else{
-    mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost/encuestas');
+    mongoose.connect(process.env.DOCKER_MONGODB_URI || process.env.MONGODB_URI || 'mongodb://localhost/encuestas');
 }
 
 

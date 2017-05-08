@@ -4,7 +4,7 @@ import { OpcionService } from "../../service/opcion/opcion.service";
 import { MateriaService } from "../../service/listadoMateria/materia.service";
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-declare var $:JQueryStatic;
+declare var $;
 
 @Component({
   selector: 'materias-publicadas-encuesta',

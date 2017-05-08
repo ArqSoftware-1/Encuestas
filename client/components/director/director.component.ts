@@ -2,7 +2,7 @@ import { Component,Directive,ElementRef,Input,OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DirectorService } from "../../service/director/director.service";
 
-declare var $:JQueryStatic;
+declare var $;
 
 @Component({
   selector: 'director-crear',

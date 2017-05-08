@@ -1,15 +1,13 @@
 version: '2'
 
 services:
+  db:
+    image: mongo
   app:
     build: ./
     environment:
-      MONGO_URL: "mongodb://database/test"
-    links:
-      - database # link this service to the database service
+      DOCKER_MONGODB_URI: "mongodb://db/test"
+    depends_on:
+      - db
     ports:
       - "3000:3000"
-  database: # name of the third service
-    image: mongo # specify image to build container from
-    ports:
-      - "27017:27017" # specify port forewarding

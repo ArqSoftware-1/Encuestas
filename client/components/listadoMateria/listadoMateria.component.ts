@@ -3,7 +3,7 @@ import { Component, ValueProvider } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MateriaService } from "../../service/listadoMateria/materia.service";
 
-declare var $:JQueryStatic;
+declare var $;
 
 const WINDOW_PROVIDER: ValueProvider = {
     provide: Window,

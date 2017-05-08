@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { EncuestaService } from "../../service/encuesta/encuesta.service";
 
-declare var $:JQueryStatic;
+declare var $;
 
 @Component({
   selector: 'encuestas',

@@ -29,7 +29,7 @@ import { ListadoMateriaModule } from "./modules/listadoMateria/listadoMateria.mo
     providers: [
         provideAuth({
             globalHeaders: [{"Content-type": "application/json"}],
-            newJwtError: true,
+            //newJwtError: true,
             noTokenScheme: true
         })
     ],

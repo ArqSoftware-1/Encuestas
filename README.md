@@ -49,3 +49,11 @@ npm run develop
 # Correr test
 npm test
 ```
+
+## Ejecutar con Docker
+
+En primer lugar se debe clonar el proyecto desde Github.
+
+# Luego pararse en el directorio y correr el comando
+docker-compose up
+```
