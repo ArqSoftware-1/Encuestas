@@ -40,7 +40,7 @@ npm run develop
 
 # URL: http://localhost:3000
 ```
-## Correr test
+## Correr test de integración (de la API)
 
 ```bash
 # Correr server 
@@ -58,3 +58,7 @@ En primer lugar se debe clonar el proyecto desde Github.
 # Luego pararse en el directorio y correr el comando
 docker-compose up
 ```
+
+## Ejecutar test de performance
+
+Primero levantar la app con docker (siguiendo los pasos anteriores) y luego utilizando la interfaz de JMeter (http://jmeter.apache.org/) levantar y correr el test ubicado en el directorio jmeter/Test.jmx
