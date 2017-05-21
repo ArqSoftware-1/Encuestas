@@ -129,7 +129,7 @@ encuesta1.save();
 
 
 
-for(var i = 0; i < 100; i++){
+for(var i = 0; i < 500; i++){
     var respuestaEncuesta = new ModeloRespuestaEncuesta({
         respuestasMateria: [],
         encuesta: encuesta,
