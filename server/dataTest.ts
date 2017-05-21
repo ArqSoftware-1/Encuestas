@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-
+import mongoose = require('mongoose');
+var ObjectId = mongoose.Types.ObjectId;
 // Para agregado de materias y sus opciones
 import { ModeloOpcion, EsquemaOpcion, NombresOpcionDefecto} from "./models/Opcion";
 import { ModeloMateria, EsquemaMateria} from "./models/Materia";
