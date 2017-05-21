@@ -127,100 +127,20 @@ var encuesta1 = new ModeloEncuesta({
 });
 encuesta1.save();
 
-// Respuestas
-var respuestaEncuesta = new ModeloRespuestaEncuesta({
-    respuestasMateria: [new ModeloRespuestaMateria({
-            materia: materia1,
-            opcion: opcion2
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia2,
-            opcion: opcion6
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia3,
-            opcion: opcion6
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia4,
-            opcion: opcion6
-        })
-    ],
-    completa: true,
-    encuesta: encuesta,
-    nombreYApellidoAlumno: 'Alumno',
-    DNIAlumno: '12345678',
-    emailAlumno: 'alumno@unq.edu.ar',
-  //_id: ObjectId("5099803df3f4948bd2f98391")
-    _id: ObjectId("000000000000000000000000")
-});
-respuestaEncuesta.save();
-respuestaEncuesta.token = respuestaEncuesta._id;
-respuestaEncuesta.save();
 
-var respuestaEncuesta1 = new ModeloRespuestaEncuesta({
-    respuestasMateria: [],
-    encuesta: encuesta,
-    nombreYApellidoAlumno: 'Alumno 1',
-    DNIAlumno: '87654321',
-    emailAlumno: 'alumno1@unq.edu.ar',
-    completa: false
-});
-respuestaEncuesta1.save();
-respuestaEncuesta1.token = respuestaEncuesta1._id + randomBytes(16).toString("hex");
-respuestaEncuesta1.save();
 
-var respuestaEncuesta2 = new ModeloRespuestaEncuesta({
-    respuestasMateria: [],
-    encuesta: encuesta1,
-    nombreYApellidoAlumno: 'Alumno 1',
-    DNIAlumno: '87654321',
-    emailAlumno: 'alumno1@unq.edu.ar',
-    completa: false
-});
-respuestaEncuesta2.save();
-respuestaEncuesta2.token = respuestaEncuesta2._id + randomBytes(16).toString("hex");
-respuestaEncuesta2.save();
-
-var respuestaEncuesta3 = new ModeloRespuestaEncuesta({
-    respuestasMateria: [new ModeloRespuestaMateria({
-            materia: materia1,
-            opcion: opcion5
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia2,
-            opcion: opcion5
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia3,
-            opcion: opcion6
-        }),
-        new ModeloRespuestaMateria({
-            materia: materia4,
-            opcion: opcion6
-        })
-    ],
-    completa: true,
-    encuesta: encuesta,
-    nombreYApellidoAlumno: 'Alumno 2',
-    DNIAlumno: '43218765',
-    emailAlumno: 'alumno2@unq.edu.ar'
-});
-respuestaEncuesta3.save();
-respuestaEncuesta3.token = respuestaEncuesta3._id + randomBytes(16).toString("hex");
-respuestaEncuesta3.save();
-
-for(var i = 3; i < 14; i++){
+for(var i = 0; i < 100; i++){
     var respuestaEncuesta = new ModeloRespuestaEncuesta({
         respuestasMateria: [],
         encuesta: encuesta,
         nombreYApellidoAlumno: 'Alumno ' + i,
         DNIAlumno: '' + (i + 20000000),
         emailAlumno: 'alumno' + i + '@unq.edu.ar',
-        completa: false
+        completa: false,
+        _id: crearId(i)
     });
     respuestaEncuesta.save();
-    respuestaEncuesta.token = respuestaEncuesta1._id + randomBytes(16).toString("hex");
+    respuestaEncuesta.token = respuestaEncuesta._id;
     respuestaEncuesta.save();
 }
 
@@ -235,3 +155,12 @@ pbkdf2('1234', salt, 10000, length, digest, (err: Error, hash: Buffer) => {
     });
     director.save();
 });
+
+function crearId(number){
+    var stringNumber = number + '';
+    var length = stringNumber.length;
+    for (var i = 0; i < 24 - length; i++) {
+        stringNumber = '0' + stringNumber;
+    }
+    return ObjectId(stringNumber);
+}
