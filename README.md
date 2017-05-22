@@ -58,8 +58,7 @@ En primer lugar se debe clonar el proyecto desde Github.
 # Luego pararse en el directorio y correr el comando
 docker-compose up
 
-# Correr test de integración. Una vez inicializada la aplicación ejecutar los siguientes comando en otra consola de docker desde el directorio root
-
+# Correr test de integración. Una vez inicializada la aplicación ejecutar los siguientes comando en otra consola   de docker desde el directorio root
 docker build -t encuesta-test -f Dockerfile.test .
 docker run --rm encuesta-test
 ```
