@@ -13,6 +13,9 @@ import { sign } from "jsonwebtoken";
 import { secret, length, digest } from "./config";
 
 
+var objectsToSave = [];
+
+
 // Opciones
 var opcion1 = new ModeloOpcion({
     descripcion: "Voy a cursar en c1",
@@ -52,14 +55,15 @@ var opcion8 = new ModeloOpcion({
     tipo: NombresOpcionDefecto.tipos.comision
 });
 
-opcion1.save();
-opcion2.save();
-opcion3.save();
-opcion7.save();
-opcion8.save();
-opcion4.save();
-opcion5.save();
-opcion6.save();
+
+objectsToSave.push(opcion1);
+objectsToSave.push(opcion2);
+objectsToSave.push(opcion3);
+objectsToSave.push(opcion7);
+objectsToSave.push(opcion8);
+objectsToSave.push(opcion4);
+objectsToSave.push(opcion5);
+objectsToSave.push(opcion6);
 
 // Materias
 var materia1 = new ModeloMateria({
@@ -87,10 +91,10 @@ var materia4 = new ModeloMateria({
     idOpcionPorDefecto: opcion4._id
 });
 
-materia1.save();
-materia2.save();
-materia3.save();
-materia4.save();
+objectsToSave.push(materia1);
+objectsToSave.push(materia2);
+objectsToSave.push(materia3);
+objectsToSave.push(materia4);
 
 var materiasParaEncuesta = [materia1, materia2, materia3, materia4];
 
@@ -101,8 +105,7 @@ for(var i = 0; i < 50; i++){
         codigo: "Mat" + i,
         idOpcionPorDefecto: opcion4._id
     });
-
-    materia.save();
+    objectsToSave.push(materia);
     materiasParaEncuesta.push(materia);
 }
 
@@ -115,7 +118,8 @@ var encuesta = new ModeloEncuesta({
     fechaLimite: new Date(2017, 11, 31),
     estaActiva: true
 });
-encuesta.save();
+
+objectsToSave.push(encuesta);
 
 var encuesta1 = new ModeloEncuesta({
     materias: [materia1, materia2, materia3],
@@ -125,11 +129,10 @@ var encuesta1 = new ModeloEncuesta({
     fechaLimite: new Date(2017, 6, 18),
     estaActiva: false
 });
-encuesta1.save();
 
+objectsToSave.push(encuesta1);
 
-
-for(var i = 0; i < 500; i++){
+for(var i = 0; i < 100; i++){
     var respuestaEncuesta = new ModeloRespuestaEncuesta({
         respuestasMateria: [],
         encuesta: encuesta,
@@ -137,11 +140,10 @@ for(var i = 0; i < 500; i++){
         DNIAlumno: '' + (i + 20000000),
         emailAlumno: 'alumno' + i + '@unq.edu.ar',
         completa: false,
-        _id: crearId(i)
+        _id: crearId(i),
+        token: crearId(i)
     });
-    respuestaEncuesta.save();
-    respuestaEncuesta.token = respuestaEncuesta._id;
-    respuestaEncuesta.save();
+    objectsToSave.push(respuestaEncuesta);
 }
 
 // Director
@@ -153,8 +155,25 @@ pbkdf2('1234', salt, 10000, length, digest, (err: Error, hash: Buffer) => {
         password: hash.toString("hex"),
         salt: salt
     });
-    director.save();
+    objectsToSave.push(director);
 });
+
+console.log("***********************INGRESANDO OBJETOS DE PRUEBAS EN BASE DE DATOS***********************");
+console.log("***********************ESPERE UNOS SEGUNDOS POR FAVOR***********************");
+saveObjects(0);
+
+/* Funciones auziliares */
+
+function saveObjects(index){
+    if(index == objectsToSave.length){
+        console.log("***********************LOS OBJETOS FUERON INGRESADOS CORRECTAMENTE***********************");
+        return;
+    }else{
+        objectsToSave[index].save(function(e){
+            saveObjects(index + 1)
+        });
+    }
+}
 
 function crearId(number){
     var stringNumber = number + '';

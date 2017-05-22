@@ -4,7 +4,7 @@
   "main": "server/app.js",
   "private": true,
   "scripts": {
-    "develop": "concurrently \"tsc -w -p ./server\" \"tsc -w -p ./client\" \"nodemon ./server/bin/www\" ",
+    "develop": "concurrently \"tsc -w -p ./server\" \"tsc -w -p ./client\" \"nodemon  --max_old_space_size=4096 ./server/bin/www\" ",
     "forever": "tsc -p ./server && forever start ./server/bin/www --watch",
     "twc:client:w": "tsc -w -p ./client",
     "twc:server:w": "tsc -w -p ./server",
