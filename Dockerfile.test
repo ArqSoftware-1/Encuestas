@@ -1,9 +1,13 @@
 FROM encuestas_app
 
-COPY test test
-ENV NODE_ENV dev
+RUN mkdir -p /usr/src/app
 
-RUN npm update && \
+COPY . /usr/src/app
+
+WORKDIR /usr/src/app
+
+RUN npm install && \
+    npm install async && \
     npm install -g mocha
 
 CMD ["mocha", "test", "--reporter", "spec"]
