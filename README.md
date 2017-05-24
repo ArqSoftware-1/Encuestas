@@ -61,7 +61,7 @@ docker-compose up
 
 ## Correr test de integración con Docker 
 
-Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
+Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root del proyecto
 
 ```bash
 docker build -t encuesta-test -f Dockerfile.test .
@@ -71,7 +71,7 @@ docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-test
 
 ## Ejecutar test de performance con Docker 
 
-Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
+Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root del proyecto
 
 ```bash
 docker build -t encuesta-performance -f Dockerfile.performance .
