@@ -58,11 +58,15 @@ En primer lugar se debe clonar el proyecto desde Github.
 # Luego pararse en el directorio y correr el comando
 docker-compose up
 
-# Correr test de integración. Una vez inicializada la aplicación ejecutar los siguientes comando en otra consola de docker desde el directorio root
+# Correr test de integración. Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
 docker build -t encuesta-test -f Dockerfile.test .
-docker run --rm encuesta-test
+# Para el siguiente comando modificar la direccion IP por la asignada en su caso.
+docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-test
 ```
 
 ## Ejecutar test de performance
 
-Primero levantar la app con docker (siguiendo los pasos anteriores) y luego utilizando la interfaz de JMeter (http://jmeter.apache.org/) levantar y correr el test ubicado en el directorio jmeter/Test.jmx
+# Correr test de integración. Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
+docker build -t encuesta-performance -f Dockerfile.performance .
+# Para el siguiente comando modificar la direccion IP por la asignada en su caso.
+docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-performance

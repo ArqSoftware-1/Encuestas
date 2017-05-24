@@ -3,7 +3,7 @@ let mongoose = require("mongoose");
 //Require the dev-dependencies
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = "http://192.168.99.100:3000";
+let server =  process.env.APP_HOST || "http://localhost:3000";
 let should = chai.should();
 
 let RespuestaEncuesta = require("../server/models/RespuestaEncuesta");

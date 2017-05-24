@@ -90,7 +90,7 @@ if (app.get("env") === "test") {
 mongoose.connection.once('open', () => {
     if(!process.env.MONGODB_URI){
         mongoose.connection.db.dropDatabase(() => {
-            require('./data');
+            require('./' + (process.env.DATA || 'data'));
         });
     }
 })
