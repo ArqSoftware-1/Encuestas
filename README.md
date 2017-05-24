@@ -59,7 +59,7 @@ En primer lugar se debe clonar el proyecto desde Github.
 docker-compose up
 ```
 
-## Correr test de integración. 
+## Correr test de integración con Docker 
 
 Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
 
@@ -69,7 +69,7 @@ docker build -t encuesta-test -f Dockerfile.test .
 docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-test
 ```
 
-## Ejecutar test de performance
+## Ejecutar test de performance con Docker 
 
 Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
 
