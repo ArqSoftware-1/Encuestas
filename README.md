@@ -50,15 +50,19 @@ npm run develop
 npm test
 ```
 
-## Ejecutar con Docker
+## Levantar la aplicación con Docker
 
 En primer lugar se debe clonar el proyecto desde Github.
 
 ```bash
 # Luego pararse en el directorio y correr el comando
 docker-compose up
+```
 
-# Correr test de integración. Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
+## Correr test de integración. 
+
+```bash
+#Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
 docker build -t encuesta-test -f Dockerfile.test .
 # Para el siguiente comando modificar la direccion IP por la asignada en su caso.
 docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-test
@@ -66,7 +70,9 @@ docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-test
 
 ## Ejecutar test de performance
 
+```bash
 # Correr test de integración. Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root
 docker build -t encuesta-performance -f Dockerfile.performance .
 # Para el siguiente comando modificar la direccion IP por la asignada en su caso.
 docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-performance
+```
