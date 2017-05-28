@@ -132,6 +132,35 @@ var encuesta1 = new ModeloEncuesta({
 
 objectsToSave.push(encuesta1);
 
+// Respuestas
+var respuestaEncuesta1 = new ModeloRespuestaEncuesta({
+    respuestasMateria: [new ModeloRespuestaMateria({
+            materia: materia1,
+            opcion: opcion2
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia2,
+            opcion: opcion6
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia3,
+            opcion: opcion6
+        }),
+        new ModeloRespuestaMateria({
+            materia: materia4,
+            opcion: opcion6
+        })
+    ],
+    completa: true,
+    encuesta: encuesta,
+    nombreYApellidoAlumno: 'Alumno',
+    DNIAlumno: '12345678',
+    emailAlumno: 'alumno@unq.edu.ar'
+});
+respuestaEncuesta1.save();
+respuestaEncuesta1.token = respuestaEncuesta1._id + randomBytes(16).toString("hex");
+respuestaEncuesta1.save();
+
 for(var i = 0; i < 100; i++){
     var respuestaEncuesta = new ModeloRespuestaEncuesta({
         respuestasMateria: [],

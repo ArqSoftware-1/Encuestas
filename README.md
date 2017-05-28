@@ -76,5 +76,5 @@ Una vez inicializada la aplicación con docker compose ejecutar los siguientes c
 ```bash
 docker build -t encuesta-performance -f Dockerfile.performance .
 # Para el siguiente comando modificar la direccion IP por la asignada en su caso.
-docker run -e APP_HOST='http://192.168.99.100:3000' --rm encuesta-performance
+docker run -e APP_HOST='192.168.99.100' --rm encuesta-performance
 ```
