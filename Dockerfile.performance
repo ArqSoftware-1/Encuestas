@@ -33,6 +33,6 @@ COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-CMD ["jmeter", "-Jhostname=$APP_HOST", "-n", "-t", "jmeter/Test.jmx", "-l", "jmeter/log.jtl"]
+CMD jmeter -Jhostname=$APP_HOST -n -t jmeter/Test.jmx -l jmeter/log.jtl
 
 
