@@ -78,3 +78,6 @@ docker build -t encuesta-performance -f Dockerfile.performance .
 # Para el siguiente comando modificar la direccion IP por la asignada en su caso.
 docker run -e APP_HOST='192.168.99.100' --rm encuesta-performance
 ```
+## Informe tests de performance
+
+https://github.com/ArqSoftware-1/Encuestas/wiki/Informe-tests-de-performance
