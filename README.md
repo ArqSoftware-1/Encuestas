@@ -56,7 +56,15 @@ En primer lugar se debe clonar el proyecto desde Github.
 
 ```bash
 # Luego pararse en el directorio y correr el comando
-docker-compose up
+
+cpu_quota=?? cpuset="??" mem_limit=??m memswap_limit=??m mem_reservation=??m docker-compose up
+
+cpu_quota -> Limita el uso de la CPU del contenedor. Por ej: establezca este valor en 50000 para limitar el contenedor al 50% de un recurso de CPU
+cpuset -> Indica en que CPU se ejecutara el proceso. Por ej: "0-2" se ejecutara en el 0, 1 y 2
+mem_limit -> Limita el uso de memoria
+memswap_limit: ??m
+mem_reservation: ??m
+
 ```
 
 ## Correr test de integración con Docker 

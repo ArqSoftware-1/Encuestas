@@ -4,6 +4,12 @@ services:
   db:
     image: mongo
   app:
+    mem_limit: $mem_limit
+    cpu_quota: $cpu_quota
+    cpuset: $cpuset
+    memswap_limit: $memswap_limit
+    mem_reservation: $mem_reservation
+    mem_swappiness: $mem_swappiness
     build: ./
     environment:
       DOCKER_MONGODB_URI: "mongodb://db/test"
