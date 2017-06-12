@@ -4,11 +4,9 @@ services:
   db:
     image: mongo
   app:
-    mem_limit: 1024m
-    cpu_quota: 50000
+    mem_limit: 2000m
+    cpu_quota: 100000
     cpuset: '0'
-    memswap_limit: 0
-    mem_reservation: 0
     mem_swappiness: 0
     build: ./
     environment:
