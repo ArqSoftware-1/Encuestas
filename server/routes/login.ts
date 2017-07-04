@@ -44,8 +44,8 @@ loginRouter.post("/", function(request: Request, response: Response, next: NextF
                     if (hash.toString("hex") === director.password) {
 
                         const token = sign({
-                            "user": director.email,
-                            permissions: []
+                            /*"user": director.email,
+                            permissions: []*/
                         }, secret, {
                             expiresIn: "8h"
                         });
