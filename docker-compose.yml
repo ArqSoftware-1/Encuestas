@@ -1,6 +1,17 @@
 version: '2'
 
 services:
+  haproxy:
+    image: eeacms/haproxy
+    depends_on:
+    - app
+    ports:
+    - "3000:5000"
+    - "1936:1936"
+    environment:
+      BACKENDS_PORT: 3000
+      BACKENDS: "app"
+      DNS_ENABLED: "true"
   db:
     image: mongo
   app:
@@ -13,5 +24,3 @@ services:
       DOCKER_MONGODB_URI: "mongodb://db/test"
     depends_on:
       - db
-    ports:
-      - "3000:3000"
