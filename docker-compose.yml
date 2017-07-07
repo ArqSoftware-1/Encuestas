@@ -14,6 +14,9 @@ services:
       DNS_ENABLED: "true"
   db:
     image: mongo
+    volumes:
+    - /home/ubuntu/data/db:/data/db
+    restart: always
   app:
     mem_limit: 2000m
     cpu_quota: 100000
