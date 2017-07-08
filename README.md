@@ -60,6 +60,18 @@ En primer lugar se debe clonar el proyecto desde Github.
 docker-compose up
 ```
 
+```bash
+# Correr la aplicacion con HAProxy
+
+Primero debemos levantar la aplicaión con:
+
+docker-compose up -d
+
+Luego ejecutamos:
+
+docker-compose scale app=X (donde X es la cantidad es de aplicaciones que queremos levantar)
+```
+
 ## Correr test de integración con Docker 
 
 Una vez inicializada la aplicación con docker compose ejecutar los siguientes comando en otra consola de docker desde el directorio root del proyecto
