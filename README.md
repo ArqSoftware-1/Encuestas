@@ -69,7 +69,7 @@ docker-compose up -d
 
 Luego ejecutamos:
 
-docker-compose scale app=X (donde X es la cantidad es de aplicaciones que queremos levantar)
+docker-compose scale app=X (donde X es la cantidad de aplicaciones que queremos levantar)
 ```
 
 ## Correr test de integración con Docker 
